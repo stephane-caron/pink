@@ -1,0 +1,7 @@
+*.pyc
+*.pyo
+.coverage
+.ropeproject
+.tox
+dist
+doc/build
