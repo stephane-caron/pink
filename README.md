@@ -1,7 +1,7 @@
 # Pink
 
 [![build](https://img.shields.io/github/workflow/status/stephane-caron/pink/CI)](https://github.com/stephane-caron/pink/actions)
-[![PyPI package](https://img.shields.io/pypi/v/pink)](https://pypi.org/project/pin-pink/)
+[![PyPI package](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 [![Documentation](https://img.shields.io/badge/documentation-online-brightgreen?logo=read-the-docs&style=flat)](https://scaron.info/doc/pink/)
 ![Status](https://img.shields.io/pypi/status/pink)
 
