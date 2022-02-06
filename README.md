@@ -5,7 +5,7 @@
 [![Documentation](https://img.shields.io/badge/documentation-online-brightgreen?logo=read-the-docs&style=flat)](https://scaron.info/doc/pink/)
 ![Status](https://img.shields.io/pypi/status/pink)
 
-*P*ython *in*verse *k*inematics for your robot model based on [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
+**P**ython **in**verse **k**inematics for your robot model based on [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
 
 ## Upcoming changes
 
