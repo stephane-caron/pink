@@ -7,7 +7,5 @@ Tasks
 Base class
 ==========
 
-All tasks derive from:
-
-.. autoclass:: pink.tasks.Task
+.. automodule:: pink.tasks.task
     :members:

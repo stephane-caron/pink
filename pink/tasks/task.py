@@ -19,7 +19,11 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Base class for kinematic tasks.
+All kinematic tasks derive from the following base class. The formalism used in
+this implementation is written down in `this note on task-based inverse
+kinematics <https://scaron.info/robotics/inverse-kinematics.html>`_. As of
+February 2022 it hasn't been updated with the proper dimensional analysis, but
+the core concepts and notations are there.
 """
 
 from typing import Tuple

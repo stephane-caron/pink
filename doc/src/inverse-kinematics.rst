@@ -4,4 +4,5 @@
 Inverse kinematics
 ******************
 
-.. autofunction:: pink.solve_ik
+.. automodule:: pink.solve_ik
+    :members:
