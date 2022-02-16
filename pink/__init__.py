@@ -22,7 +22,7 @@
 Python inverse kinematics for your robot model based on Pinocchio.
 """
 
-from .kinematics import get_transform_body_to_world
+from .transforms import get_transform_body_to_world
 
 __version__ = "0.0.2rc1"
 

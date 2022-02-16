@@ -19,18 +19,20 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Test kinematics functions.
+Test transform functions.
 """
 
 import unittest
 import warnings
+
+import numpy as np
 
 from pink import get_transform_body_to_world
 
 from .models import build_jvrc_model
 
 
-class TestPink(unittest.TestCase):
+class TestTransforms(unittest.TestCase):
     def setUp(self):
         """
         Prepare test fixture.
@@ -38,13 +40,28 @@ class TestPink(unittest.TestCase):
         warnings.simplefilter("ignore", category=DeprecationWarning)
         warnings.simplefilter("ignore", category=UserWarning)
         self.robot = build_jvrc_model()
-
-    def test_robot(self):
         self.assertIsNotNone(self.robot)
 
+    def test_transform_found(self):
+        """
+        Get the pose of an existing robot body.
+        """
+        transform_pelvis_to_world = get_transform_body_to_world(
+            self.robot, "PELVIS_S"
+        )
+        self.assertTrue(
+            np.allclose(
+                transform_pelvis_to_world.np[3, :],
+                np.array([0.0, 0.0, 0.0, 1.0]),
+            )
+        )
+
     def test_transform_not_found(self):
+        """
+        Raise an error when the robot body is not found.
+        """
         with self.assertRaises(KeyError):
-            get_transform_body_to_world(self.robot, "kron")
+            get_transform_body_to_world(self.robot, "foo")
 
 
 if __name__ == "__main__":
