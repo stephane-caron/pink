@@ -22,10 +22,12 @@
 Python inverse kinematics for your robot model based on Pinocchio.
 """
 
+from .solve_ik import solve_ik
 from .transforms import get_transform_body_to_world
 
 __version__ = "0.1.0rc0"
 
 __all__ = [
     "get_transform_body_to_world",
+    "solve_ik",
 ]
