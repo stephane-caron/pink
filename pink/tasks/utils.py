@@ -19,7 +19,7 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Kinematics functions.
+Utility functions at the interface with Pinocchio.
 """
 
 import pinocchio as pin
