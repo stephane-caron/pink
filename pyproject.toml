@@ -26,6 +26,8 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Mathematics",
 ]
 dependencies = [
+    "numpy >=1.20.0",
+    "pin >=2.6.3",
 ]
 
 [project.optional-dependencies]
