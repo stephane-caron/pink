@@ -14,3 +14,4 @@ Pink
     :maxdepth: 1
 
     installation.rst
+    tasks.rst
