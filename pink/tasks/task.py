@@ -19,7 +19,7 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Base class for IK tasks.
+Base class for kinematic tasks.
 """
 
 from typing import Tuple
@@ -31,7 +31,7 @@ import pinocchio as pin
 class Task:
 
     """
-    Base class for tasks.
+    Base class for kinematic tasks.
 
     Attributes:
         gain: Task gain :math:`\\alpha \\in [0, 1]` for additional low-pass
@@ -39,12 +39,6 @@ class Task:
     """
 
     gain: float = 1.0
-
-    def __init__(self) -> None:
-        """
-        Create task.
-        """
-        pass
 
     def compute_task_dynamics(
         self, robot: pin.RobotWrapper

@@ -18,6 +18,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Assertions on the robot model and its current configuration.
+"""
+
 import pinocchio as pin
 
 
