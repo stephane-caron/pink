@@ -19,7 +19,27 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Python inverse kinematics for your robot model based on Pinocchio.
+Test kinematics functions.
 """
 
-__version__ = "0.0.2-pre"
+import unittest
+import warnings
+
+import pink
+
+
+class TestPink(unittest.TestCase):
+
+    def setUp(self):
+        """
+        Prepare test fixture.
+        """
+        warnings.simplefilter("ignore", category=DeprecationWarning)
+        warnings.simplefilter("ignore", category=UserWarning)
+
+    def test_transform(self):
+        self.assertIsNotNone(pink)
+
+
+if __name__ == "__main__":
+    unittest.main()
