@@ -11,7 +11,10 @@
 
 Pink's API is **not stable**. Expect the following upcoming changes:
 
-- Import task template from pymanoid
+- **WIP:** Import task template from pymanoid
+- **WIP:** Import main solve function
+- Import velocity limit function
+- Formalize exceptions and configuration assertions
 - Reformulate task gains as time constants
 
 ## Installation
@@ -34,4 +37,4 @@ pip install pin-pink
 
 ## History
 
-Pink implements the same task-based inverse kinematics as [pymanoid](https://github.com/stephane-caron/pymanoid), but it is much simpler to install and runs faster thanks to Pinocchio. Its internal math is summarized in [this note](https://scaron.info/robot-locomotion/inverse-kinematics.html). If you find yourself needing to read that to use the library, it means the API has abstraction leakage, please open an issue :-)
+Pink implements the same task-based inverse kinematics as [pymanoid](https://github.com/stephane-caron/pymanoid), but it is much simpler to install and runs faster thanks to Pinocchio. Its internal math is summarized in [this note](https://scaron.info/robot-locomotion/inverse-kinematics.html). If you find yourself needing to read that in order to use the library, it means the API has abstraction leakage, please open an issue :-)
