@@ -1,0 +1,3 @@
+[submodule "tests/models/jvrc_description"]
+	path = tests/models/jvrc_description
+	url = git@github.com:stephane-caron/jvrc_description.git

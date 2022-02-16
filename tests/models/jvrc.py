@@ -19,33 +19,17 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Test kinematics functions.
+JVRC-1 humanoid robot model.
 """
 
-import unittest
-import warnings
+import os
 
-from pink import get_transform_body_to_world
-
-from .models import build_jvrc_model
+import pinocchio as pin
 
 
-class TestPink(unittest.TestCase):
-    def setUp(self):
-        """
-        Prepare test fixture.
-        """
-        warnings.simplefilter("ignore", category=DeprecationWarning)
-        warnings.simplefilter("ignore", category=UserWarning)
-        self.robot = build_jvrc_model()
-
-    def test_robot(self):
-        self.assertIsNotNone(self.robot)
-
-    def test_transform_not_found(self):
-        with self.assertRaises(KeyError):
-            get_transform_body_to_world(self.robot, "kron")
-
-
-if __name__ == "__main__":
-    unittest.main()
+def build_jvrc_model():
+    models_dir = os.path.join(os.path.dirname(__file__))
+    urdf_path = os.path.join(
+        models_dir, "jvrc_description", "urdf", "jvrc1.urdf"
+    )
+    return pin.RobotWrapper.BuildFromURDF(urdf_path, models_dir)

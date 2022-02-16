@@ -19,33 +19,11 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Test kinematics functions.
+Robot models for testing.
 """
 
-import unittest
-import warnings
+from .jvrc import build_jvrc_model
 
-from pink import get_transform_body_to_world
-
-from .models import build_jvrc_model
-
-
-class TestPink(unittest.TestCase):
-    def setUp(self):
-        """
-        Prepare test fixture.
-        """
-        warnings.simplefilter("ignore", category=DeprecationWarning)
-        warnings.simplefilter("ignore", category=UserWarning)
-        self.robot = build_jvrc_model()
-
-    def test_robot(self):
-        self.assertIsNotNone(self.robot)
-
-    def test_transform_not_found(self):
-        with self.assertRaises(KeyError):
-            get_transform_body_to_world(self.robot, "kron")
-
-
-if __name__ == "__main__":
-    unittest.main()
+__all__ = [
+    "build_jvrc_model"
+]
