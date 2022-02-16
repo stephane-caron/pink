@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2022 Stéphane Caron.
+# Copyright (c) 2022 Stéphane Caron.
 #
 # This file is part of Pink.
 #

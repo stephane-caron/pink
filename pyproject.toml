@@ -28,6 +28,7 @@ classifiers = [
 dependencies = [
     "numpy >=1.20.0",
     "pin >=2.6.3",
+    "qpsolvers >=1.8.0",
 ]
 
 [project.optional-dependencies]
