@@ -23,20 +23,17 @@ Kinematics functions.
 """
 
 import pinocchio as pin
-import pin.pinocchio_pywrap  # for pylint
 
 
 def get_transform_body_to_world(
-    model: pin.pinocchio_pywrap.Model,
-    data: pin.pinocchio_pywrap.Data,
+    robot: pin.RobotWrapper,
     body: str,
 ) -> pin.SE3:
     """
     Get the pose of a body frame in the current configuration.
 
     Args:
-        model: Robot model.
-        data: Data describing the current configuration of the model.
+        robot: Robot model and data describing its current configuration.
         body: Body name.
 
     Returns:
@@ -45,9 +42,9 @@ def get_transform_body_to_world(
     Raises:
         KeyError: if the body name is not found in the robot model.
     """
-    body_id = model.getBodyId(body)
+    body_id = robot.model.getBodyId(body)
     try:
-        return data.oMf[body_id].copy()
+        return robot.data.oMf[body_id].copy()
     except IndexError as index_error:
         raise KeyError(
             f'Body "{body}" not found in robot model'
