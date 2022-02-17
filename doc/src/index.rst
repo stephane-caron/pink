@@ -17,3 +17,5 @@ Pink
     inverse-kinematics.rst
     tasks.rst
     developer-notes.rst
+
+You can also download this documentation as a `PDF document <pink.pdf>`_.
