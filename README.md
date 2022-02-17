@@ -11,11 +11,16 @@
 
 Pink's API is **not stable**. Expect the following upcoming changes:
 
-- **WIP:** Import task template from pymanoid
-- **WIP:** Import main solve function
+- **WIP:** Add configuration as a parameter to ``solve_ik``
 - Import velocity limit function
+- Implement body task
+- Document frame and transform notations
 - Formalize exceptions and configuration assertions
 - Reformulate task gains as time constants
+
+Open questions:
+
+- Expect kinematics to be already up-to-date in robot data?
 
 ## Installation
 
