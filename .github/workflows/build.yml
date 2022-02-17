@@ -20,6 +20,8 @@ jobs:
         steps:
             - name: "Checkout sources"
               uses: actions/checkout@v2
+              with:
+                  submodules: recursive
 
             - name: "Set up Python"
               uses: actions/setup-python@v2
