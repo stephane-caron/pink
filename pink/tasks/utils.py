@@ -135,3 +135,36 @@ def get_transform_body_to_world(
         raise KeyError(
             f'Body "{body}" not found in robot model'
         ) from index_error
+
+
+def compute_body_jacobian(
+    robot: pin.RobotWrapper, configuration: np.ndarray, body_name: str
+) -> np.ndarray:
+    """
+    Compute the Jacobian matrix :math:`{}_B J_{WB}` of the body velocity
+    :math:`{}_B v_{WB}`:
+
+    .. math::
+
+        {}_B v_{WB} = {}_B J_{WB} \\dot{q}
+
+    Args:
+        robot: Robot model and data describing its current configuration.
+        configuration: Vector of joint coordinates.
+        body_name: Name of robot body.
+
+    Returns:
+        Jacobian :math:`{}_B J_{WB}` of the body twist.
+
+    When the robot model includes a floating base (pin.JointModelFreeFlyer),
+    the configuration vector :math:`q` consists of:
+
+    - ``q[0:3]``: position in [m] of the floating base in the inertial frame,
+      formatted as :math:`[p_x, p_y, p_z]`.
+    - ``q[3:7]``: unit quaternion for the orientation of the floating base in
+      the inertial frame, formatted as :math:`[q_x, q_y, q_z, q_w]`.
+    - ``q[7:]``: joint angles in [rad].
+    """
+    body_id = robot.model.getBodyId(body_name)
+    J: np.ndarray = robot.computeFrameJacobian(configuration, body_id)
+    return J
