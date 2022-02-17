@@ -12,12 +12,12 @@
 Pink's API is **not stable**. Expect the following upcoming changes:
 
 - **WIP:** Add configuration as a parameter to ``solve_ik``
-- Import velocity limit function
-- Implement body task
 - Document frame and transform notations
 - Formalize exceptions and configuration assertions
-- Release v0.1: first version with functional body task and unit tests
-- Reformulate task gains as time constants
+- v0.1: First version with functional body task and unit tests
+- v0.2: Add posture task
+- v0.3: Add joint angle limits
+- v0.4: Reformulate task gains as time constants
 
 Open questions:
 
