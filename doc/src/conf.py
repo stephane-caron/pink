@@ -74,7 +74,7 @@ author = "Stéphane Caron"
 version = "0.1"
 
 # The full version, including alpha/beta/rc tags.
-release = "0.1.0-rc0"
+release = "0.1.0rc1"
 
 # Read version info directly from the module's __init__.py
 init_path = join(
