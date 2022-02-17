@@ -38,8 +38,8 @@ def compute_qp_objective(
     robot: pin.RobotWrapper, tasks: Iterable[Task], damping: float
 ):
     """
-    Compute the matrix-vector pair :math:`(H, c)` such that the objective
-    function of the IK quadratic program is:
+    Compute the Hessian matrix :math:`H` and linear vector :math:`c` of the
+    QP objective function:
 
     .. math::
 

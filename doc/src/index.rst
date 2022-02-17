@@ -16,3 +16,4 @@ Pink
     installation.rst
     inverse-kinematics.rst
     tasks.rst
+    developer-notes.rst
