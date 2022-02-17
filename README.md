@@ -16,6 +16,7 @@ Pink's API is **not stable**. Expect the following upcoming changes:
 - Implement body task
 - Document frame and transform notations
 - Formalize exceptions and configuration assertions
+- Release v0.1: first version with functional body task and unit tests
 - Reformulate task gains as time constants
 
 Open questions:
