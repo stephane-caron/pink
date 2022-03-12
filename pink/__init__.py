@@ -24,7 +24,7 @@ Python inverse kinematics for your robot model based on Pinocchio.
 
 from .solve_ik import solve_ik
 
-__version__ = "0.1.0rc1"
+__version__ = "0.2.0"
 
 __all__ = [
     "solve_ik",
