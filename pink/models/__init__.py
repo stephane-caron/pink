@@ -24,6 +24,4 @@ Robot models for testing.
 
 from .jvrc import build_jvrc_model
 
-__all__ = [
-    "build_jvrc_model"
-]
+__all__ = ["build_jvrc_model"]
