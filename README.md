@@ -15,9 +15,9 @@
 
 Pink's API is **not stable**. Expect the following upcoming changes:
 
-- **WIP:** Add configuration as a parameter to ``solve_ik``
-- Document frame and transform notations
+- **WIP:** Use ``ConfiguredRobot`` type with ``solve_ik``
 - Formalize exceptions and configuration assertions
+- Add body task
 - v0.1: First version with functional body task and unit tests
 - v0.2: Add posture task
 - v0.3: Add joint angle limits
