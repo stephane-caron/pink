@@ -27,7 +27,7 @@ from .configured_robot import assume_robot_is_configured
 from .configured_robot import configure_robot
 from .solve_ik import solve_ik
 
-__version__ = "0.2.0"
+__version__ = "0.0.2"
 
 __all__ = [
     "ConfiguredRobot",
