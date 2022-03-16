@@ -14,6 +14,7 @@ Pink
     :maxdepth: 1
 
     installation.rst
+    introduction.rst
     inverse-kinematics.rst
     tasks.rst
     developer-notes.rst
