@@ -27,8 +27,7 @@ import unittest
 import numpy as np
 
 from pink import solve_ik
-
-from .models import build_jvrc_model
+from pink.models import build_jvrc_model
 
 
 class TestSolveIK(unittest.TestCase):

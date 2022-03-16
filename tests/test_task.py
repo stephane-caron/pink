@@ -24,9 +24,8 @@ Test base class for kinematic tasks.
 
 import unittest
 
+from pink.models import build_jvrc_model
 from pink.tasks import Task
-
-from .models import build_jvrc_model
 
 
 class TestTask(unittest.TestCase):
