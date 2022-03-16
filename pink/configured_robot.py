@@ -26,7 +26,7 @@ import numpy as np
 import pinocchio as pin
 
 
-class ConfiguredRobot(pin.RobotWrapper):
+class ConfiguredRobot:
 
     """
     Type annotation indicating that quantities that depend on the configuration
@@ -110,10 +110,26 @@ class ConfiguredRobot(pin.RobotWrapper):
 
 
 def configure_robot(robot: pin.RobotWrapper, q: np.ndarray) -> ConfiguredRobot:
+    """
+    Run forward kinematics on a robot wrapper.
+
+    Args:
+        robot: Robot wrapper with its initial data.
+        q: Configuration to apply.
+
+    Returns:
+        Configured robot.
+    """
     pin.computeJointJacobians(robot.model, robot.data, q)
     pin.updateFramePlacements(robot.model, robot.data)
     return ConfiguredRobot(robot)
 
 
 def assume_robot_is_configured(robot: pin.RobotWrapper) -> ConfiguredRobot:
+    """
+    Assume that the provided robot wrapper has already been configured.
+
+    Returns:
+        Same robot represented with a different type.
+    """
     return ConfiguredRobot(robot)
