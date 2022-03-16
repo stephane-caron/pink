@@ -27,5 +27,6 @@ from .solve_ik import solve_ik
 __version__ = "0.2.0"
 
 __all__ = [
+    "models",
     "solve_ik",
 ]
