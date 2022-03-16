@@ -19,7 +19,11 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Type annotation indicating that forward kinematics have been computed.
+Pink adds a notion of *configured* robot to indicate that forward kinematics
+functions have been run, so that frame transforms and frame Jacobians used for
+IK can be queried from the robot's data.
+
+TODO(scaron): two versions of solve_ik, with/without configuration step.
 """
 
 import numpy as np
