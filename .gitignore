@@ -5,3 +5,4 @@
 .tox
 dist
 doc/build
+examples/pink

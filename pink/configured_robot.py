@@ -18,6 +18,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
+"""
+Type annotation indicating that forward kinematics have been computed.
+"""
+
 import numpy as np
 import pinocchio as pin
 
@@ -25,8 +29,8 @@ import pinocchio as pin
 class ConfiguredRobot(pin.RobotWrapper):
 
     """
-    Robot wrapper in which quantities that depend on a configuration :math:`q`
-    have been computed.
+    Type annotation indicating that quantities that depend on the configuration
+    :math:`q` have been computed.
 
     In Pink, this type enables access to frame transforms and frame Jacobians.
     We rely on typing to make sure the proper forward kinematics functions have

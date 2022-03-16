@@ -27,3 +27,4 @@ import pink.models
 
 if __name__ == "__main__":
     robot = pink.models.build_jvrc_model()
+    configured_robot = pink.configure_robot(robot, robot.q0)
