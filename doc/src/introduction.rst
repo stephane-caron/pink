@@ -4,15 +4,12 @@
 Introduction
 ************
 
-Inverse kinematics (IK) is the problem of computing *motions* (in Pink:
-velocities) that achieve a given set of *tasks*, such as putting a foot on a
-surface, moving the center of mass to a target location, etc.
+Inverse kinematics (IK) is the problem of computing *motions* (in Pink: velocities) that achieve a given set of *tasks*, such as putting a foot on a surface, moving the center of mass to a target location, etc.
 
 Notations
 =========
 
-In Pink, we adopt the subscript right-to-left convention for transforms, and
-superscript notation to indicate the frame of a motion or force vector:
+In Pink, we adopt the subscript right-to-left convention for transforms, and superscript notation to indicate the frame of a motion or force vector:
 
 .. list-table::
     :class: cheatsheet
@@ -51,12 +48,9 @@ See also this `spatial algebra cheat sheet
 Kinematic task
 ==============
 
-[Until this section is written, you can check out this
-`former version
-<https://scaron.info/robot-locomotion/inverse-kinematics.html#kinematic-task>`_.]
+[Until this section is written, you can check out this former version: `kinematic task <https://scaron.info/robot-locomotion/inverse-kinematics.html#kinematic-task>`_.]
 
 Inequality constraints
 ======================
 
-[Until this section is written, you can check out this
-`former version <https://scaron.info/robot-locomotion/inverse-kinematics.html#inequality-constraints>`_.]
+[Until this section is written, you can check out this former version: `inequality constraints <https://scaron.info/robot-locomotion/inverse-kinematics.html#inequality-constraints>`_.]

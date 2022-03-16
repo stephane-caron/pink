@@ -80,9 +80,9 @@ def solve_ik(
     Compute a velocity tangent to the current robot configuration that
     satisfies at (weighted) best a given set of kinematic tasks.
 
-    Note:
-        This function assumes that the robot data already underwent forward
-        kinematics and frame placement update.
+    This function assumes that the robot data already underwent forward
+    kinematics and frame placement update. TODO(scaron): properly handled
+    by ConfiguredRobot type.
 
     Args:
         robot: Robot model.
@@ -95,17 +95,17 @@ def solve_ik(
             tasks.
         solver: Backend quadratic programming solver.
 
-    Note:
-        Our Tikhonov damping is isotropic despite tangent velocities not being
-        homogeneous. If it helps we can add a tangent-space scaling to damp the
-        floating base differently from joint angular velocities.
-
     Returns:
         Velocity :math:`v` in tangent space, of dimension `robot.nv`.
 
     Raises:
         NotWithinConfigurationLimits: if the current robot configuration is not
             within limits.
+
+    Note:
+        Our Tikhonov damping is isotropic despite tangent velocities not being
+        homogeneous. If it helps we can add a tangent-space scaling to damp the
+        floating base differently from joint angular velocities.
     """
     assert_configuration_is_within_limits(robot)
     H, c = compute_qp_objective(robot, tasks, damping)

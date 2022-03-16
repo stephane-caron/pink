@@ -4,8 +4,7 @@
 Developer notes
 ***************
 
-This section documents internal functions and other notes shared between
-contributors to this project.
+This section documents internal functions and other notes shared between contributors to this project.
 
 Internal functions
 ==================
