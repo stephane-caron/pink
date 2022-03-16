@@ -109,6 +109,16 @@ class ConfiguredRobot:
             ) from index_error
 
 
+def assume_robot_is_configured(robot: pin.RobotWrapper) -> ConfiguredRobot:
+    """
+    Assume that the provided robot wrapper has already been configured.
+
+    Returns:
+        Same robot represented with a different type.
+    """
+    return ConfiguredRobot(robot)
+
+
 def configure_robot(robot: pin.RobotWrapper, q: np.ndarray) -> ConfiguredRobot:
     """
     Run forward kinematics on a robot wrapper.
@@ -122,14 +132,4 @@ def configure_robot(robot: pin.RobotWrapper, q: np.ndarray) -> ConfiguredRobot:
     """
     pin.computeJointJacobians(robot.model, robot.data, q)
     pin.updateFramePlacements(robot.model, robot.data)
-    return ConfiguredRobot(robot)
-
-
-def assume_robot_is_configured(robot: pin.RobotWrapper) -> ConfiguredRobot:
-    """
-    Assume that the provided robot wrapper has already been configured.
-
-    Returns:
-        Same robot represented with a different type.
-    """
     return ConfiguredRobot(robot)
