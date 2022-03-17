@@ -22,6 +22,8 @@
 Humanoid robot model standing on two feet and reaching with a hand.
 """
 
+import pinocchio as pin
+
 import pink
 import pink.models
 
@@ -30,6 +32,14 @@ from pink import solve_ik
 
 if __name__ == "__main__":
     robot = pink.models.build_jvrc_model()
+    viz = pin.visualize.MeshcatVisualizer(
+        robot.model, robot.collision_model, robot.visual_model
+    )
+    robot.setVisualizer(viz, init=False)
+    viz.initViewer(open=True)
+    viz.loadViewerModel()
+    viz.display(robot.q0)
+
     configured_robot = pink.configure_robot(robot, robot.q0)
     dt = 5e-3
 
