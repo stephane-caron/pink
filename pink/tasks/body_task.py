@@ -210,10 +210,10 @@ class BodyTask(Task):
         Compute the Hessian matrix :math:`H` and linear vector :math:`c` such
         that the contribution of the task to the QP objective is:
 
-        \\[
+        .. math::
+
             \\| J \\Delta q - \\alpha e \\|_{W}^2
             = \\frac{1}{2} \\Delta q^T H \\Delta q + c^T q
-        \\]
 
         The weight matrix :math:`W \\in \\mathbb{R}^{6 \\times 6}` combines
         position and orientation costs. The unit of the overall contribution is
