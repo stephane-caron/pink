@@ -22,8 +22,10 @@
 Kinematic tasks.
 """
 
+from .body_task import BodyTask
 from .task import Task
 
 __all__ = [
+    "BodyTask",
     "Task",
 ]
