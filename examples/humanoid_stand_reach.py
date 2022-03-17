@@ -22,6 +22,7 @@
 Humanoid robot model standing on two feet and reaching with a hand.
 """
 
+import numpy as np
 import pinocchio as pin
 
 import pink
@@ -29,6 +30,30 @@ import pink.models
 
 from pink.tasks import BodyTask
 from pink import solve_ik
+
+from meshcat_frame import set_frame
+
+
+class TransformToWorld(pin.SE3):
+
+    pass
+
+
+class WavingPose:
+    def __init__(self, init: TransformToWorld):
+        """
+        Initialize wrist pose.
+
+        Args:
+            init: Initial transform from the wrist frame to the world frame.
+        """
+        self.init = init
+
+    def at(self, t):
+        T = self.init.copy()
+        T.translation[0] = t / 2.
+        return T
+
 
 if __name__ == "__main__":
     robot = pink.models.build_jvrc_model()
@@ -46,23 +71,35 @@ if __name__ == "__main__":
     left_foot_task = BodyTask(
         "l_ankle", position_cost=1.0, orientation_cost=3.0
     )
+    pelvis_task = BodyTask("PELVIS_S", position_cost=1.0, orientation_cost=3.0)
     right_foot_task = BodyTask(
         "r_ankle", position_cost=1.0, orientation_cost=3.0
     )
-    pelvis_task = BodyTask("PELVIS_S", position_cost=1.0, orientation_cost=3.0)
-    tasks = [pelvis_task, left_foot_task, right_foot_task]
+    right_wrist_task = BodyTask(
+        "r_wrist", position_cost=1.0, orientation_cost=3.0
+    )
+    tasks = [pelvis_task, left_foot_task, right_foot_task, right_wrist_task]
 
     left_foot_task.set_target(
         configuration.get_transform_body_to_world("l_ankle")
     )
-    right_foot_task.set_target(
-        configuration.get_transform_body_to_world("r_ankle")
-    )
     pelvis_task.set_target(
         configuration.get_transform_body_to_world("PELVIS_S")
     )
+    right_foot_task.set_target(
+        configuration.get_transform_body_to_world("r_ankle")
+    )
 
-    for _ in range(100):
+    right_wrist_pose = WavingPose(
+        configuration.get_transform_body_to_world("r_wrist")
+    )
+
+    wrist_frame = viz.viewer["right_wrist_pose"]
+    set_frame(wrist_frame)
+
+    for t in np.arange(0.0, 10.0, 5e-3):
+        right_wrist_task.set_target(right_wrist_pose.at(t))
+        wrist_frame.set_transform(right_wrist_pose.at(t).np)
         velocity = solve_ik(configuration, tasks, dt)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)

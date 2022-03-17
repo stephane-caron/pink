@@ -102,7 +102,7 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-    print("TODO(scaron): configuration.check_limits()")
+    # TODO(scaron): configuration.check_limits()
     H, c = compute_qp_objective(configuration, tasks, damping)
     v_max, v_min = compute_velocity_limits(configuration, dt)
     tangent_eye = np.eye(configuration.model.nv)
