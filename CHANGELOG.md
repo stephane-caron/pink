@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [0.1.0] - 2022/03/17
 
 ### Added
 
-- ...
+- Body task
+- Humanoid example
 
 ### Changed
 
@@ -25,7 +26,6 @@ All notable changes to this project will be documented in this file.
 - ConfiguredRobot type in which we can query frame transforms and Jacobians
 - Document joint limits API
 - Use JVRC model for unit testing
-- WIP: humanoid stand-reach example
 
 ### Fixed
 
