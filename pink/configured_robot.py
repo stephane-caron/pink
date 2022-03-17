@@ -68,7 +68,7 @@ class ConfiguredRobot:
         self.visual_model = robot.visual_model
         self.viz = robot.viz
 
-    def get_body_jacobian(self, body_name: str) -> np.ndarray:
+    def get_body_jacobian(self, body: str) -> np.ndarray:
         """
         Compute the Jacobian matrix :math:`{}_B J_{WB}` of the body velocity
         :math:`{}_B v_{WB}`:
@@ -78,7 +78,7 @@ class ConfiguredRobot:
             {}_B v_{WB} = {}_B J_{WB} \\dot{q}
 
         Args:
-            body_name: Name of robot body.
+            body: Body frame name, typically the link name from the URDF.
 
         Returns:
             Jacobian :math:`{}_B J_{WB}` of the body twist.
@@ -93,18 +93,18 @@ class ConfiguredRobot:
           in the inertial frame, formatted as :math:`[q_x, q_y, q_z, q_w]`.
         - ``q[7:]``: joint angles in [rad].
         """
-        body_id = self.model.getBodyId(body_name)
+        body_id = self.model.getBodyId(body)
         J: np.ndarray = pin.getFrameJacobian(
             self.model, self.data, body_id, pin.ReferenceFrame.LOCAL
         )
         return J
 
-    def get_transform_body_to_world(self, body_name: str) -> pin.SE3:
+    def get_transform_body_to_world(self, body: str) -> pin.SE3:
         """
         Get the pose of a body frame of the robot in its current configuration.
 
         Args:
-            body: Body name.
+            body: Body frame name, typically the link name from the URDF.
 
         Returns:
             Current transform from body frame to world frame.
@@ -112,12 +112,12 @@ class ConfiguredRobot:
         Raises:
             KeyError: if the body name is not found in the robot model.
         """
-        body_id = self.model.getBodyId(body_name)
+        body_id = self.model.getBodyId(body)
         try:
             return self.data.oMf[body_id].copy()
         except IndexError as index_error:
             raise KeyError(
-                f'Body "{body_name}" not found in robot model'
+                f'Body "{body}" not found in robot model'
             ) from index_error
 
 

@@ -22,7 +22,7 @@
 Function to solve inverse kinematics.
 """
 
-from typing import Iterable
+from typing import Iterable, Tuple
 
 import numpy as np
 import pinocchio as pin
@@ -30,13 +30,14 @@ import pinocchio as pin
 from qpsolvers import solve_qp
 
 from .checks import assert_configuration_is_within_limits
+from .configured_robot import ConfiguredRobot
 from .limits import compute_velocity_limits
 from .tasks import Task
 
 
 def compute_qp_objective(
     robot: pin.RobotWrapper, tasks: Iterable[Task], damping: float
-):
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Compute the Hessian matrix :math:`H` and linear vector :math:`c` of the
     QP objective function:
