@@ -71,7 +71,7 @@ def compute_qp_objective(
 
 
 def solve_ik(
-    robot: pin.RobotWrapper,
+    robot: ConfiguredRobot,
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
@@ -86,7 +86,7 @@ def solve_ik(
     by ConfiguredRobot type.
 
     Args:
-        robot: Robot model.
+        robot: Configured robot, that is, whose kinematics data is up-to-date.
         tasks: List of kinematic tasks.
         dt: Integration timestep in [s].
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
