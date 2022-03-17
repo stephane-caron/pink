@@ -12,6 +12,10 @@ All notable changes to this project will be documented in this file.
 
 - ConfiguredRobot(model, data) type is now Configuration(model, data, q)
 
+### Fixed
+
+- Add floating base joint when loading JVRC model
+
 ## [0.0.2] - 2022/03/16
 
 ### Added

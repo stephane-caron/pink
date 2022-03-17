@@ -51,6 +51,12 @@ class TestConfiguration(unittest.TestCase):
         J_check = np.array(
             [
                 [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
                     0.0,
                     0.0,
                     0.096,
@@ -98,6 +104,12 @@ class TestConfiguration(unittest.TestCase):
                 ],
                 [
                     0.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
                     0.0,
                     0.0,
                     0.0,
@@ -143,6 +155,12 @@ class TestConfiguration(unittest.TestCase):
                     -0.151,
                 ],
                 [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
                     0.0,
                     -0.096,
                     0.0,
@@ -190,6 +208,12 @@ class TestConfiguration(unittest.TestCase):
                 ],
                 [
                     0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
                     1.0,
                     0.0,
                     0.0,
@@ -235,6 +259,12 @@ class TestConfiguration(unittest.TestCase):
                     1.0,
                 ],
                 [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0,
                     1.0,
                     0.0,
                     0.0,
@@ -281,6 +311,12 @@ class TestConfiguration(unittest.TestCase):
                     0.0,
                 ],
                 [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
                     0.0,
                     0.0,
                     1.0,
@@ -335,8 +371,8 @@ class TestConfiguration(unittest.TestCase):
         Get the pose of an existing robot body.
         """
         configuration = pink.apply_configuration(self.robot, self.q)
-        transform_pelvis_to_world = (
-            configuration.get_transform_body_to_world("PELVIS_S")
+        transform_pelvis_to_world = configuration.get_transform_body_to_world(
+            "PELVIS_S"
         )
         self.assertTrue(
             np.allclose(

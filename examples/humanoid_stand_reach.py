@@ -22,6 +22,8 @@
 Humanoid robot model standing on two feet and reaching with a hand.
 """
 
+import time
+
 import numpy as np
 import pinocchio as pin
 
@@ -42,7 +44,7 @@ class TransformToWorld(pin.SE3):
 class WavingPose:
     def __init__(self, init: TransformToWorld):
         """
-        Initialize wrist pose.
+        Initialize pose.
 
         Args:
             init: Initial transform from the wrist frame to the world frame.

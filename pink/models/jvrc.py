@@ -35,4 +35,6 @@ def build_jvrc_model() -> pin.RobotWrapper:
     urdf_path = os.path.join(
         models_dir, "jvrc_description", "urdf", "jvrc1.urdf"
     )
-    return pin.RobotWrapper.BuildFromURDF(urdf_path, models_dir)
+    return pin.RobotWrapper.BuildFromURDF(
+        urdf_path, models_dir, root_joint=pin.JointModelFreeFlyer()
+    )
