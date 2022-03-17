@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- Switch to the Apache 2.0 license
+
 ## [0.1.0] - 2022/03/17
 
 ### Added
