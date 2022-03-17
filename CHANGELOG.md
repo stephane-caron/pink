@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - ...
 
+### Changed
+
+- ConfiguredRobot(model, data) type is now Configuration(model, data, q)
+
 ## [0.0.2] - 2022/03/16
 
 ### Added

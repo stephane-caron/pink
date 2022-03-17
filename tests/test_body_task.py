@@ -26,7 +26,7 @@ import unittest
 
 import numpy as np
 
-from pink import configure_robot, solve_ik
+from pink import apply_configuration, solve_ik
 from pink.models import build_jvrc_model
 from pink.tasks import BodyTask
 
@@ -44,7 +44,7 @@ class TestBodyTask(unittest.TestCase):
         """
         No motion when all targets are reached.
         """
-        configured_robot = configure_robot(self.robot, self.robot.q0)
+        configuration = apply_configuration(self.robot, self.robot.q0)
         left_ankle_task = BodyTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
         )
@@ -56,17 +56,17 @@ class TestBodyTask(unittest.TestCase):
         )
 
         left_ankle_task.set_target(
-            configured_robot.get_transform_body_to_world("l_ankle")
+            configuration.get_transform_body_to_world("l_ankle")
         )
         right_ankle_task.set_target(
-            configured_robot.get_transform_body_to_world("r_ankle")
+            configuration.get_transform_body_to_world("r_ankle")
         )
         pelvis_task.set_target(
-            configured_robot.get_transform_body_to_world("PELVIS_S")
+            configuration.get_transform_body_to_world("PELVIS_S")
         )
 
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
-        velocity = solve_ik(configured_robot, tasks, self.dt)
+        velocity = solve_ik(configuration, tasks, self.dt)
         self.assertTrue(np.allclose(velocity, 0.0))
 
 

@@ -25,16 +25,17 @@ Joint limits implemented as inequality constraints.
 from typing import Tuple
 
 import numpy as np
-import pinocchio as pin
+
+from .configuration import Configuration
 
 
 def compute_velocity_limits(
-    robot: pin.RobotWrapper,
+    configuration: Configuration,
     dt: float,
     config_limit_gain: float = 0.5,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Compute the robot's configuration-dependent velocity limits:
+    Compute the configuration-dependent velocity limits:
 
     .. math::
 
@@ -50,7 +51,7 @@ def compute_velocity_limits(
       :math:`q_{min} \\leq q \\leq q_{max}`.
 
     Args:
-        robot: Robot model and configuration.
+        configuration: Robot configuration to read kinematics from.
         dt: Integration timestep in [s].
         config_limit_gain: gain between 0 and 1 to steer away from
             configuration limits. It is described in "Real-time prioritized
@@ -61,6 +62,6 @@ def compute_velocity_limits(
     Returns:
         Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds.
     """
-    v_max = +1000.0 * np.ones(robot.nv)
-    v_min = -1000.0 * np.ones(robot.nv)
+    v_max = +1000.0 * np.ones(configuration.model.nv)
+    v_min = -1000.0 * np.ones(configuration.model.nv)
     return v_max, v_min

@@ -19,7 +19,7 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Test the ConfiguredRobot type.
+Test the Configuration type.
 """
 
 import unittest
@@ -31,7 +31,7 @@ import pink
 from pink.models import build_jvrc_model
 
 
-class TestSolveIK(unittest.TestCase):
+class TestConfiguration(unittest.TestCase):
     def setUp(self):
         """
         Prepare test fixture.
@@ -40,11 +40,14 @@ class TestSolveIK(unittest.TestCase):
         self.q = robot.q0
         self.robot = robot
 
-    def test_configure_robot(self):
+    def test_assume_configuration(self):
         self.robot.data.J.fill(42.0)
-        assumed_robot = pink.assume_robot_is_configured(self.robot, self.q)
-        self.assertTrue(np.allclose(assumed_robot.data.J, 42.0))
-        configured_robot = pink.configure_robot(self.robot, self.q)
+        configuration = pink.assume_configuration(self.robot, self.q)
+        self.assertTrue(np.allclose(configuration.data.J, 42.0))
+
+    def test_apply_configuration(self):
+        self.robot.data.J.fill(42.0)
+        configuration = pink.apply_configuration(self.robot, self.q)
         J_check = np.array(
             [
                 [
@@ -325,15 +328,15 @@ class TestSolveIK(unittest.TestCase):
                 ],
             ]
         )
-        self.assertTrue(np.allclose(configured_robot.data.J, J_check))
+        self.assertTrue(np.allclose(configuration.data.J, J_check))
 
     def test_transform_found(self):
         """
         Get the pose of an existing robot body.
         """
-        configured_robot = pink.configure_robot(self.robot, self.q)
+        configuration = pink.apply_configuration(self.robot, self.q)
         transform_pelvis_to_world = (
-            configured_robot.get_transform_body_to_world("PELVIS_S")
+            configuration.get_transform_body_to_world("PELVIS_S")
         )
         self.assertTrue(
             np.allclose(
@@ -346,9 +349,9 @@ class TestSolveIK(unittest.TestCase):
         """
         Raise an error when the robot body is not found.
         """
-        configured_robot = pink.configure_robot(self.robot, self.q)
+        configuration = pink.apply_configuration(self.robot, self.q)
         with self.assertRaises(KeyError):
-            configured_robot.get_transform_body_to_world("foo")
+            configuration.get_transform_body_to_world("foo")
 
 
 if __name__ == "__main__":

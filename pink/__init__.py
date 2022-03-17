@@ -22,17 +22,17 @@
 Python inverse kinematics for your robot model based on Pinocchio.
 """
 
-from .configured_robot import ConfiguredRobot
-from .configured_robot import assume_robot_is_configured
-from .configured_robot import configure_robot
+from .configuration import Configuration
+from .configuration import assume_configuration
+from .configuration import apply_configuration
 from .solve_ik import solve_ik
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 __all__ = [
-    "ConfiguredRobot",
-    "assume_robot_is_configured",
-    "configure_robot",
+    "Configuration",
+    "apply_configuration",
+    "assume_configuration",
     "models",
     "solve_ik",
 ]

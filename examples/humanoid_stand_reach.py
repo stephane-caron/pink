@@ -40,7 +40,7 @@ if __name__ == "__main__":
     viz.loadViewerModel()
     viz.display(robot.q0)
 
-    configured_robot = pink.configure_robot(robot, robot.q0)
+    configuration = pink.apply_configuration(robot, robot.q0)
     dt = 5e-3
 
     left_foot_task = BodyTask(
@@ -53,17 +53,17 @@ if __name__ == "__main__":
     tasks = [pelvis_task, left_foot_task, right_foot_task]
 
     left_foot_task.set_target(
-        configured_robot.get_transform_body_to_world("l_ankle")
+        configuration.get_transform_body_to_world("l_ankle")
     )
     right_foot_task.set_target(
-        configured_robot.get_transform_body_to_world("r_ankle")
+        configuration.get_transform_body_to_world("r_ankle")
     )
     pelvis_task.set_target(
-        configured_robot.get_transform_body_to_world("PELVIS_S")
+        configuration.get_transform_body_to_world("PELVIS_S")
     )
 
     for _ in range(100):
-        velocity = solve_ik(configured_robot, tasks, dt)
-        q = configured_robot.integrate(velocity, dt)
-        configured_robot = pink.configure_robot(robot, q)
+        velocity = solve_ik(configuration, tasks, dt)
+        q = configuration.integrate(velocity, dt)
+        configuration = pink.apply_configuration(robot, q)
         viz.display(q)

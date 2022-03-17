@@ -25,18 +25,17 @@ Function to solve inverse kinematics.
 from typing import Iterable, Tuple
 
 import numpy as np
-import pinocchio as pin
 
 from qpsolvers import solve_qp
 
 from .checks import assert_configuration_is_within_limits
-from .configured_robot import ConfiguredRobot
+from .configuration import Configuration
 from .limits import compute_velocity_limits
 from .tasks import Task
 
 
 def compute_qp_objective(
-    robot: pin.RobotWrapper, tasks: Iterable[Task], damping: float
+    configuration: Configuration, tasks: Iterable[Task], damping: float
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Compute the Hessian matrix :math:`H` and linear vector :math:`c` of the
@@ -50,7 +49,7 @@ def compute_qp_objective(
     kinematics (we divide it by :math:`\\Delta t` to get a commanded velocity).
 
     Args:
-        robot: Robot model and its current configuration :math:`q`.
+        configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks to fulfill at (weighted) best.
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
             `[cost]^2 / [tangent]` where `[tangent]` is "the" unit of robot
@@ -61,17 +60,17 @@ def compute_qp_objective(
         Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
         objective.
     """
-    H = damping * np.eye(robot.nv)
-    c = np.zeros((robot.nv,))
+    H = damping * np.eye(configuration.model.nv)
+    c = np.zeros((configuration.model.nv,))
     for task in tasks:
-        H_task, c_task = task.compute_qp_objective(robot)
+        H_task, c_task = task.compute_qp_objective(configuration)
         H += H_task
         c += c_task
     return (H, c)
 
 
 def solve_ik(
-    robot: ConfiguredRobot,
+    configuration: Configuration,
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
@@ -81,12 +80,8 @@ def solve_ik(
     Compute a velocity tangent to the current robot configuration that
     satisfies at (weighted) best a given set of kinematic tasks.
 
-    This function assumes that the robot data already underwent forward
-    kinematics and frame placement update. TODO(scaron): properly handled
-    by ConfiguredRobot type.
-
     Args:
-        robot: Configured robot, that is, whose kinematics data is up-to-date.
+        configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
         dt: Integration timestep in [s].
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
@@ -97,10 +92,10 @@ def solve_ik(
         solver: Backend quadratic programming solver.
 
     Returns:
-        Velocity :math:`v` in tangent space, of dimension `robot.nv`.
+        Velocity :math:`v` in tangent space.
 
     Raises:
-        NotWithinConfigurationLimits: if the current robot configuration is not
+        NotWithinConfigurationLimits: if the current configuration is not
             within limits.
 
     Note:
@@ -108,10 +103,10 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-    assert_configuration_is_within_limits(robot)
-    H, c = compute_qp_objective(robot, tasks, damping)
-    v_max, v_min = compute_velocity_limits(robot, dt)
-    tangent_eye = np.eye(robot.nv)
+    assert_configuration_is_within_limits(configuration)
+    H, c = compute_qp_objective(configuration, tasks, damping)
+    v_max, v_min = compute_velocity_limits(configuration, dt)
+    tangent_eye = np.eye(configuration.model.nv)
     A = np.vstack([tangent_eye, -tangent_eye])
     b = np.hstack([v_max * dt, -v_min * dt])
     Delta_q = solve_qp(H, c, A, b, solver=solver)

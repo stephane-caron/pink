@@ -30,7 +30,7 @@ import numpy as np
 import pinocchio as pin
 
 
-class ConfiguredRobot:
+class Configuration:
 
     """
     Type annotation indicating that quantities that depend on the configuration
@@ -54,25 +54,20 @@ class ConfiguredRobot:
         copy constructor. TODO(scaron): bring it up upstream.
 
     Attributes:
-        data: Data with kinematics matching the configuration
-            :data:`ConfiguredRobot.q`.
+        data: Data with kinematics matching the configuration vector
+            :data:`Configuration.q`.
         model: Kinodynamic model.
-        nq: Number of dimensions of the configuration space.
-        nv: Number of dimensions of the tangent space.
-        q: Configuration vector matching :data:`ConfiguredRobot.data`.
+        q: Configuration vector matching the kinematics in
+            :data:`Configuration.data`.
     """
 
     data: pin.pinocchio_pywrap.Data
     model: pin.pinocchio_pywrap.Model
-    nq: int
-    nv: int
     q: np.ndarray
 
-    def __init__(self, robot: pin.RobotWrapper, q: np.ndarray):
-        self.data = robot.data
-        self.model = robot.model
-        self.nv = robot.nv
-        self.nq = robot.nq
+    def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
+        self.data = data
+        self.model = model
         self.q = q
 
     def get_body_jacobian(self, body: str) -> np.ndarray:
@@ -141,9 +136,9 @@ class ConfiguredRobot:
         return pin.integrate(self.model, self.q, velocity * dt)
 
 
-def assume_robot_is_configured(
+def assume_configuration(
     robot: pin.RobotWrapper, q: np.ndarray
-) -> ConfiguredRobot:
+) -> Configuration:
     """
     Assume that the provided robot wrapper has already been configured.
 
@@ -152,22 +147,24 @@ def assume_robot_is_configured(
         q: Configuration matching the robot wrapper's data.
 
     Returns:
-        Configured robot.
+        Robot configuration.
     """
-    return ConfiguredRobot(robot, q)
+    return Configuration(robot.model, robot.data, q)
 
 
-def configure_robot(robot: pin.RobotWrapper, q: np.ndarray) -> ConfiguredRobot:
+def apply_configuration(
+    robot: pin.RobotWrapper, q: np.ndarray
+) -> Configuration:
     """
     Run forward kinematics on a robot wrapper.
 
     Args:
         robot: Robot wrapper with its initial data.
-        q: Configuration to apply.
+        q: Configuration vector to apply.
 
     Returns:
         Configured robot.
     """
     pin.computeJointJacobians(robot.model, robot.data, q)
     pin.updateFramePlacements(robot.model, robot.data)
-    return ConfiguredRobot(robot, q)
+    return Configuration(robot.model, robot.data, q)

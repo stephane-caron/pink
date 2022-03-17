@@ -27,7 +27,7 @@ from typing import Optional, Sequence, Tuple, Union
 import numpy as np
 import pinocchio as pin
 
-from ..configured_robot import ConfiguredRobot
+from ..configuration import Configuration
 from .exceptions import TargetNotSet
 from .task import Task
 from .utils import body_box_minus
@@ -154,20 +154,24 @@ class BodyTask(Task):
         """
         self.transform_target_to_world = transform_target_to_world.copy()
 
-    def compute_error_in_body(self, robot: ConfiguredRobot) -> np.ndarray:
+    def compute_error_in_body(
+        self, configuration: Configuration
+    ) -> np.ndarray:
         """
         Compute the body twist error, that is, the (box minus) difference
         between target and current body configuration.
 
         Args:
-            robot: Robot model and current configuration to read values from.
+            configuration: Robot configuration to read values from.
 
         Returns:
             Coordinate vector of the body twist error.
         """
         if self.transform_target_to_world is None:
             raise TargetNotSet(f"no target set for body {self.body}")
-        transform_body_to_world = robot.get_transform_body_to_world(self.body)
+        transform_body_to_world = configuration.get_transform_body_to_world(
+            self.body
+        )
         error_in_body: np.ndarray = -body_box_minus(
             self.transform_target_to_world,
             transform_body_to_world,
@@ -176,7 +180,7 @@ class BodyTask(Task):
         return error_in_body
 
     def compute_task_dynamics(
-        self, robot: ConfiguredRobot
+        self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Compute the matrix :math:`J(q)` and vector :math:`\\alpha e(q)` such
@@ -193,18 +197,18 @@ class BodyTask(Task):
         for more documentation.
 
         Args:
-            robot: Robot model and current configuration to read values from.
+            configuration: Robot configuration to read values from.
 
         Returns:
             Pair :math:`(J, \\alpha e)` of Jacobian matrix and error vector,
             both expressed in the body frame.
         """
-        jacobian_in_body = robot.get_body_jacobian(self.body)
-        error_in_body = self.compute_error_in_body(robot)
+        jacobian_in_body = configuration.get_body_jacobian(self.body)
+        error_in_body = self.compute_error_in_body(configuration)
         return jacobian_in_body, self.gain * error_in_body
 
     def compute_qp_objective(
-        self, robot: pin.RobotWrapper
+        self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Compute the Hessian matrix :math:`H` and linear vector :math:`c` such
@@ -222,7 +226,7 @@ class BodyTask(Task):
         a commanded velocity).
 
         Args:
-            robot: Robot model and configuration.
+            configuration: Robot configuration to read values from.
 
         Returns:
             Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
@@ -234,12 +238,12 @@ class BodyTask(Task):
             Levenberg-Marquardt Method" (Sugihara, 2011). The dimensional
             analysis in this class is our own.
         """
-        jacobian, error = self.compute_task_dynamics(robot)
+        jacobian, error = self.compute_task_dynamics(configuration)
         weight = np.diag(self.cost)  # [cost] * [twist]^{-1}
         weighted_jacobian = weight @ jacobian  # [cost]
         weighted_error = weight @ error  # [cost]
         mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2
-        eye_tg = np.eye(robot.nv)
+        eye_tg = np.eye(configuration.model.nv)
         # Our Levenberg-Marquardt damping `mu * eye_tg` is isotropic in the
         # robot's tangent space. If it helps we can add a tangent-space scaling
         # to damp the floating base differently from joint angular velocities.
