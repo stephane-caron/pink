@@ -15,9 +15,8 @@
 
 Pink's API is **not stable**. Expect the following upcoming changes:
 
-- Formalize exceptions and configuration assertions
-- Add body task
-- v0.1: First version with functional body task and unit tests
+- Formalize configuration assertions
+- Unit test body task convergence
 - v0.2: Add posture task
 - v0.3: Add joint angle limits
 - v0.4: Reformulate task gains as time constants

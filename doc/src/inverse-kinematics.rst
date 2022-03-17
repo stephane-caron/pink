@@ -4,16 +4,16 @@
 Inverse kinematics
 ******************
 
+Configuration
+=============
+
+.. automodule:: pink.configuration
+    :members:
+
 Joint limits
 ============
 
 .. automodule:: pink.limits
-    :members:
-
-Configured robots
-=================
-
-.. automodule:: pink.configured_robot
     :members:
 
 Solving joint velocities
