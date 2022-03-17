@@ -28,5 +28,3 @@ class TargetNotSet(Exception):
     """
     Exception raised when attempting to compute a task with an unset target.
     """
-
-    pass
