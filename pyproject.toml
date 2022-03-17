@@ -38,6 +38,8 @@ doc = [
 [project.urls]
 Documentation = "https://scaron.info/doc/pink/"
 Source = "https://github.com/stephane-caron/pink"
+Tracker = "https://github.com/stephane-caron/pink/issues"
+Changelog = "https://github.com/stephane-caron/pink/blob/master/CHANGELOG.md"
 
 [tool.black]
 line-length = 79
