@@ -47,6 +47,12 @@ class ConfiguredRobot:
     computes forward kinematics, so there is no need to further call
     ``pin.forwardKinematics(model, data, configuration)``.) The latter updates
     frame placements.
+
+    Notes
+    -----
+    This class is meant to be used as a subclass of pin.RobotWrapper, not wrap
+    it. However, right now pin.RobotWrapper does not have a shallow copy
+    constructor. TODO(scaron): bring it up upstream.
     """
 
     def __init__(self, robot: pin.RobotWrapper):
@@ -54,7 +60,9 @@ class ConfiguredRobot:
         self.collision_model = robot.collision_model
         self.data = robot.data
         self.model = robot.model
+        self.nv = robot.nv
         self.q0 = robot.q0
+        self.robot_wrapper = robot  # TODO(scaron): should be subclass
         self.v0 = robot.v0
         self.visual_data = robot.visual_data
         self.visual_model = robot.visual_model
