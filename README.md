@@ -15,7 +15,7 @@
 
 Pink's API is **not stable**. Expect the following upcoming changes:
 
-- **WIP:** Use ``ConfiguredRobot`` type with ``solve_ik``
+- ``ConfiguredRobot`` to be renamed ``Configuration``, a set of consistent ``(model, data, q)``
 - Formalize exceptions and configuration assertions
 - Add body task
 - v0.1: First version with functional body task and unit tests

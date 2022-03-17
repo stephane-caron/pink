@@ -19,7 +19,7 @@
 # along with Pink. If not, see <http://www.gnu.org/licenses/>.
 
 """
-Robot models for testing.
+Collection of open source robot models.
 """
 
 from .jvrc import build_jvrc_model
