@@ -28,7 +28,6 @@ import numpy as np
 
 from qpsolvers import solve_qp
 
-from .checks import assert_configuration_is_within_limits
 from .configuration import Configuration
 from .limits import compute_velocity_limits
 from .tasks import Task
@@ -103,7 +102,7 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-    assert_configuration_is_within_limits(configuration)
+    print("TODO(scaron): configuration.check_limits()")
     H, c = compute_qp_objective(configuration, tasks, damping)
     v_max, v_min = compute_velocity_limits(configuration, dt)
     tangent_eye = np.eye(configuration.model.nv)

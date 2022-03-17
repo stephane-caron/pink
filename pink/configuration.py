@@ -70,6 +70,12 @@ class Configuration:
         self.model = model
         self.q = q
 
+    def check_limits(self):
+        """
+        TODO(scaron): implement.
+        """
+        raise NotImplementedError
+
     def get_body_jacobian(self, body: str) -> np.ndarray:
         """
         Compute the Jacobian matrix :math:`{}_B J_{WB}` of the body velocity
