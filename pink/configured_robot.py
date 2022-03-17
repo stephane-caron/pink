@@ -48,25 +48,32 @@ class ConfiguredRobot:
     ``pin.forwardKinematics(model, data, configuration)``.) The latter updates
     frame placements.
 
-    Notes
-    -----
-    This class is meant to be used as a subclass of pin.RobotWrapper, not wrap
-    it. However, right now pin.RobotWrapper does not have a shallow copy
-    constructor. TODO(scaron): bring it up upstream.
+    Notes:
+        This class is meant to be used as a subclass of pin.RobotWrapper, not
+        wrap it. However, right now pin.RobotWrapper does not have a shallow
+        copy constructor. TODO(scaron): bring it up upstream.
+
+    Attributes:
+        data: Data with kinematics matching the configuration
+            :data:`ConfiguredRobot.q`.
+        model: Kinodynamic model.
+        nq: Number of dimensions of the configuration space.
+        nv: Number of dimensions of the tangent space.
+        q: Configuration vector matching :data:`ConfiguredRobot.data`.
     """
 
-    def __init__(self, robot: pin.RobotWrapper):
-        self.collision_data = robot.collision_data
-        self.collision_model = robot.collision_model
+    data: pin.pinocchio_pywrap.Data
+    model: pin.pinocchio_pywrap.Model
+    nq: int
+    nv: int
+    q: np.ndarray
+
+    def __init__(self, robot: pin.RobotWrapper, q: np.ndarray):
         self.data = robot.data
         self.model = robot.model
         self.nv = robot.nv
-        self.q0 = robot.q0
-        self.robot_wrapper = robot  # TODO(scaron): should be subclass
-        self.v0 = robot.v0
-        self.visual_data = robot.visual_data
-        self.visual_model = robot.visual_model
-        self.viz = robot.viz
+        self.nq = robot.nq
+        self.q = q
 
     def get_body_jacobian(self, body: str) -> np.ndarray:
         """
@@ -120,15 +127,34 @@ class ConfiguredRobot:
                 f'Body "{body}" not found in robot model'
             ) from index_error
 
+    def integrate(self, velocity, dt) -> np.ndarray:
+        """
+        Integrate a velocity starting from the current configuration.
 
-def assume_robot_is_configured(robot: pin.RobotWrapper) -> ConfiguredRobot:
+        Args:
+            velocity: Velocity in tangent space.
+            dt: Integration duration in [s].
+
+        Returns:
+            New configuration after integration.
+        """
+        return pin.integrate(self.model, self.q, velocity * dt)
+
+
+def assume_robot_is_configured(
+    robot: pin.RobotWrapper, q: np.ndarray
+) -> ConfiguredRobot:
     """
     Assume that the provided robot wrapper has already been configured.
 
+    Args:
+        robot: Robot wrapper with its initial data.
+        q: Configuration matching the robot wrapper's data.
+
     Returns:
-        Same robot represented with a different type.
+        Configured robot.
     """
-    return ConfiguredRobot(robot)
+    return ConfiguredRobot(robot, q)
 
 
 def configure_robot(robot: pin.RobotWrapper, q: np.ndarray) -> ConfiguredRobot:
@@ -144,4 +170,4 @@ def configure_robot(robot: pin.RobotWrapper, q: np.ndarray) -> ConfiguredRobot:
     """
     pin.computeJointJacobians(robot.model, robot.data, q)
     pin.updateFramePlacements(robot.model, robot.data)
-    return ConfiguredRobot(robot)
+    return ConfiguredRobot(robot, q)

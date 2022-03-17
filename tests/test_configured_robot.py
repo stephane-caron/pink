@@ -42,7 +42,7 @@ class TestSolveIK(unittest.TestCase):
 
     def test_configure_robot(self):
         self.robot.data.J.fill(42.0)
-        assumed_robot = pink.assume_robot_is_configured(self.robot)
+        assumed_robot = pink.assume_robot_is_configured(self.robot, self.q)
         self.assertTrue(np.allclose(assumed_robot.data.J, 42.0))
         configured_robot = pink.configure_robot(self.robot, self.q)
         J_check = np.array(
