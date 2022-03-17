@@ -16,16 +16,22 @@
 # limitations under the License.
 
 """
-Collection of open source robot models.
-
-These models are optional and not part of Pink. You can import them by
-initializing and updating submodules in a local Pink repository.
+Upkie wheeled biped robot model.
 """
 
-from .jvrc import build_jvrc_model
-from .upkie import build_upkie_model
+import os
 
-__all__ = [
-    "build_jvrc_model",
-    "build_upkie_model",
-]
+import pinocchio as pin
+
+
+def build_upkie_model() -> pin.RobotWrapper:
+    """
+    Build Upkie model from its URDF.
+    """
+    models_dir = os.path.join(os.path.dirname(__file__))
+    urdf_path = os.path.join(
+        models_dir, "upkie_description", "urdf", "upkie.urdf"
+    )
+    return pin.RobotWrapper.BuildFromURDF(
+        urdf_path, models_dir, root_joint=pin.JointModelFreeFlyer()
+    )
