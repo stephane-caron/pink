@@ -13,17 +13,13 @@
 
 ## Upcoming changes
 
-Pink's API is **not stable**. Expect the following upcoming changes:
+Pink is under active development and its API is **not stable**. Expect the following upcoming changes and more:
 
 - WIP: unit test body task convergence
 - Formalize configuration assertions
 - v0.2: Add posture task
 - v0.3: Add joint angle limits
 - v0.4: Reformulate task gains as time constants
-
-Open questions:
-
-- Expect kinematics to be already up-to-date in robot data?
 
 ## Installation
 
