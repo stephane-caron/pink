@@ -62,4 +62,8 @@ if __name__ == "__main__":
         configured_robot.get_transform_body_to_world("PELVIS_S")
     )
 
-    velocity = solve_ik(configured_robot, tasks, dt)
+    for _ in range(100):
+        velocity = solve_ik(configured_robot, tasks, dt)
+        q = configured_robot.integrate(velocity, dt)
+        configured_robot = pink.configure_robot(robot, q)
+        viz.display(q)
