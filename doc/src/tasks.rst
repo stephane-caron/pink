@@ -4,8 +4,14 @@
 Tasks
 *****
 
-Base class
-==========
+Generic task
+============
 
 .. automodule:: pink.tasks.task
+    :members:
+
+Body task
+=========
+
+.. automodule:: pink.tasks.body_task
     :members:
