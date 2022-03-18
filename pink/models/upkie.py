@@ -16,7 +16,10 @@
 # limitations under the License.
 
 """
-Upkie wheeled biped robot model.
+`Upkie`_ is a homemade wheeled biped robot that can balance, crouch and turn
+around. It proudly stands on broomsticks and 3D printed parts (^_^)
+
+.. _Upkie: https://www.youtube.com/watch?v=8b36XcCgh7s
 """
 
 import os

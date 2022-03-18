@@ -16,7 +16,8 @@
 # limitations under the License.
 
 """
-JVRC-1 humanoid robot model.
+The JVRC model is a virtual humanoid robot that was released for education and
+research during the Japanese Virtual Robotics Challenge in 2015.
 """
 
 import os
