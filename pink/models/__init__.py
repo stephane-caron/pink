@@ -22,10 +22,38 @@ These models are optional and not part of Pink. You can import them by
 initializing and updating submodules in a local Pink repository.
 """
 
-from .jvrc import build_jvrc_model
-from .upkie import build_upkie_model
+import pinocchio as pin
+
+from .jvrc import build_jvrc_from_urdf
+from .upkie import build_upkie_from_urdf
+
+
+class UnknownModel(Exception):
+
+    """
+    Exception raised when the model to load is not recognized from its path.
+    """
+
+
+def build_from_urdf(path: str) -> pin.RobotWrapper:
+    """
+    Build a robot model from its description folder.
+
+    Args:
+        path: Path to a robot description folder.
+
+    Note:
+        The model to load is recognized from the name of the last folder in the
+        path, for example "jvrc_description" or "upkie_description".
+    """
+    path.rstrip("/")
+    if path.endswith("jvrc_description"):
+        return build_jvrc_from_urdf(path)
+    if path.endswith("upkie_description"):
+        return build_upkie_from_urdf(path)
+    raise UnknownModel(path)
+
 
 __all__ = [
-    "build_jvrc_model",
-    "build_upkie_model",
+    "build_from_urdf",
 ]

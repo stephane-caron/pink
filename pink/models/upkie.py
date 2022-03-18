@@ -24,14 +24,18 @@ import os
 import pinocchio as pin
 
 
-def build_upkie_model() -> pin.RobotWrapper:
+def build_upkie_from_urdf(path: str) -> pin.RobotWrapper:
     """
-    Build Upkie model from its URDF.
+    Build the Upkie model from its URDF.
+
+    Args:
+        path: Path to an `upkie_description`_ folder.
+
+    .. _upkie_description: https://github.com/tasts-robots/upkie_description
     """
-    models_dir = os.path.join(os.path.dirname(__file__))
-    urdf_path = os.path.join(
-        models_dir, "upkie_description", "urdf", "upkie.urdf"
-    )
+    abspath = os.path.abspath(path)
     return pin.RobotWrapper.BuildFromURDF(
-        urdf_path, models_dir, root_joint=pin.JointModelFreeFlyer()
+        filename=os.path.join(abspath, "urdf", "upkie.urdf"),
+        package_dirs=[os.path.dirname(abspath)],
+        root_joint=pin.JointModelFreeFlyer(),
     )

@@ -19,6 +19,7 @@
 Humanoid robot model standing on two feet and reaching with a hand.
 """
 
+import os
 import time
 
 import numpy as np
@@ -60,7 +61,9 @@ class WavingPose:
 
 
 if __name__ == "__main__":
-    robot = pink.models.build_jvrc_model()
+    models_dir = os.path.join(os.path.dirname(__file__), "../tests", "models")
+    jvrc_description = os.path.join(models_dir, "jvrc_description")
+    robot = pink.models.build_from_urdf(jvrc_description)
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )

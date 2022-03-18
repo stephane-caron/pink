@@ -19,13 +19,14 @@
 Test the Configuration type.
 """
 
+import os
 import unittest
 
 import numpy as np
 
 import pink
 
-from pink.models import build_jvrc_model
+from pink.models import build_from_urdf
 
 
 class TestConfiguration(unittest.TestCase):
@@ -33,18 +34,20 @@ class TestConfiguration(unittest.TestCase):
         """
         Prepare test fixture.
         """
-        robot = build_jvrc_model()
-        self.q = robot.q0
-        self.robot = robot
+        models_dir = os.path.join(os.path.dirname(__file__), "models")
+        jvrc_description = os.path.join(models_dir, "jvrc_description")
+        self.jvrc_description = jvrc_description
 
     def test_assume_configuration(self):
-        self.robot.data.J.fill(42.0)
-        configuration = pink.assume_configuration(self.robot, self.q)
+        robot = build_from_urdf(self.jvrc_description)
+        robot.data.J.fill(42.0)
+        configuration = pink.assume_configuration(robot, robot.q0)
         self.assertTrue(np.allclose(configuration.data.J, 42.0))
 
     def test_apply_configuration(self):
-        self.robot.data.J.fill(42.0)
-        configuration = pink.apply_configuration(self.robot, self.q)
+        robot = build_from_urdf(self.jvrc_description)
+        robot.data.J.fill(42.0)
+        configuration = pink.apply_configuration(robot, robot.q0)
         J_check = np.array(
             [
                 [
@@ -367,7 +370,8 @@ class TestConfiguration(unittest.TestCase):
         """
         Get the pose of an existing robot body.
         """
-        configuration = pink.apply_configuration(self.robot, self.q)
+        robot = build_from_urdf(self.jvrc_description)
+        configuration = pink.apply_configuration(robot, robot.q0)
         transform_pelvis_to_world = configuration.get_transform_body_to_world(
             "PELVIS_S"
         )
@@ -382,7 +386,8 @@ class TestConfiguration(unittest.TestCase):
         """
         Raise an error when the robot body is not found.
         """
-        configuration = pink.apply_configuration(self.robot, self.q)
+        robot = build_from_urdf(self.jvrc_description)
+        configuration = pink.apply_configuration(robot, robot.q0)
         with self.assertRaises(KeyError):
             configuration.get_transform_body_to_world("foo")
 

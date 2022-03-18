@@ -19,52 +19,29 @@
 Test fixture for the body task.
 """
 
+import os
 import unittest
 
-import numpy as np
-
-from pink import apply_configuration, solve_ik
-from pink.models import build_jvrc_model
 from pink.tasks import BodyTask
 
 
 class TestBodyTask(unittest.TestCase):
+
+    """
+    Test consistency of the body task.
+
+    Note:
+        This fixture only tests the task itself. Integration tests with the IK
+        are carried out in :class:`TestSolveIK`.
+    """
+
     def setUp(self):
         """
         Prepare test fixture.
         """
-        self.dt = 5e-3  # [s]
-        self.robot = build_jvrc_model()
-        self.assertIsNotNone(self.robot)
-
-    def test_task_fulfilled(self):
-        """
-        No motion when all targets are reached.
-        """
-        configuration = apply_configuration(self.robot, self.robot.q0)
-        left_ankle_task = BodyTask(
-            "l_ankle", position_cost=1.0, orientation_cost=3.0
-        )
-        right_ankle_task = BodyTask(
-            "r_ankle", position_cost=1.0, orientation_cost=3.0
-        )
-        pelvis_task = BodyTask(
-            "PELVIS_S", position_cost=1.0, orientation_cost=3.0
-        )
-
-        left_ankle_task.set_target(
-            configuration.get_transform_body_to_world("l_ankle")
-        )
-        right_ankle_task.set_target(
-            configuration.get_transform_body_to_world("r_ankle")
-        )
-        pelvis_task.set_target(
-            configuration.get_transform_body_to_world("PELVIS_S")
-        )
-
-        tasks = [pelvis_task, left_ankle_task, right_ankle_task]
-        velocity = solve_ik(configuration, tasks, self.dt)
-        self.assertTrue(np.allclose(velocity, 0.0))
+        models_dir = os.path.join(os.path.dirname(__file__), "models")
+        jvrc_description = os.path.join(models_dir, "jvrc_description")
+        self.jvrc_description = jvrc_description
 
 
 if __name__ == "__main__":

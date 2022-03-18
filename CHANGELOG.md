@@ -6,7 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Specify path when loading a model description
 - Switch to the Apache 2.0 license
+- ``build_jvrc_model`` is now ``build_from_urdf``
+
+### Fixed
+
+- Don't distribute robot models with the library
 
 ## [0.1.0] - 2022/03/17
 
