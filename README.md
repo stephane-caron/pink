@@ -21,6 +21,20 @@ Pink is under active development and its API is **not stable**. Expect the follo
 - v0.3: Add joint angle limits
 - v0.4: Reformulate task gains as time constants
 
+## Contributing
+
+There are many ways you can contribute to Pink, all of them welcome! Here are some ideas of increasing difficulty:
+
+- Check out the [documentation](https://scaron.info/doc/pink/) and report mistakes or ask questions
+- Try out the [examples](examples) and report any issue
+- Add your own [robot model](https://scaron.info/doc/pink/extras.html#module-pink.models) to the extras
+- Write your own example
+- Find a use case that is not covered and write a unit test for it
+- Benchmark the performance of the current Configuration interface (``pin.computeJointJacobians`` + ``pin.getFrameJacobian``) compared to using ``pin.computeFrameJacobian`` depending on the number and locations of tasks
+- Solve the question of numerical instability incurred by almost-unfeasible targets where LM damping does not kick in
+
+If you are interested in helping out, open an issue so we can track progress and ensure that our priorities align.
+
 ## Installation
 
 First, install [Pinocchio](https://github.com/stack-of-tasks/pinocchio), for instance by ``pip install pin``.
