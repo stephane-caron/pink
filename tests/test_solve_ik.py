@@ -23,6 +23,7 @@ import os
 import unittest
 
 import numpy as np
+import pinocchio as pin
 
 from pink import apply_configuration
 from pink import solve_ik
@@ -63,6 +64,47 @@ class TestSolveIK(unittest.TestCase):
         )
         velocity = solve_ik(configuration, [left_contact_task], dt=5e-3)
         self.assertTrue(np.allclose(velocity, 0.0))
+
+    def test_single_task_convergence(self):
+        robot = build_from_urdf(self.upkie_description)
+        configuration = apply_configuration(robot, robot.q0)
+        left_contact_task = BodyTask(
+            "left_contact", position_cost=1.0, orientation_cost=1.0
+        )
+        transform_init_to_world = configuration.get_transform_body_to_world(
+            "left_contact"
+        )
+        transform_target_to_init = pin.SE3(
+            np.eye(3), np.array([0.0, 0.0, 0.1])
+        )
+        transform_target_to_world = (
+            transform_init_to_world * transform_target_to_init
+        )
+        left_contact_task.set_target(transform_target_to_world)
+        dt = 5e-3  # [s]
+        velocity = solve_ik(configuration, [left_contact_task], dt)
+
+        # Initially we are nowhere near the target and moving
+        self.assertFalse(np.allclose(velocity, 0.0))
+        self.assertFalse(
+            configuration.get_transform_body_to_world("left_contact").isApprox(
+                transform_target_to_world, prec=1e-4
+            )
+        )
+
+        nb_steps = 2
+        for _ in range(nb_steps):
+            q = configuration.integrate(velocity, dt)
+            configuration = apply_configuration(robot, q)
+            velocity = solve_ik(configuration, [left_contact_task], dt)
+
+        # After nb_steps we are at the target and not moving
+        self.assertTrue(np.allclose(velocity, 0.0))
+        self.assertTrue(
+            configuration.get_transform_body_to_world("left_contact").isApprox(
+                transform_target_to_world, prec=1e-8
+            )
+        )
 
     def test_three_tasks_fulfilled(self):
         """
