@@ -86,6 +86,12 @@ class TestSolveIK(unittest.TestCase):
 
         # Initially we are nowhere near the target and moving
         self.assertFalse(np.allclose(velocity, 0.0))
+        self.assertAlmostEqual(
+            np.linalg.norm(
+                left_contact_task.compute_error_in_body(configuration)
+            ),
+            0.1,
+        )
         self.assertFalse(
             configuration.get_transform_body_to_world("left_contact").isApprox(
                 transform_target_to_world, prec=1e-4
@@ -100,6 +106,12 @@ class TestSolveIK(unittest.TestCase):
 
         # After nb_steps we are at the target and not moving
         self.assertTrue(np.allclose(velocity, 0.0))
+        self.assertAlmostEqual(
+            np.linalg.norm(
+                left_contact_task.compute_error_in_body(configuration)
+            ),
+            0.0,
+        )
         self.assertTrue(
             configuration.get_transform_body_to_world("left_contact").isApprox(
                 transform_target_to_world, prec=1e-8

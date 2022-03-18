@@ -16,6 +16,7 @@
 Pink is under active development and its API is **not stable**. Expect the following upcoming changes and more:
 
 - Formalize configuration assertions
+- Body task convergence unit test with several competing tasks
 - v0.2: Add posture task
 - v0.3: Add joint angle limits
 - v0.4: Reformulate task gains as time constants
