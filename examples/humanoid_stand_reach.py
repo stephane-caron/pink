@@ -31,7 +31,7 @@ import pink.models
 from pink.tasks import BodyTask
 from pink import solve_ik
 
-from meshcat_frame import set_frame
+import meshcat_shapes
 
 
 class WavingPose:
@@ -72,9 +72,7 @@ if __name__ == "__main__":
     left_foot_task = BodyTask(
         "l_ankle", position_cost=1.0, orientation_cost=3.0
     )
-    pelvis_task = BodyTask(
-        "PELVIS_S", position_cost=1.0, orientation_cost=0.0
-    )
+    pelvis_task = BodyTask("PELVIS_S", position_cost=1.0, orientation_cost=0.0)
     right_foot_task = BodyTask(
         "r_ankle", position_cost=1.0, orientation_cost=3.0
     )
@@ -85,7 +83,7 @@ if __name__ == "__main__":
 
     pelvis_pose = configuration.get_transform_body_to_world("PELVIS_S").copy()
     pelvis_pose.translation[0] += 0.05
-    set_frame(viz.viewer["pelvis_pose"])
+    meshcat_shapes.set_frame(viz.viewer["pelvis_pose"])
     viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
     pelvis_task.set_target(pelvis_pose)
 
@@ -101,7 +99,7 @@ if __name__ == "__main__":
     )
 
     wrist_frame = viz.viewer["right_wrist_pose"]
-    set_frame(wrist_frame)
+    meshcat_shapes.set_frame(wrist_frame)
 
     dt = 5e-3  # [s]
     for t in np.arange(0.0, 10.0, dt):
