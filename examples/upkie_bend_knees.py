@@ -16,7 +16,7 @@
 # limitations under the License.
 
 """
-Humanoid robot model standing on two feet and reaching with a hand.
+Upkie wheeled biped bending its knees.
 """
 
 import os
@@ -31,10 +31,15 @@ import pink.models
 from pink.tasks import BodyTask
 from pink import solve_ik
 
-from meshcat_frame import set_frame
+import meshcat_shapes
 
 
-class WavingPose:
+class ElevatorPose:
+
+    """
+    Frame that goes up and down with respect to the world.
+    """
+
     def __init__(self, init: pin.SE3):
         """
         Initialize pose.
@@ -46,19 +51,14 @@ class WavingPose:
 
     def at(self, t):
         T = self.init.copy()
-        R = T.rotation
-        R = np.dot(R, pin.utils.rpyToMatrix(0.0, 0.0, np.pi / 2))
-        R = np.dot(R, pin.utils.rpyToMatrix(0.0, np.pi, 0.0))
-        T.rotation = R
-        T.translation[1] += -0.1 + 0.05 * np.sin(8.0 * t)
-        T.translation[2] += 0.5
+        T.translation[2] += 0.1 * np.sin(t)
         return T
 
 
 if __name__ == "__main__":
     models_dir = os.path.join(os.path.dirname(__file__), "../tests", "models")
-    jvrc_description = os.path.join(models_dir, "jvrc_description")
-    robot = pink.models.build_from_urdf(jvrc_description)
+    upkie_description = os.path.join(models_dir, "upkie_description")
+    robot = pink.models.build_from_urdf(upkie_description)
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )
@@ -69,44 +69,41 @@ if __name__ == "__main__":
     configuration = pink.apply_configuration(robot, robot.q0)
     viz.display(configuration.q)
 
-    left_foot_task = BodyTask(
-        "l_ankle", position_cost=1.0, orientation_cost=3.0
+    base_task = BodyTask("base", position_cost=1.0, orientation_cost=1.0)
+    left_contact_task = BodyTask(
+        "left_contact", position_cost=1.0, orientation_cost=1.0
     )
-    pelvis_task = BodyTask(
-        "PELVIS_S", position_cost=1.0, orientation_cost=0.0
+    right_contact_task = BodyTask(
+        "right_contact", position_cost=1.0, orientation_cost=1.0
     )
-    right_foot_task = BodyTask(
-        "r_ankle", position_cost=1.0, orientation_cost=3.0
-    )
-    right_wrist_task = BodyTask(
-        "r_wrist", position_cost=1.0, orientation_cost=3.0
-    )
-    tasks = [left_foot_task, pelvis_task, right_foot_task, right_wrist_task]
+    tasks = [base_task, left_contact_task, right_contact_task]
 
-    pelvis_pose = configuration.get_transform_body_to_world("PELVIS_S").copy()
-    pelvis_pose.translation[0] += 0.05
-    set_frame(viz.viewer["pelvis_pose"])
-    viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
-    pelvis_task.set_target(pelvis_pose)
-
-    left_foot_task.set_target(
-        configuration.get_transform_body_to_world("l_ankle")
+    base_task.set_target(
+        configuration.get_transform_body_to_world("base")
     )
-    right_foot_task.set_target(
-        configuration.get_transform_body_to_world("r_ankle")
+    left_contact_task.set_target(
+        configuration.get_transform_body_to_world("left_contact")
+    )
+    right_contact_task.set_target(
+        configuration.get_transform_body_to_world("right_contact")
     )
 
-    right_wrist_pose = WavingPose(
-        configuration.get_transform_body_to_world("r_wrist")
+    left_contact_target = ElevatorPose(
+        configuration.get_transform_body_to_world("left_contact")
+    )
+    right_contact_target = ElevatorPose(
+        configuration.get_transform_body_to_world("right_contact")
     )
 
-    wrist_frame = viz.viewer["right_wrist_pose"]
-    set_frame(wrist_frame)
+    left_contact_frame = viz.viewer["left_contact_frame"]
+    meshcat_shapes.set_frame(left_contact_frame)
+    right_contact_frame = viz.viewer["right_contact_frame"]
+    meshcat_shapes.set_frame(right_contact_frame)
 
     dt = 5e-3  # [s]
     for t in np.arange(0.0, 10.0, dt):
-        right_wrist_task.set_target(right_wrist_pose.at(t))
-        wrist_frame.set_transform(right_wrist_pose.at(t).np)
+        left_contact_task.set_target(left_contact_target.at(t))
+        right_contact_task.set_target(right_contact_target.at(t))
         velocity = solve_ik(configuration, tasks, dt)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)

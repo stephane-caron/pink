@@ -27,6 +27,7 @@ There are many ways you can contribute to Pink, all of them welcome! Here are so
 
 - Check out the [documentation](https://scaron.info/doc/pink/) and report mistakes or ask questions
 - Try out the [examples](examples) and report any issue
+- Suggests improvements to simplify the API
 - Add your own [robot model](https://scaron.info/doc/pink/extras.html#module-pink.models) to the extras so that it can load by ``pink.models.build_from_urdf("/home/.../my_robot_description")``
 - Write your own example
 - Find a use case that is not covered and write a unit test for it
