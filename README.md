@@ -7,7 +7,7 @@
 
 [![build](https://img.shields.io/github/workflow/status/stephane-caron/pink/CI)](https://github.com/stephane-caron/pink/actions)
 [![PyPI version](https://badge.fury.io/py/pin-pink.svg)](https://badge.fury.io/py/pin-pink)
-![Status](https://img.shields.io/pypi/status/pin-pink)
+<!-- ![Status](https://img.shields.io/pypi/status/pin-pink) -->
 
 **P**ython **in**verse **k**inematics for your robot model based on [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
 
