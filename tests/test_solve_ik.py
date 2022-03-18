@@ -38,7 +38,6 @@ class TestSolveIK(unittest.TestCase):
 
     def setUp(self):
         models_dir = os.path.join(os.path.dirname(__file__), "models")
-        print(models_dir, "===")
         jvrc_description = os.path.join(models_dir, "jvrc_description")
         upkie_description = os.path.join(models_dir, "upkie_description")
         self.jvrc_description = jvrc_description
