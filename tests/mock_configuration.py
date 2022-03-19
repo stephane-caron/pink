@@ -59,4 +59,4 @@ class MockConfiguration(pink.Configuration):
         return self.transforms[body]
 
     def get_body_jacobian(self, body: str) -> np.ndarray:
-        return np.ones((6, 12))
+        return np.ones((6, self.model.nv))

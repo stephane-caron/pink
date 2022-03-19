@@ -97,6 +97,22 @@ class TestBodyTask(unittest.TestCase):
         )
         self.assertLess(np.linalg.norm(e), 1e-10)
 
+    def test_unit_cost_qp_objective(self):
+        """
+        A unit cost vector means the QP objective is exactly :math:`(H, c) =
+        (J^T J, -e^T J)`.
+        """
+        shark_task = BodyTask("shark", position_cost=1.0, orientation_cost=0.1)
+        target = self.mock_configuration.get_transform_body_to_world("shark")
+        shark_task.set_target(target)
+        J, e = shark_task.compute_task_dynamics(self.mock_configuration)
+        shark_task.set_position_cost(1.0)
+        shark_task.set_orientation_cost(1.0)
+        shark_task.lm_damping = 0.0
+        H, c = shark_task.compute_qp_objective(self.mock_configuration)
+        self.assertTrue(np.allclose(J.T @ J, H))
+        self.assertTrue(np.allclose(-e.T @ J, c))
+
 
 if __name__ == "__main__":
     unittest.main()
