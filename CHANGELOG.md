@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Mock configuration type for unit testing
+- Unit test the body task
 
 ### Changed
 

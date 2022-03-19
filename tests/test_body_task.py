@@ -163,6 +163,20 @@ class TestBodyTask(unittest.TestCase):
             cost_check = qd.T @ H_check @ qd + c_check @ qd
             self.assertAlmostEqual(cost, cost_check)
 
+    def test_lm_damping_has_no_effect_at_target(self):
+        """
+        Levenberg-Marquardt damping has no effect when the task error is zero.
+        """
+        leven_task = BodyTask("leven", position_cost=1.0, orientation_cost=0.1)
+        target = self.mock_configuration.get_transform_body_to_world("leven")
+        leven_task.set_target(target)
+        leven_task.lm_damping = 1e-8
+        H_1, c_1 = leven_task.compute_qp_objective(self.mock_configuration)
+        leven_task.lm_damping = 1e-4
+        H_2, c_2 = leven_task.compute_qp_objective(self.mock_configuration)
+        self.assertTrue(np.allclose(H_1, H_2))
+        self.assertTrue(np.allclose(c_1, c_2))
+
     def test_lm_damping_has_effect_under_error(self):
         """
         Levenberg-Marquardt damping is indeed a damping: unless the task is
