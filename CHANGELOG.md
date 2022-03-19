@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Mock configuration type for unit testing
+
 ### Changed
 
 - Specify path when loading a model description
