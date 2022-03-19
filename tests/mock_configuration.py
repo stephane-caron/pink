@@ -25,6 +25,15 @@ import pinocchio as pin
 import pink
 
 
+class MockModel:
+
+    """
+    Mock robot model, 6 joints and a floating base.
+    """
+
+    nv: int = 12
+
+
 class MockConfiguration(pink.Configuration):
 
     """
@@ -32,7 +41,7 @@ class MockConfiguration(pink.Configuration):
     """
 
     def __init__(self):
-        super(MockConfiguration, self).__init__(None, None, None)
+        super(MockConfiguration, self).__init__(MockModel(), None, None)
         self.transforms = {}
 
     def get_transform_body_to_world(self, body: str) -> pin.SE3:
