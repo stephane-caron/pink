@@ -23,6 +23,9 @@ import os
 import unittest
 
 from pink.tasks import BodyTask
+from pink.tasks import TargetNotSet
+
+from .mock_configuration import MockConfiguration
 
 
 class TestBodyTask(unittest.TestCase):
@@ -42,6 +45,14 @@ class TestBodyTask(unittest.TestCase):
         models_dir = os.path.join(os.path.dirname(__file__), "models")
         jvrc_description = os.path.join(models_dir, "jvrc_description")
         self.jvrc_description = jvrc_description
+
+    def test_raises_target_not_set(self):
+        jetpack_task = BodyTask(
+            "jetpack", position_cost=1.0, orientation_cost=0.1
+        )
+        configuration = MockConfiguration()
+        with self.assertRaises(TargetNotSet):
+            jetpack_task.compute_task_dynamics(configuration)
 
 
 if __name__ == "__main__":
