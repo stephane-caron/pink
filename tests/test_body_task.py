@@ -125,6 +125,39 @@ class TestBodyTask(unittest.TestCase):
         self.assertTrue(np.allclose(J.T @ J, H))
         self.assertTrue(np.allclose(-e.T @ J, c))
 
+    def test_zero_costs_same_as_disabling_lines(self):
+        """
+        Setting a position or orientation cost to zero yields the same QP
+        objective as disabling the corresponding Jacobian and error
+        coordinates.
+        """
+        otter_task = BodyTask("otter", position_cost=1.0, orientation_cost=0.1)
+        target = self.mock_configuration.get_transform_body_to_world("otter")
+        otter_task.set_target(target)
+        J, e = otter_task.compute_task_dynamics(self.mock_configuration)
+        qd = np.random.random(J.shape[1:])
+        test_cases = {
+            "position_only": (1.0, 0.0, slice(0, 3)),
+            "orientation_only": (0.0, 1.0, slice(3, 6)),
+            "position_0": ([1.0, 0.0, 0.0], 0.0, slice(0, 1)),
+            "position_1": ([0.0, 1.0, 0.0], 0.0, slice(1, 2)),
+            "position_2": ([0.0, 0.0, 1.0], 0.0, slice(2, 3)),
+            "orientation_0": (0.0, [1.0, 0.0, 0.0], slice(3, 4)),
+            "orientation_1": (0.0, [0.0, 1.0, 0.0], slice(4, 5)),
+            "orientation_2": (0.0, [0.0, 0.0, 1.0], slice(5, 6)),
+        }
+        for case in test_cases.values():
+            position_cost, orientation_cost, indexes = case
+            otter_task.set_position_cost(position_cost)
+            otter_task.set_orientation_cost(orientation_cost)
+            otter_task.lm_damping = 0.0
+            H, c = otter_task.compute_qp_objective(self.mock_configuration)
+            H_check = J[indexes].T @ J[indexes]
+            c_check = -e[indexes].T @ J[indexes]
+            cost = qd.T @ H @ qd + c @ qd
+            cost_check = qd.T @ H_check @ qd + c_check @ qd
+            self.assertAlmostEqual(cost, cost_check)
+
 
 if __name__ == "__main__":
     unittest.main()
