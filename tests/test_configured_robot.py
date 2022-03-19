@@ -39,12 +39,18 @@ class TestConfiguration(unittest.TestCase):
         self.jvrc_description = jvrc_description
 
     def test_assume_configuration(self):
+        """
+        Assuming a configuration does not change data.
+        """
         robot = build_from_urdf(self.jvrc_description)
         robot.data.J.fill(42.0)
         configuration = pink.assume_configuration(robot, robot.q0)
         self.assertTrue(np.allclose(configuration.data.J, 42.0))
 
     def test_apply_configuration(self):
+        """
+        Applying a configuration computes Jacobians.
+        """
         robot = build_from_urdf(self.jvrc_description)
         robot.data.J.fill(42.0)
         configuration = pink.apply_configuration(robot, robot.q0)
@@ -368,7 +374,7 @@ class TestConfiguration(unittest.TestCase):
 
     def test_transform_found(self):
         """
-        Get the pose of an existing robot body.
+        Return the pose of an existing robot body.
         """
         robot = build_from_urdf(self.jvrc_description)
         configuration = pink.apply_configuration(robot, robot.q0)
@@ -384,7 +390,7 @@ class TestConfiguration(unittest.TestCase):
 
     def test_transform_not_found(self):
         """
-        Raise an error when the robot body is not found.
+        Raise an error when the request robot body is not found.
         """
         robot = build_from_urdf(self.jvrc_description)
         configuration = pink.apply_configuration(robot, robot.q0)

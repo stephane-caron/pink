@@ -54,6 +54,9 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(v, np.zeros(robot.nv)))
 
     def test_single_task_fulfilled(self):
+        """
+        Velocity is zero when the only task is already fulfilled.
+        """
         robot = build_from_urdf(self.upkie_description)
         configuration = apply_configuration(robot, robot.q0)
         left_contact_task = BodyTask(
@@ -66,6 +69,9 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_single_task_convergence(self):
+        """
+        Integrating IK velocities makes a single task converge to its target.
+        """
         robot = build_from_urdf(self.upkie_description)
         configuration = apply_configuration(robot, robot.q0)
         left_contact_task = BodyTask(

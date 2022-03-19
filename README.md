@@ -34,7 +34,7 @@ There are many ways you can contribute to Pink, all of them welcome! Here are so
 - Benchmark the performance of the current Configuration interface (``pin.computeJointJacobians`` + ``pin.getFrameJacobian``) compared to using ``pin.computeFrameJacobian``, e.g. depending on the number and locations of tasks
 - Solve the question of numerical instability incurred by almost-unfeasible targets where LM damping does not kick in
 
-If you are interested in helping out, open an issue so we can track progress and ensure that our priorities align.
+If you are interested in helping out, open an issue so we can track progress. If you already have a PR, open it so we can review it :)
 
 ## Installation
 
