@@ -56,8 +56,8 @@ class Configuration:
             :data:`Configuration.data`.
     """
 
-    data: pin.pinocchio_pywrap.Data
-    model: pin.pinocchio_pywrap.Model
+    data: pin.Data
+    model: pin.Model
     q: np.ndarray
 
     def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
