@@ -26,7 +26,8 @@ the core concepts and notations are there.
 from typing import Tuple
 
 import numpy as np
-import pinocchio as pin
+
+from ..configuration import Configuration
 
 
 class Task:
@@ -42,7 +43,7 @@ class Task:
     gain: float = 1.0
 
     def compute_task_dynamics(
-        self, robot: pin.RobotWrapper
+        self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Compute the matrix :math:`J(q)` and vector :math:`\\alpha e(q)` such
@@ -65,7 +66,7 @@ class Task:
         output of inverse kinematics.
 
         Args:
-            robot: Robot model and its current configuration :math:`q`.
+            configuration: Robot configuration to read values from.
 
         Returns:
             Tuple :math:`(J, e)` of Jacobian matrix and error vector, both
@@ -74,7 +75,7 @@ class Task:
         raise NotImplementedError
 
     def compute_qp_objective(
-        self, robot: pin.RobotWrapper
+        self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Compute the matrix-vector pair :math:`(H, c)` such that the
@@ -92,7 +93,7 @@ class Task:
         t` to get a commanded velocity).
 
         Args:
-            robot: Robot model and its current configuration :math:`q`.
+            configuration: Robot configuration to read values from.
 
         Returns:
             Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
