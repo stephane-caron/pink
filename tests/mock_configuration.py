@@ -19,6 +19,8 @@
 Mock configuration used by test fixtures.
 """
 
+from typing import Union
+
 import numpy as np
 import pinocchio as pin
 
@@ -58,8 +60,8 @@ class MockConfiguration(pink.Configuration):
             self.transforms[body] = pin.SE3.Random()
         return self.transforms[body]
 
-    def move_body_somewhere_else(self, body: str) -> None:
-        self.transforms[body] = pin.SE3.Random()
+    def move_body(self, body: str, translate: Union[list, np.ndarray]) -> None:
+        self.transforms[body].translation += np.array(translate)
 
     def get_body_jacobian(self, body: str) -> np.ndarray:
         return np.ones((6, self.model.nv))
