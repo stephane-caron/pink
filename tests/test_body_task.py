@@ -69,23 +69,24 @@ class TestBodyTask(unittest.TestCase):
         T = self.mock_configuration.get_transform_body_to_world("jetpack")
         jetpack_task.set_target(T)
         self.assertIsNotNone(jetpack_task.transform_target_to_world)
-        if jetpack_task.transform_target_to_world is not None:  # help mypy
-            self.assertTrue(
-                np.allclose(
-                    T.homogeneous,
-                    jetpack_task.transform_target_to_world.homogeneous,
-                )
+        if jetpack_task.transform_target_to_world is None:  # help mypy
+            return
+        self.assertTrue(
+            np.allclose(
+                T.homogeneous,
+                jetpack_task.transform_target_to_world.homogeneous,
             )
+        )
 
     def test_target_is_a_copy(self):
         """
         Target is saved as a copy, not a reference to the original.
         """
         tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
-        T = self.mock_configuration.get_transform_body_to_world("tail")
-        tail_task.set_target(T)
-        y = T.translation[1]
-        T.translation[1] += 12.0
+        target = self.mock_configuration.get_transform_body_to_world("tail")
+        tail_task.set_target(target)
+        y = target.translation[1]
+        target.translation[1] += 12.0
         if tail_task.transform_target_to_world is None:  # help mypy
             return
         self.assertAlmostEqual(
@@ -93,7 +94,7 @@ class TestBodyTask(unittest.TestCase):
         )
         self.assertNotAlmostEqual(
             tail_task.transform_target_to_world.translation[1],
-            T.translation[1],
+            target.translation[1],
         )
 
     def test_zero_error_when_target_at_body(self):
@@ -102,7 +103,7 @@ class TestBodyTask(unittest.TestCase):
         """
         tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
         target = self.mock_configuration.get_transform_body_to_world("tail")
-        tail_task.set_target(target)
+        tail_task.set_target(target)  # error == 0
         J, e = tail_task.compute_task_dynamics(self.mock_configuration)
         self.assertTrue(
             np.allclose(J, self.mock_configuration.get_body_jacobian("tail"))
@@ -117,6 +118,7 @@ class TestBodyTask(unittest.TestCase):
         shark_task = BodyTask("shark", position_cost=1.0, orientation_cost=0.1)
         target = self.mock_configuration.get_transform_body_to_world("shark")
         shark_task.set_target(target)
+        self.mock_configuration.move_body_somewhere_else("shark")  # error > 0
         J, e = shark_task.compute_task_dynamics(self.mock_configuration)
         shark_task.set_position_cost(1.0)
         shark_task.set_orientation_cost(1.0)
@@ -134,6 +136,7 @@ class TestBodyTask(unittest.TestCase):
         otter_task = BodyTask("otter", position_cost=1.0, orientation_cost=0.1)
         target = self.mock_configuration.get_transform_body_to_world("otter")
         otter_task.set_target(target)
+        self.mock_configuration.move_body_somewhere_else("shark")  # error > 0
         J, e = otter_task.compute_task_dynamics(self.mock_configuration)
         qd = np.random.random(J.shape[1:])
         test_cases = {

@@ -58,5 +58,8 @@ class MockConfiguration(pink.Configuration):
             self.transforms[body] = pin.SE3.Random()
         return self.transforms[body]
 
+    def move_body_somewhere_else(self, body: str) -> None:
+        self.transforms[body] = pin.SE3.Random()
+
     def get_body_jacobian(self, body: str) -> np.ndarray:
         return np.ones((6, self.model.nv))
