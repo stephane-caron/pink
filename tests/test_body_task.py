@@ -87,6 +87,16 @@ class TestBodyTask(unittest.TestCase):
             T.translation[1],
         )
 
+    def test_zero_error_when_target_at_body(self):
+        tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
+        target = self.mock_configuration.get_transform_body_to_world("tail")
+        tail_task.set_target(target)
+        J, e = tail_task.compute_task_dynamics(self.mock_configuration)
+        self.assertTrue(
+            np.allclose(J, self.mock_configuration.get_body_jacobian("tail"))
+        )
+        self.assertLess(np.linalg.norm(e), 1e-10)
+
 
 if __name__ == "__main__":
     unittest.main()

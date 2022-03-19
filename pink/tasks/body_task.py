@@ -45,8 +45,6 @@ class BodyTask(Task):
             orientation costs in :math:`[\\mathrm{cost}] / [\\mathrm{rad}]`.
             Set a cost to zero to disable the task along a coordinate (no cost
             no effect).
-        error_in_body: task error in body frame at the last time it was
-            evaluated.
         lm_damping: Unitless scale of the Levenberg-Marquardt (only when
             the error is large) regularization term, which helps when
             targets are unfeasible. Increase this value if the task is too
@@ -66,7 +64,6 @@ class BodyTask(Task):
 
     body: str
     cost: np.ndarray
-    error_in_body: np.ndarray
     lm_damping: float
     transform_target_to_world: Optional[pin.SE3]
 
@@ -95,7 +92,6 @@ class BodyTask(Task):
         """
         self.body = body
         self.cost = np.ones(6)
-        self.error_in_body = np.zeros(6)
         self.lm_damping = lm_damping
         self.transform_target_to_world = None
         #
@@ -173,7 +169,6 @@ class BodyTask(Task):
             self.transform_target_to_world,
             transform_body_to_world,
         )
-        self.error_in_body = error_in_body
         return error_in_body
 
     def compute_task_dynamics(
@@ -190,8 +185,7 @@ class BodyTask(Task):
         The Jacobian matrix is :math:`J(q) \\in \\mathbb{R}^{6 \\times n}`,
         with :math:`n` the dimension of the robot's tangent space, and the
         error vector is :math:`e(q) \\in \\mathbb{R}^6`. See
-        [`Task.compute_task_dynamics`][.tasks.task.Task.compute_task_dynamics]
-        for more documentation.
+        :func:`Task.compute_task_dynamics` for more documentation.
 
         Args:
             configuration: Robot configuration to read values from.
