@@ -50,6 +50,9 @@ class TestBodyTask(unittest.TestCase):
         self.mock_configuration = MockConfiguration()
 
     def test_target_not_set(self):
+        """
+        Raise an exception when the target is not set.
+        """
         jetpack_task = BodyTask(
             "jetpack", position_cost=1.0, orientation_cost=0.1
         )
@@ -57,6 +60,9 @@ class TestBodyTask(unittest.TestCase):
             jetpack_task.compute_task_dynamics(self.mock_configuration)
 
     def test_target_set_properly(self):
+        """
+        Return target properly once it's set.
+        """
         jetpack_task = BodyTask(
             "jetpack", position_cost=1.0, orientation_cost=0.1
         )
@@ -72,6 +78,9 @@ class TestBodyTask(unittest.TestCase):
             )
 
     def test_target_is_a_copy(self):
+        """
+        Target is saved as a copy, not a reference to the original.
+        """
         tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
         T = self.mock_configuration.get_transform_body_to_world("tail")
         tail_task.set_target(T)
@@ -88,6 +97,9 @@ class TestBodyTask(unittest.TestCase):
         )
 
     def test_zero_error_when_target_at_body(self):
+        """
+        Error is zero when the target and body are at the same location.
+        """
         tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
         target = self.mock_configuration.get_transform_body_to_world("tail")
         tail_task.set_target(target)
