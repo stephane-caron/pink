@@ -24,6 +24,8 @@ import unittest
 
 import numpy as np
 
+from qpsolvers import solve_qp
+
 from pink.tasks import BodyTask
 from pink.tasks import TargetNotSet
 
@@ -160,6 +162,30 @@ class TestBodyTask(unittest.TestCase):
             cost = qd.T @ H @ qd + c @ qd
             cost_check = qd.T @ H_check @ qd + c_check @ qd
             self.assertAlmostEqual(cost, cost_check)
+
+    def test_lm_damping_has_effect_under_error(self):
+        """
+        Levenberg-Marquardt damping is indeed a damping: unless the task is
+        fulfilled, it reduces velocities.
+        """
+        berg_task = BodyTask("berg", position_cost=1.0, orientation_cost=0.1)
+        target = self.mock_configuration.get_transform_body_to_world("berg")
+        berg_task.set_target(target)
+
+        def body_is_at_target(task):
+            error = task.compute_error_in_body(self.mock_configuration)
+            return np.linalg.norm(error) < 1e-6
+
+        while body_is_at_target(berg_task):  # enforce error > 1e-6
+            self.mock_configuration.move_body_somewhere_else("berg")
+
+        berg_task.lm_damping = 1e-9
+        H_1, c_1 = berg_task.compute_qp_objective(self.mock_configuration)
+        berg_task.lm_damping = 1e-6
+        H_2, c_2 = berg_task.compute_qp_objective(self.mock_configuration)
+        qd_1 = solve_qp(H_1, c_1)  # H_1 is p.s.d. from LM damping
+        qd_2 = solve_qp(H_2, c_2)  # idem for H_2
+        self.assertGreater(np.linalg.norm(qd_2 - qd_1), 1e-7)
 
 
 if __name__ == "__main__":
