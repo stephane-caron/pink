@@ -71,6 +71,22 @@ class TestBodyTask(unittest.TestCase):
                 )
             )
 
+    def test_target_is_a_copy(self):
+        tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
+        T = self.mock_configuration.get_transform_body_to_world("tail")
+        tail_task.set_target(T)
+        y = T.translation[1]
+        T.translation[1] += 12.0
+        if tail_task.transform_target_to_world is None:  # help mypy
+            return
+        self.assertAlmostEqual(
+            tail_task.transform_target_to_world.translation[1], y
+        )
+        self.assertNotAlmostEqual(
+            tail_task.transform_target_to_world.translation[1],
+            T.translation[1],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
