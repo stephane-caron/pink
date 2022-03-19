@@ -33,9 +33,21 @@ class MockConfiguration(pink.Configuration):
 
     def __init__(self):
         super(MockConfiguration, self).__init__(None, None, None)
+        self.transforms = {}
 
     def get_transform_body_to_world(self, body: str) -> pin.SE3:
-        return pin.SE3.Random()
+        """
+        Generate random poses with memoization.
+
+        Args:
+            body: Each name will return the same pose.
+
+        Returns:
+            Body pose in the world frame.
+        """
+        if body not in self.transforms:
+            self.transforms[body] = pin.SE3.Random()
+        return self.transforms[body]
 
     def get_body_jacobian(self, body: str) -> np.ndarray:
         return np.ones((6, 12))
