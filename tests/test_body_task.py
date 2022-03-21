@@ -51,6 +51,17 @@ class TestBodyTask(unittest.TestCase):
         self.jvrc_description = jvrc_description
         self.mock_configuration = MockConfiguration()
 
+    def test_task_repr(self):
+        """
+        String representation reports the task gain, costs and target.
+        """
+        earflap_task = BodyTask(
+            "earflap", position_cost=1.0, orientation_cost=0.1
+        )
+        self.assertTrue("gain=" in repr(earflap_task))
+        self.assertTrue("cost=" in repr(earflap_task))
+        self.assertTrue("target=" in repr(earflap_task))
+
     def test_target_not_set(self):
         """
         Raise an exception when the target is not set.
