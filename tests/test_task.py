@@ -46,7 +46,3 @@ class TestTask(unittest.TestCase):
             task.compute_task_dynamics(robot)
         with self.assertRaises(NotImplementedError):
             task.compute_qp_objective(robot)
-
-
-if __name__ == "__main__":
-    unittest.main()

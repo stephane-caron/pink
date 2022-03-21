@@ -156,7 +156,3 @@ class TestSolveIK(unittest.TestCase):
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
         velocity = solve_ik(configuration, tasks, dt=5e-3)
         self.assertTrue(np.allclose(velocity, 0.0))
-
-
-if __name__ == "__main__":
-    unittest.main()

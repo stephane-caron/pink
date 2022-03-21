@@ -406,10 +406,6 @@ class TestConfiguration(unittest.TestCase):
         q = robot.q0
         configuration = pink.apply_configuration(robot, q)
         configuration.check_limits()
-        q[-10] += 1e4
+        q[-10] += 1e4  # limit exceeded
         with self.assertRaises(NotWithinConfigurationLimits):
             configuration.check_limits()
-
-
-if __name__ == "__main__":
-    unittest.main()

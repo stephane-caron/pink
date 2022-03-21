@@ -193,7 +193,3 @@ class TestBodyTask(unittest.TestCase):
         qd_1 = solve_qp(H_1, c_1)  # H_1 is p.s.d. from LM damping
         qd_2 = solve_qp(H_2, c_2)  # idem for H_2
         self.assertGreater(np.linalg.norm(qd_2 - qd_1), 1e-6)
-
-
-if __name__ == "__main__":
-    unittest.main()
