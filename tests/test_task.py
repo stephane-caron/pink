@@ -35,6 +35,13 @@ class TestTask(unittest.TestCase):
         jvrc_description = os.path.join(models_dir, "jvrc_description")
         self.jvrc_description = jvrc_description
 
+    def test_task_repr(self):
+        """
+        String representation reports the task gain.
+        """
+        task = Task()
+        self.assertTrue("gain=" in repr(task))
+
     def test_task_not_implemented(self):
         """
         Raise an error when the robot body is not found.
