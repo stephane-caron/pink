@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Check configuration limits against model
 - Mock configuration type for unit testing
 - Unit test the body task
 

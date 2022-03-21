@@ -24,6 +24,8 @@ IK can be queried from the robot's data.
 import numpy as np
 import pinocchio as pin
 
+from .exceptions import NotWithinConfigurationLimits
+
 
 class Configuration:
 
@@ -65,11 +67,26 @@ class Configuration:
         self.model = model
         self.q = q
 
-    def check_limits(self):
+    def check_limits(self) -> None:
         """
-        TODO(scaron): implement.
+        Check that the current configuration is within limits.
+
+        Raises:
+            NotWithinConfigurationLimits: if the current configuration is
+                within limits.
         """
-        raise NotImplementedError
+        q_max = self.model.upperPositionLimit
+        q_min = self.model.lowerPositionLimit
+        for i in range(7, self.model.nq):
+            if q_max[i] <= q_min[i] + 1e-6:  # no limit
+                continue
+            if self.q[i] < q_min[i] or self.q[i] > q_max[i]:
+                raise NotWithinConfigurationLimits(
+                    i,
+                    self.q[i],
+                    q_min[i],
+                    q_max[i],
+                )
 
     def get_body_jacobian(self, body: str) -> np.ndarray:
         """
