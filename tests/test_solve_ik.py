@@ -25,6 +25,8 @@ import unittest
 import numpy as np
 import pinocchio as pin
 
+import pink
+
 from pink import apply_configuration
 from pink import solve_ik
 from pink.models import build_from_urdf
@@ -49,8 +51,9 @@ class TestSolveIK(unittest.TestCase):
         Raise an error when the robot body is not found.
         """
         robot = build_from_urdf(self.jvrc_description)
+        configuration = pink.assume_configuration(robot, robot.q0)
         tasks = []
-        v = solve_ik(robot, tasks, dt=1e-3)
+        v = solve_ik(configuration, tasks, dt=1e-3)
         self.assertTrue(np.allclose(v, np.zeros(robot.nv)))
 
     def test_single_task_fulfilled(self):
