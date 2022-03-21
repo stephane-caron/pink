@@ -26,6 +26,7 @@ import numpy as np
 
 import pink
 
+from pink.exceptions import NotWithinConfigurationLimits
 from pink.models import build_from_urdf
 
 
@@ -396,6 +397,18 @@ class TestConfiguration(unittest.TestCase):
         configuration = pink.apply_configuration(robot, robot.q0)
         with self.assertRaises(KeyError):
             configuration.get_transform_body_to_world("foo")
+
+    def test_check_limits(self):
+        """
+        Raise an error if and only if a joint limit is exceened.
+        """
+        robot = build_from_urdf(self.jvrc_description)
+        q = robot.q0
+        configuration = pink.apply_configuration(robot, q)
+        configuration.check_limits()
+        q[-10] += 1e4
+        with self.assertRaises(NotWithinConfigurationLimits):
+            configuration.check_limits()
 
 
 if __name__ == "__main__":
