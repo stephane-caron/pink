@@ -25,6 +25,8 @@ import unittest
 import numpy as np
 import pinocchio as pin
 
+from numpy.linalg import norm
+
 import pink
 
 from pink import apply_configuration
@@ -78,7 +80,7 @@ class TestSolveIK(unittest.TestCase):
         """
         robot = build_from_urdf(self.upkie_description)
         configuration = apply_configuration(robot, robot.q0)
-        left_contact_task = BodyTask(
+        task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
         transform_init_to_world = configuration.get_transform_body_to_world(
@@ -90,16 +92,14 @@ class TestSolveIK(unittest.TestCase):
         transform_target_to_world = (
             transform_init_to_world * transform_target_to_init
         )
-        left_contact_task.set_target(transform_target_to_world)
+        task.set_target(transform_target_to_world)
         dt = 5e-3  # [s]
-        velocity = solve_ik(configuration, [left_contact_task], dt)
+        velocity = solve_ik(configuration, [task], dt)
 
         # Initially we are nowhere near the target and moving
         self.assertFalse(np.allclose(velocity, 0.0))
         self.assertAlmostEqual(
-            np.linalg.norm(
-                left_contact_task.compute_error_in_body(configuration)
-            ),
+            norm(task.compute_error_in_body(configuration)),
             0.1,
         )
         self.assertFalse(
@@ -108,18 +108,21 @@ class TestSolveIK(unittest.TestCase):
             )
         )
 
-        nb_steps = 2
-        for _ in range(nb_steps):
+        last_error = 1e6
+        for nb_steps in range(42):
+            error = norm(task.compute_error_in_body(configuration))
+            if error < 1e-6 and np.allclose(velocity, 0.0):
+                break
+            self.assertLess(error, last_error)  # error stictly decreases
+            last_error = error
             q = configuration.integrate(velocity, dt)
             configuration = apply_configuration(robot, q)
-            velocity = solve_ik(configuration, [left_contact_task], dt)
+            velocity = solve_ik(configuration, [task], dt)
 
         # After nb_steps we are at the target and not moving
         self.assertTrue(np.allclose(velocity, 0.0))
         self.assertAlmostEqual(
-            np.linalg.norm(
-                left_contact_task.compute_error_in_body(configuration)
-            ),
+            norm(task.compute_error_in_body(configuration)),
             0.0,
         )
         self.assertTrue(
@@ -127,6 +130,7 @@ class TestSolveIK(unittest.TestCase):
                 transform_target_to_world, prec=1e-8
             )
         )
+        self.assertLess(nb_steps, 3)
 
     def test_three_tasks_fulfilled(self):
         """
