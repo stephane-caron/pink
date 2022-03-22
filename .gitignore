@@ -6,3 +6,4 @@
 dist
 doc/build
 examples/pink
+htmlcov
