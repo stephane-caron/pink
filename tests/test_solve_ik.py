@@ -29,6 +29,7 @@ import pink
 
 from pink import apply_configuration
 from pink import solve_ik
+from pink.exceptions import NotWithinConfigurationLimits
 from pink.models import build_from_urdf
 from pink.tasks import BodyTask
 
@@ -156,3 +157,14 @@ class TestSolveIK(unittest.TestCase):
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
         velocity = solve_ik(configuration, tasks, dt=5e-3)
         self.assertTrue(np.allclose(velocity, 0.0))
+
+    def test_checks_configuration_limits(self):
+        """
+        IK checks for configuration limits.
+        """
+        robot = build_from_urdf(self.upkie_description)
+        q = robot.q0
+        q[7] = 20  # above limit for Upkie's first joint
+        configuration = pink.apply_configuration(robot, q)
+        with self.assertRaises(NotWithinConfigurationLimits):
+            solve_ik(configuration, [], dt=1.0)
