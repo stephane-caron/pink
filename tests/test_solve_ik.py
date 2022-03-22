@@ -65,13 +65,13 @@ class TestSolveIK(unittest.TestCase):
         """
         robot = build_from_urdf(self.upkie_description)
         configuration = apply_configuration(robot, robot.q0)
-        left_contact_task = BodyTask(
+        task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
-        left_contact_task.set_target(
+        task.set_target(
             configuration.get_transform_body_to_world("left_contact")
         )
-        velocity = solve_ik(configuration, [left_contact_task], dt=5e-3)
+        velocity = solve_ik(configuration, [task], dt=5e-3)
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_single_task_convergence(self):
