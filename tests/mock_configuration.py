@@ -44,9 +44,11 @@ class MockConfiguration(pink.Configuration):
     """
 
     def __init__(self):
-        super(MockConfiguration, self).__init__(MockModel(), None, None)
+        model = MockModel()
+        q = np.ones(model.nq)
+        super(MockConfiguration, self).__init__(model, None, q)
         self.transforms = {}
-        self.q = np.ones(self.model.nq)
+        self.q = q
 
     def get_transform_body_to_world(self, body: str) -> pin.SE3:
         """
