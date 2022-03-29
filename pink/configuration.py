@@ -27,6 +27,39 @@ import pinocchio as pin
 from .exceptions import NotWithinConfigurationLimits
 
 
+class Tangent:
+
+    """
+    Represent the tangent space at a given robot configuration.
+    """
+
+    __model: pin.Model
+
+    def __init__(self, model: pin.Model):
+        self.__model = model
+
+    @property
+    def eye(self):
+        """
+        Identity matrix of the tangent space.
+        """
+        return np.eye(self.__model.nv)
+
+    @property
+    def ones(self):
+        """
+        Vector of ones in the tangent space.
+        """
+        return np.ones(self.__model.nv)
+
+    @property
+    def zeros(self):
+        """
+        Vector of zeros in the tangent space.
+        """
+        return np.zeros(self.__model.nv)
+
+
 class Configuration:
 
     """
@@ -66,6 +99,7 @@ class Configuration:
         self.data = data
         self.model = model
         self.q = q
+        self.tangent = Tangent(model)
 
     def check_limits(self) -> None:
         """

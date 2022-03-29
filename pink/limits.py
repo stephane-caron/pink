@@ -59,6 +59,6 @@ def compute_velocity_limits(
     Returns:
         Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds.
     """
-    v_max = +1000.0 * np.ones(configuration.model.nv)
-    v_min = -1000.0 * np.ones(configuration.model.nv)
+    v_max = +1000.0 * configuration.tangent.ones
+    v_min = -1000.0 * configuration.tangent.ones
     return v_max, v_min

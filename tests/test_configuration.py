@@ -409,3 +409,33 @@ class TestConfiguration(unittest.TestCase):
         q[-10] += 1e4  # TODO(scaron): this is actually undesirable!
         with self.assertRaises(NotWithinConfigurationLimits):
             configuration.check_limits()
+
+    def test_tangent_eye(self):
+        """
+        Configuration's tangent eye is an identity matrix.
+        """
+        robot = build_from_urdf(self.jvrc_description)
+        configuration = pink.apply_configuration(robot, robot.q0)
+        v = np.array([i for i in range(robot.model.nv)])
+        self.assertTrue(np.allclose(configuration.tangent.eye.dot(v), v))
+
+    def test_tangent_ones(self):
+        """
+        Configuration's tangent ones is a vector of 1.0's.
+        """
+        robot = build_from_urdf(self.jvrc_description)
+        configuration = pink.apply_configuration(robot, robot.q0)
+        self.assertEqual(np.sum(configuration.tangent.ones), robot.model.nv)
+
+    def test_tangent_zeros(self):
+        """
+        Configuration's tangent ones is a vector of 0.0's.
+        """
+        robot = build_from_urdf(self.jvrc_description)
+        configuration = pink.apply_configuration(robot, robot.q0)
+        self.assertAlmostEqual(np.sum(configuration.tangent.zeros), 0.0)
+        self.assertEqual(len(configuration.tangent.zeros), robot.model.nv)
+
+
+if __name__ == "__main__":
+    unittest.main()

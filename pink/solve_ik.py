@@ -56,8 +56,8 @@ def compute_qp_objective(
         Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
         objective.
     """
-    H = damping * np.eye(configuration.model.nv)
-    c = np.zeros((configuration.model.nv,))
+    H = damping * configuration.tangent.eye
+    c = configuration.tangent.zeros
     for task in tasks:
         H_task, c_task = task.compute_qp_objective(configuration)
         H += H_task
@@ -102,7 +102,7 @@ def solve_ik(
     configuration.check_limits()
     H, c = compute_qp_objective(configuration, tasks, damping)
     v_max, v_min = compute_velocity_limits(configuration, dt)
-    tangent_eye = np.eye(configuration.model.nv)
+    tangent_eye = configuration.tangent.eye
     A = np.vstack([tangent_eye, -tangent_eye])
     b = np.hstack([v_max * dt, -v_min * dt])
     Delta_q = solve_qp(H, c, A, b, solver=solver)

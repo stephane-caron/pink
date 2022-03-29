@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Check configuration limits against model
 - Mock configuration type for unit testing
+- Tangent member of a configuration
 - Unit test the body task
 
 ### Changed

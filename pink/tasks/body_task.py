@@ -234,7 +234,7 @@ class BodyTask(Task):
         weighted_jacobian = weight @ jacobian  # [cost]
         weighted_error = weight @ error  # [cost]
         mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2
-        eye_tg = np.eye(configuration.model.nv)
+        eye_tg = configuration.tangent.eye
         # Our Levenberg-Marquardt damping `mu * eye_tg` is isotropic in the
         # robot's tangent space. If it helps we can add a tangent-space scaling
         # to damp the floating base differently from joint angular velocities.
