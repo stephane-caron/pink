@@ -411,7 +411,7 @@ class TestConfiguration(unittest.TestCase):
         with self.assertRaises(NotWithinConfigurationLimits):
             configuration.check_limits()
 
-    def test_q_is_a_copy(self):
+    def test_q_is_a_read_only_copy(self):
         """
         The `q` attribute of a configuration is a read-only copy.
         """
@@ -422,6 +422,8 @@ class TestConfiguration(unittest.TestCase):
         self.assertNotEqual(configuration.q[2], the_answer)
         original_q[2] = the_answer
         self.assertNotEqual(configuration.q[2], the_answer)
+        with self.assertRaises(ValueError):
+            configuration.q[2] += 3.0  # read-only
 
     def test_tangent_eye(self):
         """
