@@ -24,7 +24,7 @@ from .configuration import assume_configuration
 from .configuration import apply_configuration
 from .solve_ik import solve_ik
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 
 __all__ = [
     "Configuration",

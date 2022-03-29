@@ -17,9 +17,9 @@ Pink is under active development and its API is **not stable**. Expect the follo
 
 - Configuration vector copy when applying (currently a reference, can lead to inconsistencies)
 - Body task convergence unit test with several competing tasks
-- v0.2: Add posture task
 - v0.3: Add joint angle limits
-- v0.4: Reformulate task gains as time constants
+- v0.4: Handle models without and with floating base
+- v0.5: Reformulate task gains as time constants
 
 ## 👷 Contributing
 
