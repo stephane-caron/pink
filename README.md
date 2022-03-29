@@ -15,7 +15,6 @@
 
 Pink is under active development and its API is **not stable**. Expect the following upcoming changes and more:
 
-- Configuration vector copy when applying (currently a reference, can lead to inconsistencies)
 - Body task convergence unit test with several competing tasks
 - v0.3: Add joint angle limits
 - v0.4: Handle models without and with floating base
