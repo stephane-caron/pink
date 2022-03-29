@@ -24,6 +24,7 @@ from typing import Optional, Tuple
 import numpy as np
 
 from ..configuration import Configuration
+from .exceptions import TargetNotSet
 from .task import Task
 
 
@@ -96,6 +97,8 @@ class PostureTask(Task):
             Pair :math:`(J, \\alpha e)` of Jacobian matrix and error vector,
             both expressed in the body frame.
         """
+        if self.target_q is None:
+            raise TargetNotSet("no posture target")
         # TODO(scaron): handle models without floating base joint
         jacobian = configuration.tangent.eye[6:, :]
         error = (self.target_q - configuration.q)[7:]
