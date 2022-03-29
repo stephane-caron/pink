@@ -21,10 +21,12 @@ Kinematic tasks.
 
 from .body_task import BodyTask
 from .exceptions import TargetNotSet
+from .posture_task import PostureTask
 from .task import Task
 
 __all__ = [
     "BodyTask",
+    "PostureTask",
     "TargetNotSet",
     "Task",
 ]

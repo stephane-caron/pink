@@ -184,8 +184,9 @@ class BodyTask(Task):
 
         The Jacobian matrix is :math:`J(q) \\in \\mathbb{R}^{6 \\times n}`,
         with :math:`n` the dimension of the robot's tangent space, and the
-        error vector is :math:`e(q) \\in \\mathbb{R}^6`. See
-        :func:`Task.compute_task_dynamics` for more documentation.
+        error vector is :math:`e(q) \\in \\mathbb{R}^6`.
+
+        See :func:`Task.compute_task_dynamics` for more context.
 
         Args:
             configuration: Robot configuration to read values from.
@@ -212,9 +213,9 @@ class BodyTask(Task):
 
         The weight matrix :math:`W \\in \\mathbb{R}^{6 \\times 6}` combines
         position and orientation costs. The unit of the overall contribution is
-        [cost]^2. The configuration displacement :math:`\\Delta q` is the
-        output of inverse kinematics (we divide it by :math:`\\Delta t` to get
-        a commanded velocity).
+        :math:`[\\mathrm{cost}]^2`. The configuration displacement
+        :math:`\\Delta q` is the output of inverse kinematics (we divide it by
+        :math:`\\Delta t` to get a commanded velocity).
 
         Args:
             configuration: Robot configuration to read values from.

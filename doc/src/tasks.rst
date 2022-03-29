@@ -15,3 +15,9 @@ Body task
 
 .. automodule:: pink.tasks.body_task
     :members:
+
+Posture task
+============
+
+.. automodule:: pink.tasks.posture_task
+    :members:
