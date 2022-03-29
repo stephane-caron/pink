@@ -54,7 +54,7 @@ class TestSolveIK(unittest.TestCase):
         Raise an error when the robot body is not found.
         """
         robot = build_from_urdf(self.jvrc_description)
-        configuration = pink.assume_configuration(robot, robot.q0)
+        configuration = apply_configuration(robot, robot.q0)
         tasks = []
         v = solve_ik(configuration, tasks, dt=1e-3)
         self.assertTrue(np.allclose(v, np.zeros(robot.nv)))

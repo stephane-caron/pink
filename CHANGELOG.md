@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Don't distribute robot models with the library
+- IK unit test that used robot instead of configuration
 
 ## [0.1.0] - 2022/03/17
 
