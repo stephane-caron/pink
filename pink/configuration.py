@@ -96,9 +96,11 @@ class Configuration:
     q: np.ndarray
 
     def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
+        q_copy = q.copy()
+        q_copy.setflags(write=False)
         self.data = data
         self.model = model
-        self.q = q
+        self.q = q_copy
         self.tangent = Tangent(model)
 
     def check_limits(self) -> None:
