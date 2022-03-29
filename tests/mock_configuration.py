@@ -33,6 +33,7 @@ class MockModel:
     Mock robot model, 6 joints and a floating base.
     """
 
+    nq: int = 13
     nv: int = 12
 
 
@@ -45,6 +46,7 @@ class MockConfiguration(pink.Configuration):
     def __init__(self):
         super(MockConfiguration, self).__init__(MockModel(), None, None)
         self.transforms = {}
+        self.q = np.ones(self.model.nq)
 
     def get_transform_body_to_world(self, body: str) -> pin.SE3:
         """
