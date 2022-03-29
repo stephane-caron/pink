@@ -410,6 +410,18 @@ class TestConfiguration(unittest.TestCase):
         with self.assertRaises(NotWithinConfigurationLimits):
             configuration.check_limits()
 
+    def test_q_is_a_copy(self):
+        """
+        The `q` attribute of a configuration is a read-only copy.
+        """
+        robot = build_from_urdf(self.jvrc_description)
+        original_q = robot.q0
+        configuration = pink.apply_configuration(robot, original_q)
+        the_answer = 42.0
+        self.assertNotEqual(configuration.q[2], the_answer)
+        original_q[2] = the_answer
+        self.assertNotEqual(configuration.q[2], the_answer)
+
     def test_tangent_eye(self):
         """
         Configuration's tangent eye is an identity matrix.

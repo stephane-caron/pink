@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+...
+
+## [0.2.0] - 2022/03/29
+
 ### Added
 
 - Check configuration limits against model
