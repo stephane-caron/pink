@@ -49,6 +49,14 @@ class TestPostureTask(unittest.TestCase):
         self.jvrc_description = jvrc_description
         self.mock_configuration = MockConfiguration()
 
+    def test_task_repr(self):
+        """
+        String representation reports the task gain, costs and target.
+        """
+        task = PostureTask(cost=1.0)
+        self.assertTrue("cost=" in repr(task))
+        self.assertTrue("gain=" in repr(task))
+
     def test_target_not_set(self):
         """
         Raise an exception when the target is not set.
