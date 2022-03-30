@@ -88,11 +88,23 @@ if __name__ == "__main__":
     viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
     pelvis_task.set_target(pelvis_pose)
 
+    transform_l_ankle_target_to_init = pin.SE3(
+        np.eye(3), np.array([0.1, 0.0, 0.0])
+    )
+    transform_r_ankle_target_to_init = pin.SE3(
+        np.eye(3), np.array([-0.1, 0.0, 0.0])
+    )
+
     left_foot_task.set_target(
         configuration.get_transform_body_to_world("l_ankle")
+        * transform_l_ankle_target_to_init
     )
     right_foot_task.set_target(
         configuration.get_transform_body_to_world("r_ankle")
+        * transform_r_ankle_target_to_init
+    )
+    pelvis_task.set_target(
+        configuration.get_transform_body_to_world("PELVIS_S")
     )
 
     right_wrist_pose = WavingPose(
