@@ -48,8 +48,9 @@ class WavingPose:
         T = self.init.copy()
         R = T.rotation
         R = np.dot(R, pin.utils.rpyToMatrix(0.0, 0.0, np.pi / 2))
-        R = np.dot(R, pin.utils.rpyToMatrix(0.0, np.pi, 0.0))
+        R = np.dot(R, pin.utils.rpyToMatrix(0.0, -np.pi, 0.0))
         T.rotation = R
+        T.translation[0] += 0.5
         T.translation[1] += -0.1 + 0.05 * np.sin(8.0 * t)
         T.translation[2] += 0.5
         return T
