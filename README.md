@@ -15,9 +15,10 @@
 
 Pink is under active development and its API is **not stable**. Expect the following upcoming changes:
 
-- Body task convergence unit test with several competing tasks
+- Add a manipulator example
 - v0.4: Handle models without and with floating base
-- v0.5: Reformulate task gains as time constants
+- Reformulate task gains as time constants
+- Complete documentation
 
 And more: all [contributions](CONTRIBUTING.md) are welcome :)
 
