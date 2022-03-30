@@ -48,3 +48,18 @@ class TestLimits(unittest.TestCase):
         velocity_limit = self.configuration.model.velocityLimit
         self.assertTrue(np.allclose(v_max, +velocity_limit))
         self.assertTrue(np.allclose(v_min, -velocity_limit))
+
+    def check_configuration_limit_repulsion(self):
+        """
+        Velocities are scaled down when close to a configuration limit.
+        """
+        q = self.configuration.q
+        slack_vel = 5.5e-4  # [rad] / [s]
+        self.robot.model.upperPositionLimit = q + slack_vel * self.dt
+        v_max, v_min = compute_velocity_limits(
+            self.configuration, self.dt, config_limit_gain=0.5
+        )
+        default_limit = self.robot.model.velocityLimit
+        self.assertTrue(np.allclose(v_max[:6], default_limit[:6]))
+        self.assertTrue(np.all(v_max[6:] < default_limit[6:]))
+        self.assertTrue(np.all(v_max[6:] < slack_vel))
