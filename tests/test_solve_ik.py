@@ -175,11 +175,12 @@ class TestSolveIK(unittest.TestCase):
 
     def test_three_tasks_convergence(self):
         """
-        Converges under three competing tasks.
+        Three simultaneously feasible tasks on the JVRC humanoid converge.
         """
-        return  # TODO(scaron): revise after joint limits are implemented
         robot = build_from_urdf(self.jvrc_description)
         configuration = apply_configuration(robot, robot.q0)
+
+        # Define tasks
         left_ankle_task = BodyTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
         )
@@ -187,17 +188,16 @@ class TestSolveIK(unittest.TestCase):
             "r_ankle", position_cost=1.0, orientation_cost=3.0
         )
         pelvis_task = BodyTask(
-            "PELVIS_S", position_cost=1.0, orientation_cost=3.0
+            "PELVIS_S", position_cost=1.0, orientation_cost=0.0
         )
+        tasks = [pelvis_task, left_ankle_task, right_ankle_task]
 
+        # Set task targets
         transform_l_ankle_target_to_init = pin.SE3(
-            np.eye(3), np.array([0.01, 0.0, 0.0])
+            np.eye(3), np.array([0.1, 0.0, 0.0])
         )
         transform_r_ankle_target_to_init = pin.SE3(
-            np.eye(3), np.array([-0.01, 0.0, 0.0])
-        )
-        transform_pelvis_target_to_init = pin.SE3(
-            np.eye(3), np.array([0.0, 0.0, 0.01])
+            np.eye(3), np.array([-0.1, 0.0, 0.0])
         )
         left_ankle_task.set_target(
             configuration.get_transform_body_to_world("l_ankle")
@@ -209,23 +209,22 @@ class TestSolveIK(unittest.TestCase):
         )
         pelvis_task.set_target(
             configuration.get_transform_body_to_world("PELVIS_S")
-            * transform_pelvis_target_to_init
         )
 
-        tasks = [pelvis_task, left_ankle_task, right_ankle_task]
-        last_error = 1e6
+        # Run IK in closed loop
         dt = 4e-3  # [s]
-        for nb_iter in range(24):
-            error = max(
-                norm(task.compute_error_in_body(configuration))
-                for task in tasks
-            )
-            if error < 1e-15:
-                break
-            self.assertLess(error, last_error)
-            last_error = error
+        for nb_iter in range(42):
             velocity = solve_ik(configuration, tasks, dt)
+            if norm(velocity) < 1e-10:
+                break
             q = configuration.integrate(velocity, dt)
             configuration = apply_configuration(robot, q)
-        self.assertLess(error, 1e-15)
-        self.assertLess(nb_iter, 6)
+        self.assertLess(nb_iter, 42)
+        self.assertLess(norm(velocity), 1e-10)
+        self.assertLess(
+            max(
+                norm(task.compute_error_in_body(configuration))
+                for task in tasks
+            ),
+            0.5,
+        )
