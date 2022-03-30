@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Bumped status to alpha
+- Configuration limit check now has a tolerance argument
 
 ## [0.2.0] - 2022/03/29
 

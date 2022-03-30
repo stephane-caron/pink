@@ -103,9 +103,12 @@ class Configuration:
         self.q = q_copy
         self.tangent = Tangent(model)
 
-    def check_limits(self) -> None:
+    def check_limits(self, tol: float = 1e-6) -> None:
         """
         Check that the current configuration is within limits.
+
+        Args:
+            tol: Tolerance in radians.
 
         Raises:
             NotWithinConfigurationLimits: if the current configuration is
@@ -113,10 +116,11 @@ class Configuration:
         """
         q_max = self.model.upperPositionLimit
         q_min = self.model.lowerPositionLimit
+        # TODO(scaron): handle robot models with no floating base
         for i in range(7, self.model.nq):
-            if q_max[i] <= q_min[i] + 1e-6:  # no limit
+            if q_max[i] <= q_min[i] + tol:  # no limit
                 continue
-            if self.q[i] < q_min[i] or self.q[i] > q_max[i]:
+            if self.q[i] < q_min[i] - tol or self.q[i] > q_max[i] + tol:
                 raise NotWithinConfigurationLimits(
                     i,
                     self.q[i],
