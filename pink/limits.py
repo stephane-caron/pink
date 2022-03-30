@@ -59,14 +59,22 @@ def compute_velocity_limits(
     Returns:
         Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds.
     """
+    assert 0.0 < config_limit_gain <= 1.0
+
     # Velocity limits from URDF
     v_max = configuration.model.velocityLimit.copy()
     v_min = -v_max
 
     # Configuration limits, only defined for actuated joints
+    # TODO(scaron): handle robots without floating base
     q_act = configuration.q[7:]
     q_max = configuration.model.upperPositionLimit[7:]
     q_min = configuration.model.lowerPositionLimit[7:]
+    no_limit = q_max <= q_min + 1e-10
+    big_joint_angle = 1e3 * max(np.abs(q_max).max(), np.abs(q_min).max())
+    q_max += no_limit * big_joint_angle
+    q_min -= no_limit * big_joint_angle
+
     v_max[6:] = np.minimum(v_max[6:], config_limit_gain * (q_max - q_act) / dt)
     v_min[6:] = np.maximum(v_min[6:], config_limit_gain * (q_min - q_act) / dt)
 
