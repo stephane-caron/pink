@@ -59,6 +59,15 @@ def compute_velocity_limits(
     Returns:
         Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds.
     """
-    v_max = +1000.0 * configuration.tangent.ones
-    v_min = -1000.0 * configuration.tangent.ones
+    # Velocity limits from URDF
+    v_max = configuration.model.velocityLimit.copy()
+    v_min = -v_max
+
+    # Configuration limits, only defined for actuated joints
+    q_act = configuration.q[7:]
+    q_max = configuration.model.upperPositionLimit[7:]
+    q_min = configuration.model.lowerPositionLimit[7:]
+    v_max[6:] = np.minimum(v_max[6:], config_limit_gain * (q_max - q_act) / dt)
+    v_min[6:] = np.maximum(v_min[6:], config_limit_gain * (q_min - q_act) / dt)
+
     return v_max, v_min
