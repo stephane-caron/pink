@@ -25,7 +25,7 @@ from pink.models import UnknownModel
 from pink.models import build_from_urdf
 
 
-class TestConfiguration(unittest.TestCase):
+class TestExtras(unittest.TestCase):
     def test_build_from_unknown_model(self):
         """
         Raise exception when model is not found.
