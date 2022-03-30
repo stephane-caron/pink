@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-...
+### Added
+
+- Joint velocity limits
+- Configuration limits
+
+### Changed
+
+- Bumped status to alpha
 
 ## [0.2.0] - 2022/03/29
 
