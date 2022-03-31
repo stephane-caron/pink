@@ -1,7 +1,7 @@
 # Pink
 
 [**Installation**](https://github.com/tasts-robots/pink#installation)
-| [**Documentation**](https://scaron.info/doc/pink/)
+| [**Documentation**](https://tasts-robots.org/doc/pink/)
 | [**Example**](https://github.com/tasts-robots/pink#example)
 | [**Contributing**](CONTRIBUTING.md)
 

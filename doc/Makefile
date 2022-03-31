@@ -19,7 +19,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = src
 BUILDDIR      = build
-ONLINEDIR     = scaron.info:public_html/doc/pink
+ONLINEDIR     = tasts-robots.org:public_html/doc/pink
 PDFFILE       = pink.pdf
 
 .PHONY: help Makefile upload
