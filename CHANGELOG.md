@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- Single-task test on task target translations mapped to IK output translations
+
 ## [0.3.0] - 2022/03/30
 
 ### Added

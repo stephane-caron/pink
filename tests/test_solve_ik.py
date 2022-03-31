@@ -143,6 +143,40 @@ class TestSolveIK(unittest.TestCase):
         )
         self.assertLess(nb_steps, 3)
 
+    def check_single_task_translation(self):
+        """
+        Translating a target (away from constraints) yields a pure linear
+        velocity in the same direction in the IK output.
+        """
+        robot = build_from_urdf(self.upkie_description)
+        configuration = apply_configuration(robot, robot.q0)
+        contact_task = BodyTask(
+            "left_contact", position_cost=1.0, orientation_cost=1.0
+        )
+        transform_target_to_world = self.robot.get_transform_body_to_world(
+            "left_contact"
+        ).copy()
+        self.assertTrue(
+            np.allclose(transform_target_to_world.rotation, np.eye(3)),
+            "default orientation should be aligned with the world frame",
+        )
+        transform_target_to_world.translation[1] -= 0.1
+        contact_task.set_target(transform_target_to_world)
+        contact_task.lm_damping = 0.0  # only Tikhonov damping for this test
+        velocity = solve_ik(
+            configuration, [contact_task], dt=1e-3, damping=1e-12
+        )
+        jacobian_contact_in_contact = configuration.compute_body_jacobian(
+            "left_contact"
+        )
+        velocity_contact_in_contact = jacobian_contact_in_contact @ velocity
+        linear_velocity_contact_in_contact = velocity_contact_in_contact[0:3]
+        angular_velocity_contact_in_contact = velocity_contact_in_contact[3:6]
+        self.assertTrue(np.allclose(angular_velocity_contact_in_contact, 0.0))
+        self.assertAlmostEqual(linear_velocity_contact_in_contact[0], 0.0)
+        self.assertLess(linear_velocity_contact_in_contact[1], 0.0)
+        self.assertAlmostEqual(linear_velocity_contact_in_contact[2], 0.0)
+
     def test_three_tasks_fulfilled(self):
         """
         No motion when all targets are reached.
