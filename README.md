@@ -1,11 +1,11 @@
 # Pink
 
-[**Installation**](https://github.com/stephane-caron/pink#installation)
+[**Installation**](https://github.com/tasts-robots/pink#installation)
 | [**Documentation**](https://scaron.info/doc/pink/)
-| [**Example**](https://github.com/stephane-caron/pink#example)
+| [**Example**](https://github.com/tasts-robots/pink#example)
 | [**Contributing**](CONTRIBUTING.md)
 
-[![build](https://img.shields.io/github/workflow/status/stephane-caron/pink/CI)](https://github.com/stephane-caron/pink/actions)
+[![build](https://img.shields.io/github/workflow/status/tasts-robots/pink/CI)](https://github.com/tasts-robots/pink/actions)
 [![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 ![Status](https://img.shields.io/pypi/status/pin-pink)
 

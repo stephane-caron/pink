@@ -37,9 +37,9 @@ doc = [
 
 [project.urls]
 Documentation = "https://scaron.info/doc/pink/"
-Source = "https://github.com/stephane-caron/pink"
-Tracker = "https://github.com/stephane-caron/pink/issues"
-Changelog = "https://github.com/stephane-caron/pink/blob/master/CHANGELOG.md"
+Source = "https://github.com/tasts-robots/pink"
+Tracker = "https://github.com/tasts-robots/pink/issues"
+Changelog = "https://github.com/tasts-robots/pink/blob/master/CHANGELOG.md"
 
 [tool.black]
 line-length = 79
