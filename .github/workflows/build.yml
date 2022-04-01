@@ -41,20 +41,5 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
-                  COVERALLS_PARALLEL: true
               run: |
-                  coveralls --service=github
-
-    coveralls:
-        name: "Indicate completion to coveralls.io"
-        needs: build
-        runs-on: ubuntu-latest
-        container: python:3-slim
-
-        steps:
-            - name: "Finished"
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  pip3 install --upgrade coveralls
-                  coveralls --service=github --finish
+                  coveralls
