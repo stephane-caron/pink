@@ -40,6 +40,6 @@ jobs:
             - name: "Coveralls"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  COVERALLS_SERVICE_NAME: github
+                  COVERALLS_SERVICE_NAME: github-actions
               run: |
                   coveralls
