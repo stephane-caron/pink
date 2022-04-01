@@ -70,12 +70,20 @@ if __name__ == "__main__":
     viz.display(configuration.q)
 
     tasks = {
-        "base": BodyTask("base", position_cost=1.0, orientation_cost=1.0),
+        "base": BodyTask(
+            "base",
+            position_cost=1.0,  # [cost] / [m]
+            orientation_cost=1.0,  # [cost] / [rad]
+        ),
         "left_contact": BodyTask(
-            "left_contact", position_cost=1.0, orientation_cost=1.0
+            "left_contact",
+            position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
+            orientation_cost=0.0,  # [cost] / [rad]
         ),
         "right_contact": BodyTask(
-            "right_contact", position_cost=1.0, orientation_cost=1.0
+            "right_contact",
+            position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
+            orientation_cost=0.0,  # [cost] / [rad]
         ),
     }
 
