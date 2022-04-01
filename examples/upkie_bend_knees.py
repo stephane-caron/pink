@@ -69,24 +69,18 @@ if __name__ == "__main__":
     configuration = pink.apply_configuration(robot, robot.q0)
     viz.display(configuration.q)
 
-    base_task = BodyTask("base", position_cost=1.0, orientation_cost=1.0)
-    left_contact_task = BodyTask(
-        "left_contact", position_cost=1.0, orientation_cost=1.0
-    )
-    right_contact_task = BodyTask(
-        "right_contact", position_cost=1.0, orientation_cost=1.0
-    )
-    tasks = [base_task, left_contact_task, right_contact_task]
+    tasks = {
+        "base": BodyTask("base", position_cost=1.0, orientation_cost=1.0),
+        "left_contact": BodyTask(
+            "left_contact", position_cost=1.0, orientation_cost=1.0
+        ),
+        "right_contact": BodyTask(
+            "right_contact", position_cost=1.0, orientation_cost=1.0
+        ),
+    }
 
-    base_task.set_target(
-        configuration.get_transform_body_to_world("base")
-    )
-    left_contact_task.set_target(
-        configuration.get_transform_body_to_world("left_contact")
-    )
-    right_contact_task.set_target(
-        configuration.get_transform_body_to_world("right_contact")
-    )
+    for body, task in tasks.items():
+        task.set_target(configuration.get_transform_body_to_world(body))
 
     left_contact_target = ElevatorPose(
         configuration.get_transform_body_to_world("left_contact")
@@ -102,9 +96,9 @@ if __name__ == "__main__":
 
     dt = 5e-3  # [s]
     for t in np.arange(0.0, 10.0, dt):
-        left_contact_task.set_target(left_contact_target.at(t))
-        right_contact_task.set_target(right_contact_target.at(t))
-        velocity = solve_ik(configuration, tasks, dt)
+        tasks["left_contact"].set_target(left_contact_target.at(t))
+        tasks["right_contact"].set_target(right_contact_target.at(t))
+        velocity = solve_ik(configuration, tasks.values(), dt)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
         viz.display(q)
