@@ -21,7 +21,7 @@ Pink is under active development and its API is **not stable**. Expect the follo
 - Add a manipulator example
 - Reformulate task gains as time constants
 
-And more, all [contributions](CONTRIBUTING.md) are welcome :)
+All [contributions](CONTRIBUTING.md) are welcome :)
 
 ## Installation
 
