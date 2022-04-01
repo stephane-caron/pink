@@ -49,7 +49,7 @@ class TestLimits(unittest.TestCase):
         self.assertTrue(np.allclose(v_max, +velocity_limit))
         self.assertTrue(np.allclose(v_min, -velocity_limit))
 
-    def check_configuration_limit_repulsion(self):
+    def test_configuration_limit_repulsion(self):
         """
         Velocities are scaled down when close to a configuration limit.
         """
