@@ -28,8 +28,9 @@ import pinocchio as pin
 import pink
 import pink.models
 
-from pink.tasks import BodyTask
 from pink import solve_ik
+from pink.tasks import BodyTask, PostureTask
+from pink.utils import custom_configuration_vector
 
 import meshcat_shapes
 
@@ -85,10 +86,18 @@ if __name__ == "__main__":
             position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
             orientation_cost=0.0,  # [cost] / [rad]
         ),
+        "posture": PostureTask(
+            cost=1e-3,  # [cost] / [rad]
+        ),
     }
 
+    tasks["posture"].set_target(
+        custom_configuration_vector(robot, left_knee=0.2, right_knee=-0.2)
+    )
+
     for body, task in tasks.items():
-        task.set_target(configuration.get_transform_body_to_world(body))
+        if type(task) is BodyTask:
+            task.set_target(configuration.get_transform_body_to_world(body))
 
     left_contact_target = ElevatorPose(
         configuration.get_transform_body_to_world("left_contact")
