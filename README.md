@@ -16,7 +16,6 @@
 
 Pink is under active development and its API is **not stable**. Expect the following upcoming changes:
 
-- Add posture task to Upkie example
 - v0.4: Handle models without and with floating base
 - Add a manipulator example
 - Reformulate task gains as time constants
