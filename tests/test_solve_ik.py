@@ -143,7 +143,7 @@ class TestSolveIK(unittest.TestCase):
         )
         self.assertLess(nb_steps, 3)
 
-    def check_single_task_translation(self):
+    def test_single_task_translation(self):
         """
         Translating a target (away from constraints) yields a pure linear
         velocity in the same direction in the IK output.
@@ -151,10 +151,10 @@ class TestSolveIK(unittest.TestCase):
         robot = build_from_urdf(self.upkie_description)
         configuration = apply_configuration(robot, robot.q0)
         contact_task = BodyTask(
-            "left_contact", position_cost=1.0, orientation_cost=1.0
+            "right_contact", position_cost=1.0, orientation_cost=1.0
         )
-        transform_target_to_world = self.robot.get_transform_body_to_world(
-            "left_contact"
+        transform_target_to_world = configuration.get_transform_body_to_world(
+            "right_contact"
         ).copy()
         self.assertTrue(
             np.allclose(transform_target_to_world.rotation, np.eye(3)),
@@ -166,8 +166,8 @@ class TestSolveIK(unittest.TestCase):
         velocity = solve_ik(
             configuration, [contact_task], dt=1e-3, damping=1e-12
         )
-        jacobian_contact_in_contact = configuration.compute_body_jacobian(
-            "left_contact"
+        jacobian_contact_in_contact = configuration.get_body_jacobian(
+            "right_contact"
         )
         velocity_contact_in_contact = jacobian_contact_in_contact @ velocity
         linear_velocity_contact_in_contact = velocity_contact_in_contact[0:3]
