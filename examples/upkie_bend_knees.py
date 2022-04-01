@@ -115,6 +115,8 @@ if __name__ == "__main__":
     for t in np.arange(0.0, 10.0, dt):
         tasks["left_contact"].set_target(left_contact_target.at(t))
         tasks["right_contact"].set_target(right_contact_target.at(t))
+        left_contact_frame.set_transform(left_contact_target.at(t).np)
+        right_contact_frame.set_transform(right_contact_target.at(t).np)
         velocity = solve_ik(configuration, tasks.values(), dt)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
