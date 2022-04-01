@@ -40,6 +40,6 @@ jobs:
             - name: "Coveralls"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
+                  COVERALLS_SERVICE_NAME: github
               run: |
                   coveralls
