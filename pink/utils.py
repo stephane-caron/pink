@@ -23,7 +23,17 @@ import numpy as np
 import pinocchio as pin
 
 
-def custom_configuration_vector(robot, **kwargs) -> np.ndarray:
+def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
+    """
+    Generate a configuration vector where named joints have specific values.
+
+    Args:
+        robot: Robot model.
+
+    Returns:
+        Configuration vector where named joints have the values specified in
+        keyword arguments, and other joints have their neutral value.
+    """
     q = pin.neutral(robot.model)
     for joint_name, joint_value in kwargs.items():
         joint_id = robot.model.getJointId(joint_name)
