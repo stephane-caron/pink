@@ -23,6 +23,8 @@ February 2022 it hasn't been updated with the proper dimensional analysis, but
 the core concepts and notations are there.
 """
 
+import abc
+
 from typing import Tuple
 
 import numpy as np
@@ -30,10 +32,10 @@ import numpy as np
 from ..configuration import Configuration
 
 
-class Task:
+class Task(abc.ABC):
 
     """
-    Base class for kinematic tasks.
+    Abstract base class for kinematic tasks.
 
     Attributes:
         gain: Task gain :math:`\\alpha \\in [0, 1]` for additional low-pass
@@ -42,6 +44,7 @@ class Task:
 
     gain: float = 1.0
 
+    @abc.abstractmethod
     def compute_task_dynamics(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -72,8 +75,8 @@ class Task:
             Tuple :math:`(J, e)` of Jacobian matrix and error vector, both
             expressed in the body frame.
         """
-        raise NotImplementedError
 
+    @abc.abstractmethod
     def compute_qp_objective(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -99,7 +102,6 @@ class Task:
             Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
             objective.
         """
-        raise NotImplementedError
 
     def __repr__(self):
         """

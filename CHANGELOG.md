@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Bumped status to beta
+- Task is now an abstract base class
 
 ## [0.3.0] - 2022/03/30
 

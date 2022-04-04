@@ -19,10 +19,8 @@
 Test base class for kinematic tasks.
 """
 
-import os
 import unittest
 
-from pink.models import build_from_urdf
 from pink.tasks import Task
 
 
@@ -31,9 +29,7 @@ class TestTask(unittest.TestCase):
         """
         Prepare test fixture.
         """
-        models_dir = os.path.join(os.path.dirname(__file__), "models")
-        jvrc_description = os.path.join(models_dir, "jvrc_description")
-        self.jvrc_description = jvrc_description
+        Task.__abstractmethods__ = set()  # allow instantiation
 
     def test_task_repr(self):
         """
@@ -41,15 +37,3 @@ class TestTask(unittest.TestCase):
         """
         task = Task()
         self.assertTrue("gain=" in repr(task))
-
-    def test_task_not_implemented(self):
-        """
-        Raise an error when the robot body is not found.
-        """
-        robot = build_from_urdf(self.jvrc_description)
-        task = Task()
-        self.assertIsNotNone(task)
-        with self.assertRaises(NotImplementedError):
-            task.compute_task_dynamics(robot)
-        with self.assertRaises(NotImplementedError):
-            task.compute_qp_objective(robot)
