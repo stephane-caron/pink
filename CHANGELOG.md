@@ -11,7 +11,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Argument to ``build_from_urdf`` functions is now the path to the URDF file
 - Bumped status to beta
+- Examples use the ``jvrc_description`` and ``upkie_description`` packages
 - Task is now an abstract base class
 
 ## [0.3.0] - 2022/03/30

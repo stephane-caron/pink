@@ -25,13 +25,18 @@ import time
 import numpy as np
 import pinocchio as pin
 
+import meshcat_shapes
 import pink
 import pink.models
-
-from pink.tasks import BodyTask
 from pink import solve_ik
+from pink.tasks import BodyTask
 
-import meshcat_shapes
+try:
+    import jvrc_description
+except ModuleNotFoundError:
+    raise ModuleNotFoundError(
+        "Humanoid description not found, try `pip install jvrc_description`"
+    )
 
 
 class WavingPose:
@@ -58,8 +63,7 @@ class WavingPose:
 
 if __name__ == "__main__":
     models_dir = os.path.join(os.path.dirname(__file__), "../tests", "models")
-    jvrc_description = os.path.join(models_dir, "jvrc_description")
-    robot = pink.models.build_from_urdf(jvrc_description)
+    robot = pink.models.build_from_urdf(jvrc_description.urdf_path)
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )
