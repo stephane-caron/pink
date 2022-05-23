@@ -62,7 +62,6 @@ class WavingPose:
 
 
 if __name__ == "__main__":
-    models_dir = os.path.join(os.path.dirname(__file__), "../tests", "models")
     robot = pink.models.build_from_urdf(jvrc_description.urdf_path)
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
