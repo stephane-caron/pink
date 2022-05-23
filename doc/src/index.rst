@@ -13,6 +13,7 @@ Pink
 
     installation.rst
     introduction.rst
+    forward-kinematics.rst
     inverse-kinematics.rst
     tasks.rst
     extras.rst

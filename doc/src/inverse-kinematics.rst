@@ -4,12 +4,6 @@
 Inverse kinematics
 ******************
 
-Configuration
-=============
-
-.. automodule:: pink.configuration
-    :members:
-
 Joint limits
 ============
 
