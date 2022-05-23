@@ -19,10 +19,10 @@
 Test velocity and actuated-joint limits.
 """
 
-import os
 import unittest
 
 import numpy as np
+import upkie_description
 
 from pink import apply_configuration
 from pink.limits import compute_velocity_limits
@@ -31,9 +31,7 @@ from pink.models import build_from_urdf
 
 class TestLimits(unittest.TestCase):
     def setUp(self):
-        models_dir = os.path.join(os.path.dirname(__file__), "models")
-        upkie_description = os.path.join(models_dir, "upkie_description")
-        robot = build_from_urdf(upkie_description)
+        robot = build_from_urdf(upkie_description.urdf_path)
         configuration = apply_configuration(robot, robot.q0)
         self.dt = 1e-3
         self.configuration = configuration

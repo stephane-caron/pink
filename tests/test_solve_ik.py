@@ -19,18 +19,16 @@
 Test inverse kinematics.
 """
 
-import os
 import unittest
 
+import jvrc_description
 import numpy as np
 import pinocchio as pin
-
+import upkie_description
 from numpy.linalg import norm
 
 import pink
-
-from pink import apply_configuration
-from pink import solve_ik
+from pink import apply_configuration, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
 from pink.models import build_from_urdf
 from pink.tasks import BodyTask
@@ -42,18 +40,11 @@ class TestSolveIK(unittest.TestCase):
     Test fixture for the solve_ik function.
     """
 
-    def setUp(self):
-        models_dir = os.path.join(os.path.dirname(__file__), "models")
-        jvrc_description = os.path.join(models_dir, "jvrc_description")
-        upkie_description = os.path.join(models_dir, "upkie_description")
-        self.jvrc_description = jvrc_description
-        self.upkie_description = upkie_description
-
     def test_checks_configuration_limits(self):
         """
         IK checks for configuration limits.
         """
-        robot = build_from_urdf(self.upkie_description)
+        robot = build_from_urdf(upkie_description.urdf_path)
         q = robot.q0
         q[7] = 20  # above limit for Upkie's first joint
         configuration = pink.apply_configuration(robot, q)
@@ -64,7 +55,7 @@ class TestSolveIK(unittest.TestCase):
         """
         Raise an error when the robot body is not found.
         """
-        robot = build_from_urdf(self.jvrc_description)
+        robot = build_from_urdf(jvrc_description.urdf_path)
         configuration = apply_configuration(robot, robot.q0)
         tasks = []
         v = solve_ik(configuration, tasks, dt=1e-3)
@@ -74,7 +65,7 @@ class TestSolveIK(unittest.TestCase):
         """
         Velocity is zero when the only task is already fulfilled.
         """
-        robot = build_from_urdf(self.upkie_description)
+        robot = build_from_urdf(upkie_description.urdf_path)
         configuration = apply_configuration(robot, robot.q0)
         task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
@@ -89,7 +80,7 @@ class TestSolveIK(unittest.TestCase):
         """
         Integrating IK velocities makes a single task converge to its target.
         """
-        robot = build_from_urdf(self.upkie_description)
+        robot = build_from_urdf(upkie_description.urdf_path)
         configuration = apply_configuration(robot, robot.q0)
         task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
@@ -148,7 +139,7 @@ class TestSolveIK(unittest.TestCase):
         Translating a target (away from constraints) yields a pure linear
         velocity in the same direction in the IK output.
         """
-        robot = build_from_urdf(self.upkie_description)
+        robot = build_from_urdf(upkie_description.urdf_path)
         configuration = apply_configuration(robot, robot.q0)
         contact_task = BodyTask(
             "right_contact", position_cost=1.0, orientation_cost=1.0
@@ -181,7 +172,7 @@ class TestSolveIK(unittest.TestCase):
         """
         No motion when all targets are reached.
         """
-        robot = build_from_urdf(self.jvrc_description)
+        robot = build_from_urdf(jvrc_description.urdf_path)
         configuration = apply_configuration(robot, robot.q0)
         left_ankle_task = BodyTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
@@ -211,7 +202,7 @@ class TestSolveIK(unittest.TestCase):
         """
         Three simultaneously feasible tasks on the JVRC humanoid converge.
         """
-        robot = build_from_urdf(self.jvrc_description)
+        robot = build_from_urdf(jvrc_description.urdf_path)
         configuration = apply_configuration(robot, robot.q0)
 
         # Define tasks

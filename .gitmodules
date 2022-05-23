@@ -1,6 +1,0 @@
-[submodule "tests/models/jvrc_description"]
-	path = tests/models/jvrc_description
-	url = git@github.com:stephane-caron/jvrc_description.git
-[submodule "pink/models/upkie_description"]
-	path = tests/models/upkie_description
-	url = https://github.com/tasts-robots/upkie_description
