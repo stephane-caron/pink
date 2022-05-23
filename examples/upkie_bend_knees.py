@@ -25,14 +25,19 @@ import time
 import numpy as np
 import pinocchio as pin
 
+import meshcat_shapes
 import pink
 import pink.models
-
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
 from pink.utils import custom_configuration_vector
 
-import meshcat_shapes
+try:
+    import upkie_description
+except ModuleNotFoundError:
+    raise ModuleNotFoundError(
+        "Upkie description not found, try `pip install upkie_description`"
+    )
 
 
 class ElevatorPose:
@@ -58,8 +63,7 @@ class ElevatorPose:
 
 if __name__ == "__main__":
     models_dir = os.path.join(os.path.dirname(__file__), "../tests", "models")
-    upkie_description = os.path.join(models_dir, "upkie_description")
-    robot = pink.models.build_from_urdf(upkie_description)
+    robot = pink.models.build_from_urdf(upkie_description.urdf_path)
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )
