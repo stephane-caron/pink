@@ -35,23 +35,24 @@ class UnknownModel(Exception):
     """
 
 
-def build_from_urdf(path: str) -> pin.RobotWrapper:
+def build_from_urdf(urdf_path: str) -> pin.RobotWrapper:
     """
-    Build a robot model from its description folder.
+    Build a robot model from its URDF.
 
     Args:
-        path: Path to a robot description folder.
+        urdf_path: Path to the URDF file in a robot description folder.
 
     Note:
-        The model to load is recognized from the name of the last folder in the
-        path, for example "jvrc_description" or "upkie_description".
+        The model to load is recognized from the name of the URDF file (e.g.
+        "upkie.urdf"), or last folder in the path, for example (e.g.
+        "jvrc_description").
     """
-    path.rstrip("/")
-    if path.endswith("jvrc_description"):
-        return build_jvrc_from_urdf(path)
-    if path.endswith("upkie_description"):
-        return build_upkie_from_urdf(path)
-    raise UnknownModel(path)
+    urdf_path.rstrip("/")
+    if urdf_path.endswith("jvrc1.urdf") and "jvrc_description" in urdf_path:
+        return build_jvrc_from_urdf(urdf_path)
+    if urdf_path.endswith("upkie.urdf") and "upkie_description" in urdf_path:
+        return build_upkie_from_urdf(urdf_path)
+    raise UnknownModel(urdf_path)
 
 
 __all__ = [

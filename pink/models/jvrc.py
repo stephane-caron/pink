@@ -25,16 +25,16 @@ import os
 import pinocchio as pin
 
 
-def build_jvrc_from_urdf(path: str) -> pin.RobotWrapper:
+def build_jvrc_from_urdf(urdf_path: str) -> pin.RobotWrapper:
     """
     Build the JVRC model from its URDF.
 
     Args:
-        path: Path to a `jvrc_description`_ folder.
+        urdf_path: Path to the URDF in a `jvrc_description`_ folder.
 
     .. _jvrc_description: https://github.com/stephane-caron/jvrc_description
     """
-    abspath = os.path.abspath(path)
+    abspath = os.path.abspath(os.path.dirname(urdf_path) + "/..")
     return pin.RobotWrapper.BuildFromURDF(
         filename=os.path.join(abspath, "urdf", "jvrc1.urdf"),
         package_dirs=[os.path.dirname(abspath)],
