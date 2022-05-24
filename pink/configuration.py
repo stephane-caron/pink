@@ -214,7 +214,7 @@ def apply_configuration(
     robot: pin.RobotWrapper, q: np.ndarray
 ) -> Configuration:
     """
-    Run forward kinematics on a robot wrapper.
+    Apply configuration (forward kinematics) to a robot wrapper.
 
     Args:
         robot: Robot wrapper with its initial data.
