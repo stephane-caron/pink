@@ -80,6 +80,22 @@ for body, task in tasks.items():
 
 Once a task has its cost and, if applicable, target defined, it can be used to solve inverse kinematics.
 
+### Differential inverse kinematics
+
+Pink solves differential inverse kinematics, meaning it outputs a velocity that steers the robot model towards a solution configuration (rather than solving for that configuration itself). If we keep integrating that velocity, and task targets don't change in the meantime, we will converge to that configuration:
+
+```python
+dt = 6e-3  # [s]
+for t in np.arange(0.0, 42.0, dt):
+    # ... task targets can be updated here ...
+    velocity = solve_ik(configuration, tasks.values(), dt)  # includes pos/vel limits
+    q = configuration.integrate(velocity, dt)
+    configuration = pink.apply_configuration(robot, q)
+    time.sleep(dt)
+```
+
+If task targets are continuously updated there will be no stationary solution to converge to, but the model will keep on tracking each target at best.
+
 ## Example
 
 *Under construction...*
