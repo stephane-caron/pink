@@ -20,9 +20,38 @@ pip install pin-pink
 
 ## Usage
 
-*Under construction...*
+Inverse kinematics in Pink is defined by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task characterizes an objective to achieve, such as "put the foot frame at this location", by means of an objective function to be minimized, such as $\| {}^{world}p_{foot}^{target} - {}^{world}p_{foot} \|^2$. The robot is given multiple tasks to achieve, some of which may come into conflict. Conflicts are resolved by casting all objectives to the same unit, say ``[cost]``, and weighing all these normalized objectives relative to each other.
 
-Pink implements the same task-based inverse kinematics as [pymanoid](https://github.com/stephane-caron/pymanoid), but it is much simpler to install and runs faster thanks to Pinocchio. Its internal math is summarized in [this note](https://scaron.info/robot-locomotion/inverse-kinematics.html). If you find yourself needing to read that in order to use the library, it means the API has abstraction leakage, please open an issue :-)
+### Task costs
+
+Here is the example of a biped robot that wants to control the position and orientation of of three of its frame, its base link, left and right contact frames. A fourth "posture" task, giving a desired angle for each joint, is added for regularization:
+
+```python
+from pink.tasks import BodyTask, PostureTask
+
+tasks = {
+    "base": BodyTask(
+        "base",
+        position_cost=1.0,  # [cost] / [m]
+        orientation_cost=1.0,  # [cost] / [rad]
+    ),
+    "left_contact": BodyTask(
+        "left_contact",
+        position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
+        orientation_cost=0.0,  # [cost] / [rad]
+    ),
+    "right_contact": BodyTask(
+        "right_contact",
+        position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
+        orientation_cost=0.0,  # [cost] / [rad]
+    ),
+    "posture": PostureTask(
+        cost=1e-3,  # [cost] / [rad]
+    ),
+}
+```
+
+Position costs, which can be scalars or 3D vectors, specify how much each meter of position error "costs" in the overall normalized objective.
 
 ## Example
 
