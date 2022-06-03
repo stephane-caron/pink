@@ -53,15 +53,21 @@ tasks = {
 
 Position costs, which can be scalars or 3D vectors, specify how much each meter of position error "costs" in the overall normalized objective.
 
+### Task targets
+
+...
+
+```
+    tasks["posture"].set_target(
+        [1.0, 0.0, 0.0, 0.0] +           # floating base quaternion
+        [0.0, 0.0, 0.0] +                # floating base position
+        [0.0, 0.2, 0.0, 0.0, -0.2, 0.0]  # joint angles
+    )
+```
+
 ## Example
 
 *Under construction...*
-
-## Installation
-
-```sh
-pip install pin-pink
-```
 
 ## 🏗️ Upcoming changes
 
