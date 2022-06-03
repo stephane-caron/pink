@@ -24,7 +24,7 @@ Inverse kinematics in Pink is defined by [weighted tasks](https://scaron.info/ro
 
 ### Task costs
 
-Here is the example of a biped robot that wants to control the position and orientation of of three of its frame, its base link, left and right contact frames. A fourth "posture" task, giving a desired angle for each joint, is added for regularization:
+Here is the example of a biped robot that controls the position and orientation of its base, left-contact and right-contact frames. A fourth "posture" task, giving a desired angle for each joint, is added for regularization:
 
 ```python
 from pink.tasks import BodyTask, PostureTask
@@ -51,7 +51,7 @@ tasks = {
 }
 ```
 
-Position costs, which can be scalars or 3D vectors, specify how much each meter of position error "costs" in the overall normalized objective.
+Orientation (similarly position) costs, which can be scalars or 3D vectors, specify how much each radian of angular error "costs" in the overall normalized objective. When using 3D vectors, components are weighted anisotropically along each axis of the body frame.
 
 ### Task targets
 
