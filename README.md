@@ -55,15 +55,30 @@ Orientation (similarly position) costs, which can be scalars or 3D vectors, spec
 
 ### Task targets
 
-...
+Aside from their costs, most tasks take a second set of parameters called *targets*, for example a target transform for a body task or a target configuration vector for a posture task. Targets are set by the `set_target` function:
 
-```
+```python
     tasks["posture"].set_target(
         [1.0, 0.0, 0.0, 0.0] +           # floating base quaternion
         [0.0, 0.0, 0.0] +                # floating base position
         [0.0, 0.2, 0.0, 0.0, -0.2, 0.0]  # joint angles
     )
 ```
+
+For body tasks, we can for example initialize them from the robot's neutral configuration:
+
+```python
+import pink
+import upkie_description
+
+robot = pink.models.build_from_urdf(upkie_description.urdf_path)
+configuration = pink.apply_configuration(robot, robot.q0)
+for body, task in tasks.items():
+    if type(task) is BodyTask:
+        task.set_target(configuration.get_transform_body_to_world(body))
+```
+
+Once a task has its cost and, if applicable, target defined, it can be used to solve inverse kinematics.
 
 ## Example
 
