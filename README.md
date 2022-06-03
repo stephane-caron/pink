@@ -32,21 +32,21 @@ from pink.tasks import BodyTask, PostureTask
 tasks = {
     "base": BodyTask(
         "base",
-        position_cost=1.0,  # [cost] / [m]
-        orientation_cost=1.0,  # [cost] / [rad]
+        position_cost=1.0,              # [cost] / [m]
+        orientation_cost=1.0,           # [cost] / [rad]
     ),
     "left_contact": BodyTask(
         "left_contact",
         position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
-        orientation_cost=0.0,  # [cost] / [rad]
+        orientation_cost=0.0,           # [cost] / [rad]
     ),
     "right_contact": BodyTask(
         "right_contact",
         position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
-        orientation_cost=0.0,  # [cost] / [rad]
+        orientation_cost=0.0,           # [cost] / [rad]
     ),
     "posture": PostureTask(
-        cost=1e-3,  # [cost] / [rad]
+        cost=1e-3,                      # [cost] / [rad]
     ),
 }
 ```
