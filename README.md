@@ -96,9 +96,12 @@ for t in np.arange(0.0, 42.0, dt):
 
 If task targets are continuously updated there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) takes into account both position and velocity limits read from URDF.
 
-## Example
+## Examples
 
-*Under construction...*
+All concepts above are illustrated in the following examples:
+
+- [Humanoid standing waving:](examples/humanoid_standing_waving.py) a humanoid model that positions its pelvis and feet while waiving its right wrist.
+- [Upkie crouching:](examples/upkie_crouching.py) a wheeled-biped model that lifts its feet up and down.
 
 ## 🏗️ Upcoming changes
 
