@@ -78,7 +78,7 @@ for body, task in tasks.items():
         task.set_target(configuration.get_transform_body_to_world(body))
 ```
 
-Once a task has its cost and, if applicable, target defined, it can be used to solve inverse kinematics.
+Once a task has its cost and (if applicable) target defined, it can be used to solve inverse kinematics.
 
 ### Differential inverse kinematics
 
@@ -87,29 +87,27 @@ Pink solves differential inverse kinematics, meaning it outputs a velocity that 
 ```python
 dt = 6e-3  # [s]
 for t in np.arange(0.0, 42.0, dt):
-    # ... task targets can be updated here ...
-    velocity = solve_ik(configuration, tasks.values(), dt)  # includes pos/vel limits
+    velocity = solve_ik(configuration, tasks.values(), dt)  # includes joint limits
     q = configuration.integrate(velocity, dt)
     configuration = pink.apply_configuration(robot, q)
     time.sleep(dt)
 ```
 
-If task targets are continuously updated there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) takes into account both position and velocity limits read from URDF.
+If task targets are continuously updated there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) takes into account both joint position and velocity limits read from URDF.
 
 ## Examples
 
-All concepts above are illustrated in the following examples:
+All steps above are illustrated in the following examples:
 
 - [Humanoid standing waving:](examples/humanoid_standing_waving.py) a humanoid model that positions its pelvis and feet while waiving its right wrist.
 - [Upkie crouching:](examples/upkie_crouching.py) a wheeled-biped model that lifts its feet up and down.
 
 ## 🏗️ Upcoming changes
 
-Pink is under active development and its API is **not stable**. Expect the following upcoming changes:
+Pink is in beta and its API is not fully stable. Expect the following upcoming changes:
 
 - v0.5: Handle models without and with floating base
 - Add a manipulator example
-- Complete this README
 - Reformulate task gains as time constants
 
 All [contributions](CONTRIBUTING.md) are welcome :)
