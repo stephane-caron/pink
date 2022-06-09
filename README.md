@@ -4,10 +4,11 @@
 
 [**Installation**](https://github.com/tasts-robots/pink#installation)
 | [**Documentation**](https://tasts-robots.org/doc/pink/)
-| [**Example**](https://github.com/tasts-robots/pink#example)
+| [**Usage**](https://github.com/tasts-robots/pink#usage)
+| [**Examples**](https://github.com/tasts-robots/pink#examples)
 | [**Contributing**](CONTRIBUTING.md)
 
-[![Build](https://img.shields.io/github/workflow/status/tasts-robots/pink/CI)](https://github.com/tasts-robots/pink/actions)
+[![CI](https://github.com/tasts-robots/pink/actions/workflows/build.yml/badge.svg)](https://github.com/tasts-robots/pink/actions/workflows/build.yml)
 [![Coverage](https://coveralls.io/repos/github/tasts-robots/pink/badge.svg?branch=master)](https://coveralls.io/github/tasts-robots/pink?branch=master)
 [![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 ![Status](https://img.shields.io/pypi/status/pin-pink)
