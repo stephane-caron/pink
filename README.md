@@ -1,5 +1,7 @@
 # Pink
 
+<img src="https://user-images.githubusercontent.com/1189580/172797197-9aa46561-cfaa-4046-bd60-f681d85b055d.png" align="right" height=140>
+
 [**Installation**](https://github.com/tasts-robots/pink#installation)
 | [**Documentation**](https://tasts-robots.org/doc/pink/)
 | [**Example**](https://github.com/tasts-robots/pink#example)
@@ -14,7 +16,7 @@
 
 ## Installation
 
-```sh
+```console
 pip install pin-pink
 ```
 
