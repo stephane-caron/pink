@@ -17,8 +17,7 @@
 
 import re
 import sys
-
-from os.path import dirname, join, abspath
+from os.path import abspath, dirname, join
 
 sys.path.insert(0, abspath("../.."))
 
@@ -36,7 +35,8 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx-mathjax-offline",
     "sphinx.ext.napoleon",  # before sphinx_autodoc_typehints
-    "sphinx_autodoc_typehints"
+    "sphinx_autodoc_typehints",
+    "sphinx-favicon",
 ]
 
 # List of modules to be mocked up
@@ -74,9 +74,7 @@ version = None  # read from __init__.py
 release = None  # read from __init__.py
 
 # Read version info directly from the module's __init__.py
-init_path = join(
-    dirname(dirname(dirname(str(abspath(__file__))))), "pink"
-)
+init_path = join(dirname(dirname(dirname(str(abspath(__file__))))), "pink")
 with open(f"{init_path}/__init__.py", "r") as fh:
     for line in fh:
         match = re.match('__version__ = "((\\d.\\d).\\d)".*', line)
@@ -172,7 +170,7 @@ html_theme_options = {}
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["css"]
+html_static_path = ["css", "images"]
 
 # These paths are either relative to html_static_path or fully qualified paths
 # (eg. https://...)
@@ -319,3 +317,24 @@ latex_documents = [
 # If false, no module index is generated.
 #
 # latex_domain_indices = True
+
+favicons = [
+    {
+        "rel": "icon",
+        "sizes": "16x16",
+        "static-file": "favicon-16x16.png",
+        "type": "image/png",
+    },
+    {
+        "rel": "icon",
+        "sizes": "32x32",
+        "static-file": "favicon-32x32.png",
+        "type": "image/png",
+    },
+    {
+        "rel": "apple-touch-icon",
+        "sizes": "180x180",
+        "static-file": "apple-touch-icon-180x180.png",
+        "type": "image/png",
+    },
+]
