@@ -68,7 +68,7 @@ Aside from their costs, most tasks take a second set of parameters called *targe
     )
 ```
 
-For body tasks, we can for example initialize them from the robot's neutral configuration:
+Body tasks can be initialized, for example, from the robot's neutral configuration:
 
 ```python
 import pink
@@ -109,7 +109,7 @@ All steps above are illustrated in the following examples:
 
 Pink is in beta and its API is not fully stable. Expect the following upcoming changes:
 
-- v0.5: Handle models without and with floating base
+- Handle models without and with floating base
 - Add a manipulator example
 - Reformulate task gains as time constants
 
@@ -117,4 +117,4 @@ All [contributions](CONTRIBUTING.md) are welcome :)
 
 ## History
 
-Pink implements the same task-based inverse kinematics as [pymanoid](https://github.com/stephane-caron/pymanoid), but it is much simpler to install and runs faster thanks to Pinocchio. Its internal math is summarized in [this note](https://scaron.info/robot-locomotion/inverse-kinematics.html). If you find yourself needing to read that in order to use the library, it means the API has abstraction leakage, please open an issue :-)
+Pink implements the same task-based inverse kinematics as [pymanoid](https://github.com/stephane-caron/pymanoid), but it is much simpler to install and runs faster thanks to Pinocchio. Its internal math is summarized on [this page](https://scaron.info/robot-locomotion/inverse-kinematics.html). If you find yourself needing to read that in order to use the library, it means the API has abstraction leakage, please open an issue :-)
