@@ -45,12 +45,5 @@ With these notations frame transforms can be read left to right, for example:
 See also this `spatial algebra cheat sheet
 <https://scaron.info/robot-locomotion/spatial-vector-algebra-cheat-sheet.html>`_.
 
-Kinematic task
-==============
+All clear on these points? Then click the ``Next`` button to learn about :ref:`kinematic tasks <Tasks>`.
 
-[Until this section is written, you can check out this former version: `kinematic task <https://scaron.info/robot-locomotion/inverse-kinematics.html#kinematic-task>`_.]
-
-Inequality constraints
-======================
-
-[Until this section is written, you can check out this former version: `inequality constraints <https://scaron.info/robot-locomotion/inverse-kinematics.html#inequality-constraints>`_.]

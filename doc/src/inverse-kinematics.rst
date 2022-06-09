@@ -4,14 +4,5 @@
 Inverse kinematics
 ******************
 
-Joint limits
-============
-
-.. automodule:: pink.limits
-    :members:
-
-Solving joint velocities
-========================
-
 .. automodule:: pink.solve_ik
     :members:
