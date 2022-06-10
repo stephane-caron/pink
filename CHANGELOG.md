@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Coveralls for continuous coverage testing
+- Document differential inverse kinematics and task targets
 - Single-task test on task target translations mapped to IK output translations
 
 ### Changed
@@ -14,7 +15,12 @@ All notable changes to this project will be documented in this file.
 - Argument to ``build_from_urdf`` functions is now the path to the URDF file
 - Bumped status to beta
 - Examples use the ``jvrc_description`` and ``upkie_description`` packages
+- Use jvrc\_description] and upkie\_description packages from PyPI
 - Task is now an abstract base class
+
+### Fixed
+
+- Unit tests for robot models
 
 ## [0.3.0] - 2022/03/30
 
