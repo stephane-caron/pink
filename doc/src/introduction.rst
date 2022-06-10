@@ -45,5 +45,5 @@ With these notations frame transforms can be read left to right, for example:
 See also this `spatial algebra cheat sheet
 <https://scaron.info/robot-locomotion/spatial-vector-algebra-cheat-sheet.html>`_.
 
-All clear on these points? Then click the ``Next`` button to learn about :ref:`kinematic tasks <Tasks>`.
+All clear on these points? Click the *Next* button to learn about :ref:`kinematic tasks <Tasks>`.
 

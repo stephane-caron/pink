@@ -15,3 +15,9 @@ JVRC humanoid
 
 .. automodule:: pink.models.jvrc
     :members:
+
+Upkie wheeled biped
+-------------------
+
+.. automodule:: pink.models.upkie
+    :members:
