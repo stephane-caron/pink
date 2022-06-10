@@ -8,7 +8,7 @@
 | [**Examples**](https://github.com/tasts-robots/pink#examples)
 | [**Contributing**](CONTRIBUTING.md)
 
-[![CI](https://github.com/tasts-robots/pink/actions/workflows/build.yml/badge.svg)](https://github.com/tasts-robots/pink/actions/workflows/build.yml)
+[![Build](https://img.shields.io/github/workflow/status/tasts-robots/pink/CI)](https://github.com/tasts-robots/pink/actions)
 [![Coverage](https://coveralls.io/repos/github/tasts-robots/pink/badge.svg?branch=master)](https://coveralls.io/github/tasts-robots/pink?branch=master)
 [![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 ![Status](https://img.shields.io/pypi/status/pin-pink)
