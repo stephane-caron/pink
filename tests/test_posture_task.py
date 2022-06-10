@@ -128,7 +128,3 @@ class TestPostureTask(unittest.TestCase):
         qd = np.random.random(J.shape[1:])
         cost = qd.T @ H @ qd + c @ qd
         self.assertAlmostEqual(cost, 0.0)
-
-
-if __name__ == "__main__":
-    unittest.main()

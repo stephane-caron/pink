@@ -441,7 +441,3 @@ class TestConfiguration(unittest.TestCase):
         configuration = pink.apply_configuration(robot, robot.q0)
         self.assertAlmostEqual(np.sum(configuration.tangent.zeros), 0.0)
         self.assertEqual(len(configuration.tangent.zeros), robot.model.nv)
-
-
-if __name__ == "__main__":
-    unittest.main()

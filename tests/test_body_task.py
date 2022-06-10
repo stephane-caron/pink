@@ -23,11 +23,9 @@ import os
 import unittest
 
 import numpy as np
-
 from qpsolvers import solve_qp
 
-from pink.tasks import BodyTask
-from pink.tasks import TargetNotSet
+from pink.tasks import BodyTask, TargetNotSet
 
 from .mock_configuration import MockConfiguration
 
@@ -82,14 +80,13 @@ class TestBodyTask(unittest.TestCase):
         T = self.mock_configuration.get_transform_body_to_world("jetpack")
         jetpack_task.set_target(T)
         self.assertIsNotNone(jetpack_task.transform_target_to_world)
-        if jetpack_task.transform_target_to_world is None:  # help mypy
-            return
-        self.assertTrue(
-            np.allclose(
-                T.homogeneous,
-                jetpack_task.transform_target_to_world.homogeneous,
+        if jetpack_task.transform_target_to_world is not None:  # help mypy
+            self.assertTrue(
+                np.allclose(
+                    T.homogeneous,
+                    jetpack_task.transform_target_to_world.homogeneous,
+                )
             )
-        )
 
     def test_target_is_a_copy(self):
         """
@@ -100,15 +97,14 @@ class TestBodyTask(unittest.TestCase):
         tail_task.set_target(target)
         y = target.translation[1]
         target.translation[1] += 12.0
-        if tail_task.transform_target_to_world is None:  # help mypy
-            return
-        self.assertAlmostEqual(
-            tail_task.transform_target_to_world.translation[1], y
-        )
-        self.assertNotAlmostEqual(
-            tail_task.transform_target_to_world.translation[1],
-            target.translation[1],
-        )
+        if tail_task.transform_target_to_world is not None:  # help mypy
+            self.assertAlmostEqual(
+                tail_task.transform_target_to_world.translation[1], y
+            )
+            self.assertNotAlmostEqual(
+                tail_task.transform_target_to_world.translation[1],
+                target.translation[1],
+            )
 
     def test_zero_error_when_target_at_body(self):
         """
