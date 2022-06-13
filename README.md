@@ -16,6 +16,8 @@
 pip install pin-pink
 ```
 
+On Raspberry Pi, you will need to install [from source](https://tasts-robots.org/doc/pink/installation.html#from-source).
+
 ## Usage
 
 Inverse kinematics in Pink is defined by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task characterizes an objective to achieve, such as "put the foot frame at this location", by means of an objective function to be minimized, such as $\Vert {}^{world}p_{foot}^{target} - {}^{world}p_{foot} \Vert^2$. The robot is given multiple tasks to achieve, some of which may come into conflict. Conflicts are resolved by casting all objectives to the same unit, say ``[cost]``, and weighing all these normalized objectives relative to each other.
