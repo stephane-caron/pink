@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 - Argument to ``build_from_urdf`` functions is now the path to the URDF file
 - Bumped status to beta
 - Examples use the ``jvrc_description`` and ``upkie_description`` packages
-- Use jvrc\_description] and upkie\_description packages from PyPI
+- Use jvrc\_description and upkie\_description packages from PyPI
 - Task is now an abstract base class
 
 ### Fixed
