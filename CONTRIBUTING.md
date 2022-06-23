@@ -17,6 +17,16 @@ The first thing you'll be asked to do is go through the doc and examples, checki
 - Benchmark the performance of the following design choice depending on the number and types of tasks:
     - The current ``Configuration`` interface, which does ``pin.computeJointJacobians`` + ``pin.getFrameJacobian``
     - The alternative using only ``pin.computeFrameJacobian``
+- Import the [`COMTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L119) from pymanoid
+- Import the [`MinCAMTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L394) from pymanoid
+- Import the [`MinVelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L424) from pymanoid
+
+## Advanced
+
+- Design a second-order variant of `solve_ik`
+    - Import the [`COMAccelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L163) from pymanoid
+    - Import the [`MinAccelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L357) from pymanoid
+    - Import the [`PendulumModeTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L455) from pymanoid
 
 ## Research-grade
 
