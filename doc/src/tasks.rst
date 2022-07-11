@@ -9,6 +9,10 @@ Tasks
 Kinematic tasks
 ===============
 
+**TODO:** we describe below the core concepts and notations, but there is a bit
+more dimensional analysis in Pink's position and orientation costs
+(respectively in cost / m and cost / rad) that is not written down.
+
 Let us consider the task of bringing a point :math:`p`, located on one of
 the robot’s links, to a goal position :math:`p^*`, both point coordinates
 being expressed in the world frame. When the robot is in configuration
