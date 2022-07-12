@@ -197,6 +197,6 @@ class TestBodyTask(unittest.TestCase):
         H_1, c_1 = berg_task.compute_qp_objective(self.mock_configuration)
         berg_task.lm_damping = 1e-4
         H_2, c_2 = berg_task.compute_qp_objective(self.mock_configuration)
-        qd_1 = solve_qp(H_1, c_1)  # H_1 is p.s.d. from LM damping
-        qd_2 = solve_qp(H_2, c_2)  # idem for H_2
+        qd_1 = solve_qp(H_1, c_1, solver="quadprog")  # H_1 p.s.d. (LM damping)
+        qd_2 = solve_qp(H_2, c_2, solver="quadprog")  # idem for H_2
         self.assertGreater(np.linalg.norm(qd_2 - qd_1), 1e-6)
