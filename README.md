@@ -20,7 +20,13 @@ On Raspberry Pi, you will need to install [from source](https://tasts-robots.org
 
 ## Usage
 
-Pink does inverse kinematics by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task defines an objective to achieve, for instance "put the foot frame at this location", by means of an objective function to be minimized, such as $\Vert {}^{world}p_{foot}^{target} - {}^{world}p_{foot} \Vert^2$. We can define multiple tasks, but some of them will come into conflict if they can't be fully achieved at the same time. Conflicts are resolved by casting all objectives to the same unit, say ``[cost]``, and weighing all these normalized objectives relative to each other.
+Pink does inverse kinematics by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task is defined by an objective function $T(q)$ of the robot configuration $q$ to be minimized. For instance, putting a foot position $p_{foot}(q)$ at a given target $p_{foot}^{\star}$ can be described by the objective function:
+
+$$
+T_{foot}(q, p_{foot}^{\star}) = \Vert p_{foot}^{\star} - p_{foot}(q) \Vert^2
+$$
+
+We can define multiple tasks, but some of them will come into conflict if they can't be all fully achieved at the same time. Conflicts are resolved by casting all objectives to the same unit, and weighing these normalized objectives relative to each other.
 
 ### Task costs
 
@@ -82,7 +88,7 @@ Once a task has its cost and (if applicable) target defined, it can be used to s
 
 ### Differential inverse kinematics
 
-Pink solves differential inverse kinematics, meaning it outputs a velocity that steers the robot model towards a solution configuration (rather than solving for that configuration itself). If we keep integrating that velocity, and task targets don't change in the meantime, we will converge to that configuration:
+Pink solves differential inverse kinematics, meaning it outputs a velocity that steers the robot model towards a configuration that achieves all tasks at best. If we keep integrating that velocity, and task targets don't change in the meantime, we will converge to that configuration:
 
 ```python
 dt = 6e-3  # [s]
@@ -93,7 +99,7 @@ for t in np.arange(0.0, 42.0, dt):
     time.sleep(dt)
 ```
 
-If task targets are continuously updated there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) takes into account both joint position and velocity limits read from URDF.
+If task targets are continuously updated there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) takes into account both joint position and velocity limits read from the robot model.
 
 ## Examples
 
