@@ -19,17 +19,21 @@
 Python inverse kinematics for your robot model based on Pinocchio.
 """
 
-from .configuration import Configuration
-from .configuration import assume_configuration
-from .configuration import apply_configuration
+from .configuration import (
+    Configuration,
+    apply_configuration,
+    assume_configuration,
+)
 from .solve_ik import solve_ik
+from .utils import load_urdf
 
-__version__ = "0.4.0"
+__version__ = "0.4.1-pre"
 
 __all__ = [
     "Configuration",
     "apply_configuration",
     "assume_configuration",
+    "load_urdf",
     "models",
     "solve_ik",
 ]
