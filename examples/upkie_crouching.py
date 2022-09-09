@@ -19,13 +19,12 @@
 Upkie wheeled biped bending its knees.
 """
 
-import os
 import time
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 
-import meshcat_shapes
 import pink
 import pink.models
 from pink import solve_ik

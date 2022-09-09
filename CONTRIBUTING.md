@@ -23,11 +23,7 @@ The first thing you'll be asked to do is go through the doc and examples, checki
 
 ## Advanced
 
-- Design a second-order variant of `solve_ik`
-    - Import the [`COMAccelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L163) from pymanoid
-    - Import the [`MinAccelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L357) from pymanoid
-    - Import the [`PendulumModeTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L455) from pymanoid
-
-## Research-grade
-
+- Import the [`COMAccelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L163) from pymanoid
+- Import the [`MinAccelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L357) from pymanoid
+- Import the [`PendulumModeTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L455) from pymanoid
 - Solve the question of numerical instability incurred by almost-unfeasible targets where LM damping does not kick in
