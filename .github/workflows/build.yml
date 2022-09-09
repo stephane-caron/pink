@@ -42,3 +42,4 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   coveralls --service=github
+              if: contains(env.USING_COVERAGE, matrix.python-version)
