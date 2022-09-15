@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Replace ``pink.models`` by ``robot_descriptions``
+- Transition from ``pink.models`` to ``robot_descriptions``
 - Simplify Upkie crouching example
 
 ## [0.4.0] - 2022/06/21
