@@ -21,20 +21,19 @@ Test fixture for other library features.
 
 import unittest
 
-import upkie_description
 
-from pink.models import build_from_urdf
+from robot_descriptions.loaders.pinocchio import load_robot_description
 from pink.utils import custom_configuration_vector
 
 
-class TestExtras(unittest.TestCase):
+class TestUtils(unittest.TestCase):
     def test_custom_configuration_vector(self):
         """
         Check a custom configuration vector for Upkie. Assumes the left and
         right knees have joint indices respectively 8 and 11 in the
         configuration vector.
         """
-        robot = build_from_urdf(upkie_description.urdf_path)
+        robot = load_robot_description("upkie_description")
         q = custom_configuration_vector(robot, left_knee=0.2, right_knee=-0.2)
         self.assertAlmostEqual(q[8], 0.2)
         self.assertAlmostEqual(q[11], -0.2)
