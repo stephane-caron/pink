@@ -23,12 +23,11 @@ import time
 
 import numpy as np
 import pinocchio as pin
+from utils import add_meshcat_frame_axes
 
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask
-
-from utils import add_meshcat_frame_axes
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -62,7 +61,9 @@ class WavingPose:
 
 
 if __name__ == "__main__":
-    robot = load_robot_description("jvrc_description")
+    robot = load_robot_description(
+        "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+    )
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )

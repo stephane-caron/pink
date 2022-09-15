@@ -40,7 +40,9 @@ except ModuleNotFoundError:
 
 
 if __name__ == "__main__":
-    robot = load_robot_description("upkie_description")
+    robot = load_robot_description(
+        "upkie_description", root_joint=pin.JointModelFreeFlyer()
+    )
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )

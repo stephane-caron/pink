@@ -42,7 +42,9 @@ class TestSolveIK(unittest.TestCase):
         """
         IK checks for configuration limits.
         """
-        robot = load_robot_description("upkie_description")
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
         q = robot.q0
         q[7] = 20  # above limit for Upkie's first joint
         configuration = pink.apply_configuration(robot, q)
@@ -53,7 +55,9 @@ class TestSolveIK(unittest.TestCase):
         """
         Raise an error when the robot body is not found.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = apply_configuration(robot, robot.q0)
         tasks = []
         v = solve_ik(configuration, tasks, dt=1e-3)
@@ -63,7 +67,9 @@ class TestSolveIK(unittest.TestCase):
         """
         Velocity is zero when the only task is already fulfilled.
         """
-        robot = load_robot_description("upkie_description")
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = apply_configuration(robot, robot.q0)
         task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
@@ -78,7 +84,9 @@ class TestSolveIK(unittest.TestCase):
         """
         Integrating IK velocities makes a single task converge to its target.
         """
-        robot = load_robot_description("upkie_description")
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = apply_configuration(robot, robot.q0)
         task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
@@ -137,7 +145,9 @@ class TestSolveIK(unittest.TestCase):
         Translating a target (away from constraints) yields a pure linear
         velocity in the same direction in the IK output.
         """
-        robot = load_robot_description("upkie_description")
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = apply_configuration(robot, robot.q0)
         contact_task = BodyTask(
             "right_contact", position_cost=1.0, orientation_cost=1.0
@@ -170,7 +180,9 @@ class TestSolveIK(unittest.TestCase):
         """
         No motion when all targets are reached.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = apply_configuration(robot, robot.q0)
         left_ankle_task = BodyTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
@@ -200,7 +212,9 @@ class TestSolveIK(unittest.TestCase):
         """
         Three simultaneously feasible tasks on the JVRC humanoid converge.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = apply_configuration(robot, robot.q0)
 
         # Define tasks

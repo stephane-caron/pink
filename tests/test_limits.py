@@ -21,16 +21,19 @@ Test velocity and actuated-joint limits.
 
 import unittest
 
+import pinocchio as pin
 import numpy as np
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import apply_configuration
 from pink.limits import compute_velocity_limits
-from robot_descriptions.loaders.pinocchio import load_robot_description
 
 
 class TestLimits(unittest.TestCase):
     def setUp(self):
-        robot = load_robot_description("upkie_description")
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = apply_configuration(robot, robot.q0)
         self.dt = 1e-3
         self.configuration = configuration
