@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Example to load a custom URDF description
+- Example: Upkie crouching, visualized in yourdfpy
 
 ### Changed
 
