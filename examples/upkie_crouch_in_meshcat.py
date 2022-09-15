@@ -23,13 +23,12 @@ import time
 
 import numpy as np
 import pinocchio as pin
+from utils import add_meshcat_frame_axes
 
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
 from pink.utils import custom_configuration_vector
-
-from utils import add_meshcat_frame_axes
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -38,27 +37,6 @@ except ModuleNotFoundError:
         "Examples need robot_descriptions, "
         "try `pip install robot_descriptions`"
     )
-
-
-class ElevatorPose:
-
-    """
-    Frame that goes up and down with respect to the world.
-    """
-
-    def __init__(self, init: pin.SE3):
-        """
-        Initialize pose.
-
-        Args:
-            init: Initial transform from the wrist frame to the world frame.
-        """
-        self.init = init
-
-    def at(self, t):
-        T = self.init.copy()
-        T.translation[2] += 0.1 * np.sin(t)
-        return T
 
 
 if __name__ == "__main__":
@@ -102,11 +80,11 @@ if __name__ == "__main__":
         if type(task) is BodyTask:
             task.set_target(configuration.get_transform_body_to_world(body))
 
-    left_contact_target = ElevatorPose(
-        configuration.get_transform_body_to_world("left_contact")
+    left_contact_target = configuration.get_transform_body_to_world(
+        "left_contact"
     )
-    right_contact_target = ElevatorPose(
-        configuration.get_transform_body_to_world("right_contact")
+    right_contact_target = configuration.get_transform_body_to_world(
+        "right_contact"
     )
 
     left_contact_frame = viz.viewer["left_contact_frame"]
@@ -116,10 +94,12 @@ if __name__ == "__main__":
 
     dt = 5e-3  # [s]
     for t in np.arange(0.0, 10.0, dt):
-        tasks["left_contact"].set_target(left_contact_target.at(t))
-        tasks["right_contact"].set_target(right_contact_target.at(t))
-        left_contact_frame.set_transform(left_contact_target.at(t).np)
-        right_contact_frame.set_transform(right_contact_target.at(t).np)
+        left_contact_target.translation[2] += 0.1 * np.sin(t) * dt
+        right_contact_target.translation[2] += 0.1 * np.sin(t) * dt
+        tasks["left_contact"].set_target(left_contact_target)
+        tasks["right_contact"].set_target(right_contact_target)
+        left_contact_frame.set_transform(left_contact_target.np)
+        right_contact_frame.set_transform(right_contact_target.np)
         velocity = solve_ik(configuration, tasks.values(), dt)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
