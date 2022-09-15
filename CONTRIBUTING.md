@@ -8,7 +8,6 @@ The first thing you'll be asked to do is go through the doc and examples, checki
 
 - Check out the [documentation](https://tasts-robots.org/doc/pink/) and ask questions if anything is unclear
 - Try out the [examples](examples) and report any issue
-- Add a [robot model](https://tasts-robots.org/doc/pink/extras.html#module-pink.models) to the extras so that it can load by ``pink.models.build_from_urdf("/home/.../my_robot_description")``
 
 ## Medium
 

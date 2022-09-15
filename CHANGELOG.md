@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Example to load a custom URDF description
+
+### Changed
+
+- Remove internal ``pink.models`` in favor of ``robot_descriptions``
+
 ## [0.4.0] - 2022/06/21
 
 ### Added
