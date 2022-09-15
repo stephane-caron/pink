@@ -22,6 +22,7 @@ Test the Configuration type.
 import unittest
 
 import numpy as np
+import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
@@ -33,7 +34,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Assuming a configuration does not change data.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         robot.data.J.fill(42.0)
         configuration = pink.assume_configuration(robot, robot.q0)
         self.assertTrue(np.allclose(configuration.data.J, 42.0))
@@ -42,7 +45,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Applying a configuration computes Jacobians.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         robot.data.J.fill(42.0)
         configuration = pink.apply_configuration(robot, robot.q0)
         J_check = np.array(
@@ -367,7 +372,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Return the pose of an existing robot body.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = pink.apply_configuration(robot, robot.q0)
         transform_pelvis_to_world = configuration.get_transform_body_to_world(
             "PELVIS_S"
@@ -383,7 +390,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Raise an error when the request robot body is not found.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = pink.apply_configuration(robot, robot.q0)
         with self.assertRaises(KeyError):
             configuration.get_transform_body_to_world("foo")
@@ -392,7 +401,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Raise an error if and only if a joint limit is exceened.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         q = robot.q0
         configuration = pink.apply_configuration(robot, q)
         configuration.check_limits()
@@ -405,7 +416,9 @@ class TestConfiguration(unittest.TestCase):
         """
         The `q` attribute of a configuration is a read-only copy.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         original_q = robot.q0
         configuration = pink.apply_configuration(robot, original_q)
         the_answer = 42.0
@@ -419,7 +432,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Configuration's tangent eye is an identity matrix.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = pink.apply_configuration(robot, robot.q0)
         v = np.array([i for i in range(robot.model.nv)])
         self.assertTrue(np.allclose(configuration.tangent.eye.dot(v), v))
@@ -428,7 +443,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Configuration's tangent ones is a vector of 1.0's.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = pink.apply_configuration(robot, robot.q0)
         self.assertEqual(np.sum(configuration.tangent.ones), robot.model.nv)
 
@@ -436,7 +453,9 @@ class TestConfiguration(unittest.TestCase):
         """
         Configuration's tangent ones is a vector of 0.0's.
         """
-        robot = load_robot_description("jvrc_description")
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
         configuration = pink.apply_configuration(robot, robot.q0)
         self.assertAlmostEqual(np.sum(configuration.tangent.zeros), 0.0)
         self.assertEqual(len(configuration.tangent.zeros), robot.model.nv)

@@ -22,6 +22,7 @@ Upkie wheeled biped bending its knees.
 from time import perf_counter, sleep
 
 import numpy as np
+import pinocchio as pin
 import yourdfpy
 
 import pink
@@ -40,7 +41,9 @@ except ModuleNotFoundError:
 
 
 if __name__ == "__main__":
-    robot = load_robot_description("upkie_description")
+    robot = load_robot_description(
+        "upkie_description", root_joint=pin.JointModelFreeFlyer()
+    )
 
     tasks = {
         "base": BodyTask(
