@@ -21,21 +21,22 @@ Upkie wheeled biped bending its knees.
 
 import time
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 
 import pink
-import pink.models
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
 from pink.utils import custom_configuration_vector
 
+from utils import add_meshcat_frame_axes
+
 try:
-    import upkie_description
+    from robot_descriptions.loaders.pinocchio import load_robot_description
 except ModuleNotFoundError:
     raise ModuleNotFoundError(
-        "Upkie description not found, try `pip install upkie_description`"
+        "Examples need robot_descriptions, "
+        "try `pip install robot_descriptions`"
     )
 
 
@@ -61,7 +62,7 @@ class ElevatorPose:
 
 
 if __name__ == "__main__":
-    robot = pink.models.build_from_urdf(upkie_description.urdf_path)
+    robot = load_robot_description("upkie_description")
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )
@@ -109,9 +110,9 @@ if __name__ == "__main__":
     )
 
     left_contact_frame = viz.viewer["left_contact_frame"]
-    meshcat_shapes.set_frame(left_contact_frame)
+    add_meshcat_frame_axes(left_contact_frame)
     right_contact_frame = viz.viewer["right_contact_frame"]
-    meshcat_shapes.set_frame(right_contact_frame)
+    add_meshcat_frame_axes(right_contact_frame)
 
     dt = 5e-3  # [s]
     for t in np.arange(0.0, 10.0, dt):

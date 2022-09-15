@@ -25,7 +25,6 @@ from .configuration import (
     assume_configuration,
 )
 from .solve_ik import solve_ik
-from .utils import load_urdf
 
 __version__ = "0.4.1-pre"
 
@@ -33,7 +32,6 @@ __all__ = [
     "Configuration",
     "apply_configuration",
     "assume_configuration",
-    "load_urdf",
     "models",
     "solve_ik",
 ]

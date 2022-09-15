@@ -16,26 +16,26 @@
 # limitations under the License.
 
 """
-Humanoid robot model standing on two feet and reaching with a hand.
+JVRC-1 humanoid standing on two feet and reaching with a hand.
 """
 
-import os
 import time
 
 import numpy as np
 import pinocchio as pin
 
-import meshcat_shapes
 import pink
-import pink.models
 from pink import solve_ik
 from pink.tasks import BodyTask
 
+from utils import add_meshcat_frame_axes
+
 try:
-    import jvrc_description
+    from robot_descriptions.loaders.pinocchio import load_robot_description
 except ModuleNotFoundError:
     raise ModuleNotFoundError(
-        "Humanoid description not found, try `pip install jvrc_description`"
+        "Examples need robot_descriptions, "
+        "try `pip install robot_descriptions`"
     )
 
 
@@ -62,7 +62,7 @@ class WavingPose:
 
 
 if __name__ == "__main__":
-    robot = pink.models.build_from_urdf(jvrc_description.urdf_path)
+    robot = load_robot_description("jvrc_description")
     viz = pin.visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     pelvis_pose = configuration.get_transform_body_to_world("PELVIS_S").copy()
     pelvis_pose.translation[0] += 0.05
-    meshcat_shapes.set_frame(viz.viewer["pelvis_pose"])
+    add_meshcat_frame_axes(viz.viewer["pelvis_pose"])
     viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
     pelvis_task.set_target(pelvis_pose)
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     )
 
     wrist_frame = viz.viewer["right_wrist_pose"]
-    meshcat_shapes.set_frame(wrist_frame)
+    add_meshcat_frame_axes(wrist_frame)
 
     dt = 5e-3  # [s]
     for t in np.arange(0.0, 10.0, dt):

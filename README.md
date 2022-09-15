@@ -75,9 +75,9 @@ Body tasks can be initialized, for example, from the robot's neutral configurati
 
 ```python
 import pink
-import upkie_description
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
-robot = pink.models.build_from_urdf(upkie_description.urdf_path)
+robot = load_robot_description("upkie_description")
 configuration = pink.apply_configuration(robot, robot.q0)
 for body, task in tasks.items():
     if type(task) is BodyTask:
