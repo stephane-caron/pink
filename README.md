@@ -103,10 +103,13 @@ If task targets are continuously updated there will be no stationary solution to
 
 ## Examples
 
-All steps above are illustrated in the following examples:
+The steps above are illustrated in the following examples:
 
-- [Humanoid standing waving:](examples/humanoid_standing_waving.py) a humanoid model that positions its pelvis and feet while waiving its right wrist.
-- [Upkie crouching:](examples/upkie_crouching.py) a wheeled-biped model that lifts its feet up and down.
+| Robot  | Tasks  | Visualizer | Example |
+|--------|--------|------------|---------|
+| JVRC-1 | Wave   | MeshCat    | [code](examples/jvrc_wave_in_meshcat.py) |
+| Upkie  | Crouch | MeshCat    | [code](examples/upkie_crouch_in_meshcat.py) |
+| Upkie  | Crouch | yourdfpy   | [code](examples/upkie_crouch_in_yourdfpy.py) |
 
 ## History
 
@@ -124,4 +127,4 @@ Pink is in beta and its API is not fully stable. Expect the following upcoming c
 
 Install the library and use it! Report bugs in the [issue tracker](https://github.com/tasts-robots/pink/issues).
 
-If you're a developer with some robotics experience looking to hack on open source, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+If you are a developer with some robotics experience looking to hack on open source, check out the [contribution guidelines](CONTRIBUTING.md).
