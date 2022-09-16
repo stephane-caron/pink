@@ -35,8 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <!-- This URDF was modified from `double_pendulum.urdf to avoid mehses.
      Modifications by Justin Beri (https://github.com/justinberi) -->
 <robot name="double_pendulum">
-  <link
-    name="base_link">
+  <link name="base_link">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <mass value="0.1" />
