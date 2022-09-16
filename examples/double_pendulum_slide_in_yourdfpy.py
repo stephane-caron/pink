@@ -19,6 +19,7 @@
 Raise the double pendulum up and down.
 """
 
+from os import path
 from functools import partial
 
 import pinocchio as pin
@@ -33,7 +34,7 @@ def callback(scene, robot, viz):
 
 
 if __name__ == "__main__":
-    urdf_path = "./double_pendulum.urdf"
+    urdf_path = path.join(path.dirname(__file__), "double_pendulum.urdf")
     robot = pin.RobotWrapper.BuildFromURDF(
         filename=urdf_path,
         package_dirs=["."],
