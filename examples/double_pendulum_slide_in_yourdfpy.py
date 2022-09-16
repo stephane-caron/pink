@@ -19,19 +19,16 @@
 Raise the double pendulum up and down.
 """
 
-from os import path
 from functools import partial
+from os import path
 
 import pinocchio as pin
 import yourdfpy
 
 import pink
-
-
-def callback(scene, robot, viz):
-    configuration = pink.apply_configuration(robot, robot.q0)
-    viz.update_cfg(configuration.q)
-
+from pink import solve_ik
+from pink.tasks import BodyTask, PostureTask
+from pink.utils import RateLimiter
 
 if __name__ == "__main__":
     urdf_path = path.join(path.dirname(__file__), "double_pendulum.urdf")
@@ -40,6 +37,42 @@ if __name__ == "__main__":
         package_dirs=["."],
         root_joint=None,
     )
+
+    tasks = {
+        "tip": BodyTask(
+            "link3",
+            position_cost=1.0,  # [cost] / [m]
+            orientation_cost=1.0,  # [cost] / [rad]
+        ),
+        "posture": PostureTask(
+            cost=1e-3,  # [cost] / [rad]
+        ),
+    }
+
+    tasks["posture"].set_target(robot.q0)
+
+    animation_time = 0.0  # [s]
+    visualizer_fps = 100  # [Hz]
+    rate = RateLimiter(frequency=visualizer_fps)
+
+    def callback(scene, robot, viz):
+        global animation_time, configuration
+        dt = rate.period
+
+        # Update task targets
+
+        # Compute velocity and integrate it into next configuration
+        velocity = solve_ik(configuration, tasks.values(), dt)
+        q = configuration.integrate(velocity, dt)
+        configuration = pink.apply_configuration(robot, q)
+
+        # Display resulting configuration
+        actuated_joints = configuration.q[7:]
+        viz.update_cfg(actuated_joints)
+
+        # Regulate visualizer FPS
+        animation_time += dt
+        rate.sleep()
 
     viz = yourdfpy.URDF.load(urdf_path)
     viz.show(callback=partial(callback, robot=robot, viz=viz))
