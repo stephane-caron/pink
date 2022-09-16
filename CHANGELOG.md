@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Example to load a custom URDF description
 - Example: Upkie crouching, visualized in yourdfpy
+- Simple rate limiter in ``pink.utils``
 
 ### Changed
 
