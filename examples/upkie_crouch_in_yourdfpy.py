@@ -19,8 +19,6 @@
 Upkie wheeled biped bending its knees.
 """
 
-from time import perf_counter, sleep
-
 import numpy as np
 import pinocchio as pin
 import yourdfpy
@@ -28,7 +26,7 @@ import yourdfpy
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
-from pink.utils import custom_configuration_vector
+from pink.utils import RateLimiter, custom_configuration_vector
 
 try:
     from robot_descriptions import upkie_description
@@ -81,11 +79,13 @@ if __name__ == "__main__":
         "right_contact"
     )
 
-    last_callback_time = perf_counter()
     animation_time = 0.0  # [s]
+    visualizer_fps = 100  # [Hz]
+    rate = RateLimiter(frequency=visualizer_fps)
 
-    def callback(scene, dt=1e-2, dz=0.05):
-        global animation_time, configuration, last_callback_time
+    def callback(scene, dz=0.05):
+        global animation_time, configuration
+        dt = rate.period
 
         # Update task targets
         t = animation_time
@@ -104,12 +104,8 @@ if __name__ == "__main__":
         viz.update_cfg(actuated_joints)
 
         # Regulate visualizer FPS
-        cur_time = perf_counter()
-        rem_time = last_callback_time + dt - cur_time
-        if rem_time > 0.0:
-            sleep(rem_time)
-        last_callback_time = cur_time
         animation_time += dt
+        rate.sleep()
 
     viz = yourdfpy.URDF.load(upkie_description.URDF_PATH)
     viz.show(callback=callback)
