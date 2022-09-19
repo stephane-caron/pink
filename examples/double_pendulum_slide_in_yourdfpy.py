@@ -22,6 +22,7 @@ Raise the double pendulum up and down.
 from functools import partial
 from os import path
 
+import numpy as np
 import pinocchio as pin
 import yourdfpy
 
@@ -42,14 +43,16 @@ if __name__ == "__main__":
         "tip": BodyTask(
             "link3",
             position_cost=1.0,  # [cost] / [m]
-            orientation_cost=1.0,  # [cost] / [rad]
+            orientation_cost=0.0,  # [cost] / [rad]
         ),
         "posture": PostureTask(
             cost=1e-3,  # [cost] / [rad]
         ),
     }
 
-    tasks["posture"].set_target(robot.q0)
+    configuration = pink.apply_configuration(robot, robot.q0)
+    for task in tasks.values():
+        task.set_target_from_configuration(configuration)
 
     animation_time = 0.0  # [s]
     visualizer_fps = 100  # [Hz]
@@ -60,6 +63,13 @@ if __name__ == "__main__":
         dt = rate.period
 
         # Update task targets
+        t = animation_time
+        T = tasks["tip"].transform_target_to_world
+        T.translation[0] = np.sin(t)
+
+        tip_task = tasks["tip"]
+        error = tip_task.compute_error_in_body(configuration)
+        print(f"{error=}")
 
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks.values(), dt)
