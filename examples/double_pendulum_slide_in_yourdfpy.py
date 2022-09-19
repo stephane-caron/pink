@@ -77,8 +77,7 @@ if __name__ == "__main__":
         configuration = pink.apply_configuration(robot, q)
 
         # Display resulting configuration
-        actuated_joints = configuration.q[7:]
-        viz.update_cfg(actuated_joints)
+        viz.update_cfg(configuration.q)
 
         # Regulate visualizer FPS
         animation_time += dt
