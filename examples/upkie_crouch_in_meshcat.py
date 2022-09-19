@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     for body, task in tasks.items():
         if type(task) is BodyTask:
-            task.set_target(configuration.get_transform_body_to_world(body))
+            task.set_target_from_configuration(configuration)
 
     left_contact_target = configuration.get_transform_body_to_world(
         "left_contact"
