@@ -65,12 +65,21 @@ class PostureTask(Task):
 
     def set_target(self, target_q: np.ndarray) -> None:
         """
-        Set task target pose in the world frame.
+        Set target posture.
 
         Args:
             target_q: Target vector in the configuration space.
         """
         self.target_q = target_q.copy()
+
+    def set_target_from_configuration(self, configuration: Configuration) -> None:
+        """
+        Set target posture from a robot configuration.
+
+        Args:
+            configuration: Robot configuration.
+        """
+        self.set_target(configuration.q)
 
     def compute_task_dynamics(
         self, configuration: Configuration
