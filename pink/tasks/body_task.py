@@ -147,6 +147,17 @@ class BodyTask(Task):
         """
         self.transform_target_to_world = transform_target_to_world.copy()
 
+    def set_target_from_configuration(
+        self, configuration: Configuration
+    ) -> None:
+        """
+        Set task target pose from a robot configuration.
+
+        Args:
+            configuration: Robot configuration.
+        """
+        self.set_target(configuration.get_transform_body_to_world(self.body))
+
     def compute_error_in_body(
         self, configuration: Configuration
     ) -> np.ndarray:

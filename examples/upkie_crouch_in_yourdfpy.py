@@ -67,7 +67,8 @@ if __name__ == "__main__":
     configuration = pink.apply_configuration(robot, robot.q0)
     for body, task in tasks.items():
         if type(task) is BodyTask:
-            task.set_target(configuration.get_transform_body_to_world(body))
+            task.set_target_from_configuration(configuration)
+
     tasks["posture"].set_target(
         custom_configuration_vector(robot, left_knee=0.2, right_knee=-0.2)
     )

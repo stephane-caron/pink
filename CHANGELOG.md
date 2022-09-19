@@ -6,8 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Body task targets can be read directly from a configuration
 - Example to load a custom URDF description
 - Example: Upkie crouching, visualized in yourdfpy
+- Posture task targets can be read directly from a configuration
 - Simple rate limiter in ``pink.utils``
 
 ### Changed
