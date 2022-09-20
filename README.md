@@ -104,11 +104,12 @@ If task targets are continuously updated there will be no stationary solution to
 
 The steps above are illustrated in the following examples:
 
-| Robot  | Tasks  | Visualizer | Example |
-|--------|--------|------------|---------|
-| JVRC-1 | Wave   | MeshCat    | [code](examples/jvrc_wave_in_meshcat.py) |
-| Upkie  | Crouch | MeshCat    | [code](examples/upkie_crouch_in_meshcat.py) |
-| Upkie  | Crouch | yourdfpy   | [code](examples/upkie_crouch_in_yourdfpy.py) |
+| Robot           | Tasks  | Visualizer | Example |
+|-----------------|--------|------------|---------|
+| Double pendulum | Slide  | yourdfpy   | [code](examples/double_pendulum.py) |
+| JVRC-1          | Wave   | MeshCat    | [code](examples/jvrc_humanoid.py) |
+| Upkie           | Crouch | MeshCat    | [code](examples/upkie_biped_in_meshcat.py) |
+| Upkie           | Crouch | yourdfpy   | [code](examples/upkie_biped_in_yourdfpy.py) |
 
 ## History
 
