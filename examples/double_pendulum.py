@@ -65,14 +65,15 @@ if __name__ == "__main__":
         # Update task targets
         t = animation_time
         T = tasks["tip"].transform_target_to_world
-        T.translation[0] = np.sin(t)
+        T.translation[1] = 0.1 * np.sin(t)
 
         tip_task = tasks["tip"]
-        error = tip_task.compute_error_in_body(configuration)
-        print(f"{error=}")
+        J, e = tip_task.compute_task_dynamics(configuration)
+        print(f"{J=}, {e=}")
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks.values(), dt)
+        velocity = solve_ik(configuration, tasks.values(), dt, solver="osqp")
+        print(velocity)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 

@@ -23,7 +23,7 @@ import meshcat
 import numpy as np
 
 
-def __attach_axes(
+def __attach_meshcat_axes(
     frame: meshcat.Visualizer,
     length: float = 0.05,
     thickness: float = 0.002,
@@ -88,4 +88,4 @@ def add_meshcat_frame_axes(
     )
     sphere = meshcat.geometry.Sphere(origin_radius)
     frame.set_object(sphere, material)
-    __attach_axes(frame, axis_length, axis_thickness, opacity)
+    __attach_meshcat_axes(frame, axis_length, axis_thickness, opacity)
