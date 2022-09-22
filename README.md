@@ -106,7 +106,8 @@ The steps above are illustrated in the following examples:
 
 | Robot           | Tasks  | Visualizer | Example |
 |-----------------|--------|------------|---------|
-| Double pendulum | Slide  | yourdfpy   | [code](examples/double_pendulum.py) |
+| Double pendulum | Slide  | MeshCat    | [code](examples/double_pendulum_in_meshcat.py) |
+| Double pendulum | Slide  | yourdfpy   | [code](examples/double_pendulum_in_yourdfpy.py) |
 | JVRC-1          | Wave   | MeshCat    | [code](examples/jvrc_humanoid.py) |
 | Upkie           | Crouch | MeshCat    | [code](examples/upkie_biped_in_meshcat.py) |
 | Upkie           | Crouch | yourdfpy   | [code](examples/upkie_biped_in_yourdfpy.py) |
