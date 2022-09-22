@@ -63,6 +63,9 @@ def compute_velocity_limits(
 
     # Velocity limits from URDF
     v_max = configuration.model.velocityLimit.copy()
+    if v_max.dot(v_max) < 1e-10:
+        # Zero means no limit, see https://wiki.ros.org/urdf/XML/link
+        v_max = np.full(v_max.shape, +np.infty)
     v_min = -v_max
 
     # Configuration limits, only defined for actuated joints
