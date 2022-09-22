@@ -19,12 +19,10 @@
 Raise the double pendulum up and down.
 """
 
-from functools import partial
 from os import path
 
 import numpy as np
 import pinocchio as pin
-import yourdfpy
 
 import pink
 from pink import solve_ik
@@ -38,6 +36,16 @@ if __name__ == "__main__":
         package_dirs=["."],
         root_joint=None,
     )
+    configuration = pink.apply_configuration(robot, robot.q0)
+
+    # Initialize MeshCat visualizer
+    viz = pin.visualize.MeshcatVisualizer(
+        robot.model, robot.collision_model, robot.visual_model
+    )
+    robot.setVisualizer(viz, init=False)
+    viz.initViewer(open=True)
+    viz.loadViewerModel()
+    viz.display(configuration.q)
 
     tasks = {
         "tip": BodyTask(
@@ -50,20 +58,15 @@ if __name__ == "__main__":
         ),
     }
 
-    configuration = pink.apply_configuration(robot, robot.q0)
     for task in tasks.values():
         task.set_target_from_configuration(configuration)
 
-    animation_time = 0.0  # [s]
     visualizer_fps = 100  # [Hz]
     rate = RateLimiter(frequency=visualizer_fps)
+    dt = rate.period
 
-    def callback(scene, robot, viz):
-        global animation_time, configuration
-        dt = rate.period
-
+    for t in np.arange(0.0, 10.0, dt):
         # Update task targets
-        t = animation_time
         T = tasks["tip"].transform_target_to_world
         T.translation[1] = 0.1 * np.sin(t)
 
@@ -77,12 +80,6 @@ if __name__ == "__main__":
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 
-        # Display resulting configuration
-        viz.update_cfg(configuration.q)
-
-        # Regulate visualizer FPS
-        animation_time += dt
+        # Visualize result at fixed FPS
+        viz.display(q)
         rate.sleep()
-
-    viz = yourdfpy.URDF.load(urdf_path)
-    viz.show(callback=partial(callback, robot=robot, viz=viz))
