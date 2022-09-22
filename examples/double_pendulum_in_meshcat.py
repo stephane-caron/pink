@@ -28,6 +28,7 @@ import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
 from pink.utils import RateLimiter
+from pink.visualization import start_meshcat_visualizer
 
 if __name__ == "__main__":
     urdf_path = path.join(path.dirname(__file__), "double_pendulum.urdf")
@@ -36,16 +37,7 @@ if __name__ == "__main__":
         package_dirs=["."],
         root_joint=None,
     )
-    configuration = pink.apply_configuration(robot, robot.q0)
-
-    # Initialize MeshCat visualizer
-    viz = pin.visualize.MeshcatVisualizer(
-        robot.model, robot.collision_model, robot.visual_model
-    )
-    robot.setVisualizer(viz, init=False)
-    viz.initViewer(open=True)
-    viz.loadViewerModel()
-    viz.display(configuration.q)
+    viz = start_meshcat_visualizer(robot)
 
     tasks = {
         "tip": BodyTask(
@@ -58,8 +50,11 @@ if __name__ == "__main__":
         ),
     }
 
+    configuration = pink.apply_configuration(robot, robot.q0)
     for task in tasks.values():
         task.set_target_from_configuration(configuration)
+    viz.display(configuration.q)
+
 
     visualizer_fps = 100  # [Hz]
     rate = RateLimiter(frequency=visualizer_fps)
