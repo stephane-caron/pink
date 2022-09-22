@@ -23,6 +23,7 @@ from os import path
 
 import numpy as np
 import pinocchio as pin
+from utils import add_meshcat_frame_axes
 
 import pink
 from pink import solve_ik
@@ -55,15 +56,24 @@ if __name__ == "__main__":
         task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
 
+    target_frame = viz.viewer["tip_target"]
+    tip_frame = viz.viewer["tip"]
+    add_meshcat_frame_axes(target_frame, opacity=0.5)
+    add_meshcat_frame_axes(tip_frame, opacity=1.0)
 
-    visualizer_fps = 100  # [Hz]
-    rate = RateLimiter(frequency=visualizer_fps)
+    rate = RateLimiter(frequency=100.0)
     dt = rate.period
-
-    for t in np.arange(0.0, 10.0, dt):
+    t = 0.0  # [s]
+    while True:
         # Update task targets
         T = tasks["tip"].transform_target_to_world
         T.translation[1] = 0.1 * np.sin(t)
+
+        # Update visualizer frames
+        target_frame.set_transform(T.np)
+        tip_frame.set_transform(
+            configuration.get_transform_body_to_world(tasks["tip"].body).np
+        )
 
         tip_task = tasks["tip"]
         J, e = tip_task.compute_task_dynamics(configuration)
@@ -78,3 +88,4 @@ if __name__ == "__main__":
         # Visualize result at fixed FPS
         viz.display(q)
         rate.sleep()
+        t += dt

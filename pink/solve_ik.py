@@ -22,7 +22,6 @@ Function to solve inverse kinematics.
 from typing import Iterable, Tuple
 
 import numpy as np
-
 from qpsolvers import solve_qp
 
 from .configuration import Configuration
