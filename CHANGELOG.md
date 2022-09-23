@@ -7,8 +7,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Body task targets can be read directly from a configuration
-- Example to load a custom URDF description
-- Example: Upkie crouching, visualized in yourdfpy
+- Example: double pendulum
+- Example: loading a custom URDF description
+- Example: visualization in MeshCat
+- Example: visualization in yourdfpy
 - Generalize configuration limits to any root joint
 - Handle descriptions that have no velocity limit
 - Posture task targets can be read directly from a configuration

@@ -32,33 +32,39 @@ from pink.utils import RateLimiter
 from pink.visualization import start_meshcat_visualizer
 
 if __name__ == "__main__":
+    # Load robot description
     urdf_path = path.join(path.dirname(__file__), "double_pendulum.urdf")
     robot = pin.RobotWrapper.BuildFromURDF(
         filename=urdf_path,
         package_dirs=["."],
         root_joint=None,
     )
+
+    # Initialize visualizer
     viz = start_meshcat_visualizer(robot)
+    viewer = viz.viewer
+    meshcat_shapes.draw_frame(viewer["target_frame"], opacity=0.5)
+    meshcat_shapes.draw_frame(viewer["tip_frame"], opacity=1.0)
 
     tasks = {
         "tip": BodyTask(
             "link3",
             position_cost=1.0,  # [cost] / [m]
-            orientation_cost=0.0,  # [cost] / [rad]
+            orientation_cost=1e-3,  # [cost] / [rad]
         ),
         "posture": PostureTask(
-            cost=1e-3,  # [cost] / [rad]
+            cost=1e-2,  # [cost] / [rad]
         ),
     }
 
+    # Initialize tasks from the initial configuration
     configuration = pink.apply_configuration(robot, robot.q0)
     for task in tasks.values():
         task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
 
-    viewer = viz.viewer
-    meshcat_shapes.draw_frame(viewer["target_frame"], opacity=0.5)
-    meshcat_shapes.draw_frame(viewer["tip_frame"], opacity=1.0)
+    # Homework: what happens if we replace -= by += in the following line?
+    tasks["tip"].transform_target_to_world.translation[2] -= 0.1
 
     rate = RateLimiter(frequency=100.0)
     dt = rate.period
@@ -74,12 +80,8 @@ if __name__ == "__main__":
             configuration.get_transform_body_to_world(tasks["tip"].body).np
         )
 
-        tip_task = tasks["tip"]
-        J, e = tip_task.compute_task_dynamics(configuration)
-        print(f"{J=}, {e=}")
-
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks.values(), dt, solver="osqp")
+        velocity = solve_ik(configuration, tasks.values(), dt)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 
