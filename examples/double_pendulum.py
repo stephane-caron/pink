@@ -16,7 +16,7 @@
 # limitations under the License.
 
 """
-Raise the double pendulum up and down.
+Swing the double pendulum left and right.
 """
 
 from os import path
@@ -32,6 +32,7 @@ from pink.utils import RateLimiter
 from pink.visualization import start_meshcat_visualizer
 
 if __name__ == "__main__":
+
     # Load robot description
     urdf_path = path.join(path.dirname(__file__), "double_pendulum.urdf")
     robot = pin.RobotWrapper.BuildFromURDF(
@@ -46,6 +47,7 @@ if __name__ == "__main__":
     meshcat_shapes.draw_frame(viewer["target_frame"], opacity=0.5)
     meshcat_shapes.draw_frame(viewer["tip_frame"], opacity=1.0)
 
+    # Define tasks
     tasks = {
         "tip": BodyTask(
             "link3",
