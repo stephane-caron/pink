@@ -22,8 +22,27 @@ Joint limits implemented as inequality constraints.
 from typing import Tuple
 
 import numpy as np
+import pinocchio as pin
 
 from .configuration import Configuration
+
+
+def size_root_joint(model: pin.Model) -> Tuple[int, int]:
+    """
+    Count the configuration and tangent dimensions of the root joint, if any.
+
+    Args:
+        model: Robot model.
+
+    Returns:
+        nq: Number of configuration dimensions.
+        nv: Number of tangent dimensions.
+    """
+    if model.existJointName("root_joint"):
+        root_joint_id = model.getJointId("root_joint")
+        root_joint = model.joints[root_joint_id]
+        return root_joint.nq, root_joint.nv
+    return 0, 0
 
 
 def compute_velocity_limits(
@@ -69,15 +88,20 @@ def compute_velocity_limits(
     v_min = -v_max
 
     # Configuration limits, only defined for actuated joints
-    # TODO(scaron): handle robots without floating base
-    q_act = configuration.q[7:]
-    q_max = configuration.model.upperPositionLimit[7:]
-    q_min = configuration.model.lowerPositionLimit[7:]
+    root_nq, root_nv = size_root_joint(configuration.model)
+    q_act = configuration.q[root_nq:]
+    q_max = configuration.model.upperPositionLimit[root_nq:]
+    q_min = configuration.model.lowerPositionLimit[root_nq:]
     no_limit = q_max <= q_min + 1e-10
     q_max[no_limit] = np.inf
     q_min[no_limit] = -np.inf
 
-    v_max[6:] = np.minimum(v_max[6:], config_limit_gain * (q_max - q_act) / dt)
-    v_min[6:] = np.maximum(v_min[6:], config_limit_gain * (q_min - q_act) / dt)
+    # Apply both limits
+    v_max[root_nv:] = np.minimum(
+        v_max[root_nv:], config_limit_gain * (q_max - q_act) / dt
+    )
+    v_min[root_nv:] = np.maximum(
+        v_min[root_nv:], config_limit_gain * (q_min - q_act) / dt
+    )
 
     return v_max, v_min
