@@ -30,6 +30,7 @@ dependencies = [
     "quadprog >=0.1.11",
     "qpsolvers >=1.8.0",
 ]
+keywords = ["inverse", "kinematics", "pinocchio"]
 
 [project.optional-dependencies]
 doc = [
