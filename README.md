@@ -102,15 +102,17 @@ If task targets are continuously updated there will be no stationary solution to
 
 ## Examples
 
-The steps above are illustrated in the following examples:
+Check out the [examples](https://github.com/tasts-robots/pink/examples) folder for various examples, including basic tasks:
 
-| Robot           | Tasks  | Visualizer | Example |
-|-----------------|--------|------------|---------|
-| Double pendulum | Slide  | MeshCat    | [code](examples/double_pendulum_in_meshcat.py) |
-| Double pendulum | Slide  | yourdfpy   | [code](examples/double_pendulum_in_yourdfpy.py) |
-| JVRC-1          | Wave   | MeshCat    | [code](examples/jvrc_humanoid.py) |
-| Upkie           | Crouch | MeshCat    | [code](examples/upkie_biped_in_meshcat.py) |
-| Upkie           | Crouch | yourdfpy   | [code](examples/upkie_biped_in_yourdfpy.py) |
+* [Loading a custom URDF](examples/load_custom_urdf.py)
+* [Visualization in MeshCat](examples/visualize_in_meshcat.py)
+* [Visualization in yourdfpy](examples/visualize_in_yourdfpy.py)
+
+And various robot morphologies:
+
+* [Double pendulum](examples/double_pendulum.py)
+* [Humanoid](examples/humanoid.py)
+* [Wheeled biped](examples/wheeled_biped.py)
 
 ## History
 
