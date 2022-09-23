@@ -19,9 +19,9 @@
 Upkie wheeled biped bending its knees.
 """
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
-from utils import add_meshcat_frame_axes
 
 import pink
 from pink import solve_ik
@@ -79,10 +79,10 @@ if __name__ == "__main__":
     right_contact_target = tasks["right_contact"].transform_target_to_world
 
     viewer = viz.viewer
-    add_meshcat_frame_axes(viewer["left_contact_target"], opacity=0.5)
-    add_meshcat_frame_axes(viewer["right_contact_target"], opacity=0.5)
-    add_meshcat_frame_axes(viewer["left_contact"], opacity=1.0)
-    add_meshcat_frame_axes(viewer["right_contact"], opacity=1.0)
+    meshcat_shapes.draw_frame(viewer["left_contact_target"], opacity=0.5)
+    meshcat_shapes.draw_frame(viewer["right_contact_target"], opacity=0.5)
+    meshcat_shapes.draw_frame(viewer["left_contact"], opacity=1.0)
+    meshcat_shapes.draw_frame(viewer["right_contact"], opacity=1.0)
 
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
