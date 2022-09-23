@@ -19,17 +19,17 @@
 Raise the double pendulum up and down.
 """
 
-from functools import partial
 from os import path
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
-import yourdfpy
 
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
 from pink.utils import RateLimiter
+from pink.visualization import start_meshcat_visualizer
 
 if __name__ == "__main__":
     urdf_path = path.join(path.dirname(__file__), "double_pendulum.urdf")
@@ -38,6 +38,7 @@ if __name__ == "__main__":
         package_dirs=["."],
         root_joint=None,
     )
+    viz = start_meshcat_visualizer(robot)
 
     tasks = {
         "tip": BodyTask(
@@ -53,19 +54,25 @@ if __name__ == "__main__":
     configuration = pink.apply_configuration(robot, robot.q0)
     for task in tasks.values():
         task.set_target_from_configuration(configuration)
+    viz.display(configuration.q)
 
-    animation_time = 0.0  # [s]
-    visualizer_fps = 100  # [Hz]
-    rate = RateLimiter(frequency=visualizer_fps)
+    viewer = viz.viewer
+    meshcat_shapes.draw_frame(viewer["target_frame"], opacity=0.5)
+    meshcat_shapes.draw_frame(viewer["tip_frame"], opacity=1.0)
 
-    def callback(scene, robot, viz):
-        global animation_time, configuration
-        dt = rate.period
-
+    rate = RateLimiter(frequency=100.0)
+    dt = rate.period
+    t = 0.0  # [s]
+    while True:
         # Update task targets
-        t = animation_time
         T = tasks["tip"].transform_target_to_world
         T.translation[1] = 0.1 * np.sin(t)
+
+        # Update visualizer frames
+        viewer["target_frame"].set_transform(T.np)
+        viewer["tip_frame"].set_transform(
+            configuration.get_transform_body_to_world(tasks["tip"].body).np
+        )
 
         tip_task = tasks["tip"]
         J, e = tip_task.compute_task_dynamics(configuration)
@@ -73,16 +80,10 @@ if __name__ == "__main__":
 
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks.values(), dt, solver="osqp")
-        print(velocity)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 
-        # Display resulting configuration
-        viz.update_cfg(configuration.q)
-
-        # Regulate visualizer FPS
-        animation_time += dt
+        # Visualize result at fixed FPS
+        viz.display(q)
         rate.sleep()
-
-    viz = yourdfpy.URDF.load(urdf_path)
-    viz.show(callback=partial(callback, robot=robot, viz=viz))
+        t += dt

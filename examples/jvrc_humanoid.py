@@ -21,9 +21,9 @@ JVRC-1 humanoid standing on two feet and reaching with a hand.
 
 import time
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
-from utils import add_meshcat_frame_axes
 
 import pink
 from pink import solve_ik
@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     pelvis_pose = configuration.get_transform_body_to_world("PELVIS_S").copy()
     pelvis_pose.translation[0] += 0.05
-    add_meshcat_frame_axes(viz.viewer["pelvis_pose"])
+    meshcat_shapes.draw_frame(viz.viewer["pelvis_pose"])
     viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
     pelvis_task.set_target(pelvis_pose)
 
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     )
 
     wrist_frame = viz.viewer["right_wrist_pose"]
-    add_meshcat_frame_axes(wrist_frame)
+    meshcat_shapes.draw_frame(wrist_frame)
 
     dt = 5e-3  # [s]
     for t in np.arange(0.0, 10.0, dt):
