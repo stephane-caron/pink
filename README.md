@@ -122,8 +122,8 @@ Pink implements the same task-based inverse kinematics as [pymanoid](https://git
 
 Pink is in beta and its API is not fully stable. Expect the following upcoming changes:
 
-- Handle models without and with floating base
 - Add a manipulator example
+- Add a singularity example, discuss homotopy classes
 - Reformulate task gains as time constants
 
 ## How can I help?
