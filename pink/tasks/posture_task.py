@@ -72,7 +72,9 @@ class PostureTask(Task):
         """
         self.target_q = target_q.copy()
 
-    def set_target_from_configuration(self, configuration: Configuration) -> None:
+    def set_target_from_configuration(
+        self, configuration: Configuration
+    ) -> None:
         """
         Set target posture from a robot configuration.
 

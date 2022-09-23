@@ -81,7 +81,6 @@ if __name__ == "__main__":
 
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks.values(), dt, solver="osqp")
-        print(velocity)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 
