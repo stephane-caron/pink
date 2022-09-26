@@ -22,6 +22,7 @@ Posture task specification.
 from typing import Optional, Tuple
 
 import numpy as np
+import pinocchio as pin
 
 from ..configuration import Configuration
 from ..utils import get_root_joint_dim
@@ -111,10 +112,11 @@ class PostureTask(Task):
         """
         if self.target_q is None:
             raise TargetNotSet("no posture target")
-        # TODO(scaron): doesn't work for Kinova Gen2 description
         nq, nv = get_root_joint_dim(configuration.model)
         jacobian = configuration.tangent.eye[nv:, :]
-        error = (self.target_q - configuration.q)[nq:]
+        error = pin.difference(
+            configuration.model, configuration.q, self.target_q
+        )[nv:]
         return (jacobian, self.gain * error)
 
     def compute_qp_objective(
