@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [0.5.0] - 2022/09/26
 
 ### Added
 
@@ -26,6 +26,10 @@ All notable changes to this project will be documented in this file.
 - Simplify Upkie wheeled biped example
 - Transition from ``pink.models`` to ``robot_descriptions``
 - Warn when the backend QP solver is not explicitly selected
+
+### Fixed
+
+- Unbounded velocities when the backend solver is CVXOPT
 
 ## [0.4.0] - 2022/06/21
 
