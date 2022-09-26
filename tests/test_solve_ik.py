@@ -23,6 +23,7 @@ import unittest
 
 import numpy as np
 import pinocchio as pin
+import qpsolvers
 from numpy.linalg import norm
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
@@ -265,3 +266,60 @@ class TestSolveIK(unittest.TestCase):
             ),
             0.5,
         )
+
+    def get_jvrc_problem(self):
+        """
+        Get an IK problem with three tasks on a humanoid model.
+        """
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        configuration = apply_configuration(robot, robot.q0)
+        left_ankle_task = BodyTask(
+            "l_ankle", position_cost=1.0, orientation_cost=3.0
+        )
+        right_ankle_task = BodyTask(
+            "r_ankle", position_cost=1.0, orientation_cost=3.0
+        )
+        pelvis_task = BodyTask(
+            "PELVIS_S", position_cost=1.0, orientation_cost=3.0
+        )
+        left_ankle_task.set_target(
+            configuration.get_transform_body_to_world("l_ankle")
+        )
+        right_ankle_task.set_target(
+            configuration.get_transform_body_to_world("r_ankle")
+        )
+        pelvis_task.set_target(
+            configuration.get_transform_body_to_world("PELVIS_S")
+        )
+        tasks = [pelvis_task, left_ankle_task, right_ankle_task]
+        dt = 5e-3
+        return configuration, tasks, dt
+
+    @staticmethod
+    def get_solver_test(solver: str):
+        """
+        Get test function for a given QP solver.
+
+        Parameters
+        ----------
+        solver : string
+            Name of the QP solver to use as backend.
+
+        Returns
+        -------
+        test : function
+            Test function for that solver.
+        """
+
+        def test(self):
+            configuration, tasks, dt = self.get_jvrc_problem()
+            solve_ik(configuration, tasks, dt, solver=solver)
+
+        return test
+
+
+# Generate test fixtures for each solver
+for solver in qpsolvers.available_solvers:
+    setattr(TestSolveIK, f"test_{solver}", TestSolveIK.get_solver_test(solver))
