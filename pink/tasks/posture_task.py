@@ -112,7 +112,7 @@ class PostureTask(Task):
         """
         if self.target_q is None:
             raise TargetNotSet("no posture target")
-        nq, nv = get_root_joint_dim(configuration.model)
+        _, nv = get_root_joint_dim(configuration.model)
         jacobian = configuration.tangent.eye[nv:, :]
         error = pin.difference(
             configuration.model, configuration.q, self.target_q
