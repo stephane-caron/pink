@@ -74,13 +74,21 @@ def compute_velocity_limits(
     q_max = configuration.model.upperPositionLimit
     q_min = configuration.model.lowerPositionLimit
     no_limit = q_max <= q_min + 1e-10
-    q_max[no_limit] = np.inf
+    q_max[no_limit] = +np.inf
     q_min[no_limit] = -np.inf
 
-    # Apply both limits
+    # Compute difference to configuration limits
     Delta_q_max = pin.difference(configuration.model, q_act, q_max)
     Delta_q_min = pin.difference(configuration.model, q_act, q_min)
+    # The two instructions below handle a corner case for free flyers
+    # See https://github.com/stack-of-tasks/pinocchio/issues/1752
+    Delta_q_max = np.nan_to_num(Delta_q_max, nan=+np.inf)
+    Delta_q_min = np.nan_to_num(Delta_q_min, nan=-np.inf)
+    # Threshold high bounds with infinity to avoid overflows later on
+    Delta_q_max[Delta_q_max > np.finfo(np.float64).max // 2] = +np.inf
+    Delta_q_min[Delta_q_min < np.finfo(np.float64).min // 2] = -np.inf
+
+    # Combine velocity and configuration limits
     v_max = np.minimum(v_max, config_limit_gain * Delta_q_max / dt)
     v_min = np.maximum(v_min, config_limit_gain * Delta_q_min / dt)
-
     return v_max, v_min
