@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Body task targets can be read directly from a robot configuration
 - Example: double pendulum
+- Example: Kinova Gen2 arm
 - Example: loading a custom URDF description
 - Example: visualization in MeshCat
 - Example: visualization in yourdfpy
