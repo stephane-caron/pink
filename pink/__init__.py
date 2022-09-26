@@ -32,6 +32,5 @@ __all__ = [
     "Configuration",
     "apply_configuration",
     "assume_configuration",
-    "models",
     "solve_ik",
 ]
