@@ -65,6 +65,33 @@ def compute_qp_objective(
     return (H, c)
 
 
+def compute_qp_inequalities(configuration, v_max, v_min, dt):
+    """
+    Compute inequality constraints for the quadratic program.
+
+    Args:
+        configuration: Robot configuration to read kinematics from.
+        v_max: Maximum velocity in tangent space.
+        v_min: Minimum velocity in tangent space.
+        dt: Integration timestep in [s].
+
+    Returns:
+        Pair :math:`(A, b)` of inequality matrix and vector.
+
+    Notes:
+        We trim comparisons to infinity (equivalently: big floats) because some
+        solvers don't support it. See for instance
+        https://github.com/tasts-robots/pink/issues/10.
+    """
+    tangent_eye = configuration.tangent.eye
+    bff = np.finfo(np.float64).max // 2
+    finite_v_max = v_max < bff
+    finite_v_min = v_min > -bff
+    A = np.vstack([tangent_eye[finite_v_max], -tangent_eye[finite_v_min]])
+    b = np.hstack([dt * v_max[finite_v_max], -dt * v_min[finite_v_min]])
+    return A, b
+
+
 def solve_ik(
     configuration: Configuration,
     tasks: Iterable[Task],
@@ -106,11 +133,9 @@ def solve_ik(
             f"(available_solvers={available_solvers})"
         )
     configuration.check_limits()
-    H, c = compute_qp_objective(configuration, tasks, damping)
     v_max, v_min = compute_velocity_limits(configuration, dt)
-    tangent_eye = configuration.tangent.eye
-    A = np.vstack([tangent_eye, -tangent_eye])
-    b = np.hstack([v_max * dt, -v_min * dt])
+    H, c = compute_qp_objective(configuration, tasks, damping)
+    A, b = compute_qp_inequalities(configuration, v_max, v_min, dt)
     Delta_q = solve_qp(H, c, A, b, solver=solver)
     assert Delta_q is not None
     v: np.ndarray = Delta_q / dt
