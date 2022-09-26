@@ -154,6 +154,8 @@ class Configuration:
           in the inertial frame, formatted as :math:`[q_x, q_y, q_z, q_w]`.
         - ``q[7:]``: joint angles in [rad].
         """
+        if not self.model.existBodyName(body):
+            raise ValueError(f"body {body} does not exist")
         body_id = self.model.getBodyId(body)
         J: np.ndarray = pin.getFrameJacobian(
             self.model, self.data, body_id, pin.ReferenceFrame.LOCAL
