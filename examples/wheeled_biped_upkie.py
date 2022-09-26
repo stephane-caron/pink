@@ -22,6 +22,7 @@ Upkie wheeled biped bending its knees.
 import meshcat_shapes
 import numpy as np
 import pinocchio as pin
+from qpsolvers import available_solvers
 
 import pink
 from pink import solve_ik
@@ -65,14 +66,14 @@ if __name__ == "__main__":
         ),
     }
 
-    tasks["posture"].set_target(
-        custom_configuration_vector(robot, left_knee=0.2, right_knee=-0.2)
+    q_ref = custom_configuration_vector(
+        robot, left_hip=-0.2, left_knee=0.4, right_hip=0.2, right_knee=-0.4
     )
-
-    configuration = pink.apply_configuration(robot, robot.q0)
+    configuration = pink.apply_configuration(robot, q_ref)
     for body, task in tasks.items():
         if type(task) is BodyTask:
             task.set_target_from_configuration(configuration)
+    tasks["posture"].set_target(q_ref)
     viz.display(configuration.q)
 
     left_contact_target = tasks["left_contact"].transform_target_to_world
@@ -101,7 +102,9 @@ if __name__ == "__main__":
             )
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks.values(), dt)
+        default_solver = available_solvers[0]
+        solver = "osqp" if "osqp" in available_solvers else default_solver
+        velocity = solve_ik(configuration, tasks.values(), dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 

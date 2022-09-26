@@ -23,8 +23,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Raise an error when querying a body that doesn't exist
-- Simplify Upkie wheeled biped example
 - Transition from ``pink.models`` to ``robot_descriptions``
+- Update reference posture in Upkie wheeled biped example
 - Warn when the backend QP solver is not explicitly selected
 
 ### Fixed
