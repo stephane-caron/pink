@@ -102,17 +102,20 @@ If task targets are continuously updated there will be no stationary solution to
 
 ## Examples
 
-Check out the [examples](https://github.com/tasts-robots/pink/examples) folder for various examples, including basic tasks:
+Pink works with all kinds of robot morphologies:
 
-* [Loading a custom URDF](examples/load_custom_urdf.py)
-* [Visualization in MeshCat](examples/visualize_in_meshcat.py)
-* [Visualization in yourdfpy](examples/visualize_in_yourdfpy.py)
+* [Double pendulum](https://github.com/tasts-robots/pink/examples/double_pendulum.py)
+* [Humanoid](https://github.com/tasts-robots/pink/examples/jvrc_humanoid.py)
+* [Wheeled biped](https://github.com/tasts-robots/pink/examples/upkie_wheeled_biped.py)
 
-And various robot morphologies:
+Check out more basic examples to get started:
 
-* [Double pendulum](examples/double_pendulum.py)
-* [Humanoid](examples/humanoid.py)
-* [Wheeled biped](examples/wheeled_biped.py)
+* [Double pendulum](https://github.com/tasts-robots/pink/examples/double_pendulum.py)
+* [Loading a custom URDF](https://github.com/tasts-robots/pink/examples/load_custom_urdf.py)
+* [Visualization in MeshCat](https://github.com/tasts-robots/pink/examples/visualize_in_meshcat.py)
+* [Visualization in yourdfpy](https://github.com/tasts-robots/pink/examples/visualize_in_yourdfpy.py)
+
+Check out the [examples](https://github.com/tasts-robots/pink/examples) folder for more.
 
 ## History
 
