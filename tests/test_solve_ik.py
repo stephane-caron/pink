@@ -61,7 +61,7 @@ class TestSolveIK(unittest.TestCase):
         )
         configuration = apply_configuration(robot, robot.q0)
         tasks = []
-        v = solve_ik(configuration, tasks, dt=1e-3)
+        v = solve_ik(configuration, tasks, dt=1e-3, solver="quadprog")
         self.assertTrue(np.allclose(v, np.zeros(robot.nv)))
 
     def test_single_task_fulfilled(self):
@@ -206,7 +206,7 @@ class TestSolveIK(unittest.TestCase):
         )
 
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
-        velocity = solve_ik(configuration, tasks, dt=5e-3)
+        velocity = solve_ik(configuration, tasks, dt=5e-3, solver="quadprog")
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_three_tasks_convergence(self):
@@ -252,7 +252,7 @@ class TestSolveIK(unittest.TestCase):
         # Run IK in closed loop
         dt = 4e-3  # [s]
         for nb_iter in range(42):
-            velocity = solve_ik(configuration, tasks, dt)
+            velocity = solve_ik(configuration, tasks, dt, solver="quadprog")
             if norm(velocity) < 1e-10:
                 break
             q = configuration.integrate(velocity, dt)
