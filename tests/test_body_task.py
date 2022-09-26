@@ -19,15 +19,15 @@
 Test fixture for the body task.
 """
 
-import os
 import unittest
 
 import numpy as np
+import pinocchio as pin
 from qpsolvers import solve_qp
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
+import pink
 from pink.tasks import BodyTask, TargetNotSet
-
-from .mock_configuration import MockConfiguration
 
 
 class TestBodyTask(unittest.TestCase):
@@ -44,10 +44,10 @@ class TestBodyTask(unittest.TestCase):
         """
         Prepare test fixture.
         """
-        models_dir = os.path.join(os.path.dirname(__file__), "models")
-        jvrc_description = os.path.join(models_dir, "jvrc_description")
-        self.jvrc_description = jvrc_description
-        self.mock_configuration = MockConfiguration()
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        self.configuration = pink.apply_configuration(robot, robot.q0)
 
     def test_task_repr(self):
         """
@@ -64,27 +64,23 @@ class TestBodyTask(unittest.TestCase):
         """
         Raise an exception when the target is not set.
         """
-        jetpack_task = BodyTask(
-            "jetpack", position_cost=1.0, orientation_cost=0.1
-        )
+        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         with self.assertRaises(TargetNotSet):
-            jetpack_task.compute_task_dynamics(self.mock_configuration)
+            task.compute_task_dynamics(self.configuration)
 
     def test_target_set_properly(self):
         """
         Return target properly once it's set.
         """
-        jetpack_task = BodyTask(
-            "jetpack", position_cost=1.0, orientation_cost=0.1
-        )
-        T = self.mock_configuration.get_transform_body_to_world("jetpack")
-        jetpack_task.set_target(T)
-        self.assertIsNotNone(jetpack_task.transform_target_to_world)
-        if jetpack_task.transform_target_to_world is not None:  # help mypy
+        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
+        T = self.configuration.get_transform_body_to_world("l_ankle")
+        task.set_target(T)
+        self.assertIsNotNone(task.transform_target_to_world)
+        if task.transform_target_to_world is not None:  # help mypy
             self.assertTrue(
                 np.allclose(
                     T.homogeneous,
-                    jetpack_task.transform_target_to_world.homogeneous,
+                    task.transform_target_to_world.homogeneous,
                 )
             )
 
@@ -92,17 +88,17 @@ class TestBodyTask(unittest.TestCase):
         """
         Target is saved as a copy, not a reference to the original.
         """
-        tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
-        target = self.mock_configuration.get_transform_body_to_world("tail")
-        tail_task.set_target(target)
+        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
+        target = self.configuration.get_transform_body_to_world("l_ankle")
+        task.set_target(target)
         y = target.translation[1]
         target.translation[1] += 12.0
-        if tail_task.transform_target_to_world is not None:  # help mypy
+        if task.transform_target_to_world is not None:  # help mypy
             self.assertAlmostEqual(
-                tail_task.transform_target_to_world.translation[1], y
+                task.transform_target_to_world.translation[1], y
             )
             self.assertNotAlmostEqual(
-                tail_task.transform_target_to_world.translation[1],
+                task.transform_target_to_world.translation[1],
                 target.translation[1],
             )
 
@@ -110,12 +106,12 @@ class TestBodyTask(unittest.TestCase):
         """
         Error is zero when the target and body are at the same location.
         """
-        tail_task = BodyTask("tail", position_cost=1.0, orientation_cost=0.1)
-        target = self.mock_configuration.get_transform_body_to_world("tail")
-        tail_task.set_target(target)  # error == 0
-        J, e = tail_task.compute_task_dynamics(self.mock_configuration)
+        task = BodyTask("r_ankle", position_cost=1.0, orientation_cost=0.1)
+        target = self.configuration.get_transform_body_to_world("r_ankle")
+        task.set_target(target)  # error == 0
+        J, e = task.compute_task_dynamics(self.configuration)
         self.assertTrue(
-            np.allclose(J, self.mock_configuration.get_body_jacobian("tail"))
+            np.allclose(J, self.configuration.get_body_jacobian("r_ankle"))
         )
         self.assertLess(np.linalg.norm(e), 1e-10)
 
