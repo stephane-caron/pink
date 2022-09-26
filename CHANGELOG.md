@@ -23,8 +23,9 @@ All notable changes to this project will be documented in this file.
 
 - Rewrite configuration limits to use ``pin.difference``
 - Rewrite posture task to use ``pin.difference``
-- Transition from ``pink.models`` to ``robot_descriptions``
 - Simplify Upkie crouching example
+- Transition from ``pink.models`` to ``robot_descriptions``
+- Unit tests use actual rather than mock configurations
 
 ## [0.4.0] - 2022/06/21
 
