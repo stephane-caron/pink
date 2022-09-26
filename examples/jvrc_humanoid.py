@@ -19,8 +19,6 @@
 JVRC-1 humanoid standing on two feet and reaching with a hand.
 """
 
-import time
-
 import meshcat_shapes
 import numpy as np
 import pinocchio as pin
@@ -28,6 +26,7 @@ import pinocchio as pin
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask
+from pink.utils import RateLimiter
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -118,12 +117,20 @@ if __name__ == "__main__":
     wrist_frame = viz.viewer["right_wrist_pose"]
     meshcat_shapes.draw_frame(wrist_frame)
 
-    dt = 5e-3  # [s]
-    for t in np.arange(0.0, 10.0, dt):
+    rate = RateLimiter(frequency=200.0)
+    dt = rate.period
+    t = 0.0  # [s]
+    while True:
+        # Update task targets
         right_wrist_task.set_target(right_wrist_pose.at(t))
         wrist_frame.set_transform(right_wrist_pose.at(t).np)
+
+        # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks, dt)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
+
+        # Visualize result at fixed FPS
         viz.display(q)
-        time.sleep(dt)  # TODO(scaron): proper rate
+        rate.sleep()
+        t += dt
