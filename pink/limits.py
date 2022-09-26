@@ -22,9 +22,9 @@ Joint limits implemented as inequality constraints.
 from typing import Tuple
 
 import numpy as np
+import pinocchio as pin
 
 from .configuration import Configuration
-from .utils import get_root_joint_dim
 
 
 def compute_velocity_limits(
@@ -70,20 +70,19 @@ def compute_velocity_limits(
     v_min = -v_max
 
     # Configuration limits, only defined for actuated joints
-    root_nq, root_nv = get_root_joint_dim(configuration.model)
-    q_act = configuration.q[root_nq:]
-    q_max = configuration.model.upperPositionLimit[root_nq:]
-    q_min = configuration.model.lowerPositionLimit[root_nq:]
+    q_act = configuration.q
+    q_max = configuration.model.upperPositionLimit
+    q_min = configuration.model.lowerPositionLimit
     no_limit = q_max <= q_min + 1e-10
     q_max[no_limit] = np.inf
     q_min[no_limit] = -np.inf
 
     # Apply both limits
-    v_max[root_nv:] = np.minimum(
-        v_max[root_nv:], config_limit_gain * (q_max - q_act) / dt
-    )
-    v_min[root_nv:] = np.maximum(
-        v_min[root_nv:], config_limit_gain * (q_min - q_act) / dt
-    )
+    Delta_q_max = pin.difference(configuration.model, q_act, q_max)
+    Delta_q_min = pin.difference(configuration.model, q_act, q_min)
+    # Delta_q_max = q_max - q_act
+    # Delta_q_max = q_min - q_act
+    v_max = np.minimum(v_max, config_limit_gain * Delta_q_max / dt)
+    v_min = np.maximum(v_min, config_limit_gain * Delta_q_min / dt)
 
     return v_max, v_min

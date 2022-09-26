@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Rewrite configuration limits to use ``pin.difference``
 - Transition from ``pink.models`` to ``robot_descriptions``
 - Simplify Upkie crouching example
 
