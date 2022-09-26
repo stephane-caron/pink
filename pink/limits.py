@@ -80,8 +80,6 @@ def compute_velocity_limits(
     # Apply both limits
     Delta_q_max = pin.difference(configuration.model, q_act, q_max)
     Delta_q_min = pin.difference(configuration.model, q_act, q_min)
-    # Delta_q_max = q_max - q_act
-    # Delta_q_max = q_min - q_act
     v_max = np.minimum(v_max, config_limit_gain * Delta_q_max / dt)
     v_min = np.maximum(v_min, config_limit_gain * Delta_q_min / dt)
 
