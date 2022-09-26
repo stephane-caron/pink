@@ -25,7 +25,7 @@ import numpy as np
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
-from pink.utils import RateLimiter
+from pink.utils import RateLimiter, custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
 
 try:
@@ -53,7 +53,9 @@ if __name__ == "__main__":
 
     tasks = [end_effector_task, posture_task]
 
-    q = 0.5 *(robot.model.lowerPositionLimit + robot.model.upperPositionLimit)
+    q = custom_configuration_vector(
+        robot, j2s6s200_joint_2=1.0, j2s6s200_joint_3=1.0, j2s6s200_joint_5=1.0
+    )
     configuration = pink.apply_configuration(robot, q)
     for task in tasks:
         task.set_target_from_configuration(configuration)
