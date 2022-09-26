@@ -19,10 +19,11 @@
 Function to solve inverse kinematics.
 """
 
-from typing import Iterable, Tuple
+import warnings
+from typing import Iterable, Optional, Tuple
 
 import numpy as np
-from qpsolvers import solve_qp
+from qpsolvers import available_solvers, solve_qp
 
 from .configuration import Configuration
 from .limits import compute_velocity_limits
@@ -69,7 +70,7 @@ def solve_ik(
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
-    solver: str = "quadprog",
+    solver: Optional[str] = None,
 ) -> np.ndarray:
     """
     Compute a velocity tangent to the current robot configuration that
@@ -98,6 +99,12 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
+    if solver is None:
+        solver = available_solvers[0]
+        warnings.warn(
+            f"No QP solver selected, using solver='{solver}' "
+            f"(available_solvers={available_solvers})"
+        )
     configuration.check_limits()
     H, c = compute_qp_objective(configuration, tasks, damping)
     v_max, v_min = compute_velocity_limits(configuration, dt)
