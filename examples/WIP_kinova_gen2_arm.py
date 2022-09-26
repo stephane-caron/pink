@@ -19,9 +19,9 @@
 Upkie wheeled biped bending its knees.
 """
 
+import meshcat_shapes
 import numpy as np
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
@@ -53,7 +53,8 @@ if __name__ == "__main__":
 
     tasks = [end_effector_task, posture_task]
 
-    configuration = pink.apply_configuration(robot, robot.q0)
+    q = 0.5 *(robot.model.lowerPositionLimit + robot.model.upperPositionLimit)
+    configuration = pink.apply_configuration(robot, q)
     for task in tasks:
         task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
