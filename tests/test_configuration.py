@@ -459,3 +459,14 @@ class TestConfiguration(unittest.TestCase):
         configuration = pink.apply_configuration(robot, robot.q0)
         self.assertAlmostEqual(np.sum(configuration.tangent.zeros), 0.0)
         self.assertEqual(len(configuration.tangent.zeros), robot.model.nv)
+
+    def test_get_body_jacobian(self):
+        """
+        Querying a body that does not exist raises a ValueError.
+        """
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        configuration = pink.apply_configuration(robot, robot.q0)
+        with self.assertRaises(ValueError):
+            configuration.get_body_jacobian("does_not_exist")
