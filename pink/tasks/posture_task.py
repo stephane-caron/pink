@@ -24,6 +24,7 @@ from typing import Optional, Tuple
 import numpy as np
 
 from ..configuration import Configuration
+from ..utils import get_root_joint_dim
 from .exceptions import TargetNotSet
 from .task import Task
 

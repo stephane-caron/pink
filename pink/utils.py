@@ -20,6 +20,7 @@ Utility classes and functions.
 """
 
 from time import perf_counter, sleep
+from typing import Tuple
 
 import numpy as np
 import pinocchio as pin
@@ -42,6 +43,24 @@ def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
         joint = robot.model.joints[joint_id]
         q[joint.idx_q] = joint_value
     return q
+
+
+def get_root_joint_dim(model: pin.Model) -> Tuple[int, int]:
+    """
+    Count the configuration and tangent dimensions of the root joint, if any.
+
+    Args:
+        model: Robot model.
+
+    Returns:
+        nq: Number of configuration dimensions.
+        nv: Number of tangent dimensions.
+    """
+    if model.existJointName("root_joint"):
+        root_joint_id = model.getJointId("root_joint")
+        root_joint = model.joints[root_joint_id]
+        return root_joint.nq, root_joint.nv
+    return 0, 0
 
 
 class RateLimiter:

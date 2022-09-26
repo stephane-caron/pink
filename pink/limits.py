@@ -22,27 +22,9 @@ Joint limits implemented as inequality constraints.
 from typing import Tuple
 
 import numpy as np
-import pinocchio as pin
 
 from .configuration import Configuration
-
-
-def size_root_joint(model: pin.Model) -> Tuple[int, int]:
-    """
-    Count the configuration and tangent dimensions of the root joint, if any.
-
-    Args:
-        model: Robot model.
-
-    Returns:
-        nq: Number of configuration dimensions.
-        nv: Number of tangent dimensions.
-    """
-    if model.existJointName("root_joint"):
-        root_joint_id = model.getJointId("root_joint")
-        root_joint = model.joints[root_joint_id]
-        return root_joint.nq, root_joint.nv
-    return 0, 0
+from .utils import get_root_joint_dim
 
 
 def compute_velocity_limits(
@@ -88,7 +70,7 @@ def compute_velocity_limits(
     v_min = -v_max
 
     # Configuration limits, only defined for actuated joints
-    root_nq, root_nv = size_root_joint(configuration.model)
+    root_nq, root_nv = get_root_joint_dim(configuration.model)
     q_act = configuration.q[root_nq:]
     q_max = configuration.model.upperPositionLimit[root_nq:]
     q_min = configuration.model.lowerPositionLimit[root_nq:]
