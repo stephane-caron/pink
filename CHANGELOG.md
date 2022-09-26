@@ -21,11 +21,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Rewrite configuration limits to use ``pin.difference``
-- Rewrite posture task to use ``pin.difference``
-- Simplify Upkie crouching example
+- Simplify Upkie wheeled biped example
 - Transition from ``pink.models`` to ``robot_descriptions``
-- Unit tests use actual rather than mock configurations
+- Warn when the backend QP solver is not explicitly selected
 
 ## [0.4.0] - 2022/06/21
 

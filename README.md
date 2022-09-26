@@ -92,7 +92,7 @@ Pink solves differential inverse kinematics, meaning it outputs a velocity that 
 ```python
 dt = 6e-3  # [s]
 for t in np.arange(0.0, 42.0, dt):
-    velocity = solve_ik(configuration, tasks.values(), dt)  # includes joint limits
+    velocity = solve_ik(configuration, tasks.values(), dt, solver="osqp")
     q = configuration.integrate(velocity, dt)
     configuration = pink.apply_configuration(robot, q)
     time.sleep(dt)
