@@ -16,7 +16,7 @@
 # limitations under the License.
 
 """
-TODO(scaron): move these utility functions somewhere logical.
+Collection of shapes to decorate MeshCat scenes.
 """
 
 import meshcat

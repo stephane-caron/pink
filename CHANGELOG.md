@@ -6,13 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Body task targets can be read directly from a configuration
+- Body task targets can be read directly from a robot configuration
 - Example: double pendulum
 - Example: loading a custom URDF description
 - Example: visualization in MeshCat
 - Example: visualization in yourdfpy
 - Generalize configuration limits to any root joint
 - Handle descriptions that have no velocity limit
+- Handle general root joint in configuration limits
 - Posture task targets can be read directly from a configuration
 - Simple rate limiter in ``pink.utils``
 

@@ -25,6 +25,7 @@ import numpy as np
 import pinocchio as pin
 
 from .exceptions import NotWithinConfigurationLimits
+from .utils import get_root_joint_dim
 
 
 class Tangent:
@@ -116,8 +117,8 @@ class Configuration:
         """
         q_max = self.model.upperPositionLimit
         q_min = self.model.lowerPositionLimit
-        # TODO(scaron): handle robot models with no floating base
-        for i in range(7, self.model.nq):
+        root_nq, _ = get_root_joint_dim(self.model)
+        for i in range(root_nq, self.model.nq):
             if q_max[i] <= q_min[i] + tol:  # no limit
                 continue
             if self.q[i] < q_min[i] - tol or self.q[i] > q_max[i] + tol:
