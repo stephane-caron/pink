@@ -120,15 +120,20 @@ class TestBodyTask(unittest.TestCase):
         A unit cost vector means the QP objective is exactly :math:`(H, c) =
         (J^T J, -e^T J)`.
         """
-        shark_task = BodyTask("shark", position_cost=1.0, orientation_cost=0.1)
-        target = self.mock_configuration.get_transform_body_to_world("shark")
-        shark_task.set_target(target)
-        self.mock_configuration.move_body("shark", translate=[0.0, 0.01, 0.0])
-        J, e = shark_task.compute_task_dynamics(self.mock_configuration)
-        shark_task.set_position_cost(1.0)
-        shark_task.set_orientation_cost(1.0)
-        shark_task.lm_damping = 0.0
-        H, c = shark_task.compute_qp_objective(self.mock_configuration)
+        task = BodyTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
+        transform_target_to_body = pin.SE3(
+            np.eye(3), np.array([0.0, 0.01, 0.0])
+        )
+        target = (
+            self.configuration.get_transform_body_to_world("r_wrist")
+            * transform_target_to_body
+        )
+        task.set_target(target)
+        J, e = task.compute_task_dynamics(self.configuration)
+        task.set_position_cost(1.0)
+        task.set_orientation_cost(1.0)
+        task.lm_damping = 0.0
+        H, c = task.compute_qp_objective(self.configuration)
         self.assertTrue(np.allclose(J.T @ J, H))
         self.assertTrue(np.allclose(-e.T @ J, c))
 
@@ -138,11 +143,16 @@ class TestBodyTask(unittest.TestCase):
         objective as disabling the corresponding Jacobian and error
         coordinates.
         """
-        otter_task = BodyTask("otter", position_cost=1.0, orientation_cost=0.1)
-        target = self.mock_configuration.get_transform_body_to_world("otter")
-        otter_task.set_target(target)
-        self.mock_configuration.move_body("otter", translate=[0.1, 0.02, 0.01])
-        J, e = otter_task.compute_task_dynamics(self.mock_configuration)
+        task = BodyTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
+        transform_target_to_body = pin.SE3(
+            np.eye(3), np.array([0.1, 0.02, 0.01])
+        )
+        target = (
+            self.configuration.get_transform_body_to_world("l_wrist")
+            * transform_target_to_body
+        )
+        task.set_target(target)
+        J, e = task.compute_task_dynamics(self.configuration)
         qd = np.random.random(J.shape[1:])
         test_cases = {
             "position_only": (1.0, 0.0, slice(0, 3)),
@@ -156,10 +166,10 @@ class TestBodyTask(unittest.TestCase):
         }
         for case in test_cases.values():
             position_cost, orientation_cost, indexes = case
-            otter_task.set_position_cost(position_cost)
-            otter_task.set_orientation_cost(orientation_cost)
-            otter_task.lm_damping = 0.0
-            H, c = otter_task.compute_qp_objective(self.mock_configuration)
+            task.set_position_cost(position_cost)
+            task.set_orientation_cost(orientation_cost)
+            task.lm_damping = 0.0
+            H, c = task.compute_qp_objective(self.configuration)
             H_check = J[indexes].T @ J[indexes]
             c_check = -e[indexes].T @ J[indexes]
             cost = qd.T @ H @ qd + c @ qd
@@ -170,13 +180,13 @@ class TestBodyTask(unittest.TestCase):
         """
         Levenberg-Marquardt damping has no effect when the task error is zero.
         """
-        leven_task = BodyTask("leven", position_cost=1.0, orientation_cost=0.1)
-        target = self.mock_configuration.get_transform_body_to_world("leven")
-        leven_task.set_target(target)
-        leven_task.lm_damping = 1e-8
-        H_1, c_1 = leven_task.compute_qp_objective(self.mock_configuration)
-        leven_task.lm_damping = 1e-4
-        H_2, c_2 = leven_task.compute_qp_objective(self.mock_configuration)
+        task = BodyTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
+        target = self.configuration.get_transform_body_to_world("l_wrist")
+        task.set_target(target)
+        task.lm_damping = 1e-8
+        H_1, c_1 = task.compute_qp_objective(self.configuration)
+        task.lm_damping = 1e-4
+        H_2, c_2 = task.compute_qp_objective(self.configuration)
         self.assertTrue(np.allclose(H_1, H_2))
         self.assertTrue(np.allclose(c_1, c_2))
 
@@ -185,14 +195,19 @@ class TestBodyTask(unittest.TestCase):
         Levenberg-Marquardt damping is indeed a damping: unless the task is
         fulfilled, it reduces velocities.
         """
-        berg_task = BodyTask("berg", position_cost=1.0, orientation_cost=0.1)
-        target = self.mock_configuration.get_transform_body_to_world("berg")
-        berg_task.set_target(target)
-        self.mock_configuration.move_body("berg", translate=[0.0, 2.0, 0.0])
-        berg_task.lm_damping = 1e-8
-        H_1, c_1 = berg_task.compute_qp_objective(self.mock_configuration)
-        berg_task.lm_damping = 1e-4
-        H_2, c_2 = berg_task.compute_qp_objective(self.mock_configuration)
+        task = BodyTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
+        transform_target_to_body = pin.SE3(
+            np.eye(3), np.array([0.0, 2.0, 0.0])
+        )
+        target = (
+            self.configuration.get_transform_body_to_world("r_wrist")
+            * transform_target_to_body
+        )
+        task.set_target(target)
+        task.lm_damping = 1e-8
+        H_1, c_1 = task.compute_qp_objective(self.configuration)
+        task.lm_damping = 1e-4
+        H_2, c_2 = task.compute_qp_objective(self.configuration)
         qd_1 = solve_qp(H_1, c_1, solver="quadprog")  # H_1 p.s.d. (LM damping)
         qd_2 = solve_qp(H_2, c_2, solver="quadprog")  # idem for H_2
         self.assertGreater(np.linalg.norm(qd_2 - qd_1), 1e-6)
