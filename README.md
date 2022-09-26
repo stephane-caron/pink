@@ -104,11 +104,11 @@ If task targets are continuously updated there will be no stationary solution to
 
 Pink works with all kinds of robot morphologies:
 
-* [Double pendulum](https://github.com/tasts-robots/pink/examples/double_pendulum.py)
-* [Humanoid](https://github.com/tasts-robots/pink/examples/jvrc_humanoid.py)
-* [Wheeled biped](https://github.com/tasts-robots/pink/examples/upkie_wheeled_biped.py)
+* Arm: [Kinova Gen2](https://github.com/tasts-robots/pink/examples/arm_kinova_gen2.py)
+* Humanoid: [JVRC-1](https://github.com/tasts-robots/pink/examples/humanoid_jvrc.py)
+* Wheeled biped: [Upkie](https://github.com/tasts-robots/pink/examples/wheeled_biped_upkie.py)
 
-Check out more basic examples to get started:
+Basic examples are the best to get started:
 
 * [Double pendulum](https://github.com/tasts-robots/pink/examples/double_pendulum.py)
 * [Loading a custom URDF](https://github.com/tasts-robots/pink/examples/load_custom_urdf.py)
