@@ -111,9 +111,10 @@ class PostureTask(Task):
         """
         if self.target_q is None:
             raise TargetNotSet("no posture target")
-        # TODO(scaron): handle models without floating base joint
-        jacobian = configuration.tangent.eye[6:, :]
-        error = (self.target_q - configuration.q)[7:]
+        # TODO(scaron): doesn't work for Kinova Gen2 description
+        nq, nv = get_root_joint_dim(configuration.model)
+        jacobian = configuration.tangent.eye[nv:, :]
+        error = (self.target_q - configuration.q)[nq:]
         return (jacobian, self.gain * error)
 
     def compute_qp_objective(

@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Generalize configuration limits to any root joint
 - Handle descriptions that have no velocity limit
 - Handle general root joint in configuration limits
+- Handle general root joint in posture task
 - Posture task targets can be read directly from a configuration
 - Simple rate limiter in ``pink.utils``
 
