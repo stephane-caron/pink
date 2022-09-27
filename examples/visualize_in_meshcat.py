@@ -79,10 +79,10 @@ if __name__ == "__main__":
     right_contact_target = tasks["right_contact"].transform_target_to_world
 
     viewer = viz.viewer
-    meshcat_shapes.draw_frame(viewer["left_contact_target"], opacity=0.5)
-    meshcat_shapes.draw_frame(viewer["right_contact_target"], opacity=0.5)
-    meshcat_shapes.draw_frame(viewer["left_contact"], opacity=1.0)
-    meshcat_shapes.draw_frame(viewer["right_contact"], opacity=1.0)
+    meshcat_shapes.frame(viewer["left_contact_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["right_contact_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["left_contact"], opacity=1.0)
+    meshcat_shapes.frame(viewer["right_contact"], opacity=1.0)
 
     rate = RateLimiter(frequency=200.0)
     dt = rate.period

@@ -32,11 +32,6 @@ dependencies = [
 ]
 keywords = ["inverse", "kinematics", "pinocchio"]
 
-[project.optional-dependencies]
-doc = [
-    "sphinx",
-]
-
 [project.urls]
 Documentation = "https://tasts-robots.org/doc/pink/"
 Source = "https://github.com/tasts-robots/pink"
