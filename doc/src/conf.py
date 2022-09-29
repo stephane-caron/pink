@@ -77,7 +77,7 @@ release = None  # read from __init__.py
 init_path = join(dirname(dirname(dirname(str(abspath(__file__))))), "pink")
 with open(f"{init_path}/__init__.py", "r") as fh:
     for line in fh:
-        match = re.match('__version__ = "((\\d.\\d).\\d)[a-z\\-]*".*', line)
+        match = re.match('__version__ = "((\\d.\\d).\\d)[a-z0-9\\-]*".*', line)
         if match is not None:
             release = match.group(1)
             version = match.group(2)
