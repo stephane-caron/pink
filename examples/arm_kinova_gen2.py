@@ -62,8 +62,8 @@ if __name__ == "__main__":
     viz.display(configuration.q)
 
     viewer = viz.viewer
-    meshcat_shapes.draw_frame(viewer["end_effector_target"], opacity=0.5)
-    meshcat_shapes.draw_frame(viewer["end_effector"], opacity=1.0)
+    meshcat_shapes.frame(viewer["end_effector_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["end_effector"], opacity=1.0)
 
     rate = RateLimiter(frequency=200.0)
     dt = rate.period

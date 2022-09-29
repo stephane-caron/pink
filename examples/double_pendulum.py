@@ -44,8 +44,8 @@ if __name__ == "__main__":
     # Initialize visualizer
     viz = start_meshcat_visualizer(robot)
     viewer = viz.viewer
-    meshcat_shapes.draw_frame(viewer["target_frame"], opacity=0.5)
-    meshcat_shapes.draw_frame(viewer["tip_frame"], opacity=1.0)
+    meshcat_shapes.frame(viewer["target_frame"], opacity=0.5)
+    meshcat_shapes.frame(viewer["tip_frame"], opacity=1.0)
 
     # Define tasks
     tasks = {

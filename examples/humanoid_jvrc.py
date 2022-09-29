@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     pelvis_pose = configuration.get_transform_body_to_world("PELVIS_S").copy()
     pelvis_pose.translation[0] += 0.05
-    meshcat_shapes.draw_frame(viz.viewer["pelvis_pose"])
+    meshcat_shapes.frame(viz.viewer["pelvis_pose"])
     viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
     pelvis_task.set_target(pelvis_pose)
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     )
 
     wrist_frame = viz.viewer["right_wrist_pose"]
-    meshcat_shapes.draw_frame(wrist_frame)
+    meshcat_shapes.frame(wrist_frame)
 
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
