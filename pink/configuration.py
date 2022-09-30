@@ -68,7 +68,7 @@ def extend_pinocchio_model(model: pin.Model) -> None:
     Extend model with configuration-independent quantities.
 
     Args:
-        model: Pinocchio model to extend.
+        model: robot model to extend.
     """
     if hasattr(model, "is_velocity_of_bounded_joint"):
         return
@@ -227,7 +227,7 @@ class Configuration:
             dt: Integration duration in [s].
 
         Returns:
-            New configuration after integration.
+            New configuration vector after integration.
         """
         return pin.integrate(self.model, self.q, velocity * dt)
 
