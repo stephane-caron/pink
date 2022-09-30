@@ -136,44 +136,23 @@ def compute_velocity_limits_2(
         v_max = np.full(v_max.shape, +np.infty)
     v_min = -v_max
 
-    # Configuration limits, only defined for actuated joints
+    # Velocity limits from configuration bounds
     q_act = configuration.q
     q_max = configuration.model.upperPositionLimit
     q_min = configuration.model.lowerPositionLimit
-    model = configuration.model
-
-    has_configuration_limit = np.logical_and(
-        q_max < 1e20,
-        q_max > q_min + 1e-10,
-    )
-
-    bounded_joints = [
-        joint
-        for joint in model.joints
-        if has_configuration_limit[
-            slice(joint.idx_q, joint.idx_q + joint.nq)
-        ].all()
-    ]
-
-    is_velocity_of_bounded_joint = np.full(model.nv, False)
-    for joint in bounded_joints:
-        is_velocity_of_bounded_joint[
-            slice(joint.idx_v, joint.idx_v + joint.nv)
-        ] = True
-
-    # Velocity limits from configuration bounds
     Delta_q_max = pin.difference(configuration.model, q_act, q_max)
     Delta_q_min = pin.difference(configuration.model, q_act, q_min)
     np.minimum(
         v_max,
         config_limit_gain * Delta_q_max / dt,
-        where=is_velocity_of_bounded_joint,
+        where=configuration.model.is_velocity_of_bounded_joint,
         out=v_max,
     )
     np.maximum(
         v_min,
         config_limit_gain * Delta_q_min / dt,
-        where=is_velocity_of_bounded_joint,
+        where=configuration.model.is_velocity_of_bounded_joint,
         out=v_min,
     )
+
     return v_max, v_min
