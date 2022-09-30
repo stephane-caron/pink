@@ -63,6 +63,38 @@ class Tangent:
         return np.zeros(self.__model.nv)
 
 
+def extend_pinocchio_model(model: pin.Model) -> None:
+    """
+    Extend model with configuration-independent quantities.
+
+    Args:
+        model: Pinocchio model to extend.
+    """
+    if hasattr(model, "is_velocity_of_bounded_joint"):
+        return
+
+    has_configuration_limit = np.logical_and(
+        model.upperPositionLimit < 1e20,
+        model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
+    )
+
+    bounded_joints = [
+        joint
+        for joint in model.joints
+        if has_configuration_limit[
+            slice(joint.idx_q, joint.idx_q + joint.nq)
+        ].all()
+    ]
+
+    is_velocity_of_bounded_joint = np.full(model.nv, False)
+    for joint in bounded_joints:
+        is_velocity_of_bounded_joint[
+            slice(joint.idx_v, joint.idx_v + joint.nv)
+        ] = True
+
+    model.is_velocity_of_bounded_joint = is_velocity_of_bounded_joint
+
+
 class Configuration:
 
     """
@@ -99,6 +131,7 @@ class Configuration:
     q: np.ndarray
 
     def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
+        extend_pinocchio_model(model)
         q_copy = q.copy()
         q_copy.setflags(write=False)
         self.data = data
