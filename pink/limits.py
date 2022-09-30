@@ -92,3 +92,88 @@ def compute_velocity_limits(
     v_max = np.minimum(v_max, config_limit_gain * Delta_q_max / dt)
     v_min = np.maximum(v_min, config_limit_gain * Delta_q_min / dt)
     return v_max, v_min
+
+
+def compute_velocity_limits_2(
+    configuration: Configuration,
+    dt: float,
+    config_limit_gain: float = 0.5,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Compute the configuration-dependent velocity limits:
+
+    .. math::
+
+        v_{min}(q) \\leq v \\leq v_{max}(q)
+
+    where :math:`q \\in {\\cal C}` is the robot's configuration and :math:`v
+    \\in T_q({\\cal C})` is the velocity in the tangent space at :math:`q`.
+    These velocity limits combine:
+
+    - Configuration-independent joint velocity limits
+      :math:`|\\dot{q}| \\leq \\dot{q}_{lim}`.
+    - Time-derivatives of the configuration limit
+      :math:`q_{min} \\leq q \\leq q_{max}`.
+
+    Args:
+        configuration: Robot configuration to read kinematics from.
+        dt: Integration timestep in [s].
+        config_limit_gain: gain between 0 and 1 to steer away from
+            configuration limits. It is described in "Real-time prioritized
+            kinematic control under inequality constraints for redundant
+            manipulators" (Kanoun, 2012). More details in [this
+            writeup](https://scaron.info/teaching/inverse-kinematics.html).
+
+    Returns:
+        Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds.
+    """
+    assert 0.0 < config_limit_gain <= 1.0
+
+    # Velocity limits from URDF
+    v_max = configuration.model.velocityLimit.copy()
+    if v_max.dot(v_max) < 1e-10:
+        # Zero means no limit, see https://wiki.ros.org/urdf/XML/link
+        v_max = np.full(v_max.shape, +np.infty)
+    v_min = -v_max
+
+    # Configuration limits, only defined for actuated joints
+    q_act = configuration.q
+    q_max = configuration.model.upperPositionLimit
+    q_min = configuration.model.lowerPositionLimit
+    model = configuration.model
+
+    has_configuration_limit = np.logical_and(
+        q_max < 1e20,
+        q_max > q_min + 1e-10,
+    )
+
+    bounded_joints = [
+        joint
+        for joint in model.joints
+        if has_configuration_limit[
+            slice(joint.idx_q, joint.idx_q + joint.nq)
+        ].all()
+    ]
+
+    is_velocity_of_bounded_joint = np.full(model.nv, False)
+    for joint in bounded_joints:
+        is_velocity_of_bounded_joint[
+            slice(joint.idx_v, joint.idx_v + joint.nv)
+        ] = True
+
+    # Velocity limits from configuration bounds
+    Delta_q_max = pin.difference(configuration.model, q_act, q_max)
+    Delta_q_min = pin.difference(configuration.model, q_act, q_min)
+    np.minimum(
+        v_max,
+        config_limit_gain * Delta_q_max / dt,
+        where=is_velocity_of_bounded_joint,
+        out=v_max,
+    )
+    np.maximum(
+        v_min,
+        config_limit_gain * Delta_q_min / dt,
+        where=is_velocity_of_bounded_joint,
+        out=v_min,
+    )
+    return v_max, v_min
