@@ -19,8 +19,9 @@
 Load a custom URDF.
 """
 
-import pinocchio as pin
 import os
+
+import pinocchio as pin
 
 try:
     import yourdfpy
