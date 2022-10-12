@@ -56,9 +56,8 @@ if __name__ == "__main__":
     base_task = BodyTask(
         "base",
         position_cost=1.0,  # [cost] / [m]
-        orientation_cost=1e-5,  # [cost] / [rad]
+        orientation_cost=1e-3,  # [cost] / [rad]
     )
-    base_task.gain = 0.1
     posture_task = PostureTask(
         cost=1e-2,  # [cost] / [rad]
     )
