@@ -27,7 +27,7 @@ import pinocchio as pin
 from .configuration import Configuration
 
 
-def compute_velocity_limits(
+def compute_velocity_limits_1(
     configuration: Configuration,
     dt: float,
     config_limit_gain: float = 0.5,
@@ -156,3 +156,6 @@ def compute_velocity_limits_2(
     )
 
     return v_max, v_min
+
+
+compute_velocity_limits = compute_velocity_limits_2
