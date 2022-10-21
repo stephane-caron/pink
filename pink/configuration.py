@@ -164,6 +164,15 @@ class Configuration:
         )
         return J
 
+    def get_spatial_jacobian(self, body: str) -> np.ndarray:
+        if not self.model.existBodyName(body):
+            raise ValueError(f"body {body} does not exist")
+        body_id = self.model.getBodyId(body)
+        J: np.ndarray = pin.getFrameJacobian(
+            self.model, self.data, body_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+        )
+        return J
+
     def get_transform_body_to_world(self, body: str) -> pin.SE3:
         """
         Get the pose of a body frame of the robot in its current configuration.
