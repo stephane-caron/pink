@@ -22,15 +22,14 @@ Test inverse kinematics.
 import unittest
 
 import numpy as np
+import pink
 import pinocchio as pin
 import qpsolvers
 from numpy.linalg import norm
-from robot_descriptions.loaders.pinocchio import load_robot_description
-
-import pink
 from pink import apply_configuration, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
 from pink.tasks import BodyTask
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 
 class TestSolveIK(unittest.TestCase):
@@ -164,7 +163,11 @@ class TestSolveIK(unittest.TestCase):
         contact_task.set_target(transform_target_to_world)
         contact_task.lm_damping = 0.0  # only Tikhonov damping for this test
         velocity = solve_ik(
-            configuration, [contact_task], dt=1e-3, damping=1e-12, solver="quadprog",
+            configuration,
+            [contact_task],
+            dt=1e-3,
+            damping=1e-12,
+            solver="quadprog",
         )
         jacobian_contact_in_contact = configuration.get_body_jacobian(
             "right_contact"
