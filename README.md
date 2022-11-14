@@ -130,6 +130,8 @@ Pink is in beta and its API is not fully stable. Expect the following upcoming c
 
 ## How can I help?
 
-Install the library and use it! Report bugs in the [issue tracker](https://github.com/tasts-robots/pink/issues).
+Install the library and use it! Report bugs in the [issue tracker](https://github.com/tasts-robots/pink/issues). If you are a developer with some robotics experience looking to hack on open source, check out the [contribution guidelines](CONTRIBUTING.md).
 
-If you are a developer with some robotics experience looking to hack on open source, check out the [contribution guidelines](CONTRIBUTING.md).
+## See also
+
+- [Jink.jl](https://github.com/adubredu/Jink.jl): Julia package for differential multi-task inverse kinematics.
