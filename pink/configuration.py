@@ -16,9 +16,10 @@
 # limitations under the License.
 
 """
-Pink adds a notion of *configured* robot to indicate that forward kinematics
-functions have been run, so that frame transforms and frame Jacobians used for
-IK can be queried from the robot's data.
+Pink uses `Pinocchio <https://github.com/stack-of-tasks/pinocchio>`__ for
+forward kinematics. It adds to it a :ref:`Configuration` type to indicate that
+forward kinematics functions have been run, indicating that frame transforms
+and frame Jacobians used for IK can be queried from the robot's data.
 """
 
 import numpy as np
