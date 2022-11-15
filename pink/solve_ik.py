@@ -83,7 +83,7 @@ def __compute_qp_inequalities(
         https://github.com/tasts-robots/pink/issues/10.
     """
     v_max, v_min = compute_velocity_limits(configuration, dt)
-    bounded_proj = configuration.tangent.bounded_proj
+    bounded_proj = configuration.bounded.tangent.proj
     A = np.vstack([bounded_proj, -bounded_proj])
     b = np.hstack([dt * v_max, -dt * v_min])
     if b.size < 1:

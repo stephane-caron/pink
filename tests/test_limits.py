@@ -55,7 +55,7 @@ class TestLimits(unittest.TestCase):
         dt = 1e-3  # [s]
         configuration = apply_configuration(self.robot, self.robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt)
-        v_lim = configuration.model.bounded_velocity_limit
+        v_lim = configuration.model.bounded.velocity_limit
         tol = 1e-10
         self.assertLess(np.max(v_max - v_lim), tol)
         self.assertLess(np.max(-v_lim - v_min), tol)
