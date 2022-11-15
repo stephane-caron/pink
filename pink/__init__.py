@@ -25,6 +25,7 @@ from .configuration import (
     assume_configuration,
 )
 from .solve_ik import build_ik, solve_ik
+from .tasks import Task
 
 __version__ = "0.6.0"
 
@@ -34,4 +35,5 @@ __all__ = [
     "assume_configuration",
     "build_ik",
     "solve_ik",
+    "Task",
 ]
