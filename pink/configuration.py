@@ -102,6 +102,8 @@ def extend_pinocchio_model(model: pin.Model) -> None:
     for joint in bounded_joints:
         bounded_config_idx.extend(range(joint.idx_q, joint.idx_q + joint.nq))
         bounded_tangent_idx.extend(range(joint.idx_v, joint.idx_v + joint.nv))
+    bounded_config_idx = np.array(bounded_config_idx)
+    bounded_tangent_idx = np.array(bounded_tangent_idx)
     bounded_config_idx.setflags(write=False)
     bounded_tangent_idx.setflags(write=False)
     bounded_config_eye = np.eye(model.nq)[bounded_config_idx]
@@ -112,6 +114,7 @@ def extend_pinocchio_model(model: pin.Model) -> None:
     model.bounded_joints = bounded_joints
     model.bounded_tangent_eye = bounded_tangent_eye
     model.bounded_tangent_idx = bounded_tangent_idx
+    model.bounded_velocity_limit = model.velocityLimit[bounded_tangent_idx]
     model.tangent = Tangent(model, bounded_tangent_idx)
 
 
@@ -146,7 +149,6 @@ class Configuration:
             :data:`Configuration.data`.
     """
 
-    bounded_joints: np.ndarray
     data: pin.Data
     model: pin.Model
     q: np.ndarray
