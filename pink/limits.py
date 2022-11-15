@@ -128,32 +128,28 @@ def compute_velocity_limits_2(
         Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds.
     """
     assert 0.0 < config_limit_gain <= 1.0
+    model = configuration.model
 
     # Velocity limits from URDF
-    v_max = configuration.model.velocityLimit.copy()
+    v_max = model.bounded_velocity_limit
     if v_max.dot(v_max) < 1e-10:
         # Zero means no limit, see https://wiki.ros.org/urdf/XML/link
         v_max = np.full(v_max.shape, +np.infty)
     v_min = -v_max
 
     # Velocity limits from configuration bounds
-    q_act = configuration.q
-    q_max = configuration.model.upperPositionLimit
-    q_min = configuration.model.lowerPositionLimit
-    Delta_q_max = pin.difference(configuration.model, q_act, q_max)
-    Delta_q_min = pin.difference(configuration.model, q_act, q_min)
-    np.minimum(
-        v_max,
-        config_limit_gain * Delta_q_max / dt,
-        where=configuration.model.is_velocity_of_bounded_joint,
-        out=v_max,
-    )
-    np.maximum(
-        v_min,
-        config_limit_gain * Delta_q_min / dt,
-        where=configuration.model.is_velocity_of_bounded_joint,
-        out=v_min,
-    )
+    Delta_q_max = pin.difference(
+        model,
+        configuration.q,
+        model.upperPositionLimit,
+    )[model.bounded_tangent_idx]
+    Delta_q_min = pin.difference(
+        model,
+        configuration.q,
+        model.lowerPositionLimit,
+    )[model.bounded_tangent_idx]
+    np.minimum(v_max, config_limit_gain * Delta_q_max / dt, out=v_max)
+    np.maximum(v_min, config_limit_gain * Delta_q_min / dt, out=v_min)
 
     return v_max, v_min
 
