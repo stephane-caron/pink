@@ -115,6 +115,7 @@ def extend_pinocchio_model(model: pin.Model) -> None:
     model.bounded_tangent_eye = bounded_tangent_eye
     model.bounded_tangent_idx = bounded_tangent_idx
     model.bounded_velocity_limit = model.velocityLimit[bounded_tangent_idx]
+    model.nv_bounded = len(bounded_joints)
     model.tangent = Tangent(model, bounded_tangent_idx)
 
 
