@@ -64,13 +64,15 @@ class TestLimits(unittest.TestCase):
         """
         Velocities are scaled down when close to a configuration limit.
         """
+        dt = 1e-3  # [s]
+        model = self.robot.model
         configuration = apply_configuration(self.robot, self.robot.q0)
         slack_vel = 5.5e-4 * configuration.tangent.ones
-        self.robot.model.upperPositionLimit = configuration.integrate(
-            slack_vel, self.dt
-        )
+        bounded_slack_vel = slack_vel[model.bounded_tangent_idx]
+        model.upperPositionLimit = configuration.integrate(slack_vel, dt)
         v_max, v_min = compute_velocity_limits(
-            configuration, self.dt, config_limit_gain=0.5
+            configuration, dt, config_limit_gain=0.5
         )
-        self.assertTrue(np.all(v_max < self.robot.model.velocityLimit))
-        self.assertTrue(np.all(v_max < slack_vel))
+        tol = 1e-10
+        self.assertLess(np.max(v_max - model.bounded_velocity_limit), tol)
+        self.assertLess(np.max(v_max - bounded_slack_vel), tol)
