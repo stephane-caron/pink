@@ -44,8 +44,8 @@ class TestLimits(unittest.TestCase):
         model = self.robot.model
         configuration = apply_configuration(self.robot, self.robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt)
-        self.assertEqual(v_max.shape, (model.nv_bounded,))
-        self.assertEqual(v_min.shape, (model.nv_bounded,))
+        self.assertEqual(v_max.shape, (model.bounded.tangent.dim,))
+        self.assertEqual(v_min.shape, (model.bounded.tangent.dim,))
 
     def test_forward_velocity_limit(self):
         """

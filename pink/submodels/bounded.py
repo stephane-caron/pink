@@ -19,13 +19,10 @@
 Subset of bounded joints associated with a robot model.
 """
 
-from dataclasses import dataclass
-
 import numpy as np
 import pinocchio as pin
 
 
-@dataclass
 class Projection:
 
     """
@@ -33,15 +30,24 @@ class Projection:
     restricting joints to bounded ones.
 
     Attributes:
+        dim: Dimension of output space.
         input_dim: Dimension of input space.
         indices: Coordinates of bounded joints in subspace.
         projection_matrix: Projection matrix from the input space to that space
             restricted to bounded joints.
     """
 
+    dim: int
     input_dim: int
     indices: np.ndarray
     projection_matrix: np.ndarray
+
+    def __init__(self, input_dim: int, indices: np.ndarray):
+        projection_matrix = np.eye(input_dim)[indices]
+        self.dim = len(indices)
+        self.indices = indices
+        self.input_dim = input_dim
+        self.projection_matrix = projection_matrix
 
     def project(self, v: np.ndarray) -> np.ndarray:
         """
@@ -87,11 +93,9 @@ class Bounded:
         tangent_idx = np.array(tangent_idx)
         config_idx.setflags(write=False)
         tangent_idx.setflags(write=False)
-        config_proj = np.eye(model.nq)[config_idx]
-        tangent_proj = np.eye(model.nv)[tangent_idx]
 
-        self.configuration = Projection(model.nq, config_idx, config_proj)
+        self.configuration = Projection(model.nq, config_idx)
         self.joints = joints
         self.nv = len(joints)
-        self.tangent = Projection(model.nv, tangent_idx, tangent_proj)
+        self.tangent = Projection(model.nv, tangent_idx)
         self.velocity_limit = model.velocityLimit[tangent_idx]
