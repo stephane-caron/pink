@@ -19,11 +19,10 @@
 Function to solve inverse kinematics.
 """
 
-import warnings
 from typing import Iterable, Optional, Tuple
 
 import numpy as np
-from qpsolvers import available_solvers, solve_qp
+from qpsolvers import solve_qp
 
 from .configuration import Configuration
 from .limits import compute_velocity_limits
@@ -84,12 +83,9 @@ def __compute_qp_inequalities(
         https://github.com/tasts-robots/pink/issues/10.
     """
     v_max, v_min = compute_velocity_limits(configuration, dt)
-    tangent_eye = configuration.tangent.eye
-    bff = np.finfo(np.float64).max // 2
-    finite_v_max = v_max < bff
-    finite_v_min = v_min > -bff
-    A = np.vstack([tangent_eye[finite_v_max], -tangent_eye[finite_v_min]])
-    b = np.hstack([dt * v_max[finite_v_max], -dt * v_min[finite_v_min]])
+    bounded_proj = configuration.tangent.bounded_proj
+    A = np.vstack([bounded_proj, -bounded_proj])
+    b = np.hstack([dt * v_max, -dt * v_min])
     if b.size < 1:
         return None, None
     return A, b
@@ -158,12 +154,6 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-    if solver is None:
-        solver = available_solvers[0]
-        warnings.warn(
-            f"No QP solver selected, using solver='{solver}' "
-            f"(available_solvers={available_solvers})"
-        )
     configuration.check_limits()
     H, c, A, b = build_ik(configuration, tasks, dt, damping)
     Delta_q = solve_qp(H, c, A, b, solver=solver)
