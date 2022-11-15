@@ -23,6 +23,8 @@ transforms and frame Jacobians used for IK can be queried from the robot's
 data.
 """
 
+from typing import List
+
 import numpy as np
 import pinocchio as pin
 
@@ -63,22 +65,21 @@ class Tangent:
         return np.zeros(self.__model.nv)
 
 
-def extend_pinocchio_model(model: pin.Model) -> None:
+def list_bounded_joints(model: pin.Model) -> List[pin.JointModel]:
     """
-    Extend model with configuration-independent quantities.
+    List bounded joints in a pinocchio model.
 
     Args:
-        model: robot model to extend.
-    """
-    if hasattr(model, "is_velocity_of_bounded_joint"):
-        return
+        model: robot model.
 
+    Returns:
+        List of bounded joints.
+    """
     has_configuration_limit = np.logical_and(
         model.upperPositionLimit < 1e20,
         model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
     )
-
-    bounded_joints = [
+    return [
         joint
         for joint in model.joints
         if has_configuration_limit[
@@ -86,13 +87,36 @@ def extend_pinocchio_model(model: pin.Model) -> None:
         ].all()
     ]
 
-    is_velocity_of_bounded_joint = np.full(model.nv, False)
-    for joint in bounded_joints:
-        is_velocity_of_bounded_joint[
-            slice(joint.idx_v, joint.idx_v + joint.nv)
-        ] = True
 
-    model.is_velocity_of_bounded_joint = is_velocity_of_bounded_joint
+def extend_pinocchio_model(model: pin.Model) -> None:
+    """
+    Extend model with configuration-independent quantities.
+
+    Args:
+        model: robot model to extend.
+
+    Returns:
+        Array of bounded joint indexes.
+    """
+    if hasattr(model, "bounded_joints"):
+        return
+
+    bounded_joints = list_bounded_joints(model)
+    bounded_config_idx = []
+    bounded_tangent_idx = []
+    for joint in bounded_joints:
+        bounded_config_idx.extend(range(joint.idx_q, joint.idx_q + joint.nq))
+        bounded_tangent_idx.extend(range(joint.idx_v, joint.idx_v + joint.nv))
+    bounded_config_idx.setflags(write=False)
+    bounded_tangent_idx.setflags(write=False)
+    bounded_config_eye = np.eye(model.nq)[bounded_config_idx]
+    bounded_tangent_eye = np.eye(model.nv)[bounded_tangent_idx]
+
+    model.bounded_config_eye = bounded_config_eye
+    model.bounded_config_idx = bounded_config_idx
+    model.bounded_joints = bounded_joints
+    model.bounded_tangent_eye = bounded_tangent_eye
+    model.bounded_tangent_idx = bounded_tangent_idx
 
 
 class Configuration:
@@ -126,17 +150,18 @@ class Configuration:
             :data:`Configuration.data`.
     """
 
+    bounded_joints: np.ndarray
     data: pin.Data
     model: pin.Model
     q: np.ndarray
 
     def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
         extend_pinocchio_model(model)
-        q_copy = q.copy()
-        q_copy.setflags(write=False)
+        q_readonly = q.copy()
+        q_readonly.setflags(write=False)
         self.data = data
         self.model = model
-        self.q = q_copy
+        self.q = q_readonly
         self.tangent = Tangent(model)
 
     def check_limits(self, tol: float = 1e-6) -> None:
