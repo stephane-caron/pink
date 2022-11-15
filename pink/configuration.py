@@ -38,31 +38,20 @@ class Tangent:
     Represent the tangent space at a given robot configuration.
     """
 
-    __model: pin.Model
+    bounded_projector: np.ndarray
+    eye: np.ndarray
+    ones: np.ndarray
+    zeros: np.ndarray
 
     def __init__(self, model: pin.Model):
-        self.__model = model
-
-    @property
-    def eye(self):
-        """
-        Identity matrix of the tangent space.
-        """
-        return np.eye(self.__model.nv)
-
-    @property
-    def ones(self):
-        """
-        Vector of ones in the tangent space.
-        """
-        return np.ones(self.__model.nv)
-
-    @property
-    def zeros(self):
-        """
-        Vector of zeros in the tangent space.
-        """
-        return np.zeros(self.__model.nv)
+        eye = np.eye(model.nv)
+        ones = np.ones(model.nv)
+        zeros = np.zeros(model.nv)
+        bounded_projector = eye[model.bounded_tangent_idx]
+        self.bounded_projector = bounded_projector
+        self.eye = eye
+        self.ones = ones
+        self.zeros = zeros
 
 
 def list_bounded_joints(model: pin.Model) -> List[pin.JointModel]:
@@ -117,6 +106,7 @@ def extend_pinocchio_model(model: pin.Model) -> None:
     model.bounded_joints = bounded_joints
     model.bounded_tangent_eye = bounded_tangent_eye
     model.bounded_tangent_idx = bounded_tangent_idx
+    model.tangent = Tangent(model)
 
 
 class Configuration:
@@ -162,7 +152,7 @@ class Configuration:
         self.data = data
         self.model = model
         self.q = q_readonly
-        self.tangent = Tangent(model)
+        self.tangent = model.tangent
 
     def check_limits(self, tol: float = 1e-6) -> None:
         """
