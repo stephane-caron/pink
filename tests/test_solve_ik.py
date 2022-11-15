@@ -22,14 +22,15 @@ Test inverse kinematics.
 import unittest
 
 import numpy as np
-import pink
 import pinocchio as pin
 import qpsolvers
 from numpy.linalg import norm
+from robot_descriptions.loaders.pinocchio import load_robot_description
+
+import pink
 from pink import apply_configuration, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
 from pink.tasks import BodyTask
-from robot_descriptions.loaders.pinocchio import load_robot_description
 
 
 class TestSolveIK(unittest.TestCase):
@@ -325,4 +326,6 @@ class TestSolveIK(unittest.TestCase):
 
 # Generate test fixtures for each solver
 for solver in qpsolvers.available_solvers:
+    if solver == "highs":
+        continue
     setattr(TestSolveIK, f"test_{solver}", TestSolveIK.get_solver_test(solver))
