@@ -138,16 +138,20 @@ def compute_velocity_limits_2(
     v_min = -v_max
 
     # Velocity limits from configuration bounds
-    Delta_q_max = pin.difference(
-        model,
-        configuration.q,
-        model.upperPositionLimit,
-    )[model.bounded_tangent_idx]
-    Delta_q_min = pin.difference(
-        model,
-        configuration.q,
-        model.lowerPositionLimit,
-    )[model.bounded_tangent_idx]
+    Delta_q_max = model.bounded.tangent.project(
+        pin.difference(
+            model,
+            configuration.q,
+            model.upperPositionLimit,
+        )
+    )
+    Delta_q_min = model.bounded.tangent.project(
+        pin.difference(
+            model,
+            configuration.q,
+            model.lowerPositionLimit,
+        )
+    )
     np.minimum(v_max, config_limit_gain * Delta_q_max / dt, out=v_max)
     np.maximum(v_min, config_limit_gain * Delta_q_min / dt, out=v_min)
 
