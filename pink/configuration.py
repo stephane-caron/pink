@@ -27,7 +27,7 @@ import numpy as np
 import pinocchio as pin
 
 from .exceptions import NotWithinConfigurationLimits
-from .model import extend_pinocchio_model
+from .submodels import add_submodels
 from .utils import get_root_joint_dim
 
 
