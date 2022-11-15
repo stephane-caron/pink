@@ -26,7 +26,18 @@ import pinocchio as pin
 
 
 @dataclass
-class BoundedJoints:
+class CoordinateMap:
+
+    """
+    Set of coordinate indices and projector matrix to map from one space
+    (configuration or tangent) to its subspace for bounded joints.
+
+    Attributes:
+        indices: Coordinate indices.
+        projector: Projection matrix from full space to the space restricted to
+            bounded joints.
+    """
+
     indices: np.ndarray
     projector: np.ndarray
 
@@ -67,8 +78,8 @@ class Bounded:
         config_proj = np.eye(model.nq)[config_idx]
         tangent_proj = np.eye(model.nv)[tangent_idx]
 
-        self.configuration = BoundedJoints(config_idx, config_proj)
+        self.configuration = CoordinateMap(config_idx, config_proj)
         self.joints = joints
         self.nv = len(joints)
-        self.tangent = BoundedJoints(tangent_idx, tangent_proj)
+        self.tangent = CoordinateMap(tangent_idx, tangent_proj)
         self.velocity_limit = model.velocityLimit[tangent_idx]

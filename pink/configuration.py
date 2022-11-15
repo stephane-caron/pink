@@ -67,7 +67,7 @@ class Configuration:
     q: np.ndarray
 
     def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
-        extend_pinocchio_model(model)
+        add_submodels(model)
         q_readonly = q.copy()
         q_readonly.setflags(write=False)
         self.data = data

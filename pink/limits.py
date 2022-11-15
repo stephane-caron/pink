@@ -131,7 +131,7 @@ def compute_velocity_limits_2(
     model = configuration.model
 
     # Velocity limits from URDF
-    v_max = model.bounded_velocity_limit
+    v_max = model.bounded.velocity_limit
     if v_max.dot(v_max) < 1e-10:
         # Zero means no limit, see https://wiki.ros.org/urdf/XML/link
         v_max = np.full(v_max.shape, +np.infty)
