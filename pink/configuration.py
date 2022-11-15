@@ -36,19 +36,25 @@ class Tangent:
 
     """
     Represent the tangent space at a given robot configuration.
+
+    Attributes:
+        bounded_proj: Projection matrix on bounded joints.
+        eye: Identity matrix.
+        ones: Tangent space vector with all coordinates at one.
+        zeros: Zero tangent space vector.
     """
 
-    bounded_projector: np.ndarray
+    bounded_proj: np.ndarray
     eye: np.ndarray
     ones: np.ndarray
     zeros: np.ndarray
 
-    def __init__(self, model: pin.Model):
+    def __init__(self, model: pin.Model, bounded_tangent_idx):
         eye = np.eye(model.nv)
         ones = np.ones(model.nv)
         zeros = np.zeros(model.nv)
-        bounded_projector = eye[model.bounded_tangent_idx]
-        self.bounded_projector = bounded_projector
+        bounded_proj = eye[bounded_tangent_idx]
+        self.bounded_proj = bounded_proj
         self.eye = eye
         self.ones = ones
         self.zeros = zeros
@@ -106,7 +112,7 @@ def extend_pinocchio_model(model: pin.Model) -> None:
     model.bounded_joints = bounded_joints
     model.bounded_tangent_eye = bounded_tangent_eye
     model.bounded_tangent_idx = bounded_tangent_idx
-    model.tangent = Tangent(model)
+    model.tangent = Tangent(model, bounded_tangent_idx)
 
 
 class Configuration:
