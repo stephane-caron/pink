@@ -52,11 +52,13 @@ class TestLimits(unittest.TestCase):
         When we are far away from configuration limits, the velocity limit is
         simply the configuration-agnostic one from the robot.
         """
+        dt = 1e-3  # [s]
         configuration = apply_configuration(self.robot, self.robot.q0)
-        v_max, v_min = compute_velocity_limits(configuration, self.dt)
-        model_v_lim = configuration.model.velocityLimit
-        self.assertTrue(np.allclose(v_max, +model_v_lim))
-        self.assertTrue(np.allclose(v_min, -model_v_lim))
+        v_max, v_min = compute_velocity_limits(configuration, dt)
+        v_lim = configuration.model.bounded_velocity_limit
+        tol = 1e-10
+        self.assertLess(np.max(v_max - v_lim), tol)
+        self.assertLess(np.max(-v_lim - v_min), tol)
 
     def test_configuration_limit_repulsion(self):
         """
