@@ -60,8 +60,8 @@ class Bounded:
         config_idx.setflags(write=False)
         tangent_idx.setflags(write=False)
 
-        self.configuration = Projection(model.nq, config_idx)
+        self.configuration = Subspace(model.nq, config_idx)
         self.joints = joints
         self.nv = len(joints)
-        self.tangent = Projection(model.nv, tangent_idx)
+        self.tangent = Subspace(model.nv, tangent_idx)
         self.velocity_limit = model.velocityLimit[tangent_idx]
