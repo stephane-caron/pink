@@ -26,6 +26,7 @@ from .configuration import (
 )
 from .solve_ik import build_ik, solve_ik
 from .tasks import Task
+from .utils import custom_configuration_vector
 
 __version__ = "0.7.0rc0"
 
@@ -34,6 +35,7 @@ __all__ = [
     "apply_configuration",
     "assume_configuration",
     "build_ik",
+    "custom_configuration_vector",
     "solve_ik",
     "Task",
 ]
