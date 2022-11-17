@@ -152,6 +152,7 @@ def compute_velocity_limits_2(
             model.lowerPositionLimit,
         )
     )
+
     np.minimum(v_max, config_limit_gain * Delta_q_max / dt, out=v_max)
     np.maximum(v_min, config_limit_gain * Delta_q_min / dt, out=v_min)
 

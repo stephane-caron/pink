@@ -16,7 +16,7 @@
 # limitations under the License.
 
 """
-Add sub-models to a pinocchio model.
+Add submodels to a pinocchio model.
 """
 
 from .add_submodels import add_submodels

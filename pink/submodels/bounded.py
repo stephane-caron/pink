@@ -22,42 +22,7 @@ Subset of bounded joints associated with a robot model.
 import numpy as np
 import pinocchio as pin
 
-
-class Projection:
-
-    """
-    Projection rom one space (configuration or tangent) to its subspace when
-    restricting joints to bounded ones.
-
-    Attributes:
-        dim: Dimension of output space.
-        input_dim: Dimension of input space.
-        indices: Coordinates of bounded joints in subspace.
-        projection_matrix: Projection matrix from the input space to that space
-            restricted to bounded joints.
-    """
-
-    dim: int
-    input_dim: int
-    indices: np.ndarray
-    projection_matrix: np.ndarray
-
-    def __init__(self, input_dim: int, indices: np.ndarray):
-        projection_matrix = np.eye(input_dim)[indices]
-        self.dim = len(indices)
-        self.indices = indices
-        self.input_dim = input_dim
-        self.projection_matrix = projection_matrix
-
-    def project(self, v: np.ndarray) -> np.ndarray:
-        """
-        Project a vector from the original space to the subspace.
-
-        Args:
-            v: Vector from the original space.
-        """
-        assert v.shape == (self.input_dim,), "Dimension mismatch"
-        return v[self.indices]
+from .subspace import Subspace
 
 
 class Bounded:
