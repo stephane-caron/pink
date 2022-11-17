@@ -19,6 +19,8 @@
 Subspace of the configuration or tangent space.
 """
 
+from typing import Optional
+
 import numpy as np
 
 
@@ -32,22 +34,31 @@ class Subspace:
         dim: Dimension of output space.
         indices: Joint coordinates in input space.
         input_dim: Dimension of input space.
-        projection_matrix: Projection matrix from input to output space.
     """
 
+    __projection_matrix: Optional[np.ndarray]
     dim: int
     indices: np.ndarray
     input_dim: int
-    projection_matrix: np.ndarray
 
     def __init__(self, input_dim: int, indices: np.ndarray):
-        if len(indices) < 1:
-            raise ValueError("cannot project on empty space")
-        projection_matrix = np.eye(input_dim)[indices]
+        projection_matrix = (
+            np.eye(input_dim)[indices] if len(indices) > 0 else None
+        )
         self.dim = len(indices)
         self.indices = indices
         self.input_dim = input_dim
-        self.projection_matrix = projection_matrix
+        self.__projection_matrix = projection_matrix
+
+    @property
+    def is_empty(self):
+        return self.projection_matrix is None
+
+    @property
+    def projection_matrix(self) -> np.ndarray:
+        if self.__projection_matrix is None:
+            raise ValueError("no projection matrix to the empty space")
+        return self.__projection_matrix
 
     def project(self, v: np.ndarray) -> np.ndarray:
         """
