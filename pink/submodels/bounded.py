@@ -44,7 +44,8 @@ class Bounded:
         joints = [
             joint
             for joint in model.joints
-            if has_configuration_limit[
+            if joint.idx_q >= 0
+            and has_configuration_limit[
                 slice(joint.idx_q, joint.idx_q + joint.nq)
             ].all()
         ]
