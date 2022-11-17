@@ -23,6 +23,7 @@ import meshcat_shapes
 import numpy as np
 import qpsolvers
 import pinocchio as pin
+import qpsolvers
 
 import pink
 from pink import solve_ik
