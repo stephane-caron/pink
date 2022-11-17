@@ -20,7 +20,9 @@ Add submodels to a pinocchio model.
 """
 
 from .add_submodels import add_submodels
+from .subspace import Subspace
 
 __all__ = [
     "add_submodels",
+    "Subspace",
 ]

@@ -24,7 +24,7 @@ import unittest
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-from pink.submodels import add_submodels
+from pink.submodels import Subspace, add_submodels
 
 
 class TestSubmodels(unittest.TestCase):
@@ -60,3 +60,7 @@ class TestSubmodels(unittest.TestCase):
         self.assertEqual(
             bounded.configuration.projection_matrix.shape, (nb, nq)
         )
+
+    def test_subspace(self):
+        with self.assertRaises(ValueError):
+            Subspace(0, [])
