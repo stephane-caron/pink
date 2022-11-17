@@ -21,6 +21,7 @@ Test submodels.
 
 import unittest
 
+import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
@@ -62,5 +63,16 @@ class TestSubmodels(unittest.TestCase):
         )
 
     def test_subspace(self):
-        with self.assertRaises(ValueError):
-            Subspace(0, [])
+        """
+        Check Subspace class.
+        """
+        subspace = Subspace(2, [1])
+        P = subspace.projection_matrix
+        self.assertLess((P - np.array([0.0, 1.0])).max(), 1e-10)
+
+    def test_unbounded(self):
+        """
+        Check that unbounded models don't fail.
+        """
+        empty_model = pin.Model()
+        add_submodels(empty_model)
