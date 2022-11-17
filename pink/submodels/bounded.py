@@ -59,9 +59,16 @@ class Bounded:
         tangent_idx = np.array(tangent_idx)
         config_idx.setflags(write=False)
         tangent_idx.setflags(write=False)
+        nv = len(joints)
 
         self.configuration = Subspace(model.nq, config_idx)
         self.joints = joints
-        self.nv = len(joints)
+        self.nv = nv
         self.tangent = Subspace(model.nv, tangent_idx)
-        self.velocity_limit = model.velocityLimit[tangent_idx]
+        self.velocity_limit = (
+            model.velocityLimit[tangent_idx] if nv > 0 else None
+        )
+
+    @property
+    def is_empty(self):
+        return self.nv < 1
