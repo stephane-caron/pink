@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Example: UR3 arm
 - Expose ``pink.Task`` from top-level module
 - Improve joint limit computations
 
