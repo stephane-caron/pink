@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Upkie wheeled biped bending its knees."""
+"""Universal Robots UR3 arm tracking a moving target."""
 
 import meshcat_shapes
 import numpy as np
