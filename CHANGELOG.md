@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 
 - Example: reduce Upkie model in leg extension example
 - Solver keyword argument is now mandatory
+- Example: UR3 arm
 
 ## [0.5.0] - 2022/09/26
 
