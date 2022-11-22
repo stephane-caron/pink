@@ -208,8 +208,21 @@ class BodyTask(Task):
             both expressed in the body frame.
         """
         jacobian_in_body = configuration.get_body_jacobian(self.body)
+
+        transform_body_to_world = configuration.get_transform_body_to_world(
+            self.body
+        )
+        transform_body_to_target = (
+            self.transform_target_to_world.inverse() * transform_body_to_world
+        )
+        bug = True
+        if bug:
+            J = jacobian_in_body
+        else:
+            J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
+
         error_in_body = self.compute_error_in_body(configuration)
-        return jacobian_in_body, self.gain * error_in_body
+        return J, self.gain * error_in_body
 
     def compute_qp_objective(
         self, configuration: Configuration
