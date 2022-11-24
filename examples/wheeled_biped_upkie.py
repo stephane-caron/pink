@@ -19,11 +19,10 @@
 Upkie wheeled biped bending its knees.
 """
 
-import meshcat_shapes
 import numpy as np
-import pinocchio as pin
 from qpsolvers import available_solvers
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
@@ -40,17 +39,13 @@ except ModuleNotFoundError:
 
 
 if __name__ == "__main__":
-    robot = load_robot_description(
-        "upkie_description", root_joint=pin.JointModelFreeFlyer()
+    full_robot = load_robot_description("upkie_description", root_joint=None)
+    robot = full_robot.buildReducedRobot(
+        list_of_joints_to_lock=["left_wheel", "right_wheel"]
     )
     viz = start_meshcat_visualizer(robot)
 
     tasks = {
-        "base": BodyTask(
-            "base",
-            position_cost=1.0,  # [cost] / [m]
-            orientation_cost=1.0,  # [cost] / [rad]
-        ),
         "left_contact": BodyTask(
             "left_contact",
             position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
