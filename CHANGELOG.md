@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- Example: reduce Upkie model in leg extension example
+
 ## [0.5.0] - 2022/09/26
 
 ### Added
