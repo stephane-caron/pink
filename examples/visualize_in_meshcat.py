@@ -22,6 +22,7 @@ Upkie wheeled biped bending its knees.
 import meshcat_shapes
 import numpy as np
 import pinocchio as pin
+import qpsolvers
 
 import pink
 from pink import solve_ik
@@ -84,6 +85,11 @@ if __name__ == "__main__":
     meshcat_shapes.frame(viewer["left_contact"], opacity=1.0)
     meshcat_shapes.frame(viewer["right_contact"], opacity=1.0)
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
     t = 0.0  # [s]
@@ -101,7 +107,7 @@ if __name__ == "__main__":
             )
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks.values(), dt)
+        velocity = solve_ik(configuration, tasks.values(), dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 

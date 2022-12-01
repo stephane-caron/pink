@@ -19,10 +19,10 @@
 Upkie wheeled biped bending its knees.
 """
 
-import numpy as np
-from qpsolvers import available_solvers
-
 import meshcat_shapes
+import numpy as np
+import qpsolvers
+
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
@@ -80,6 +80,11 @@ if __name__ == "__main__":
     meshcat_shapes.frame(viewer["left_contact"], opacity=1.0)
     meshcat_shapes.frame(viewer["right_contact"], opacity=1.0)
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
     t = 0.0  # [s]
@@ -97,8 +102,6 @@ if __name__ == "__main__":
             )
 
         # Compute velocity and integrate it into next configuration
-        default_solver = available_solvers[0]
-        solver = "osqp" if "osqp" in available_solvers else default_solver
         velocity = solve_ik(configuration, tasks.values(), dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)

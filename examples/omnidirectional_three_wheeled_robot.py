@@ -23,6 +23,7 @@ import os
 
 import numpy as np
 import pinocchio as pin
+import qpsolvers
 
 import meshcat_shapes
 import pink
@@ -76,6 +77,11 @@ if __name__ == "__main__":
     posture_task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     rate = RateLimiter(frequency=100.0)
     dt = rate.period
     t = 0.0  # [s]
@@ -104,7 +110,7 @@ if __name__ == "__main__":
         )
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks, dt, solver="osqp")
+        velocity = solve_ik(configuration, tasks, dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 

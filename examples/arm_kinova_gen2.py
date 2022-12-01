@@ -16,11 +16,12 @@
 # limitations under the License.
 
 """
-Upkie wheeled biped bending its knees.
+Kinova Gen2 arm tracking a moving target.
 """
 
 import meshcat_shapes
 import numpy as np
+import qpsolvers
 
 import pink
 from pink import solve_ik
@@ -65,6 +66,11 @@ if __name__ == "__main__":
     meshcat_shapes.frame(viewer["end_effector_target"], opacity=0.5)
     meshcat_shapes.frame(viewer["end_effector"], opacity=1.0)
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
     t = 0.0  # [s]
@@ -83,7 +89,7 @@ if __name__ == "__main__":
         )
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks, dt)
+        velocity = solve_ik(configuration, tasks, dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 
