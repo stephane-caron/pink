@@ -20,7 +20,7 @@ Function to solve inverse kinematics.
 """
 
 import warnings
-from typing import Iterable, Optional, Tuple
+from typing import Iterable, Tuple
 
 import numpy as np
 from qpsolvers import available_solvers, solve_qp
@@ -65,14 +65,12 @@ def __compute_qp_objective(
     return (H, c)
 
 
-def __compute_qp_inequalities(configuration, v_max, v_min, dt):
+def __compute_qp_inequalities(configuration, dt):
     """
     Compute inequality constraints for the quadratic program.
 
     Args:
         configuration: Robot configuration to read kinematics from.
-        v_max: Maximum velocity in tangent space.
-        v_min: Minimum velocity in tangent space.
         dt: Integration timestep in [s].
 
     Returns:
@@ -83,6 +81,7 @@ def __compute_qp_inequalities(configuration, v_max, v_min, dt):
         solvers don't support it. See for instance
         https://github.com/tasts-robots/pink/issues/10.
     """
+    v_max, v_min = compute_velocity_limits(configuration, dt)
     tangent_eye = configuration.tangent.eye
     bff = np.finfo(np.float64).max // 2
     finite_v_max = v_max < bff
@@ -92,12 +91,39 @@ def __compute_qp_inequalities(configuration, v_max, v_min, dt):
     return A, b
 
 
-def solve_ik(
+def build_ik(
     configuration: Configuration,
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
-    solver: Optional[str] = None,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Build quadratic program from current configuration and tasks.
+    Args:
+        configuration: Robot configuration to read kinematics from.
+        tasks: List of kinematic tasks.
+        dt: Integration timestep in [s].
+        damping: weight of Tikhonov (everywhere) regularization. Its unit is
+            :math:`[\\mathrm{cost}]^2 / [\\mathrm{tangent}]` where
+            :math:`[\\mathrm{tangent}]` is "the" unit of robot velocities.
+            Improves numerical stability, but larger values slow down all
+            tasks.
+    Returns:
+        QP matrices :math:`(H, c)` for the cost and :math:`(A, b)` for linear
+        inequalities.
+    """
+    configuration.check_limits()
+    H, c = __compute_qp_objective(configuration, tasks, damping)
+    A, b = __compute_qp_inequalities(configuration, dt)
+    return H, c, A, b
+
+
+def solve_ik(
+    configuration: Configuration,
+    tasks: Iterable[Task],
+    dt: float,
+    solver: str,
+    damping: float = 1e-12,
 ) -> np.ndarray:
     """
     Compute a velocity tangent to the current robot configuration that
@@ -133,9 +159,7 @@ def solve_ik(
             f"(available_solvers={available_solvers})"
         )
     configuration.check_limits()
-    v_max, v_min = compute_velocity_limits(configuration, dt)
-    H, c = __compute_qp_objective(configuration, tasks, damping)
-    A, b = __compute_qp_inequalities(configuration, v_max, v_min, dt)
+    H, c, A, b = build_ik(configuration, tasks, dt, damping)
     Delta_q = solve_qp(H, c, A, b, solver=solver)
     assert Delta_q is not None
     v: np.ndarray = Delta_q / dt
