@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Example: Omnidirectional three-wheeled robot
+
 ### Changed
 
 - Example: reduce Upkie model in leg extension example
