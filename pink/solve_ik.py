@@ -30,7 +30,7 @@ from .limits import compute_velocity_limits
 from .tasks import Task
 
 
-def compute_qp_objective(
+def __compute_qp_objective(
     configuration: Configuration, tasks: Iterable[Task], damping: float
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -65,7 +65,7 @@ def compute_qp_objective(
     return (H, c)
 
 
-def compute_qp_inequalities(configuration, v_max, v_min, dt):
+def __compute_qp_inequalities(configuration, v_max, v_min, dt):
     """
     Compute inequality constraints for the quadratic program.
 
@@ -134,8 +134,8 @@ def solve_ik(
         )
     configuration.check_limits()
     v_max, v_min = compute_velocity_limits(configuration, dt)
-    H, c = compute_qp_objective(configuration, tasks, damping)
-    A, b = compute_qp_inequalities(configuration, v_max, v_min, dt)
+    H, c = __compute_qp_objective(configuration, tasks, damping)
+    A, b = __compute_qp_inequalities(configuration, v_max, v_min, dt)
     Delta_q = solve_qp(H, c, A, b, solver=solver)
     assert Delta_q is not None
     v: np.ndarray = Delta_q / dt
