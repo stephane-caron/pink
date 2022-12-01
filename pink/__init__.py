@@ -26,7 +26,7 @@ from .configuration import (
 )
 from .solve_ik import solve_ik
 
-__version__ = "0.5.1"
+__version__ = "0.6.0"
 
 __all__ = [
     "Configuration",
