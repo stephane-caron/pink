@@ -99,6 +99,7 @@ def build_ik(
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Build quadratic program from current configuration and tasks.
+
     Args:
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
@@ -108,6 +109,7 @@ def build_ik(
             :math:`[\\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
+
     Returns:
         QP matrices :math:`(H, c)` for the cost and :math:`(A, b)` for linear
         inequalities.
