@@ -97,8 +97,14 @@ if __name__ == "__main__":
             configuration.get_transform_body_to_world(base_task.body).np
         )
 
+        # Waiting on #12 to implement the planar joint limit properly
+        raise NotImplementedError(
+            "This example will work once the following PR is merged:"
+            "\n\n\thttps://github.com/tasts-robots/pink/pull/12\n"
+        )
+
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks, dt)
+        velocity = solve_ik(configuration, tasks, dt, solver="osqp")
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 
@@ -106,6 +112,3 @@ if __name__ == "__main__":
         viz.display(q)
         rate.sleep()
         t += dt
-        import time
-
-        time.sleep(0.01)
