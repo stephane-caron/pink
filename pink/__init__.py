@@ -24,7 +24,7 @@ from .configuration import (
     apply_configuration,
     assume_configuration,
 )
-from .solve_ik import solve_ik
+from .solve_ik import build_ik, solve_ik
 
 __version__ = "0.6.0"
 
@@ -32,5 +32,6 @@ __all__ = [
     "Configuration",
     "apply_configuration",
     "assume_configuration",
+    "build_ik",
     "solve_ik",
 ]
