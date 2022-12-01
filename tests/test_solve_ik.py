@@ -50,7 +50,7 @@ class TestSolveIK(unittest.TestCase):
         q[7] = 20  # above limit for Upkie's first joint
         configuration = pink.apply_configuration(robot, q)
         with self.assertRaises(NotWithinConfigurationLimits):
-            solve_ik(configuration, [], dt=1.0)
+            solve_ik(configuration, [], dt=1.0, solver="quadprog")
 
     def test_no_task(self):
         """
@@ -78,7 +78,7 @@ class TestSolveIK(unittest.TestCase):
         task.set_target(
             configuration.get_transform_body_to_world("left_contact")
         )
-        velocity = solve_ik(configuration, [task], dt=5e-3)
+        velocity = solve_ik(configuration, [task], dt=5e-3, solver="quadprog")
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_single_task_convergence(self):
@@ -103,7 +103,7 @@ class TestSolveIK(unittest.TestCase):
         )
         task.set_target(transform_target_to_world)
         dt = 5e-3  # [s]
-        velocity = solve_ik(configuration, [task], dt)
+        velocity = solve_ik(configuration, [task], dt, solver="quadprog")
 
         # Initially we are nowhere near the target and moving
         self.assertFalse(np.allclose(velocity, 0.0))
@@ -126,7 +126,7 @@ class TestSolveIK(unittest.TestCase):
             last_error = error
             q = configuration.integrate(velocity, dt)
             configuration = apply_configuration(robot, q)
-            velocity = solve_ik(configuration, [task], dt)
+            velocity = solve_ik(configuration, [task], dt, solver="quadprog")
 
         # After nb_steps we are at the target and not moving
         self.assertTrue(np.allclose(velocity, 0.0))
@@ -164,7 +164,7 @@ class TestSolveIK(unittest.TestCase):
         contact_task.set_target(transform_target_to_world)
         contact_task.lm_damping = 0.0  # only Tikhonov damping for this test
         velocity = solve_ik(
-            configuration, [contact_task], dt=1e-3, damping=1e-12
+            configuration, [contact_task], dt=1e-3, damping=1e-12, solver="quadprog",
         )
         jacobian_contact_in_contact = configuration.get_body_jacobian(
             "right_contact"
