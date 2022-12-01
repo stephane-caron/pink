@@ -19,12 +19,12 @@
 Swing the double pendulum left and right.
 """
 
-from os import path
+import os
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
@@ -34,7 +34,11 @@ from pink.visualization import start_meshcat_visualizer
 if __name__ == "__main__":
 
     # Load robot description
-    urdf_path = path.join(path.dirname(__file__), "double_pendulum.urdf")
+    urdf_path = os.path.join(
+        os.path.dirname(__file__),
+        "robots",
+        "double_pendulum.urdf",
+    )
     robot = pin.RobotWrapper.BuildFromURDF(
         filename=urdf_path,
         package_dirs=["."],
