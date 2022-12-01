@@ -21,11 +21,11 @@ Swing the double pendulum left and right.
 
 import os
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
@@ -59,12 +59,6 @@ if __name__ == "__main__":
         orientation_cost=1e-5,  # [cost] / [rad]
     )
     base_task.gain = 0.1
-    ori_task = BodyTask(
-        "base",
-        position_cost=0.0,  # [cost] / [m]
-        orientation_cost=1.0,  # [cost] / [rad]
-    )
-    ori_task.gain = 0.1
     posture_task = PostureTask(
         cost=1e-2,  # [cost] / [rad]
     )
@@ -73,7 +67,6 @@ if __name__ == "__main__":
     # Initialize tasks from the initial configuration
     configuration = pink.apply_configuration(robot, robot.q0)
     base_task.set_target_from_configuration(configuration)
-    ori_task.set_target_from_configuration(configuration)
     posture_task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
 
@@ -87,10 +80,7 @@ if __name__ == "__main__":
     t = 0.0  # [s]
     while True:
         # Update task targets
-        for T in [
-            base_task.transform_target_to_world,
-            ori_task.transform_target_to_world,
-        ]:
+        for T in [base_task.transform_target_to_world]:
             jumpy = 0.0 if t % 5.0 <= 1.0 else -1.0
             # T.translation[1] = 0.1 * np.sin(t)
             T.translation[0] = 0.2 * jumpy
