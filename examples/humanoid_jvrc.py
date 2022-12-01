@@ -21,6 +21,7 @@ JVRC-1 humanoid standing on two feet and reaching with a hand.
 
 import meshcat_shapes
 import numpy as np
+import qpsolvers
 import pinocchio as pin
 
 import pink
@@ -117,6 +118,11 @@ if __name__ == "__main__":
     wrist_frame = viz.viewer["right_wrist_pose"]
     meshcat_shapes.frame(wrist_frame)
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
     t = 0.0  # [s]
@@ -126,7 +132,7 @@ if __name__ == "__main__":
         wrist_frame.set_transform(right_wrist_pose.at(t).np)
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks, dt)
+        velocity = solve_ik(configuration, tasks, dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 

@@ -21,10 +21,11 @@ Swing the double pendulum left and right.
 
 import os
 
+import meshcat_shapes
 import numpy as np
+import qpsolvers
 import pinocchio as pin
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
@@ -72,6 +73,11 @@ if __name__ == "__main__":
     # Homework: what happens if we replace -= by += in the following line?
     tasks["tip"].transform_target_to_world.translation[2] -= 0.1
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     rate = RateLimiter(frequency=100.0)
     dt = rate.period
     t = 0.0  # [s]
@@ -87,7 +93,7 @@ if __name__ == "__main__":
         )
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks.values(), dt)
+        velocity = solve_ik(configuration, tasks.values(), dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 

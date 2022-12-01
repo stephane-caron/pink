@@ -21,6 +21,7 @@ Upkie wheeled biped bending its knees.
 
 import numpy as np
 import pinocchio as pin
+import qpsolvers
 import yourdfpy
 
 import pink
@@ -80,6 +81,11 @@ if __name__ == "__main__":
         "right_contact"
     )
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     animation_time = 0.0  # [s]
     visualizer_fps = 100  # [Hz]
     rate = RateLimiter(frequency=visualizer_fps)
@@ -96,7 +102,7 @@ if __name__ == "__main__":
         tasks["right_contact"].set_target(right_contact_target)
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks.values(), dt)
+        velocity = solve_ik(configuration, tasks.values(), dt, solver=solver)
         q = configuration.integrate(velocity, dt)
         configuration = pink.apply_configuration(robot, q)
 

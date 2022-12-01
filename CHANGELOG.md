@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Example: reduce Upkie model in leg extension example
+- Solver keyword argument is now mandatory
 
 ## [0.5.0] - 2022/09/26
 
