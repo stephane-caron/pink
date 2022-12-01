@@ -21,10 +21,10 @@ Swing the double pendulum left and right.
 
 import os
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask

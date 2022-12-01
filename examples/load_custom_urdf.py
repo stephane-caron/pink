@@ -20,6 +20,7 @@ Load a custom URDF.
 """
 
 import pinocchio as pin
+import os
 
 try:
     import yourdfpy
@@ -27,7 +28,11 @@ except ImportError:
     yourdfpy = None
 
 if __name__ == "__main__":
-    urdf_path = "./double_pendulum.urdf"
+    urdf_path = os.path.join(
+        os.path.dirname(__file__),
+        "robots",
+        "double_pendulum.urdf",
+    )
 
     robot = pin.RobotWrapper.BuildFromURDF(
         filename=urdf_path,
