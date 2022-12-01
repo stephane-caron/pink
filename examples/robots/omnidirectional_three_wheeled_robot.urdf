@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Copyright 2022 Stéphane Caron
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<robot name="omnidirectional_three_wheeled">
+
+    <material name="light_gray">
+        <color rgba="0.8 0.8 0.8 1" />
+    </material>
+
+    <link name="base">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.02" />
+            </geometry>
+            <material name="light_gray" />
+        </visual>
+        <visual>
+            <origin xyz="0 0 0.01" />
+            <geometry>
+                <box size="0.07 0.01 0.01" />
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="wheel_1">
+        <visual>
+            <geometry>
+                <cylinder radius="0.02" length="0.01" />
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="base_to_wheel_1" type="revolute">
+        <parent link="base"/>
+        <child link="wheel_1"/>
+        <origin rpy="0 1.5707963267948966 0" xyz="0.055 0 0" />
+        <limit velocity="0.7" effort="1.0"/>
+    </joint>
+
+    <link name="wheel_2">
+        <visual>
+            <geometry>
+                <cylinder radius="0.02" length="0.01" />
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="base_to_wheel_2" type="revolute">
+        <parent link="base"/>
+        <child link="wheel_2"/>
+        <origin rpy="0 1.5707963267948966 2.0943951023931953" xyz="-0.0275 0.0476314 0" />
+        <limit velocity="0.7" effort="1.0"/>
+    </joint>
+
+    <link name="wheel_3">
+        <visual>
+            <geometry>
+                <cylinder radius="0.02" length="0.01" />
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="base_to_wheel_3" type="revolute">
+        <parent link="base"/>
+        <child link="wheel_3"/>
+        <origin rpy="0 1.5707963267948966 4.1887902047863905" xyz="-0.0275 -0.0476314 0" />
+        <limit velocity="0.7" effort="1.0"/>
+    </joint>
+
+</robot>
