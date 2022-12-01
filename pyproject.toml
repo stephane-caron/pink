@@ -30,7 +30,7 @@ dependencies = [
     "numpy >=1.20.0",
     "pin >=2.6.3",
     "quadprog >=0.1.11",
-    "qpsolvers >=1.8.0",
+    "qpsolvers >=2.5.0",
 ]
 keywords = ["inverse", "kinematics", "pinocchio"]
 
