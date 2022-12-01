@@ -27,7 +27,7 @@ import pinocchio as pin
 from ..configuration import Configuration
 from .exceptions import TargetNotSet
 from .task import Task
-from .utils import body_box_minus, box_minus
+from .utils import body_box_minus
 
 
 class BodyTask(Task):
@@ -182,20 +182,6 @@ class BodyTask(Task):
         )
         return error_in_body
 
-    def compute_error_in_world(
-        self, configuration: Configuration
-    ) -> np.ndarray:
-        if self.transform_target_to_world is None:
-            raise TargetNotSet(f"no target set for body {self.body}")
-        transform_body_to_world = configuration.get_transform_body_to_world(
-            self.body
-        )
-        error_in_world: np.ndarray = box_minus(
-            self.transform_target_to_world,
-            transform_body_to_world,
-        )
-        return error_in_world
-
     def compute_task_dynamics(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -221,25 +207,8 @@ class BodyTask(Task):
             both expressed in the body frame.
         """
         jacobian_in_body = configuration.get_body_jacobian(self.body)
-        true_error_in_body = self.compute_error_in_body(configuration)
-        transform_body_to_world = configuration.get_transform_body_to_world(
-            self.body
-        )
-        position_body_to_target_in_world = (
-            self.transform_target_to_world.translation
-            - transform_body_to_world.translation
-        )
-        print(
-            f"{position_body_to_target_in_world=}\t{true_error_in_body[0:3]=}"
-        )
-        error_in_body: np.ndarray = transform_body_to_world.actInv(
-            pin.Motion(position_body_to_target_in_world, np.zeros(3))
-        )
-        return jacobian_in_body, self.gain * true_error_in_body
-
-        jacobian_in_world = configuration.get_spatial_jacobian(self.body)
-        error_in_world = self.compute_error_in_world(configuration)
-        return jacobian_in_world, self.gain * error_in_world
+        error_in_body = self.compute_error_in_body(configuration)
+        return jacobian_in_body, self.gain * error_in_body
 
     def compute_qp_objective(
         self, configuration: Configuration
