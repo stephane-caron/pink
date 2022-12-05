@@ -16,16 +16,18 @@
 # limitations under the License.
 
 """
-Swing the double pendulum left and right.
+Move an omnidirectional robot between two jumping targets.
+
+Illustrates the notion of screw path.
 """
 
 import os
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
@@ -78,14 +80,13 @@ if __name__ == "__main__":
     rate = RateLimiter(frequency=100.0)
     dt = rate.period
     t = 0.0  # [s]
+    jump_period = 5.0
     while True:
         # Update task targets
-        for T in [base_task.transform_target_to_world]:
-            jumpy = 0.0 if t % 5.0 <= 1.0 else -1.0
-            # T.translation[1] = 0.1 * np.sin(t)
-            T.translation[0] = 0.2 * jumpy
-            # T.rotation = pin.utils.rpyToMatrix(0.0, 0.0, np.sin(t))
-            T.rotation = pin.utils.rpyToMatrix(0.0, 0.0, np.pi * jumpy)
+        jumpy = 0.0 if (t / jump_period) % 1.0 <= 0.5 else -1.0
+        T = base_task.transform_target_to_world
+        T.translation[0] = 0.2 * jumpy
+        T.rotation = pin.utils.rpyToMatrix(0.0, 0.0, np.pi * jumpy)
 
         # Update visualizer frames
         viewer["target_frame"].set_transform(T.np)
