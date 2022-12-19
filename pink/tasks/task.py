@@ -26,7 +26,6 @@ concepts and notations are there.
 """
 
 import abc
-
 from typing import Tuple
 
 import numpy as np

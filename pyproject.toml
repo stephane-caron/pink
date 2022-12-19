@@ -45,3 +45,7 @@ line-length = 79
 
 [tool.flit.module]
 name = "pink"
+
+[tool.isort]
+profile = "black"
+line_length = 79
