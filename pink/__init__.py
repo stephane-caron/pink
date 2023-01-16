@@ -27,7 +27,7 @@ from .configuration import (
 from .solve_ik import build_ik, solve_ik
 from .tasks import Task
 
-__version__ = "0.7.0rc0"
+__version__ = "0.7.0"
 
 __all__ = [
     "Configuration",
