@@ -26,9 +26,9 @@ data.
 import numpy as np
 import pinocchio as pin
 
+from .bounded_tangent import BoundedTangent
 from .exceptions import NotWithinConfigurationLimits
-from .submodels import add_submodels
-from .utils import get_root_joint_dim
+from .utils import VectorSpace, get_root_joint_dim
 
 
 class Configuration:
@@ -67,7 +67,10 @@ class Configuration:
     q: np.ndarray
 
     def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
-        add_submodels(model)
+        if not hasattr(model, "tangent"):
+            model.tangent = VectorSpace(model.nv)
+        if not hasattr(model, "bounded_tangent"):
+            model.bounded_tangent = BoundedTangent(model)
         q_readonly = q.copy()
         q_readonly.setflags(write=False)
         self.data = data

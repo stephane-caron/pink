@@ -56,7 +56,7 @@ def __compute_qp_objective(
         objective.
     """
     H = damping * configuration.tangent.eye
-    c = configuration.tangent.zeros
+    c = configuration.tangent.zeros.copy()
     for task in tasks:
         H_task, c_task = task.compute_qp_objective(configuration)
         H += H_task
@@ -82,12 +82,12 @@ def __compute_qp_inequalities(
         solvers don't support it. See for instance
         https://github.com/tasts-robots/pink/issues/10.
     """
-    bounded = configuration.model.bounded
-    if bounded.is_empty:
+    bounded_tangent = configuration.model.bounded_tangent
+    if bounded_tangent.dim < 1:
         return None, None
 
     v_max, v_min = compute_velocity_limits(configuration, dt)
-    bounded_proj = configuration.model.bounded.tangent.projection_matrix
+    bounded_proj = bounded_tangent.projection_matrix
     A = np.vstack([bounded_proj, -bounded_proj])
     b = np.hstack([dt * v_max, -dt * v_min])
     if b.size < 1:

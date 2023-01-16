@@ -44,23 +44,16 @@ class TestSubmodels(unittest.TestCase):
         self.assertEqual(tangent.zeros.shape, (nv,))
 
     def test_bounded(self):
-        bounded = self.model.bounded
-        for joint in bounded.joints:
+        bounded_tangent= self.model.bounded_tangent
+        for joint in bounded_tangent.joints:
             self.assertGreaterEqual(joint.idx_q, 0)
             self.assertGreaterEqual(joint.idx_v, 0)
-        nb = len(bounded.joints)  # those are only revolute joints
+        nb = len(bounded_tangent.joints)  # those are only revolute joints
 
         nv = self.model.nv
-        self.assertEqual(bounded.tangent.dim, nb)
-        self.assertEqual(bounded.tangent.input_dim, nv)
-        self.assertEqual(bounded.tangent.projection_matrix.shape, (nb, nv))
-
-        nq = self.model.nq
-        self.assertEqual(bounded.configuration.dim, nb)
-        self.assertEqual(bounded.configuration.input_dim, nq)
-        self.assertEqual(
-            bounded.configuration.projection_matrix.shape, (nb, nq)
-        )
+        self.assertEqual(bounded_tangent.dim, nb)
+        self.assertEqual(bounded_tangent.input_dim, nv)
+        self.assertEqual(bounded_tangent.projection_matrix.shape, (nb, nv))
 
     def test_subspace(self):
         """

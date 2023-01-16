@@ -44,8 +44,8 @@ class TestLimits(unittest.TestCase):
         model = self.robot.model
         configuration = apply_configuration(self.robot, self.robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt)
-        self.assertEqual(v_max.shape, (model.bounded.tangent.dim,))
-        self.assertEqual(v_min.shape, (model.bounded.tangent.dim,))
+        self.assertEqual(v_max.shape, (model.bounded_tangent.dim,))
+        self.assertEqual(v_min.shape, (model.bounded_tangent.dim,))
 
     def test_forward_velocity_limit(self):
         """
@@ -55,7 +55,7 @@ class TestLimits(unittest.TestCase):
         dt = 1e-3  # [s]
         configuration = apply_configuration(self.robot, self.robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt)
-        v_lim = configuration.model.bounded.velocity_limit
+        v_lim = configuration.model.bounded_tangent.velocity_limit
         tol = 1e-10
         self.assertLess(np.max(v_max - v_lim), tol)
         self.assertLess(np.max(-v_lim - v_min), tol)
@@ -68,11 +68,13 @@ class TestLimits(unittest.TestCase):
         model = self.robot.model
         configuration = apply_configuration(self.robot, self.robot.q0)
         slack_vel = 5.5e-4 * configuration.tangent.ones
-        bounded_slack_vel = slack_vel[model.bounded.tangent.indices]
+        bounded_slack_vel = slack_vel[model.bounded_tangent.indices]
         model.upperPositionLimit = configuration.integrate(slack_vel, dt)
         v_max, v_min = compute_velocity_limits(
             configuration, dt, config_limit_gain=0.5
         )
         tol = 1e-10
-        self.assertLess(np.max(v_max - model.bounded.velocity_limit), tol)
+        self.assertLess(
+            np.max(v_max - model.bounded_tangent.velocity_limit), tol
+        )
         self.assertLess(np.max(v_max - bounded_slack_vel), tol)

@@ -131,21 +131,21 @@ def compute_velocity_limits_2(
     model = configuration.model
 
     # Velocity limits from URDF
-    v_max = model.bounded.velocity_limit.copy()
+    v_max = model.bounded_tangent.velocity_limit.copy()
     if v_max.dot(v_max) < 1e-10:
         # Zero means no limit, see https://wiki.ros.org/urdf/XML/link
         v_max = np.full(v_max.shape, +np.infty)
     v_min = -v_max
 
     # Velocity limits from configuration bounds
-    Delta_q_max = model.bounded.tangent.project(
+    Delta_q_max = model.bounded_tangent.project(
         pin.difference(
             model,
             configuration.q,
             model.upperPositionLimit,
         )
     )
-    Delta_q_min = model.bounded.tangent.project(
+    Delta_q_min = model.bounded_tangent.project(
         pin.difference(
             model,
             configuration.q,

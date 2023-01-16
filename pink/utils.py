@@ -105,3 +105,33 @@ class RateLimiter:
         if self.slack > 0.0:
             sleep(self.slack)
         self._next_tick = perf_counter() + self.period
+
+
+class VectorSpace:
+
+    """
+    Wrapper to refer to a vector space and its characteristic matrices.
+
+    Attributes:
+        dim: Dimension of the vector space.
+        eye: Identity matrix.
+        ones: Vector full of ones, dimension of the space.
+        zeros: Zero vector of the space.
+    """
+
+    dim: int
+    eye: np.ndarray
+    ones: np.ndarray
+    zeros: np.ndarray
+
+    def __init__(self, dim: int):
+        eye = np.eye(dim)
+        ones = np.ones(dim)
+        zeros = np.zeros(dim)
+        eye.setflags(write=False)
+        ones.setflags(write=False)
+        zeros.setflags(write=False)
+        self.dim = dim
+        self.eye = eye
+        self.ones = ones
+        self.zeros = zeros
