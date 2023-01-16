@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+- Empty inequalities when model has no bounded joint
+
 ## [0.6.0] - 2022/12/01
 
 ### Added
