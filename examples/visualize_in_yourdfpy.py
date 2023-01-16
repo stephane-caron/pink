@@ -23,11 +23,12 @@ import numpy as np
 import pinocchio as pin
 import qpsolvers
 import yourdfpy
+from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
-from pink.utils import RateLimiter, custom_configuration_vector
+from pink.utils import custom_configuration_vector
 
 try:
     from robot_descriptions import upkie_description
