@@ -27,7 +27,7 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-    "loop-rate-limiters >=0.2.0",
+    "loop-rate-limiters >=0.1.0",
     "numpy >=1.20.0",
     "pin >=2.6.3",
     "qpsolvers >=2.5.0",
