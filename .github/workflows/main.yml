@@ -27,7 +27,7 @@ jobs:
               run: |
                   python -m pip install --upgrade pip
                   # tox version: https://github.com/tox-dev/tox/issues/2778
-                  python -m pip install tox==3.28.0 tox-gh-actions
+                  python -m pip install coveralls tox==3.28.0
 
             - name: "Run unit tests"
               run: |
@@ -56,7 +56,7 @@ jobs:
               run: |
                   python -m pip install --upgrade pip
                   # tox version: https://github.com/tox-dev/tox/issues/2778
-                  python -m pip install tox==3.28.0 tox-gh-actions
+                  python -m pip install tox==3.28.0
 
             - name: "Check code format"
               run: |
