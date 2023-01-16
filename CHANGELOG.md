@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Bounded subspace of tangent space, that is, restricted to bounded joints
+- CI: test on both Ubuntu and macOS images
 - Tangent space from Pinocchio model
 
 ### Changed
