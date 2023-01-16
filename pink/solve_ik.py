@@ -22,7 +22,7 @@ Function to solve inverse kinematics.
 from typing import Iterable, Optional, Tuple
 
 import numpy as np
-from qpsolvers import solve_qp
+import qpsolvers
 
 from .configuration import Configuration
 from .limits import compute_velocity_limits
@@ -75,7 +75,7 @@ def __compute_qp_inequalities(
         dt: Integration timestep in [s].
 
     Returns:
-        Pair :math:`(A, b)` of inequality matrix and vector.
+        Pair :math:`(G, h)` of inequality matrix and vector.
 
     Notes:
         We trim comparisons to infinity (equivalently: big floats) because some
@@ -88,9 +88,9 @@ def __compute_qp_inequalities(
 
     v_max, v_min = compute_velocity_limits(configuration, dt)
     bounded_proj = bounded_tangent.projection_matrix
-    A = np.vstack([bounded_proj, -bounded_proj])
-    b = np.hstack([dt * v_max, -dt * v_min])
-    return A, b
+    G = np.vstack([bounded_proj, -bounded_proj])
+    h = np.hstack([dt * v_max, -dt * v_min])
+    return G, h
 
 
 def build_ik(
@@ -98,7 +98,7 @@ def build_ik(
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
-) -> Tuple[np.ndarray, np.ndarray, Optional[np.ndarray], Optional[np.ndarray]]:
+) -> qpsolvers.Problem:
     """
     Build quadratic program from current configuration and tasks.
 
@@ -113,13 +113,14 @@ def build_ik(
             tasks.
 
     Returns:
-        QP matrices :math:`(H, c)` for the cost and :math:`(A, b)` for linear
+        QP matrices :math:`(H, c)` for the cost and :math:`(G, h)` for linear
         inequalities.
     """
     configuration.check_limits()
-    H, c = __compute_qp_objective(configuration, tasks, damping)
-    A, b = __compute_qp_inequalities(configuration, dt)
-    return H, c, A, b
+    P, q = __compute_qp_objective(configuration, tasks, damping)
+    G, h = __compute_qp_inequalities(configuration, dt)
+    problem = qpsolvers.Problem(P, q, G, h)
+    return problem
 
 
 def solve_ik(
@@ -157,8 +158,9 @@ def solve_ik(
         floating base differently from joint angular velocities.
     """
     configuration.check_limits()
-    H, c, A, b = build_ik(configuration, tasks, dt, damping)
-    Delta_q = solve_qp(H, c, A, b, solver=solver)
+    problem = build_ik(configuration, tasks, dt, damping)
+    result = qpsolvers.solve_problem(problem, solver=solver)
+    Delta_q = result.x
     assert Delta_q is not None
     v: np.ndarray = Delta_q / dt
     return v
