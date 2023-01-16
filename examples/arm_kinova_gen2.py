@@ -22,11 +22,12 @@ Kinova Gen2 arm tracking a moving target.
 import meshcat_shapes
 import numpy as np
 import qpsolvers
+from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
-from pink.utils import RateLimiter, custom_configuration_vector
+from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
 
 try:

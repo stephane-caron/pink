@@ -19,7 +19,6 @@
 Utility classes and functions.
 """
 
-from time import perf_counter, sleep
 from typing import Tuple
 
 import numpy as np
@@ -61,50 +60,6 @@ def get_root_joint_dim(model: pin.Model) -> Tuple[int, int]:
         root_joint = model.joints[root_joint_id]
         return root_joint.nq, root_joint.nv
     return 0, 0
-
-
-class RateLimiter:
-
-    """
-    Regulate the frequency between calls to the same instruction in e.g. a loop
-    or callback.
-
-    This rate limiter is in essence the same as rospy.Rate_. It assumes
-    Python's performance counter never jumps backward nor forward, so that it
-    does not handle such cases contrary to rospy.Rate_.
-
-    .. _rospy.Rate:
-        https://github.com/ros/ros_comm/blob/noetic-devel/clients/rospy/src/rospy/timer.py
-
-    Attributes:
-        period: Desired period between two calls to :func:`sleep`, in seconds.
-        slack: Duration in seconds remaining until the next tick at the
-            end of the last call to :func:`sleep`.
-    """
-
-    _next_tick: float
-    period: float
-    slack: float
-
-    def __init__(self, frequency: float):
-        """
-        Initialize rate limiter.
-
-        Args:
-            frequency: Desired frequency in hertz.
-        """
-        period = 1.0 / frequency
-        self._next_tick = perf_counter() + period
-        self.period = period
-
-    def sleep(self):
-        """
-        Sleep the duration required to regulate the frequency between calls.
-        """
-        self.slack = self._next_tick - perf_counter()
-        if self.slack > 0.0:
-            sleep(self.slack)
-        self._next_tick = perf_counter() + self.period
 
 
 class VectorSpace:

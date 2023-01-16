@@ -21,13 +21,13 @@ JVRC-1 humanoid standing on two feet and reaching with a hand.
 
 import meshcat_shapes
 import numpy as np
-import qpsolvers
 import pinocchio as pin
+import qpsolvers
+from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask
-from pink.utils import RateLimiter
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description

@@ -25,11 +25,11 @@ import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask
-from pink.utils import RateLimiter
 from pink.visualization import start_meshcat_visualizer
 
 if __name__ == "__main__":

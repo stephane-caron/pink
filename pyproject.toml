@@ -27,10 +27,11 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
+    "loop-rate-limiters >=0.2.0",
     "numpy >=1.20.0",
     "pin >=2.6.3",
-    "quadprog >=0.1.11",
     "qpsolvers >=2.5.0",
+    "quadprog >=0.1.11",
 ]
 keywords = ["inverse", "kinematics", "pinocchio"]
 
