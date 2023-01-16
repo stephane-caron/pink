@@ -74,9 +74,9 @@ class BoundedTangent(VectorSpace):
         indices.setflags(write=False)
 
         dim = len(indices)
+        super().__init__(dim)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
 
-        self.dim = dim
         self.indices = indices
         self.joints = joints
         self.nv = model.nv
