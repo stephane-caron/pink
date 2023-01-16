@@ -20,7 +20,7 @@ Function to solve inverse kinematics.
 """
 
 import warnings
-from typing import Iterable, Tuple
+from typing import Iterable, Optional, Tuple
 
 import numpy as np
 from qpsolvers import available_solvers, solve_qp
@@ -65,7 +65,9 @@ def __compute_qp_objective(
     return (H, c)
 
 
-def __compute_qp_inequalities(configuration, dt):
+def __compute_qp_inequalities(
+    configuration, dt
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     """
     Compute inequality constraints for the quadratic program.
 
@@ -88,6 +90,8 @@ def __compute_qp_inequalities(configuration, dt):
     finite_v_min = v_min > -bff
     A = np.vstack([tangent_eye[finite_v_max], -tangent_eye[finite_v_min]])
     b = np.hstack([dt * v_max[finite_v_max], -dt * v_min[finite_v_min]])
+    if b.size < 1:
+        return None, None
     return A, b
 
 
