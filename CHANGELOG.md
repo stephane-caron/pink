@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Bounded submodel to base Pinocchio model
-- Tangent submodel to base Pinocchio model
+- Bounded subspace of tangent space
+- Tangent space from Pinocchio model
 
 ### Changed
 

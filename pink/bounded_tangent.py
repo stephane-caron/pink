@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright 2022 Stéphane Caron
+# Copyright 2023 Inria
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,11 +22,22 @@ Subset of bounded joints associated with a robot model.
 
 import numpy as np
 import pinocchio as pin
+from typing import Optional
 
-from .subspace import Subspace
+from .utils import VectorSpace
 
 
-class Bounded:
+class BoundedTangent(VectorSpace):
+
+    """
+    Subspace of the tangent space restricted to bounded joints.
+    """
+
+    indices: list
+    joints: list
+    projection_matrix: Optional[np.ndarray]
+    velocity_limit: Optional[np.ndarray]
+
     def __init__(self, model: pin.Model):
         """
         Bounded joints in a robot model.
@@ -50,25 +62,30 @@ class Bounded:
             ].all()
         ]
 
-        config_idx = []
-        tangent_idx = []
+        indices = []
         for joint in joints:
-            config_idx.extend(range(joint.idx_q, joint.idx_q + joint.nq))
-            tangent_idx.extend(range(joint.idx_v, joint.idx_v + joint.nv))
-        config_idx = np.array(config_idx)
-        tangent_idx = np.array(tangent_idx)
-        config_idx.setflags(write=False)
-        tangent_idx.setflags(write=False)
-        nv = len(joints)
+            indices.extend(range(joint.idx_v, joint.idx_v + joint.nv))
+        indices = np.array(indices)
+        indices.setflags(write=False)
 
-        self.configuration = Subspace(model.nq, config_idx)
+        dim = len(indices)
+        projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
+
+        self.dim = dim
+        self.indices = indices
         self.joints = joints
-        self.nv = nv
-        self.tangent = Subspace(model.nv, tangent_idx)
+        self.projection_matrix = projection_matrix
         self.velocity_limit = (
-            model.velocityLimit[tangent_idx] if nv > 0 else None
+            model.velocityLimit[indices] if len(joints) > 0 else None
         )
 
-    @property
-    def is_empty(self):
-        return self.nv < 1
+    def project(self, v: np.ndarray) -> np.ndarray:
+        """
+        Project a vector from the tangent space to the bounded tangent
+        subspace.
+
+        Args:
+            v: Vector from the original space.
+        """
+        assert v.shape == (self.space.dim,), "Dimension mismatch"
+        return v[self.indices]
