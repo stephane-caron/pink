@@ -117,13 +117,6 @@ Basic examples are the best to get started:
 
 Check out the [examples](https://github.com/tasts-robots/pink/tree/master/examples) folder for more.
 
-## 🏗️ Upcoming changes
-
-Pink is in beta and its API is not fully stable. Expect the following upcoming changes:
-
-- Add a singularity example, discuss homotopy classes
-- Reformulate task gains as time constants
-
 ## How can I help?
 
 Install the library and use it! Report bugs in the [issue tracker](https://github.com/tasts-robots/pink/issues). If you are a developer with some robotics experience looking to hack on open source, check out the [contribution guidelines](CONTRIBUTING.md).
