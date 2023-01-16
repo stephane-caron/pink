@@ -21,51 +21,58 @@ Test submodels.
 
 import unittest
 
-import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-from pink.submodels import Subspace, add_submodels
+from pink.bounded_tangent import BoundedTangent
+from pink.utils import VectorSpace
 
 
-class TestSubmodels(unittest.TestCase):
+class TestBoundedTangent(unittest.TestCase):
+
+    """
+    Test fixture for bounded tangent subspace.
+    """
+
     def setUp(self):
-        robot = load_robot_description(
+        """
+        Set test fixture up.
+        """
+        model = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
-        )
-        self.model = robot.model
-        add_submodels(self.model)
+        ).model
+        self.bounded_tangent = BoundedTangent(model)
+        self.model = model
+        self.tangent = VectorSpace(model.nv)
 
     def test_tangent(self):
+        """
+        Check dimensions of regular tangent space.
+        """
         nv = self.model.nv
-        tangent = self.model.tangent
-        self.assertEqual(tangent.eye.shape, (nv, nv))
-        self.assertEqual(tangent.ones.shape, (nv,))
-        self.assertEqual(tangent.zeros.shape, (nv,))
+        self.assertEqual(self.tangent.eye.shape, (nv, nv))
+        self.assertEqual(self.tangent.ones.shape, (nv,))
+        self.assertEqual(self.tangent.zeros.shape, (nv,))
 
-    def test_bounded(self):
-        bounded_tangent= self.model.bounded_tangent
-        for joint in bounded_tangent.joints:
+    def test_bounded_tangent(self):
+        """
+        Check dimensions in bounded tangent space.
+        """
+        for joint in self.bounded_tangent.joints:
             self.assertGreaterEqual(joint.idx_q, 0)
             self.assertGreaterEqual(joint.idx_v, 0)
-        nb = len(bounded_tangent.joints)  # those are only revolute joints
-
+        nb = len(self.bounded_tangent.joints)  # those are only revolute joints
         nv = self.model.nv
-        self.assertEqual(bounded_tangent.dim, nb)
-        self.assertEqual(bounded_tangent.input_dim, nv)
-        self.assertEqual(bounded_tangent.projection_matrix.shape, (nb, nv))
+        self.assertEqual(self.bounded_tangent.dim, nb)
+        self.assertEqual(self.bounded_tangent.nv, nv)
+        self.assertEqual(
+            self.bounded_tangent.projection_matrix.shape, (nb, nv)
+        )
 
-    def test_subspace(self):
-        """
-        Check Subspace class.
-        """
-        subspace = Subspace(2, [1])
-        P = subspace.projection_matrix
-        self.assertLess((P - np.array([0.0, 1.0])).max(), 1e-10)
-
-    def test_unbounded(self):
+    def test_unbounded_tangent(self):
         """
         Check that unbounded models don't fail.
         """
         empty_model = pin.Model()
-        add_submodels(empty_model)
+        empty_bounded = BoundedTangent(empty_model)
+        self.assertEqual(empty_bounded.dim, 0)
