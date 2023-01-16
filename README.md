@@ -107,6 +107,7 @@ Pink works with all kinds of robot morphologies:
 * Arm: [Kinova Gen2](https://github.com/tasts-robots/pink/blob/master/examples/arm_kinova_gen2.py)
 * Arm: [UR3](https://github.com/tasts-robots/pink/blob/master/examples/arm_ur3.py)
 * Humanoid: [JVRC-1](https://github.com/tasts-robots/pink/blob/master/examples/humanoid_jvrc.py)
+* Humanoid: [SigmaBan](https://github.com/tasts-robots/pink/blob/master/examples/humanoid_sigmaban.py)
 * Wheeled biped: [Upkie](https://github.com/tasts-robots/pink/blob/master/examples/wheeled_biped_upkie.py)
 
 Basic examples are the best to get started:
