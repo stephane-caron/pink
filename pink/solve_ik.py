@@ -98,7 +98,7 @@ def build_ik(
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, Optional[np.ndarray], Optional[np.ndarray]]:
     """
     Build quadratic program from current configuration and tasks.
 
