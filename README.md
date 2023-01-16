@@ -105,6 +105,7 @@ If task targets are continuously updated there will be no stationary solution to
 Pink works with all kinds of robot morphologies:
 
 * Arm: [Kinova Gen2](https://github.com/tasts-robots/pink/blob/master/examples/arm_kinova_gen2.py)
+* Arm: [UR3](https://github.com/tasts-robots/pink/blob/master/examples/arm_ur3.py)
 * Humanoid: [JVRC-1](https://github.com/tasts-robots/pink/blob/master/examples/humanoid_jvrc.py)
 * Wheeled biped: [Upkie](https://github.com/tasts-robots/pink/blob/master/examples/wheeled_biped_upkie.py)
 
