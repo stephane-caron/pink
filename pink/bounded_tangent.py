@@ -20,9 +20,10 @@
 Subset of bounded joints associated with a robot model.
 """
 
+from typing import Optional
+
 import numpy as np
 import pinocchio as pin
-from typing import Optional
 
 from .utils import VectorSpace
 
