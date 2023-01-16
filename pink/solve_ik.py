@@ -90,8 +90,6 @@ def __compute_qp_inequalities(
     bounded_proj = bounded_tangent.projection_matrix
     A = np.vstack([bounded_proj, -bounded_proj])
     b = np.hstack([dt * v_max, -dt * v_min])
-    if b.size < 1:
-        return None, None
     return A, b
 
 
