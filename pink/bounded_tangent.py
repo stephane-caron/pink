@@ -20,7 +20,7 @@
 Subset of bounded joints associated with a robot model.
 """
 
-from typing import Optional
+from typing import List, Optional
 
 import numpy as np
 import pinocchio as pin
@@ -37,7 +37,7 @@ class BoundedTangent(VectorSpace):
         nv: Dimension of the full tangent space.
     """
 
-    indices: list
+    indices: np.ndarray
     joints: list
     nv: int
     projection_matrix: Optional[np.ndarray]
@@ -67,10 +67,10 @@ class BoundedTangent(VectorSpace):
             ].all()
         ]
 
-        indices = []
+        index_list: List[int] = []
         for joint in joints:
-            indices.extend(range(joint.idx_v, joint.idx_v + joint.nv))
-        indices = np.array(indices)
+            index_list.extend(range(joint.idx_v, joint.idx_v + joint.nv))
+        indices = np.array(index_list)
         indices.setflags(write=False)
 
         dim = len(indices)
