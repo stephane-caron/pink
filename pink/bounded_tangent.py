@@ -31,10 +31,14 @@ class BoundedTangent(VectorSpace):
 
     """
     Subspace of the tangent space restricted to bounded joints.
+
+    Attributes:
+        nv: Dimension of the full tangent space.
     """
 
     indices: list
     joints: list
+    nv: int
     projection_matrix: Optional[np.ndarray]
     velocity_limit: Optional[np.ndarray]
 
@@ -74,6 +78,7 @@ class BoundedTangent(VectorSpace):
         self.dim = dim
         self.indices = indices
         self.joints = joints
+        self.nv = model.nv
         self.projection_matrix = projection_matrix
         self.velocity_limit = (
             model.velocityLimit[indices] if len(joints) > 0 else None
@@ -87,5 +92,5 @@ class BoundedTangent(VectorSpace):
         Args:
             v: Vector from the original space.
         """
-        assert v.shape == (self.space.dim,), "Dimension mismatch"
+        assert v.shape == (self.nv,), "Dimension mismatch"
         return v[self.indices]
