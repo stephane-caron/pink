@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Bounded submodel to base Pinocchio model
+- Tangent submodel to base Pinocchio model
+
+### Changed
+
+- Expose ``pink.Task`` from top-level module
+
 ### Fixed
 
 - Empty inequalities when model has no bounded joint
