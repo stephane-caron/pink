@@ -54,6 +54,11 @@ class TestPostureTask(unittest.TestCase):
         with self.assertRaises(TargetNotSet):
             task.compute_task_dynamics(self.configuration)
 
+    def test_set_target_from_configuration(self):
+        task = PostureTask(cost=1.0)
+        task.set_target_from_configuration(self.configuration)
+        self.assertTrue(np.allclose(self.configuration.q, task.target_q))
+
     def test_target_set_properly(self):
         """Return target properly once it's set."""
         task = PostureTask(cost=1.0)
