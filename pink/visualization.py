@@ -21,8 +21,7 @@ import pinocchio as pin
 
 
 def start_meshcat_visualizer(robot: pin.RobotWrapper):
-    """
-    Open a MeshCat visualizer in a web browser.
+    """Open a MeshCat visualizer in a web browser.
 
     Args:
         robot: Robot wrapper with its initial data.

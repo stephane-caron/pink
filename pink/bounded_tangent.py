@@ -28,8 +28,7 @@ from .utils import VectorSpace
 
 class BoundedTangent(VectorSpace):
 
-    """
-    Subspace of the tangent space restricted to bounded joints.
+    """Subspace of the tangent space restricted to bounded joints.
 
     Attributes:
         nv: Dimension of the full tangent space.
@@ -42,8 +41,7 @@ class BoundedTangent(VectorSpace):
     velocity_limit: Optional[np.ndarray]
 
     def __init__(self, model: pin.Model):
-        """
-        Bounded joints in a robot model.
+        """Bounded joints in a robot model.
 
         Args:
             model: robot model.
@@ -84,8 +82,7 @@ class BoundedTangent(VectorSpace):
         )
 
     def project(self, v: np.ndarray) -> np.ndarray:
-        """
-        Project a vector from the tangent space to the bounded tangent
+        """Project a vector from the tangent space to the bounded tangent
         subspace.
 
         Args:
