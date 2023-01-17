@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - Example: SigmaBan humanoid
 
+### Changed
+
+- VectorSpace type is now immutable
+
 ## [0.7.0] 2023/01/16
 
 ### Added
