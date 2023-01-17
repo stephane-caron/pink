@@ -44,6 +44,7 @@ class TestLimits(unittest.TestCase):
         self.assertEqual(v_min.shape, (model.bounded_tangent.dim,))
 
     def test_model_with_no_joint_limit(self):
+        """Model with no joint limit has no velocity-limit vector."""
         model = pin.Model()
         model.addJoint(
             0, pin.JointModelSpherical(), pin.SE3.Identity(), "spherical"
@@ -53,6 +54,27 @@ class TestLimits(unittest.TestCase):
         v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
         self.assertIsNone(v_max)
         self.assertIsNone(v_min)
+
+    def test_model_with_limitless_joint(self):
+        """Same as previous test, but the joint has a limit set to zero."""
+        model = pin.Model()
+        model.addJoint(
+            0,
+            pin.JointModelRevoluteUnaligned(),
+            pin.SE3.Identity(),
+            "revolute",
+            max_effort=np.array([0.0]),
+            max_velocity=np.array([0.0]),
+            min_config=np.array([0.0]),
+            max_config=np.array([0.0]),
+        )
+        robot = pin.RobotWrapper(model=model)
+        configuration = apply_configuration(robot, robot.q0)
+        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
+        self.assertIsNotNone(v_max)
+        self.assertIsNotNone(v_min)
+        self.assertTrue(np.allclose(v_max, +np.inf))
+        self.assertTrue(np.allclose(v_min, -np.inf))
 
     def test_forward_velocity_limit(self):
         """Velocity limits have no effect far from configuration limits.
