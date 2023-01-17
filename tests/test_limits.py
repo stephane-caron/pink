@@ -71,10 +71,8 @@ class TestLimits(unittest.TestCase):
         robot = pin.RobotWrapper(model=model)
         configuration = apply_configuration(robot, robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
-        self.assertIsNotNone(v_max)
-        self.assertIsNotNone(v_min)
-        self.assertTrue(np.allclose(v_max, +np.inf))
-        self.assertTrue(np.allclose(v_min, -np.inf))
+        self.assertIsNone(v_max)
+        self.assertIsNone(v_min)
 
     def test_forward_velocity_limit(self):
         """Velocity limits have no effect far from configuration limits.
