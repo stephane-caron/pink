@@ -15,7 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
+"""Configuration type.
+
 Pink uses `Pinocchio <https://github.com/stack-of-tasks/pinocchio>`__ for
 forward kinematics. It adds to it a :class:`Configuration` type to indicate
 that forward kinematics functions have been run, indicating that frame
@@ -27,15 +28,12 @@ import numpy as np
 import pinocchio as pin
 
 from .bounded_tangent import BoundedTangent
-from .exceptions import NotWithinConfigurationLimits
+from .exceptions import BodyNotFound, NotWithinConfigurationLimits
 from .utils import VectorSpace, get_root_joint_dim
 
 
 class Configuration:
-
-    """
-    Type annotation indicating that quantities that depend on the configuration
-    :math:`q` have been computed.
+    """Type indicating that configuration-dependent quantities are available.
 
     In Pink, this type enables access to frame transforms and frame Jacobians.
     We rely on typing to make sure the proper forward kinematics functions have
@@ -67,6 +65,15 @@ class Configuration:
     q: np.ndarray
 
     def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
+        """Initialize configuration.
+
+        Args:
+            model: Kinodynamic model.
+            data: Data with kinematics matching the configuration vector
+                :data:`Configuration.q`.
+            q: Configuration vector matching the kinematics in
+                :data:`Configuration.data`.
+        """
         if not hasattr(model, "tangent"):
             model.tangent = VectorSpace(model.nv)
         if not hasattr(model, "bounded_tangent"):
@@ -79,8 +86,7 @@ class Configuration:
         self.tangent = model.tangent
 
     def check_limits(self, tol: float = 1e-6) -> None:
-        """
-        Check that the current configuration is within limits.
+        """Check that the current configuration is within limits.
 
         Args:
             tol: Tolerance in radians.
@@ -104,13 +110,14 @@ class Configuration:
                 )
 
     def get_body_jacobian(self, body: str) -> np.ndarray:
-        """
-        Compute the Jacobian matrix :math:`{}_B J_{WB}` of the body velocity
-        :math:`{}_B v_{WB}`:
+        r"""Compute the Jacobian matrix of the body velocity.
+
+        This matrix :math:`{}_B J_{WB}` is related to the body velocity
+        :math:`{}_B v_{WB}` by:
 
         .. math::
 
-            {}_B v_{WB} = {}_B J_{WB} \\dot{q}
+            {}_B v_{WB} = {}_B J_{WB} \dot{q}
 
         Args:
             body: Body frame name, typically the link name from the URDF.
@@ -137,8 +144,7 @@ class Configuration:
         return J
 
     def get_transform_body_to_world(self, body: str) -> pin.SE3:
-        """
-        Get the pose of a body frame of the robot in its current configuration.
+        """Get the pose of a body frame in the current configuration.
 
         Args:
             body: Body frame name, typically the link name from the URDF.
@@ -158,8 +164,7 @@ class Configuration:
             ) from index_error
 
     def integrate(self, velocity, dt) -> np.ndarray:
-        """
-        Integrate a velocity starting from the current configuration.
+        """Integrate a velocity starting from the current configuration.
 
         Args:
             velocity: Velocity in tangent space.
@@ -174,8 +179,7 @@ class Configuration:
 def assume_configuration(
     robot: pin.RobotWrapper, q: np.ndarray
 ) -> Configuration:
-    """
-    Assume that the provided robot wrapper has already been configured.
+    """Assume that the provided robot wrapper has already been configured.
 
     Args:
         robot: Robot wrapper with its initial data.
@@ -190,8 +194,7 @@ def assume_configuration(
 def apply_configuration(
     robot: pin.RobotWrapper, q: np.ndarray
 ) -> Configuration:
-    """
-    Apply configuration (forward kinematics) to a robot wrapper.
+    """Apply configuration (forward kinematics) to a robot wrapper.
 
     Args:
         robot: Robot wrapper with its initial data.
