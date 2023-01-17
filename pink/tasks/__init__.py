@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Kinematic tasks.
-"""
+"""Kinematic tasks."""
 
 from .body_task import BodyTask
 from .exceptions import TargetNotSet

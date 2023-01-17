@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Joint limits implemented as inequality constraints.
-"""
+"""Joint limits implemented as inequality constraints."""
 
 from typing import Tuple
 

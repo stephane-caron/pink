@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Function to solve inverse kinematics.
-"""
+"""Build and solve the inverse kinematics problem."""
 
 from typing import Iterable, Optional, Tuple
 

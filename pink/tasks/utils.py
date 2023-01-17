@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Lie algebra utility functions.
-"""
+"""Lie-algebra utility functions."""
 
 import numpy as np
 import pinocchio as pin

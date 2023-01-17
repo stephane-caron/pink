@@ -15,12 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Exceptions specific to Pink.
-"""
+"""Exceptions specific to Pink."""
+
+class PinkError(Exception):
+    pass
 
 
-class NotWithinConfigurationLimits(Exception):
+class NotWithinConfigurationLimits(PinkError):
 
     """
     Exception thrown when a robot configuration violates its limits.
