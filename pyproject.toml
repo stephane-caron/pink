@@ -56,5 +56,7 @@ select = [
     "E",
     "W",
     # isort
-    "I001"
+    "I001",
+    # pydocstyle
+    "D"
 ]
