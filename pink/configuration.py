@@ -129,7 +129,7 @@ class Configuration:
         - ``q[7:]``: joint angles in [rad].
         """
         if not self.model.existBodyName(body):
-            raise ValueError(f"body {body} does not exist")
+            raise BodyNotFound(f"body {body} does not exist")
         body_id = self.model.getBodyId(body)
         J: np.ndarray = pin.getFrameJacobian(
             self.model, self.data, body_id, pin.ReferenceFrame.LOCAL
