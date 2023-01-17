@@ -17,7 +17,7 @@
 
 """Joint limits implemented as inequality constraints."""
 
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import pinocchio as pin
@@ -30,7 +30,7 @@ def compute_velocity_limits(
     configuration: Configuration,
     dt: float,
     config_limit_gain: float = 0.5,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     r"""Compute the configuration-dependent velocity limits.
 
     Those limits are defined by:
@@ -58,11 +58,14 @@ def compute_velocity_limits(
             writeup](https://scaron.info/teaching/inverse-kinematics.html).
 
     Returns:
-        Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds.
+        Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds, or
+        ``(None, None)`` if there is no velocity limit.
     """
     assert 0.0 < config_limit_gain <= 1.0
     model = configuration.model
     bounded_tangent: BoundedTangent = model.bounded_tangent
+    if bounded_tangent.velocity_limit is None:
+        return None, None
 
     # Velocity limits from URDF
     v_max: np.ndarray = bounded_tangent.velocity_limit.copy()
