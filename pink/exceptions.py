@@ -17,18 +17,17 @@
 
 """Exceptions specific to Pink."""
 
+
 class PinkError(Exception):
-    pass
+    """Base class for Pink exceptions."""
 
 
 class BodyNotFound(PinkError):
-    pass
+    """Exception raised when a body is not found in the robot model."""
 
 
 class NotWithinConfigurationLimits(PinkError):
-
-    """
-    Exception thrown when a robot configuration violates its limits.
+    """Exception thrown when a robot configuration violates its limits.
 
     Attributes:
         joint: Index of the joint in the configuration vector.
@@ -49,8 +48,7 @@ class NotWithinConfigurationLimits(PinkError):
         lower: float,
         upper: float,
     ) -> None:
-        """
-        Create exception.
+        """Create exception.
 
         Args:
             joint: Index of the joint in the configuration vector.

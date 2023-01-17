@@ -29,18 +29,16 @@ from .utils import body_box_minus
 
 
 class BodyTask(Task):
-
-    """
-    Regulate the pose of a robot body in the world frame.
+    r"""Regulate the pose of a robot body in the world frame.
 
     Attributes:
         body: Body frame name, typically the link name from the URDF.
         cost: 6D vector that specifies how much each coordinate (in the local
             body frame) contributes to the cost. Position costs come first
             (Pinocchio spatial vector convention) and are in
-            :math:`[\\mathrm{cost}] / [\\mathrm{m}]`, where the the unit of
-            :math:`[\\mathrm{cost}]` up to the user. They are followed by
-            orientation costs in :math:`[\\mathrm{cost}] / [\\mathrm{rad}]`.
+            :math:`[\mathrm{cost}] / [\mathrm{m}]`, where the the unit of
+            :math:`[\mathrm{cost}]` up to the user. They are followed by
+            orientation costs in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
             Set a cost to zero to disable the task along a coordinate (no cost
             no effect).
         lm_damping: Unitless scale of the Levenberg-Marquardt (only when
@@ -72,17 +70,16 @@ class BodyTask(Task):
         orientation_cost: Union[float, Sequence[float]],
         lm_damping: float = 1e-6,
     ) -> None:
-        """
-        Define a new body task.
+        r"""Define a new body task.
 
         Args:
             body: Name of the body frame to move to the target pose.
             position_cost: Contribution of position errors to the normalized
-                cost, in :math:`[\\mathrm{cost}] / [\\mathrm{m}]`. If this is a
+                cost, in :math:`[\mathrm{cost}] / [\mathrm{m}]`. If this is a
                 vector, the cost is anisotropic and each coordinate corresponds
                 to an axis in the local body frame.
             orientation_cost: Contribution of orientation errors to the
-                normalized cost, in :math:`[\\mathrm{cost}] / [\\mathrm{rad}]`.
+                normalized cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
                 If this is a vector, the cost is anisotropic and each
                 coordinate corresponds to an axis in the local body frame.
             lm_damping: Levenberg-Marquardt damping (see class attributes). The
@@ -99,12 +96,11 @@ class BodyTask(Task):
     def set_position_cost(
         self, position_cost: Union[float, Sequence[float]]
     ) -> None:
-        """
-        Set a new cost for all 3D position coordinates.
+        r"""Set a new cost for all 3D position coordinates.
 
         Args:
             position_cost: Contribution of position errors to the normalized
-                cost, in :math:`[\\mathrm{cost}] / [\\mathrm{m}]`. If this is a
+                cost, in :math:`[\mathrm{cost}] / [\mathrm{m}]`. If this is a
                 vector, the cost is anisotropic and each coordinate corresponds
                 to an axis in the local body frame.
         """
@@ -117,12 +113,11 @@ class BodyTask(Task):
     def set_orientation_cost(
         self, orientation_cost: Union[float, Sequence[float]]
     ) -> None:
-        """
-        Set a new cost for all 3D orientation coordinates.
+        r"""Set a new cost for all 3D orientation coordinates.
 
         Args:
             orientation_cost: Contribution of orientation errors to the
-                normalized cost, in :math:`[\\mathrm{cost}] / [\\mathrm{rad}]`.
+                normalized cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
                 If this is a vector, the cost is anisotropic and each
                 coordinate corresponds to an axis in the local body frame.
         """
@@ -136,8 +131,7 @@ class BodyTask(Task):
         self,
         transform_target_to_world: pin.SE3,
     ) -> None:
-        """
-        Set task target pose in the world frame.
+        """Set task target pose in the world frame.
 
         Args:
             transform_target_to_world: Transform from the task target frame to
@@ -148,8 +142,7 @@ class BodyTask(Task):
     def set_target_from_configuration(
         self, configuration: Configuration
     ) -> None:
-        """
-        Set task target pose from a robot configuration.
+        """Set task target pose from a robot configuration.
 
         Args:
             configuration: Robot configuration.
@@ -159,14 +152,15 @@ class BodyTask(Task):
     def compute_error_in_body(
         self, configuration: Configuration
     ) -> np.ndarray:
-        """
-        Compute the body twist error, that is, the (box minus) difference
-        between target and current body configuration:
+        r"""Compute the body twist error.
+
+        The body twist error is the (box minus) difference between target and
+        current body configuration:
 
         .. math::
 
-            e(q) := {}_b \\xi_{0b} = -(T_{t0} \\boxminus T_{b0})
-            = -\\log(T_{t0} \\cdot T_{0b}) = -\\log(T_{tb}) = \\log(T_{bt})
+            e(q) := {}_b \xi_{0b} = -(T_{t0} \boxminus T_{b0})
+            = -\log(T_{t0} \cdot T_{0b}) = -\log(T_{tb}) = \log(T_{bt})
 
         where :math:`b` denotes the body frame, :math:`t` the target frame and
         :math:`0` the inertial frame.
@@ -191,17 +185,18 @@ class BodyTask(Task):
     def compute_task_dynamics(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Compute the matrix :math:`J(q)` and vector :math:`\\alpha e(q)` such
+        r"""Compute the task dynamics matrix and vector.
+
+        Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
         that the task dynamics are:
 
         .. math::
 
-            J(q) \\Delta q = \\alpha e(q)
+            J(q) \Delta q = \alpha e(q)
 
-        The Jacobian matrix is :math:`J(q) \\in \\mathbb{R}^{6 \\times n}`,
+        The Jacobian matrix is :math:`J(q) \in \mathbb{R}^{6 \times n}`,
         with :math:`n` the dimension of the robot's tangent space, and the
-        error vector is :math:`e(q) \\in \\mathbb{R}^6`.
+        error vector is :math:`e(q) \in \mathbb{R}^6`.
 
         See :func:`Task.compute_task_dynamics` for more context.
 
@@ -209,7 +204,7 @@ class BodyTask(Task):
             configuration: Robot configuration to read values from.
 
         Returns:
-            Pair :math:`(J, \\alpha e)` of Jacobian matrix and error vector,
+            Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
             both expressed in the body frame.
         """
         jacobian_in_body = configuration.get_body_jacobian(self.body)
@@ -219,20 +214,21 @@ class BodyTask(Task):
     def compute_qp_objective(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Compute the Hessian matrix :math:`H` and linear vector :math:`c` such
-        that the contribution of the task to the QP objective is:
+        r"""Compute the matrix-vector pair :math:`(H, c)` of the QP objective.
+
+        This pair is such that the contribution of the task to the QP objective
+        of the IK is:
 
         .. math::
 
-            \\| J \\Delta q - \\alpha e \\|_{W}^2
-            = \\frac{1}{2} \\Delta q^T H \\Delta q + c^T q
+            \| J \Delta q - \alpha e \|_{W}^2
+            = \frac{1}{2} \Delta q^T H \Delta q + c^T q
 
-        The weight matrix :math:`W \\in \\mathbb{R}^{6 \\times 6}` combines
+        The weight matrix :math:`W \in \mathbb{R}^{6 \times 6}` combines
         position and orientation costs. The unit of the overall contribution is
-        :math:`[\\mathrm{cost}]^2`. The configuration displacement
-        :math:`\\Delta q` is the output of inverse kinematics (we divide it by
-        :math:`\\Delta t` to get a commanded velocity).
+        :math:`[\mathrm{cost}]^2`. The configuration displacement
+        :math:`\Delta q` is the output of inverse kinematics (we divide it by
+        :math:`\Delta t` to get a commanded velocity).
 
         Args:
             configuration: Robot configuration to read values from.
@@ -241,7 +237,7 @@ class BodyTask(Task):
             Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
             objective.
 
-        See also:
+        See Also:
             Levenberg-Marquardt damping is described in
             "Solvability-Unconcerned Inverse Kinematics by the
             Levenberg-Marquardt Method" (Sugihara, 2011). The dimensional

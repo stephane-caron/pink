@@ -30,16 +30,17 @@ from .tasks import Task
 def __compute_qp_objective(
     configuration: Configuration, tasks: Iterable[Task], damping: float
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Compute the Hessian matrix :math:`H` and linear vector :math:`c` of the
-    QP objective function:
+    r"""Compute the QP objective function.
+
+    The Hessian matrix :math:`H` and linear vector :math:`c` define the QP
+    objective function as:
 
     .. math::
 
-        \\frac{1}{2} \\Delta q^T H \\Delta q + c^T q
+        \frac{1}{2} \Delta q^T H \Delta q + c^T q
 
-    The configuration displacement :math:`\\Delta q` is the output of inverse
-    kinematics (we divide it by :math:`\\Delta t` to get a commanded velocity).
+    The configuration displacement :math:`\Delta q` is the output of inverse
+    kinematics (we divide it by :math:`\Delta t` to get a commanded velocity).
 
     Args:
         configuration: Robot configuration to read kinematics from.
@@ -65,8 +66,7 @@ def __compute_qp_objective(
 def __compute_qp_inequalities(
     configuration, dt
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
-    """
-    Compute inequality constraints for the quadratic program.
+    """Compute inequality constraints for the quadratic program.
 
     Args:
         configuration: Robot configuration to read kinematics from.
@@ -97,16 +97,15 @@ def build_ik(
     dt: float,
     damping: float = 1e-12,
 ) -> qpsolvers.Problem:
-    """
-    Build quadratic program from current configuration and tasks.
+    r"""Build quadratic program from current configuration and tasks.
 
     Args:
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
         dt: Integration timestep in [s].
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
-            :math:`[\\mathrm{cost}]^2 / [\\mathrm{tangent}]` where
-            :math:`[\\mathrm{tangent}]` is "the" unit of robot velocities.
+            :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
+            :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
 
@@ -128,17 +127,18 @@ def solve_ik(
     solver: str,
     damping: float = 1e-12,
 ) -> np.ndarray:
-    """
-    Compute a velocity tangent to the current robot configuration that
-    satisfies at (weighted) best a given set of kinematic tasks.
+    r"""Compute a velocity tangent to the current robot configuration.
+
+    The computed velocity satisfies at (weighted) best the set of kinematic
+    tasks given in argument.
 
     Args:
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
         dt: Integration timestep in [s].
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
-            :math:`[\\mathrm{cost}]^2 / [\\mathrm{tangent}]` where
-            :math:`[\\mathrm{tangent}]` is "the" unit of robot velocities.
+            :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
+            :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
         solver: Backend quadratic programming solver.

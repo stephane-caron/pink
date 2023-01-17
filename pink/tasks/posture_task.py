@@ -29,14 +29,14 @@ from .task import Task
 
 
 class PostureTask(Task):
+    r"""Regulate joint angles to a desired posture.
 
-    """
-    Regulate joint angles to a desired posture, *i.e.* a vector of actuated
-    joint angles. Floating base coordinates are not affected by this task.
+    A posture is a vector of actuated joint angles. Floating base coordinates
+    are not affected by this task.
 
     Attributes:
         cost: joint angular error cost in
-            :math:`[\\mathrm{cost}] / [\\mathrm{rad}]`.
+            :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
         target_q: Target vector in the configuration space.
 
     A posture task is typically used for regularization as it has a steady
@@ -49,12 +49,11 @@ class PostureTask(Task):
     target_q: Optional[np.ndarray]
 
     def __init__(self, cost: float) -> None:
-        """
-        Create task.
+        r"""Create task.
 
         Args:
             cost: joint angular error cost in
-                :math:`[\\mathrm{cost}] / [\\mathrm{rad}]`.
+                :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
 
         Note:
             We assume that the first seven coordinates of the configuration are
@@ -64,8 +63,7 @@ class PostureTask(Task):
         self.target_q = None
 
     def set_target(self, target_q: np.ndarray) -> None:
-        """
-        Set target posture.
+        """Set target posture.
 
         Args:
             target_q: Target vector in the configuration space.
@@ -75,8 +73,7 @@ class PostureTask(Task):
     def set_target_from_configuration(
         self, configuration: Configuration
     ) -> None:
-        """
-        Set target posture from a robot configuration.
+        """Set target posture from a robot configuration.
 
         Args:
             configuration: Robot configuration.
@@ -86,17 +83,18 @@ class PostureTask(Task):
     def compute_task_dynamics(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Compute the matrix :math:`J(q)` and vector :math:`\\alpha e(q)` such
+        r"""Compute the task dynamics matrix and vector.
+
+        Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
         that the task dynamics are:
 
         .. math::
 
-            J(q) \\Delta q = \\alpha e(q)
+            J(q) \Delta q = \alpha e(q)
 
-        The Jacobian matrix is :math:`J(q) \\in \\mathbb{R}^{n \\times n}`,
+        The Jacobian matrix is :math:`J(q) \in \mathbb{R}^{n \times n}`,
         with :math:`n` the dimension of the robot's tangent space, and the
-        error vector is :math:`e(q) \\in \\mathbb{R}^n`. Both depend on the
+        error vector is :math:`e(q) \in \mathbb{R}^n`. Both depend on the
         configuration :math:`q` of the robot.
 
         See :func:`Task.compute_task_dynamics` for more context.
@@ -105,7 +103,7 @@ class PostureTask(Task):
             configuration: Robot configuration to read kinematics from.
 
         Returns:
-            Pair :math:`(J, \\alpha e)` of Jacobian matrix and error vector,
+            Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
             both expressed in the body frame.
         """
         if self.target_q is None:
@@ -120,23 +118,24 @@ class PostureTask(Task):
     def compute_qp_objective(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Compute the Hessian matrix :math:`H` and linear vector :math:`c` such
-        that the contribution of the task to the QP objective is:
+        r"""Compute the matrix-vector pair :math:`(H, c)` of the QP objective.
+
+        This pair is such that the contribution of the task to the QP objective
+        of the IK is:
 
         .. math::
 
-            \\| J \\Delta q - \\alpha e \\|_{W}^2
-            = \\frac{1}{2} \\Delta q^T H \\Delta q + c^T q
+            \| J \Delta q - \alpha e \|_{W}^2
+            = \frac{1}{2} \Delta q^T H \Delta q + c^T q
 
-        The weight matrix :math:`W \\in \\mathbb{R}^{n \\times n}` weighs and
+        The weight matrix :math:`W \in \mathbb{R}^{n \times n}` weighs and
         normalizes task coordinates to the same unit. The unit of the overall
-        contribution is :math:`[\\mathrm{cost}]^2`. The configuration
-        displacement :math:`\\Delta q` is the output of inverse kinematics (we
-        divide it by :math:`\\Delta t` to get a commanded velocity).
+        contribution is :math:`[\mathrm{cost}]^2`. The configuration
+        displacement :math:`\Delta q` is the output of inverse kinematics (we
+        divide it by :math:`\Delta t` to get a commanded velocity).
 
         Args:
-            robot: Robot model and configuration.
+            configuration: Robot configuration.
 
         Returns:
             Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP

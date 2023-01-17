@@ -30,21 +30,22 @@ def compute_velocity_limits(
     dt: float,
     config_limit_gain: float = 0.5,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Compute the configuration-dependent velocity limits:
+    r"""Compute the configuration-dependent velocity limits.
+
+    Those limits are defined by:
 
     .. math::
 
-        v_{min}(q) \\leq v \\leq v_{max}(q)
+        v_{min}(q) \leq v \leq v_{max}(q)
 
-    where :math:`q \\in {\\cal C}` is the robot's configuration and :math:`v
-    \\in T_q({\\cal C})` is the velocity in the tangent space at :math:`q`.
+    where :math:`q \in {\cal C}` is the robot's configuration and :math:`v
+    \in T_q({\cal C})` is the velocity in the tangent space at :math:`q`.
     These velocity limits combine:
 
     - Configuration-independent joint velocity limits
-      :math:`|\\dot{q}| \\leq \\dot{q}_{lim}`.
+      :math:`|\dot{q}| \leq \dot{q}_{lim}`.
     - Time-derivatives of the configuration limit
-      :math:`q_{min} \\leq q \\leq q_{max}`.
+      :math:`q_{min} \leq q \leq q_{max}`.
 
     Args:
         configuration: Robot configuration to read kinematics from.

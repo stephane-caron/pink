@@ -21,5 +21,4 @@ from ..exceptions import PinkError
 
 
 class TargetNotSet(PinkError):
-
     """Exception raised when attempting to compute with an unset target."""

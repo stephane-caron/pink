@@ -15,8 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-All kinematic tasks derive from the :class:`Task` base class.
+"""All kinematic tasks derive from the :class:`Task` base class.
 
 The formalism used in this implementation is written down in `this note on
 task-based inverse kinematics
@@ -34,12 +33,10 @@ from ..configuration import Configuration
 
 
 class Task(abc.ABC):
-
-    """
-    Abstract base class for kinematic tasks.
+    r"""Abstract base class for kinematic tasks.
 
     Attributes:
-        gain: Task gain :math:`\\alpha \\in [0, 1]` for additional low-pass
+        gain: Task gain :math:`\alpha \in [0, 1]` for additional low-pass
             filtering. Defaults to 1.0 (no filtering) for dead-beat control.
     """
 
@@ -49,18 +46,19 @@ class Task(abc.ABC):
     def compute_task_dynamics(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Compute the matrix :math:`J(q)` and vector :math:`\\alpha e(q)` such
+        r"""Compute the task dynamics matrix and vector.
+
+        Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
         that the task dynamics are:
 
         .. math::
 
-            J(q) \\Delta q = \\alpha e(q)
+            J(q) \Delta q = \alpha e(q)
 
-        The Jacobian matrix is :math:`J(q) \\in \\mathbb{R}^{k \\times n_v}`,
+        The Jacobian matrix is :math:`J(q) \in \mathbb{R}^{k \times n_v}`,
         with :math:`n_v` the dimension of the robot's tangent space and
-        :math:`k` the dimension of the task. The error vector :math:`e(q) \\in
-        \\mathbb{R}^k` is multiplied by the task gain :math:`\\alpha \\in [0,
+        :math:`k` the dimension of the task. The error vector :math:`e(q) \in
+        \mathbb{R}^k` is multiplied by the task gain :math:`\alpha \in [0,
         1]`. The gain is usually 1 for dead-beat control (*i.e.* converge as
         fast as possible), but it can also be lower for some extra low-pass
         filtering.
@@ -81,19 +79,20 @@ class Task(abc.ABC):
     def compute_qp_objective(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Compute the matrix-vector pair :math:`(H, c)` such that the
-        contribution of the task to the QP objective of the IK is:
+        r"""Compute the matrix-vector pair :math:`(H, c)` of the QP objective.
+
+        This pair is such that the contribution of the task to the QP objective
+        of the IK is:
 
         .. math::
 
-            \\| J \\Delta q - \\alpha e \\|_{W}^2 = \\frac{1}{2} \\Delta q^T H
-            \\Delta q + c^T q
+            \| J \Delta q - \alpha e \|_{W}^2 = \frac{1}{2} \Delta q^T H
+            \Delta q + c^T q
 
-        The weight matrix :math:`W \\in \\mathbb{R}^{k \\times k}` weighs and
+        The weight matrix :math:`W \in \mathbb{R}^{k \times k}` weighs and
         normalizes task coordinates to the same unit. The unit of the overall
-        contribution is [cost]^2. The configuration displacement :math:`\\Delta
-        q` is the output of inverse kinematics (we divide it by :math:`\\Delta
+        contribution is [cost]^2. The configuration displacement :math:`\Delta
+        q` is the output of inverse kinematics (we divide it by :math:`\Delta
         t` to get a commanded velocity).
 
         Args:
