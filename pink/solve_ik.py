@@ -99,6 +99,20 @@ def build_ik(
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
 
+    This quadratic program is, in standard form:
+
+    .. math::
+
+        \begin{split}\begin{array}{ll}
+            \underset{\Delta q}{\mbox{minimize}} &
+                \frac{1}{2} {\Delta q}^T H {\Delta q} + c^T {\Delta q} \\
+            \mbox{subject to}
+                & G {\Delta q} \leq h
+        \end{array}\end{split}
+
+    where :math:`\Delta q` is a vector of joint displacements corresponding to
+    the joint velocities :math:`v = {\Delta q} / {\mathrm{d}t}`.
+
     Args:
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
