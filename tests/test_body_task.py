@@ -45,6 +45,18 @@ class TestBodyTask(unittest.TestCase):
         )
         self.configuration = pink.apply_configuration(robot, robot.q0)
 
+    def test_set_target_from_configuration(self):
+        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
+        task.set_target_from_configuration(self.configuration)
+        transform_ankle_to_world = (
+            self.configuration.get_transform_body_to_world("l_ankle")
+        )
+        self.assertTrue(
+            np.allclose(
+                transform_ankle_to_world, task.transform_target_to_world
+            )
+        )
+
     def test_task_repr(self):
         """String representation reports the task gain, costs and target."""
         earflap_task = BodyTask(
