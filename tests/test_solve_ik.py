@@ -326,6 +326,5 @@ class TestSolveIK(unittest.TestCase):
 
 # Generate test fixtures for each solver
 for solver in qpsolvers.available_solvers:
-    if solver == "highs":
-        continue
-    setattr(TestSolveIK, f"test_{solver}", TestSolveIK.get_solver_test(solver))
+    if solver != "highs":
+        setattr(TestSolveIK, f"test_{solver}", TestSolveIK.get_solver_test(solver))
