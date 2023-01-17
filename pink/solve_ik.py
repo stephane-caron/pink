@@ -80,11 +80,11 @@ def __compute_qp_inequalities(
         solvers don't support it. See for instance
         https://github.com/tasts-robots/pink/issues/10.
     """
-    bounded_tangent = configuration.model.bounded_tangent
-    if bounded_tangent.dim < 1:
+    v_max, v_min = compute_velocity_limits(configuration, dt)
+    if v_max is None or v_min is None:
         return None, None
 
-    v_max, v_min = compute_velocity_limits(configuration, dt)
+    bounded_tangent = configuration.model.bounded_tangent
     bounded_proj = bounded_tangent.projection_matrix
     G = np.vstack([bounded_proj, -bounded_proj])
     h = np.hstack([dt * v_max, -dt * v_min])
