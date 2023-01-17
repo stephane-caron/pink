@@ -21,6 +21,10 @@ class PinkError(Exception):
     pass
 
 
+class BodyNotFound(PinkError):
+    pass
+
+
 class NotWithinConfigurationLimits(PinkError):
 
     """
