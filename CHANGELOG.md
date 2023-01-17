@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Return type of ``compute_velocity_limits`` now includes optionals
 - VectorSpace type is now immutable
 
 ## [0.7.0] 2023/01/16
