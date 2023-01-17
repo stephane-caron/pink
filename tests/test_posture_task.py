@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test fixture for the posture task.
-"""
+"""Test fixture for the posture task."""
 
 import unittest
 
@@ -30,9 +28,7 @@ from pink.tasks import PostureTask, TargetNotSet
 
 
 class TestPostureTask(unittest.TestCase):
-
-    """
-    Test consistency of the posture task.
+    """Test consistency of the posture task.
 
     Note:
         This fixture only tests the task itself. Integration tests with the IK
@@ -40,34 +36,26 @@ class TestPostureTask(unittest.TestCase):
     """
 
     def setUp(self):
-        """
-        Prepare test fixture.
-        """
+        """Prepare test fixture."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
         self.configuration = pink.apply_configuration(robot, robot.q0)
 
     def test_task_repr(self):
-        """
-        String representation reports the task gain, costs and target.
-        """
+        """String representation reports the task gain, costs and target."""
         task = PostureTask(cost=1.0)
         self.assertTrue("cost=" in repr(task))
         self.assertTrue("gain=" in repr(task))
 
     def test_target_not_set(self):
-        """
-        Raise an exception when the target is not set.
-        """
+        """Raise an exception when the target is not set."""
         task = PostureTask(cost=1.0)
         with self.assertRaises(TargetNotSet):
             task.compute_task_dynamics(self.configuration)
 
     def test_target_set_properly(self):
-        """
-        Return target properly once it's set.
-        """
+        """Return target properly once it's set."""
         task = PostureTask(cost=1.0)
         task.set_target(self.configuration.q)
         self.assertIsNotNone(task.target_q)
@@ -76,9 +64,7 @@ class TestPostureTask(unittest.TestCase):
         self.assertTrue(np.allclose(self.configuration.q, task.target_q))
 
     def test_target_is_a_copy(self):
-        """
-        Target is saved as a copy, not a reference to the original.
-        """
+        """Target is saved as a copy, not a reference to the original."""
         task = PostureTask(cost=1.0)
         q = self.configuration.q
         with self.assertRaises(ValueError):
@@ -87,19 +73,14 @@ class TestPostureTask(unittest.TestCase):
         self.assertIsNotNone(task.target_q)
 
     def test_zero_error_when_target_at_body(self):
-        """
-        Error is zero when the target and body are at the same location.
-        """
+        """Error is zero when the target and body are at the same location."""
         task = PostureTask(cost=1.0)
         task.set_target(self.configuration.q)  # error == 0
         _, e = task.compute_task_dynamics(self.configuration)
         self.assertLess(np.linalg.norm(e), 1e-10)
 
     def test_unit_cost_qp_objective(self):
-        """
-        A unit cost vector means the QP objective is exactly :math:`(H, c) =
-        (J^T J, -e^T J)`.
-        """
+        """A unit cost vector means the QP objective is (J^T J, -e^T J)."""
         task = PostureTask(cost=1.0)
         task.set_target(self.configuration.q)
         q_new = self.configuration.q.copy()
@@ -113,9 +94,7 @@ class TestPostureTask(unittest.TestCase):
         self.assertTrue(np.allclose(-e.T @ J, c))
 
     def test_zero_cost_same_as_disabling_task(self):
-        """
-        The task has no effect when its cost is zero.
-        """
+        """The task has no effect when its cost is zero."""
         task = PostureTask(cost=0.0)
         q = self.configuration.q
         task.set_target(q)
