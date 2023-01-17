@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test inverse kinematics.
-"""
+"""Test inverse kinematics."""
 
 import unittest
 
@@ -35,14 +33,10 @@ from pink.tasks import BodyTask
 
 class TestSolveIK(unittest.TestCase):
 
-    """
-    Test fixture for the solve_ik function.
-    """
+    """Test fixture for the solve_ik function."""
 
     def test_checks_configuration_limits(self):
-        """
-        IK checks for configuration limits.
-        """
+        """IK checks for configuration limits."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -53,9 +47,7 @@ class TestSolveIK(unittest.TestCase):
             solve_ik(configuration, [], dt=1.0, solver="quadprog")
 
     def test_no_task(self):
-        """
-        Raise an error when the robot body is not found.
-        """
+        """Raise an error when the robot body is not found."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -65,9 +57,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(v, np.zeros(robot.nv)))
 
     def test_single_task_fulfilled(self):
-        """
-        Velocity is zero when the only task is already fulfilled.
-        """
+        """Velocity is zero when the only task is already fulfilled."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -82,9 +72,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_single_task_convergence(self):
-        """
-        Integrating IK velocities makes a single task converge to its target.
-        """
+        """Integrating velocities makes a task converge to its target."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -142,10 +130,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertLess(nb_steps, 3)
 
     def test_single_task_translation(self):
-        """
-        Translating a target (away from constraints) yields a pure linear
-        velocity in the same direction in the IK output.
-        """
+        """Translating a target yields a pure linear velocity."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -182,9 +167,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertAlmostEqual(linear_velocity_contact_in_contact[2], 0.0)
 
     def test_three_tasks_fulfilled(self):
-        """
-        No motion when all targets are reached.
-        """
+        """No motion when all targets are reached."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -214,9 +197,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_three_tasks_convergence(self):
-        """
-        Three simultaneously feasible tasks on the JVRC humanoid converge.
-        """
+        """Three simultaneously feasible tasks on the JVRC model converge."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -272,9 +253,7 @@ class TestSolveIK(unittest.TestCase):
         )
 
     def get_jvrc_problem(self):
-        """
-        Get an IK problem with three tasks on a humanoid model.
-        """
+        """Get an IK problem with three tasks on a humanoid model."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -303,17 +282,12 @@ class TestSolveIK(unittest.TestCase):
 
     @staticmethod
     def get_solver_test(solver: str):
-        """
-        Get test function for a given QP solver.
+        """Get test function for a given QP solver.
 
-        Parameters
-        ----------
-        solver : string
-            Name of the QP solver to use as backend.
+        Args:
+            solver: Name of the QP solver to use as backend.
 
-        Returns
-        -------
-        test : function
+        Returns:
             Test function for that solver.
         """
 
