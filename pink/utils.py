@@ -66,18 +66,12 @@ class VectorSpace:
 
     """
     Wrapper to refer to a vector space and its characteristic matrices.
-
-    Attributes:
-        dim: Dimension of the vector space.
-        eye: Identity matrix.
-        ones: Vector full of ones, dimension of the space.
-        zeros: Zero vector of the space.
     """
 
-    dim: int
-    eye: np.ndarray
-    ones: np.ndarray
-    zeros: np.ndarray
+    __dim: int
+    __eye: np.ndarray
+    __ones: np.ndarray
+    __zeros: np.ndarray
 
     def __init__(self, dim: int):
         eye = np.eye(dim)
@@ -86,7 +80,35 @@ class VectorSpace:
         eye.setflags(write=False)
         ones.setflags(write=False)
         zeros.setflags(write=False)
-        self.dim = dim
-        self.eye = eye
-        self.ones = ones
-        self.zeros = zeros
+        self.__dim = dim
+        self.__eye = eye
+        self.__ones = ones
+        self.__zeros = zeros
+
+    @property
+    def dim(self) -> int:
+        """
+        Dimension of the vector space.
+        """
+        return self.__dim
+
+    @property
+    def eye(self) -> np.ndarray:
+        """
+        Identity matrix from and to the vector space.
+        """
+        return self.__eye
+
+    @property
+    def ones(self) -> np.ndarray:
+        """
+        Vector full of ones, dimension of the space.
+        """
+        return self.__ones
+
+    @property
+    def zeros(self) -> np.ndarray:
+        """
+        Zero vector of the space.
+        """
+        return self.__zeros
