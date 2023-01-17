@@ -60,3 +60,6 @@ select = [
     # pydocstyle
     "D"
 ]
+
+[tool.ruff.pydocstyle]
+convention = "google"
