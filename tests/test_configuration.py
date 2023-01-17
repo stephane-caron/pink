@@ -26,7 +26,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
-from pink.exceptions import NotWithinConfigurationLimits
+from pink.exceptions import BodyNotFound, NotWithinConfigurationLimits
 
 
 class TestConfiguration(unittest.TestCase):
@@ -468,5 +468,5 @@ class TestConfiguration(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = pink.apply_configuration(robot, robot.q0)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(BodyNotFound):
             configuration.get_body_jacobian("does_not_exist")
