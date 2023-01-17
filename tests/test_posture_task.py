@@ -64,9 +64,8 @@ class TestPostureTask(unittest.TestCase):
         task = PostureTask(cost=1.0)
         task.set_target(self.configuration.q)
         self.assertIsNotNone(task.target_q)
-        if task.target_q is None:  # help mypy
-            return
-        self.assertTrue(np.allclose(self.configuration.q, task.target_q))
+        if task.target_q is not None:  # help mypy
+            self.assertTrue(np.allclose(self.configuration.q, task.target_q))
 
     def test_target_is_a_copy(self):
         """Target is saved as a copy, not a reference to the original."""
