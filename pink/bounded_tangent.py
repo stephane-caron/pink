@@ -27,7 +27,6 @@ from .utils import VectorSpace
 
 
 class BoundedTangent(VectorSpace):
-
     """Subspace of the tangent space restricted to bounded joints.
 
     Attributes:
@@ -82,8 +81,7 @@ class BoundedTangent(VectorSpace):
         )
 
     def project(self, v: np.ndarray) -> np.ndarray:
-        """Project a vector from the tangent space to the bounded tangent
-        subspace.
+        """Project a tangent vector to the bounded tangent subspace.
 
         Args:
             v: Vector from the original space.

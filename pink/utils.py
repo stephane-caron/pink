@@ -24,11 +24,11 @@ import pinocchio as pin
 
 
 def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
-    """
-    Generate a configuration vector where named joints have specific values.
+    """Generate a configuration vector where named joints have specific values.
 
     Args:
         robot: Robot model.
+        kwargs: Custom values for joint coordinates.
 
     Returns:
         Configuration vector where named joints have the values specified in
@@ -43,8 +43,7 @@ def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
 
 
 def get_root_joint_dim(model: pin.Model) -> Tuple[int, int]:
-    """
-    Count the configuration and tangent dimensions of the root joint, if any.
+    """Count configuration and tangent dimensions of the root joint, if any.
 
     Args:
         model: Robot model.
@@ -61,7 +60,6 @@ def get_root_joint_dim(model: pin.Model) -> Tuple[int, int]:
 
 
 class VectorSpace:
-
     """Wrapper to refer to a vector space and its characteristic matrices."""
 
     __dim: int
@@ -70,6 +68,11 @@ class VectorSpace:
     __zeros: np.ndarray
 
     def __init__(self, dim: int):
+        """Create new vector space description.
+
+        Args:
+            dim: Dimension.
+        """
         eye = np.eye(dim)
         ones = np.ones(dim)
         zeros = np.zeros(dim)
