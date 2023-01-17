@@ -163,7 +163,15 @@ class BodyTask(Task):
     ) -> np.ndarray:
         """
         Compute the body twist error, that is, the (box minus) difference
-        between target and current body configuration.
+        between target and current body configuration:
+
+        .. math::
+
+            e(q) := {}_b \\xi_{0b} = -(T_{t0} \\boxminus T_{b0})
+            = -\\log(T_{t0} \\cdot T_{0b}) = -\\log(T_{tb}) = \\log(T_{bt})
+
+        where :math:`b` denotes the body frame, :math:`t` the target frame and
+        :math:`0` the inertial frame.
 
         Args:
             configuration: Robot configuration to read values from.
