@@ -26,7 +26,7 @@ from numpy.linalg import norm
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
-from pink import apply_configuration, solve_ik
+from pink import apply_configuration, build_ik, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
 from pink.tasks import BodyTask
 
@@ -45,6 +45,18 @@ class TestSolveIK(unittest.TestCase):
         configuration = pink.apply_configuration(robot, q)
         with self.assertRaises(NotWithinConfigurationLimits):
             solve_ik(configuration, [], dt=1.0, solver="quadprog")
+
+    def test_model_with_no_joint_limit(self):
+        """Model with no joint limit has no inequality constraints."""
+        model = pin.Model()
+        model.addJoint(
+            0, pin.JointModelSpherical(), pin.SE3.Identity(), "spherical"
+        )
+        robot = pin.RobotWrapper(model=model)
+        configuration = apply_configuration(robot, robot.q0)
+        problem = build_ik(configuration, [], dt=1.0)
+        self.assertIsNone(problem.G)
+        self.assertIsNone(problem.h)
 
     def test_no_task(self):
         """Raise an error when the robot body is not found."""
@@ -301,4 +313,6 @@ class TestSolveIK(unittest.TestCase):
 # Generate test fixtures for each solver
 for solver in qpsolvers.available_solvers:
     if solver != "highs":
-        setattr(TestSolveIK, f"test_{solver}", TestSolveIK.get_solver_test(solver))
+        setattr(
+            TestSolveIK, f"test_{solver}", TestSolveIK.get_solver_test(solver)
+        )
