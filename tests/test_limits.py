@@ -43,6 +43,17 @@ class TestLimits(unittest.TestCase):
         self.assertEqual(v_max.shape, (model.bounded_tangent.dim,))
         self.assertEqual(v_min.shape, (model.bounded_tangent.dim,))
 
+    def test_model_with_no_joint_limit(self):
+        model = pin.Model()
+        model.addJoint(
+            0, pin.JointModelSpherical(), pin.SE3.Identity(), "spherical"
+        )
+        robot = pin.RobotWrapper(model=model)
+        configuration = apply_configuration(robot, robot.q0)
+        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
+        self.assertIsNone(v_max)
+        self.assertIsNone(v_min)
+
     def test_forward_velocity_limit(self):
         """Velocity limits have no effect far from configuration limits.
 
