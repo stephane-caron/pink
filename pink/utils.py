@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Utility classes and functions.
-"""
+"""Utility classes and functions."""
 
 from typing import Tuple
 
@@ -64,9 +62,7 @@ def get_root_joint_dim(model: pin.Model) -> Tuple[int, int]:
 
 class VectorSpace:
 
-    """
-    Wrapper to refer to a vector space and its characteristic matrices.
-    """
+    """Wrapper to refer to a vector space and its characteristic matrices."""
 
     __dim: int
     __eye: np.ndarray
@@ -87,28 +83,20 @@ class VectorSpace:
 
     @property
     def dim(self) -> int:
-        """
-        Dimension of the vector space.
-        """
+        """Dimension of the vector space."""
         return self.__dim
 
     @property
     def eye(self) -> np.ndarray:
-        """
-        Identity matrix from and to the vector space.
-        """
+        """Identity matrix from and to the vector space."""
         return self.__eye
 
     @property
     def ones(self) -> np.ndarray:
-        """
-        Vector full of ones, dimension of the space.
-        """
+        """Vector full of ones, dimension of the space."""
         return self.__ones
 
     @property
     def zeros(self) -> np.ndarray:
-        """
-        Zero vector of the space.
-        """
+        """Zero vector of the space."""
         return self.__zeros

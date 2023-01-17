@@ -105,7 +105,5 @@ class Task(abc.ABC):
         """
 
     def __repr__(self):
-        """
-        Human-readable representation of the task.
-        """
+        """Human-readable representation of the task."""
         return f"Task(gain={self.gain})"

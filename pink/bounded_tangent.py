@@ -16,9 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Subset of bounded joints associated with a robot model.
-"""
+"""Subset of bounded joints associated with a robot model."""
 
 from typing import List, Optional
 

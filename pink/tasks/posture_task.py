@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Posture task specification.
-"""
+"""Posture task implementation."""
 
 from typing import Optional, Tuple
 
@@ -152,7 +150,5 @@ class PostureTask(Task):
         return (H, c)
 
     def __repr__(self):
-        """
-        Human-readable representation of the task.
-        """
+        """Human-readable representation of the task."""
         return f"PostureTask(cost={self.cost}, gain={self.gain})"

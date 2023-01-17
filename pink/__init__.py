@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Python inverse kinematics for your robot model based on Pinocchio.
-"""
+"""Python inverse kinematics for your robot model based on Pinocchio."""
 
 from .configuration import (
     Configuration,

@@ -15,13 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Exceptions raised by tasks.
-"""
+"""Exceptions raised by tasks."""
+
+from ..exceptions import PinkError
 
 
-class TargetNotSet(Exception):
+class TargetNotSet(PinkError):
 
-    """
-    Exception raised when attempting to compute a task with an unset target.
-    """
+    """Exception raised when attempting to compute with an unset target."""

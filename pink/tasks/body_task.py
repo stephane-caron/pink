@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Body task specification.
-"""
+"""Body task implementation."""
 
 from typing import Optional, Sequence, Tuple, Union
 
@@ -263,9 +261,7 @@ class BodyTask(Task):
         return (H, c)
 
     def __repr__(self):
-        """
-        Human-readable representation of the task.
-        """
+        """Human-readable representation of the task."""
         return (
             f"BodyTask({self.body}, "
             f"gain={self.gain}, "

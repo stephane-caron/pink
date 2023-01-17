@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Visualization helpers.
-"""
+"""Visualization helpers."""
 
 import pinocchio as pin
 
