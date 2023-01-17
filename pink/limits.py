@@ -22,6 +22,7 @@ from typing import Tuple
 import numpy as np
 import pinocchio as pin
 
+from .bounded_tangent import BoundedTangent
 from .configuration import Configuration
 
 
@@ -61,23 +62,24 @@ def compute_velocity_limits(
     """
     assert 0.0 < config_limit_gain <= 1.0
     model = configuration.model
+    bounded_tangent: BoundedTangent = model.bounded_tangent
 
     # Velocity limits from URDF
-    v_max = model.bounded_tangent.velocity_limit.copy()
+    v_max: np.ndarray = bounded_tangent.velocity_limit.copy()
     if v_max.dot(v_max) < 1e-10:
         # Zero means no limit, see https://wiki.ros.org/urdf/XML/link
         v_max = np.full(v_max.shape, +np.infty)
-    v_min = -v_max
+    v_min: np.ndarray = -v_max
 
     # Velocity limits from configuration bounds
-    Delta_q_max = model.bounded_tangent.project(
+    Delta_q_max = bounded_tangent.project(
         pin.difference(
             model,
             configuration.q,
             model.upperPositionLimit,
         )
     )
-    Delta_q_min = model.bounded_tangent.project(
+    Delta_q_min = bounded_tangent.project(
         pin.difference(
             model,
             configuration.q,
