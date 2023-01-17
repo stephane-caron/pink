@@ -36,34 +36,28 @@ class TestLimits(unittest.TestCase):
         )
 
     def test_limit_dimension(self):
-        """
-        Check that velocity limit vectors have the same dimension as the number
-        of bounded joints.
-        """
-        dt = 1e-3  # [s]
+        """Velocity limit dimension is the number of bounded joints."""
         model = self.robot.model
         configuration = apply_configuration(self.robot, self.robot.q0)
-        v_max, v_min = compute_velocity_limits(configuration, dt)
+        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
         self.assertEqual(v_max.shape, (model.bounded_tangent.dim,))
         self.assertEqual(v_min.shape, (model.bounded_tangent.dim,))
 
     def test_forward_velocity_limit(self):
-        """
+        """Velocity limits have no effect far from configuration limits.
+
         When we are far away from configuration limits, the velocity limit is
         simply the configuration-agnostic one from the robot.
         """
-        dt = 1e-3  # [s]
         configuration = apply_configuration(self.robot, self.robot.q0)
-        v_max, v_min = compute_velocity_limits(configuration, dt)
+        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
         v_lim = configuration.model.bounded_tangent.velocity_limit
         tol = 1e-10
         self.assertLess(np.max(v_max - v_lim), tol)
         self.assertLess(np.max(-v_lim - v_min), tol)
 
     def test_configuration_limit_repulsion(self):
-        """
-        Velocities are scaled down when close to a configuration limit.
-        """
+        """Velocities are scaled down when close to a configuration limit."""
         dt = 1e-3  # [s]
         model = self.robot.model
         configuration = apply_configuration(self.robot, self.robot.q0)
