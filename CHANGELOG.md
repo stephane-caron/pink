@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - BodyNotFound exception
 - Example: SigmaBan humanoid
+- Forward keyword arguments of ``solve_ik`` to the backend QP solver
 
 ### Changed
 
