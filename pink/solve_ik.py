@@ -140,6 +140,7 @@ def solve_ik(
     dt: float,
     solver: str,
     damping: float = 1e-12,
+    **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
 
@@ -150,12 +151,13 @@ def solve_ik(
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
         dt: Integration timestep in [s].
+        solver: Backend quadratic programming (QP) solver.
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
             :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
-        solver: Backend quadratic programming solver.
+        kwargs: Keyword arguments to forward to the backend QP solver.
 
     Returns:
         Velocity :math:`v` in tangent space.
@@ -171,7 +173,7 @@ def solve_ik(
     """
     configuration.check_limits()
     problem = build_ik(configuration, tasks, dt, damping)
-    result = qpsolvers.solve_problem(problem, solver=solver)
+    result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
     assert Delta_q is not None
     v: np.ndarray = Delta_q / dt
