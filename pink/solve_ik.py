@@ -124,8 +124,7 @@ def build_ik(
             tasks.
 
     Returns:
-        QP matrices :math:`(H, c)` for the cost and :math:`(G, h)` for linear
-        inequalities.
+        Quadratic program of the inverse kinematics problem.
     """
     configuration.check_limits()
     P, q = __compute_qp_objective(configuration, tasks, damping)
