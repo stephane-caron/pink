@@ -27,4 +27,4 @@ Then install Pink by:
 
     pip install --no-deps pin-pink
 
-Or by copying its source directory to your ``PYTHONPATH``.
+Or by copying its source directory somewhere in your ``PYTHONPATH``.

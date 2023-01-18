@@ -15,7 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Joint limits implemented as inequality constraints."""
+"""Joint limits implemented as inequality constraints.
+
+You can check out a writeup of this formulation in `this post
+<https://scaron.info/robot-locomotion/inverse-kinematics.html#inequality-constraints>`__.
+"""
 
 from typing import Optional, Tuple
 
@@ -54,12 +58,12 @@ def compute_velocity_limits(
         config_limit_gain: gain between 0 and 1 to steer away from
             configuration limits. It is described in "Real-time prioritized
             kinematic control under inequality constraints for redundant
-            manipulators" (Kanoun, 2012). More details in [this
-            writeup](https://scaron.info/teaching/inverse-kinematics.html).
+            manipulators" (Kanoun, 2012). More details in `this writeup
+            <https://scaron.info/teaching/inverse-kinematics.html>`__.
 
     Returns:
-        Pair $(v_{max}(q), v_{min}(q))$ of velocity lower and upper bounds, or
-        ``(None, None)`` if there is no velocity limit.
+        Pair :math:`(v_{max}(q), v_{min}(q))` of velocity lower and upper
+        bounds, or ``(None, None)`` if there is no velocity limit.
     """
     assert 0.0 < config_limit_gain <= 1.0
     model = configuration.model
