@@ -52,7 +52,7 @@ def spatial_minus(Y: pin.SE3, X: pin.SE3) -> np.ndarray:
         Spatial motion vector resulting from the difference :math:`\ominus_0`
         between :math:`Y` and :math:`X`.
 
-    See also:
+    Notes:
         The `micro Lie theory <https://arxiv.org/abs/1812.01537>`_ describes
         the difference between the left and right minus operators.
     """
@@ -91,7 +91,7 @@ def body_minus(Y: pin.SE3, X: pin.SE3) -> np.ndarray:
         Body motion vector resulting from the difference :math:`\ominus_0`
         between :math:`Y` and :math:`X`.
 
-    See also:
+    Notes:
         `Body motion vector
         <https://scaron.info/robotics/screw-theory.html#body-screws>`_ are also
         known as body screws in screw theory.
