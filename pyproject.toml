@@ -60,6 +60,9 @@ select = [
     # pydocstyle
     "D"
 ]
+ignore = [
+    "D401",  # good for methods but not for class docstrings
+]
 
 [tool.ruff.pydocstyle]
 convention = "google"
