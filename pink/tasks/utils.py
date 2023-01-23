@@ -28,7 +28,7 @@ def spatial_minus(Y: pin.SE3, X: pin.SE3) -> np.ndarray:
 
     .. math::
 
-        Y \ominus_s X = \log(Y \cdot X^{-1})
+        Y \ominus_0 X = \log(Y \cdot X^{-1})
 
     This operator allows us to think about orientation "differences" as
     similarly as possible to position differences, but mind the frames! If we
