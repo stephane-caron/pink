@@ -25,7 +25,7 @@ import pinocchio as pin
 from ..configuration import Configuration
 from .exceptions import TargetNotSet
 from .task import Task
-from .utils import body_box_minus
+from .utils import body_minus
 
 
 class BodyTask(Task):
