@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - BodyNotFound exception
+- Document spatial and body minus between transforms
 - Example: SigmaBan humanoid
 - Forward keyword arguments of ``solve_ik`` to the backend QP solver
 
@@ -14,6 +15,10 @@ All notable changes to this project will be documented in this file.
 
 - Return type of ``compute_velocity_limits`` now includes optionals
 - VectorSpace type is now immutable
+
+### Fixed
+
+- Sign of body task error
 
 ## [0.7.0] 2023/01/16
 
