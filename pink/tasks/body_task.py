@@ -209,16 +209,19 @@ class BodyTask(Task):
         """
         jacobian_in_body = configuration.get_body_jacobian(self.body)
 
-        transform_body_to_world = configuration.get_transform_body_to_world(
-            self.body
-        )
-        transform_body_to_target = (
-            self.transform_target_to_world.inverse() * transform_body_to_world
-        )
         bug = True
         if bug:
             J = jacobian_in_body
         else:
+            if self.transform_target_to_world is None:
+                raise TargetNotSet(f"no target set for body {self.body}")
+            transform_body_to_world = (
+                configuration.get_transform_body_to_world(self.body)
+            )
+            transform_body_to_target = (
+                self.transform_target_to_world.inverse()
+                * transform_body_to_world
+            )
             J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
 
         error_in_body = self.compute_error_in_body(configuration)
