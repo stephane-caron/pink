@@ -176,7 +176,7 @@ class BodyTask(Task):
         transform_body_to_world = configuration.get_transform_body_to_world(
             self.body
         )
-        error_in_body: np.ndarray = -body_box_minus(
+        error_in_body: np.ndarray = body_minus(
             self.transform_target_to_world,
             transform_body_to_world,
         )
