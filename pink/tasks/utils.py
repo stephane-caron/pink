@@ -92,12 +92,11 @@ def body_minus(Y: pin.SE3, X: pin.SE3) -> np.ndarray:
         between :math:`Y` and :math:`X`.
 
     Notes:
-        `Body motion vector
-        <https://scaron.info/robotics/screw-theory.html#body-screws>`_ are also
-        known as body screws in screw theory.
-
-        The `micro Lie theory <https://arxiv.org/abs/1812.01537>`_ describes
-        the difference between the left and right minus operators.
+        - `Body motion vector
+          <https://scaron.info/robotics/screw-theory.html#body-screws>`_ are
+          also known as body screws in screw theory.
+        - The `micro Lie theory <https://arxiv.org/abs/1812.01537>`_ describes
+          the difference between the left and right minus operators.
     """
     body_twist: np.ndarray = pin.log(X.actInv(Y)).vector
     return body_twist
