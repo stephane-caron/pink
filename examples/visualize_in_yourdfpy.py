@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Upkie wheeled biped bending its knees.
-"""
+"""Upkie wheeled biped bending its knees."""
 
 import numpy as np
 import pinocchio as pin
@@ -92,6 +90,7 @@ if __name__ == "__main__":
     rate = RateLimiter(frequency=visualizer_fps)
 
     def callback(scene, dz=0.05):
+        """Callback function for the visualizer."""
         global animation_time, configuration
         dt = rate.period
 

@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Upkie wheeled biped bending its knees.
-"""
+"""Upkie wheeled biped bending its knees."""
 
 import meshcat_shapes
 import numpy as np

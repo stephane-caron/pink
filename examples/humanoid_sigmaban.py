@@ -15,16 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-SigmaBan humanoid standing on two feet.
-"""
+"""SigmaBan humanoid standing on two feet."""
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask, PostureTask

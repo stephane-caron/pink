@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Kinova Gen2 arm tracking a moving target.
-"""
+"""Kinova Gen2 arm tracking a moving target."""
 
 import meshcat_shapes
 import numpy as np

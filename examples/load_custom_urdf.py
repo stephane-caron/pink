@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Load a custom URDF.
-"""
+"""Load a custom URDF."""
 
 import os
 

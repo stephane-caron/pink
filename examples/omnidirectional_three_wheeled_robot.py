@@ -15,8 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Move an omnidirectional robot between two jumping targets.
+"""Move an omnidirectional robot between two jumping targets.
 
 Illustrates the notion of screw path.
 """

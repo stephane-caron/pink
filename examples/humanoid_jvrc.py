@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-JVRC-1 humanoid standing on two feet and reaching with a hand.
-"""
+"""JVRC-1 humanoid standing on two feet and reaching with a hand."""
 
 import meshcat_shapes
 import numpy as np
@@ -39,9 +37,10 @@ except ModuleNotFoundError:
 
 
 class WavingPose:
+    """Moving target to the wave the right hand."""
+
     def __init__(self, init: pin.SE3):
-        """
-        Initialize pose.
+        """Initialize pose.
 
         Args:
             init: Initial transform from the wrist frame to the world frame.
@@ -49,6 +48,11 @@ class WavingPose:
         self.init = init
 
     def at(self, t):
+        """Get waving pose at a given time.
+
+        Args:
+            t: Time in seconds.
+        """
         T = self.init.copy()
         R = T.rotation
         R = np.dot(R, pin.utils.rpyToMatrix(0.0, 0.0, np.pi / 2))
