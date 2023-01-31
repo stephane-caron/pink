@@ -61,15 +61,12 @@ class TestJacobians(unittest.TestCase):
 
         def J(q):
             configuration = pink.apply_configuration(self.robot, q)
-            jacobian_in_body = configuration.get_body_jacobian(self.body)
-            return jacobian_in_body
+            jacobian, _ = task.compute_task_dynamics(configuration, version=3)
+            return jacobian
 
         nq = self.robot.model.nq
         nv = self.robot.model.nv
         for q_0 in self.random_q:
-            print(f"=====\n{q_0=}")
-            # configuration = pink.apply_configuration(self.robot, q_0)
-            # task.set_target_from_configuration(configuration)
             J_0 = J(q_0)
             e_0 = e(q_0)
 
@@ -79,7 +76,4 @@ class TestJacobians(unittest.TestCase):
                 e_i = np.eye(nq)[i]
                 J_finite[:, i] = (e(q_0 + h * e_i) - e_0) / h
 
-            print(f"{J_0=}")
-            print(f"{J_finite=}")
             print(np.linalg.norm(J_0 + J_finite, ord=np.inf))
-            print("")
