@@ -183,7 +183,7 @@ class BodyTask(Task):
         return error_in_body
 
     def compute_task_dynamics(
-        self, configuration: Configuration
+        self, configuration: Configuration, version: int = 3
     ) -> Tuple[np.ndarray, np.ndarray]:
         r"""Compute the task dynamics matrix and vector.
 
@@ -209,7 +209,6 @@ class BodyTask(Task):
         """
         jacobian_in_body = configuration.get_body_jacobian(self.body)
 
-        version = 3
         if version == 1:
             J = jacobian_in_body
         else:
