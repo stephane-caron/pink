@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - BodyNotFound exception
 - Document spatial and body minus between transforms
 - Example: SigmaBan humanoid
+- Example: UR3 arm
 - Forward keyword arguments of ``solve_ik`` to the backend QP solver
 
 ### Changed
