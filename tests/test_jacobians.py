@@ -48,9 +48,12 @@ class TestJacobians(unittest.TestCase):
         self.random_q = random_q
         self.robot = robot
 
-    def test_body_task(self):
+    def test_body_task(self, tol=1e-6):
         """
         Test BodyTask Jacobian matrix.
+
+        Args:
+            tol: Test tolerance.
         """
         task = BodyTask(self.body, position_cost=1.0, orientation_cost=1.0)
         task.set_target(pin.SE3.Random())
@@ -76,4 +79,4 @@ class TestJacobians(unittest.TestCase):
                 e_i = np.eye(nq)[i]
                 J_finite[:, i] = (e(q_0 + h * e_i) - e_0) / h
 
-            print(np.linalg.norm(J_0 + J_finite, ord=np.inf))
+            self.assertLess(np.linalg.norm(J_0 + J_finite, ord=np.inf), tol)
