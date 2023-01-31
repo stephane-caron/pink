@@ -182,7 +182,9 @@ class BodyTask(Task):
         )
         return error_in_body
 
-    def compute_task_dynamics(self, configuration: Configuration) -> Tuple[np.ndarray, np.ndarray]:
+    def compute_task_dynamics(
+        self, configuration: Configuration
+    ) -> Tuple[np.ndarray, np.ndarray]:
         r"""Compute the task dynamics matrix and vector.
 
         Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
