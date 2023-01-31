@@ -33,7 +33,7 @@ class TestJacobians(unittest.TestCase):
     Test task Jacobian matrices against finite differences.
     """
 
-    def setUp(self, nb_configs=1, nb_dirs=2):
+    def setUp(self, nb_configs=10, nb_dirs=2):
         np.random.seed(42)
         random_dq = 2.0 * np.random.random((nb_dirs, 6)) - 1.0
         l2norms = np.sqrt((random_dq * random_dq).sum(axis=1))
