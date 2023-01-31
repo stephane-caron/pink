@@ -182,9 +182,7 @@ class BodyTask(Task):
         )
         return error_in_body
 
-    def compute_task_dynamics(
-        self, configuration: Configuration, version: int = 3
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    def compute_task_dynamics(self, configuration: Configuration) -> Tuple[np.ndarray, np.ndarray]:
         r"""Compute the task dynamics matrix and vector.
 
         Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
@@ -208,20 +206,17 @@ class BodyTask(Task):
             both expressed in the body frame.
         """
         jacobian_in_body = configuration.get_body_jacobian(self.body)
+
         # TODO(scaron): fix sign of error and box minus
-        if version == 1:
-            J = jacobian_in_body
-        else:
-            if self.transform_target_to_world is None:
-                raise TargetNotSet(f"no target set for body {self.body}")
-            transform_body_to_world = (
-                configuration.get_transform_body_to_world(self.body)
-            )
-            transform_body_to_target = (
-                self.transform_target_to_world.inverse()
-                * transform_body_to_world
-            )
-            J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
+        if self.transform_target_to_world is None:
+            raise TargetNotSet(f"no target set for body {self.body}")
+        transform_body_to_world = configuration.get_transform_body_to_world(
+            self.body
+        )
+        transform_body_to_target = (
+            self.transform_target_to_world.inverse() * transform_body_to_world
+        )
+        J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
 
         error_in_body = self.compute_error_in_body(configuration)
         return J, self.gain * error_in_body
