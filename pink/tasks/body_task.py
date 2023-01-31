@@ -208,7 +208,7 @@ class BodyTask(Task):
             both expressed in the body frame.
         """
         jacobian_in_body = configuration.get_body_jacobian(self.body)
-
+        # TODO(scaron): fix sign of error and box minus
         if version == 1:
             J = jacobian_in_body
         else:
@@ -221,14 +221,7 @@ class BodyTask(Task):
                 self.transform_target_to_world.inverse()
                 * transform_body_to_world
             )
-            if version == 2:
-                J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
-            else:
-                transform_target_to_body = transform_body_to_target.inverse()
-                Jlog = pin.Jlog6(transform_target_to_body)
-                Adj_body_to_target = transform_body_to_target.action
-                # TODO(scaron): fix sign of error and box minus
-                J = Jlog @ Adj_body_to_target @ jacobian_in_body
+            J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
 
         error_in_body = self.compute_error_in_body(configuration)
         return J, self.gain * error_in_body
