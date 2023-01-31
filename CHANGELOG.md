@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Sign of body task error
+- Jacobian of the body task
 
 ## [0.7.0] 2023/01/16
 
