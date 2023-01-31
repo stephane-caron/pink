@@ -70,6 +70,8 @@ class TestBodyTask(unittest.TestCase):
         """Raise an exception when the target is not set."""
         task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         with self.assertRaises(TargetNotSet):
+            task.compute_error_in_body(self.configuration)
+        with self.assertRaises(TargetNotSet):
             task.compute_task_dynamics(self.configuration)
 
     def test_target_set_properly(self):
