@@ -64,7 +64,7 @@ class TestJacobians(unittest.TestCase):
 
         def J(q):
             configuration = pink.apply_configuration(self.robot, q)
-            jacobian, _ = task.compute_task_dynamics(configuration, version=3)
+            jacobian, _ = task.compute_task_dynamics(configuration)
             return jacobian
 
         nq = self.robot.model.nq
