@@ -23,15 +23,15 @@ Illustrates the notion of screw path.
 import os
 
 import numpy as np
-import pink
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
+
+import meshcat_shapes
+import pink
 from pink import solve_ik
 from pink.tasks import BodyTask
 from pink.visualization import start_meshcat_visualizer
-
-import meshcat_shapes
 
 if __name__ == "__main__":
 
@@ -59,6 +59,7 @@ if __name__ == "__main__":
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1e-5,  # [cost] / [rad]
     )
+    base_task.gain = 0.22  # slow things down
     tasks = [base_task]
 
     # Initialize tasks from the initial configuration
