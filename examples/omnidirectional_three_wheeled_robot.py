@@ -22,16 +22,16 @@ Illustrates the notion of screw path.
 
 import os
 
-import meshcat_shapes
 import numpy as np
+import pink
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
-
-import pink
 from pink import solve_ik
-from pink.tasks import BodyTask, PostureTask
+from pink.tasks import BodyTask
 from pink.visualization import start_meshcat_visualizer
+
+import meshcat_shapes
 
 if __name__ == "__main__":
 
@@ -59,16 +59,11 @@ if __name__ == "__main__":
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1e-5,  # [cost] / [rad]
     )
-    base_task.gain = 0.1
-    posture_task = PostureTask(
-        cost=1e-2,  # [cost] / [rad]
-    )
-    tasks = [base_task, posture_task]
+    tasks = [base_task]
 
     # Initialize tasks from the initial configuration
     configuration = pink.apply_configuration(robot, robot.q0)
     base_task.set_target_from_configuration(configuration)
-    posture_task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
 
     # Select QP solver
@@ -79,7 +74,7 @@ if __name__ == "__main__":
     rate = RateLimiter(frequency=100.0)
     dt = rate.period
     t = 0.0  # [s]
-    jump_period = 5.0
+    jump_period = 4.0
     while True:
         # Update task targets
         jumpy = 0.0 if (t / jump_period) % 1.0 <= 0.5 else -1.0
