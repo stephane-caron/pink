@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # You can set these variables from the command line.
-SPHINXOPTS    =
+SPHINXOPTS    = -W
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = src
 BUILDDIR      = build
