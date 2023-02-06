@@ -39,7 +39,7 @@ if __name__ == "__main__":
     urdf_path = os.path.join(
         os.path.dirname(__file__),
         "robots",
-        "omnidirectional_three_wheeled_robot.urdf",
+        "omnidirectional_wheeled_robot.urdf",
     )
     robot = pin.RobotWrapper.BuildFromURDF(
         filename=urdf_path,

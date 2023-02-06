@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 -->
-<robot name="omnidirectional_three_wheeled">
+<robot name="omnidirectional_wheeled">
 
     <material name="light_gray">
         <color rgba="0.8 0.8 0.8 1" />
