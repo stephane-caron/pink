@@ -104,3 +104,21 @@ class TestLimits(unittest.TestCase):
             np.max(v_max - self.model.bounded_tangent.velocity_limit), tol
         )
         self.assertLess(np.max(v_max - bounded_slack_vel), tol)
+
+    def test_velocity_without_configuration_limits(self, tol: float = 1e-10):
+        """Velocity limits are loaded for a model without config limits.
+
+        Args:
+            tol: Equality test tolerance.
+        """
+        dt = 1e-3  # [s]
+        sigmaban = load_robot_description("sigmaban_description")
+        configuration = apply_configuration(sigmaban, sigmaban.q0)
+        v_max, v_min = compute_velocity_limits(
+            configuration, dt, config_limit_gain=0.5
+        )
+        self.assertIsNotNone(v_max)
+        self.assertIsNotNone(v_min)
+        self.assertLess(
+            np.max(v_max - sigmaban.model.bounded_tangent.velocity_limit), tol
+        )
