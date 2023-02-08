@@ -27,9 +27,10 @@ data.
 import numpy as np
 import pinocchio as pin
 
-from .bounded_tangent import BoundedTangent
+from .configuration_limit import ConfigurationLimit
 from .exceptions import BodyNotFound, NotWithinConfigurationLimits
 from .utils import VectorSpace, get_root_joint_dim
+from .velocity_limit import VelocityLimit
 
 
 class Configuration:
@@ -89,8 +90,10 @@ class Configuration:
         """
         if not hasattr(model, "tangent"):
             model.tangent = VectorSpace(model.nv)
-        if not hasattr(model, "bounded_tangent"):
-            model.bounded_tangent = BoundedTangent(model)
+        if not hasattr(model, "configuration_limit"):
+            model.configuration_limit = ConfigurationLimit(model)
+        if not hasattr(model, "velocity_limit"):
+            model.velocity_limit = VelocityLimit(model)
         q_readonly = q.copy()
         q_readonly.setflags(write=False)
         self.data = data.copy() if copy_data else data
