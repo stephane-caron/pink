@@ -66,19 +66,55 @@ class ConfigurationLimit(VectorSpace):
         super().__init__(dim)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
 
-        self.full_nv = model.nv
         self.indices = indices
         self.joints = joints
+        self.model = model
         self.projection_matrix = projection_matrix
-        self.velocity_limit = (
-            model.velocityLimit[indices] if len(joints) > 0 else None
-        )
 
-    def project(self, v: np.ndarray) -> np.ndarray:
-        """Project a tangent vector to the bounded tangent subspace.
+    def compute_velocity_limits(
+        self,
+        model: pin.Model,
+        q: np.ndarray,
+        dt: float,
+        config_limit_gain: float = 0.5,
+    ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
+        r"""Compute the configuration-dependent velocity limits.
+
+        Those limits are defined by:
+
+        .. math::
+
+            \frac{q \ominus q_{min}}{\mathrm{d}t} \leq
+            \leq v \leq
+            \frac{q_{max} \ominus q}{\mathrm{d}t}
+
+        where :math:`q \in {\cal C}` is the robot's configuration and :math:`v
+        \in T_q({\cal C})` is the velocity in the tangent space at :math:`q`.
+        The velocity limits correspond to the time-derivatives of the
+        configuration limit :math:`q_{min} \leq q \leq q_{max}`.
 
         Args:
-            v: Vector from the original space.
+            model: Robot model.
+            q: Robot configuration.
+            dt: Integration timestep in [s].
+            config_limit_gain: gain between 0 and 1 to steer away from
+                configuration limits. It is described in "Real-time prioritized
+                kinematic control under inequality constraints for redundant
+                manipulators" (Kanoun, 2012). More details in `this writeup
+                <https://scaron.info/teaching/inverse-kinematics.html>`__.
+
+        Returns:
+            Pair :math:`(G, h)` representing the inequality constraint as
+            :math:`G \Delta q \leq h`, or ``None`` if there is no limit.
         """
-        assert v.shape == (self.full_nv,), "Dimension mismatch"
-        return v[self.indices]
+        assert 0.0 < config_limit_gain <= 1.0
+        if not self.joints:
+            return None
+
+        Delta_q_max = pin.difference(model, q, model.upperPositionLimit)
+        Delta_q_min = pin.difference(model, q, model.lowerPositionLimit)
+        Delta_q_max = config_limit_gain * Delta_q_max[self.indices]
+        Delta_q_min = config_limit_gain * Delta_q_min[self.indices]
+        G = np.vstack([self.projection_matrix, -self.projection_matrix])
+        h = np.hstack([Delta_q_max, -Delta_q_min])
+        return G, h

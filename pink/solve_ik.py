@@ -23,7 +23,6 @@ import numpy as np
 import qpsolvers
 
 from .configuration import Configuration
-from .limits import compute_velocity_limits
 from .tasks import Task
 
 
