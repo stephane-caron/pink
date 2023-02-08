@@ -24,55 +24,51 @@ import unittest
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-from pink.bounded_tangent import BoundedTangent
+from pink.configuration_limit import ConfigurationLimit
 from pink.utils import VectorSpace
 
 
-class TestBoundedTangent(unittest.TestCase):
+class TestConfigurationLimit(unittest.TestCase):
 
     """
-    Test fixture for bounded tangent subspace.
+    Test fixture for configuration limit.
     """
 
     def setUp(self):
         """
         Set test fixture up.
         """
-        model = load_robot_description(
+        robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
-        ).model
-        self.bounded_tangent = BoundedTangent(model)
+        )
+        model = robot.model
+        self.configuration_limit = ConfigurationLimit(model)
         self.model = model
         self.tangent = VectorSpace(model.nv)
 
     def test_tangent(self):
-        """
-        Check dimensions of regular tangent space.
-        """
+        """Check dimensions of regular tangent space."""
         nv = self.model.nv
         self.assertEqual(self.tangent.eye.shape, (nv, nv))
         self.assertEqual(self.tangent.ones.shape, (nv,))
         self.assertEqual(self.tangent.zeros.shape, (nv,))
 
-    def test_bounded_tangent(self):
-        """
-        Check dimensions in bounded tangent space.
-        """
-        for joint in self.bounded_tangent.joints:
+    def test_dimensions(self):
+        """Check dimensions of configuration limit projection."""
+        for joint in self.configuration_limit.joints:
             self.assertGreaterEqual(joint.idx_q, 0)
             self.assertGreaterEqual(joint.idx_v, 0)
-        nb = len(self.bounded_tangent.joints)  # those are only revolute joints
+        nb = len(
+            self.configuration_limit.joints
+        )  # those are only revolute joints
         nv = self.model.nv
-        self.assertEqual(self.bounded_tangent.dim, nb)
-        self.assertEqual(self.bounded_tangent.nv, nv)
+        self.assertEqual(self.configuration_limit.dim, nb)
         self.assertEqual(
-            self.bounded_tangent.projection_matrix.shape, (nb, nv)
+            self.configuration_limit.projection_matrix.shape, (nb, nv)
         )
 
-    def test_unbounded_tangent(self):
-        """
-        Check that unbounded models don't fail.
-        """
+    def test_model_with_no_limit(self):
+        """Check that unbounded models don't fail."""
         empty_model = pin.Model()
-        empty_bounded = BoundedTangent(empty_model)
+        empty_bounded = ConfigurationLimit(empty_model)
         self.assertEqual(empty_bounded.dim, 0)
