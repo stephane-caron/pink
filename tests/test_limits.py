@@ -120,7 +120,7 @@ class TestLimits(unittest.TestCase):
             "sigmaban_description",
             commit="d5d023fd35800d00d7647000bce8602617a4960d",
         )
-        configuration = apply_configuration(sigmaban, sigmaban.q0)
+        configuration = Configuration(sigmaban.model, sigmaban.data, sigmaban.q0)
         v_max, v_min = compute_velocity_limits(
             configuration, dt, config_limit_gain=0.5
         )

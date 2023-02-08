@@ -42,7 +42,7 @@ class TestConfigurationLimit(unittest.TestCase):
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
         model = robot.model
-        self.configuration_limit = ConfigurationLimit(model)
+        self.limit = ConfigurationLimit(model)
         self.model = model
         self.tangent = VectorSpace(model.nv)
 
@@ -55,17 +55,13 @@ class TestConfigurationLimit(unittest.TestCase):
 
     def test_dimensions(self):
         """Check dimensions of configuration limit projection."""
-        for joint in self.configuration_limit.joints:
+        for joint in self.limit.joints:
             self.assertGreaterEqual(joint.idx_q, 0)
             self.assertGreaterEqual(joint.idx_v, 0)
-        nb = len(
-            self.configuration_limit.joints
-        )  # those are only revolute joints
+        nb = len(self.limit.joints)  # those are only revolute joints
         nv = self.model.nv
-        self.assertEqual(self.configuration_limit.dim, nb)
-        self.assertEqual(
-            self.configuration_limit.projection_matrix.shape, (nb, nv)
-        )
+        self.assertEqual(self.limit.dim, nb)
+        self.assertEqual(self.limit.projection_matrix.shape, (nb, nv))
 
     def test_model_with_no_limit(self):
         """Check that unbounded models don't fail."""
