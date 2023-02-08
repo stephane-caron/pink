@@ -6,5 +6,11 @@
 Joint limits
 ************
 
-.. automodule:: pink.limits
+.. automodule:: pink.configuration_limit
+   :members:
+
+.. automodule:: pink.velocity_limit
+   :members:
+
+.. automodule:: pink.compute_velocity_limits
     :members:
