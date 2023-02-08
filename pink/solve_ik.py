@@ -63,31 +63,40 @@ def __compute_qp_objective(
 
 
 def __compute_qp_inequalities(
-    configuration, dt
+    configuration,
+    dt: float,
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
-    """Compute inequality constraints for the quadratic program.
+    r"""Compute inequality constraints for the quadratic program.
 
     Args:
         configuration: Robot configuration to read kinematics from.
         dt: Integration timestep in [s].
 
     Returns:
-        Pair :math:`(G, h)` of inequality matrix and vector.
+        Pair :math:`(G, h)` of inequality matrix and vector representing the
+        inequality :math:`G \Delta q \leq h`, or ``(None, None)`` if there is
+        no inequality.
 
     Notes:
         We trim comparisons to infinity (equivalently: big floats) because some
         solvers don't support it. See for instance
         https://github.com/tasts-robots/pink/issues/10.
     """
-    v_max, v_min = compute_velocity_limits(configuration, dt)
-    if v_max is None or v_min is None:
-        return None, None
+    configuration_limit = configuration.model.configuration_limit
+    velocity_limit = configuration.model.velocity_limit
+    model = configuration.model
+    q = configuration.q
 
-    bounded_tangent = configuration.model.bounded_tangent
-    bounded_proj = bounded_tangent.projection_matrix
-    G = np.vstack([bounded_proj, -bounded_proj])
-    h = np.hstack([dt * v_max, -dt * v_min])
-    return G, h
+    G_list = []
+    h_list = []
+    for limit in (configuration_limit, velocity_limit):
+        matvec = limit.compute_velocity_limits(model, q, dt)
+        if matvec is not None:
+            G_list.append(matvec[0])
+            h_list.append(matvec[1])
+    if not G_list:
+        return None, None
+    return np.vstack(G_list), np.hstack(h_list)
 
 
 def build_ik(
