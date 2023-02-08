@@ -18,7 +18,7 @@
 
 """Subset of bounded joints associated with a robot model."""
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import numpy as np
 import pinocchio as pin
@@ -26,20 +26,15 @@ import pinocchio as pin
 from .utils import VectorSpace
 
 
-class BoundedTangent(VectorSpace):
-    """Subspace of the tangent space restricted to bounded joints.
-
-    A bounded joint has either configuration or velocity limits.
+class ConfigurationLimit(VectorSpace):
+    """Subspace of the tangent space restricted to joints with position limits.
 
     Attributes:
-        full_nv: Dimension of the full tangent space.
     """
 
     indices: np.ndarray
     joints: list
-    full_nv: int
     projection_matrix: Optional[np.ndarray]
-    velocity_limit: Optional[np.ndarray]
 
     def __init__(self, model: pin.Model):
         """Initialize bounded tangent of a model.
@@ -51,7 +46,6 @@ class BoundedTangent(VectorSpace):
             model.upperPositionLimit < 1e20,
             model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
         )
-        has_velocity_limit = model.velocityLimit < 1e100
 
         joints = [
             joint
@@ -60,12 +54,7 @@ class BoundedTangent(VectorSpace):
             and has_configuration_limit[
                 slice(joint.idx_q, joint.idx_q + joint.nq)
             ].all()
-            or has_velocity_limit[
-                slice(joint.idx_v, joint.idx_v + joint.nv)
-            ].all()
         ]
-        print(f"{joints=}")
-        print(f"{model.velocityLimit=}")
 
         index_list: List[int] = []
         for joint in joints:
