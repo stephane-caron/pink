@@ -29,29 +29,29 @@ from .utils import VectorSpace
 class BoundedTangent(VectorSpace):
     """Subspace of the tangent space restricted to bounded joints.
 
+    A bounded joint has either configuration or velocity limits.
+
     Attributes:
-        nv: Dimension of the full tangent space.
+        full_nv: Dimension of the full tangent space.
     """
 
     indices: np.ndarray
     joints: list
-    nv: int
+    full_nv: int
     projection_matrix: Optional[np.ndarray]
     velocity_limit: Optional[np.ndarray]
 
     def __init__(self, model: pin.Model):
-        """Bounded joints in a robot model.
+        """Initialize bounded tangent of a model.
 
         Args:
             model: robot model.
-
-        Returns:
-            List of bounded joints.
         """
         has_configuration_limit = np.logical_and(
             model.upperPositionLimit < 1e20,
             model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
         )
+        has_velocity_limit = model.velocityLimit < 1e100
 
         joints = [
             joint
@@ -60,7 +60,12 @@ class BoundedTangent(VectorSpace):
             and has_configuration_limit[
                 slice(joint.idx_q, joint.idx_q + joint.nq)
             ].all()
+            or has_velocity_limit[
+                slice(joint.idx_v, joint.idx_v + joint.nv)
+            ].all()
         ]
+        print(f"{joints=}")
+        print(f"{model.velocityLimit=}")
 
         index_list: List[int] = []
         for joint in joints:
@@ -72,9 +77,9 @@ class BoundedTangent(VectorSpace):
         super().__init__(dim)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
 
+        self.full_nv = model.nv
         self.indices = indices
         self.joints = joints
-        self.nv = model.nv
         self.projection_matrix = projection_matrix
         self.velocity_limit = (
             model.velocityLimit[indices] if len(joints) > 0 else None
@@ -86,5 +91,5 @@ class BoundedTangent(VectorSpace):
         Args:
             v: Vector from the original space.
         """
-        assert v.shape == (self.nv,), "Dimension mismatch"
+        assert v.shape == (self.full_nv,), "Dimension mismatch"
         return v[self.indices]
