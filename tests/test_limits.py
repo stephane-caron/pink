@@ -110,9 +110,16 @@ class TestLimits(unittest.TestCase):
 
         Args:
             tol: Equality test tolerance.
+
+        Note:
+            The loaded robot description is commit-pinned to make sure we load
+            a URDF without configuration limits.
         """
         dt = 1e-3  # [s]
-        sigmaban = load_robot_description("sigmaban_description")
+        sigmaban = load_robot_description(
+            "sigmaban_description",
+            commit="d5d023fd35800d00d7647000bce8602617a4960d",
+        )
         configuration = apply_configuration(sigmaban, sigmaban.q0)
         v_max, v_min = compute_velocity_limits(
             configuration, dt, config_limit_gain=0.5
