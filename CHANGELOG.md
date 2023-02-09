@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [0.8.0] - 2023/02/09
 
 ### Added
 
@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 
 - Jacobian of the body task
 
-## [0.7.0] 2023/01/16
+## [0.7.0] - 2023/01/16
 
 ### Added
 
