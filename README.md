@@ -19,13 +19,13 @@ On Raspberry Pi, you will need to install [from source](https://tasts-robots.org
 
 ## Usage
 
-Pink solves inverse kinematics by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task is defined by a *residual* function $e(q)$ of the robot configuration $q \in \mathcal{C}$ to be driven to zero. For instance, putting a foot position $p_{foot}(q)$ at a given target $p_{foot}^{\star}$ can be described by the position residual:
+Pink solves differential inverse kinematics by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task is defined by a *residual* function $e(q)$ of the robot configuration $q \in \mathcal{C}$ to be driven to zero. For instance, putting a foot position $p_{foot}(q)$ at a given target $p_{foot}^{\star}$ can be described by the position residual:
 
 $$
 e(q) = p_{foot}^{\star} - p_{foot}(q)
 $$
 
-In inverse kinematics, we compute a velocity $v \in \mathfrak{c}$ that satisfies the first-order differential equation:
+In differential inverse kinematics, we compute a velocity $v \in \mathfrak{c}$ that satisfies the first-order differential equation:
 
 $$
 J_e(q) v = \dot{e}(q) = -\alpha e(q)
@@ -44,7 +44,7 @@ Pink provides an API to describe the problem as tasks with targets, and automati
 
 ### Task costs
 
-Here is the example of a biped robot that controls the position and orientation of its base, left-contact and right-contact frames. A fourth "posture" task, giving a desired angle for each joint, is added for regularization:
+Here is the example of a biped robot that controls the position and orientation of its base, left and right contact frames. A fourth "posture" task, giving a preferred angle for each joint, is added for regularization:
 
 ```python
 from pink.tasks import BodyTask, PostureTask
@@ -71,11 +71,11 @@ tasks = {
 }
 ```
 
-Orientation (similarly position) costs, which can be scalars or 3D vectors, specify how much each radian of angular error "costs" in the overall normalized objective. When using 3D vectors, components are weighted anisotropically along each axis of the body frame.
+Orientation (similarly position) costs can be scalars or 3D vectors. They specify how much each radian of angular error "costs" in the overall normalized objective. When using 3D vectors, components are weighted anisotropically along each axis of the body frame.
 
 ### Task targets
 
-Aside from their costs, most tasks take a second set of parameters called *targets*, for example a target transform for a body task or a target configuration vector for a posture task. Targets are set by the `set_target` function:
+Aside from their costs, most tasks take a second set of parameters called *target*. For example, a body task aims for a target transform, while a posture task aims for a target configuration vector. Targets are set by the `set_target` function:
 
 ```python
     tasks["posture"].set_target(
@@ -98,11 +98,11 @@ for body, task in tasks.items():
         task.set_target(configuration.get_transform_body_to_world(body))
 ```
 
-Once a task has its cost and (if applicable) target defined, it can be used to solve inverse kinematics.
+A task can be added to the inverse kinematics once both its cost and target (if applicable) are defined.
 
 ### Differential inverse kinematics
 
-Pink solves differential inverse kinematics, meaning it outputs a velocity that steers the robot model towards a configuration that achieves all tasks at best. If we keep integrating that velocity, and task targets don't change in the meantime, we will converge to that configuration:
+Pink solves differential inverse kinematics, meaning it outputs a velocity that steers the robot towards achieving all tasks at best. If we keep integrating that velocity, and task targets don't change over time, we will converge to a stationary configuration:
 
 ```python
 dt = 6e-3  # [s]
@@ -113,7 +113,7 @@ for t in np.arange(0.0, 42.0, dt):
     time.sleep(dt)
 ```
 
-If task targets are continuously updated there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) takes into account both joint position and velocity limits read from the robot model.
+If task targets are continuously updated, there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) will take care of both configuration and velocity limits read from the robot model.
 
 ## Examples
 
