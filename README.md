@@ -19,13 +19,21 @@ On Raspberry Pi, you will need to install [from source](https://tasts-robots.org
 
 ## Usage
 
-Pink does inverse kinematics by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task is defined by an objective function $T(q)$ of the robot configuration $q$ to be minimized. For instance, putting a foot position $p_{foot}(q)$ at a given target $p_{foot}^{\star}$ can be described by the objective function:
+Pink solves inverse kinematics by [weighted tasks](https://scaron.info/robot-locomotion/inverse-kinematics.html). A task is defined by a *residual* function $e(q)$ of the robot configuration $q \in \mathcal{C}$ to be driven to zero. For instance, putting a foot position $p_{foot}(q)$ at a given target $p_{foot}^{\star}$ can be described by the position residual:
 
 $$
-T_{foot}(q, p_{foot}^{\star}) = \Vert p_{foot}^{\star} - p_{foot}(q) \Vert^2
+e(q) = p_{foot}^{\star} - p_{foot}(q)
 $$
 
-We can define multiple tasks, but some of them will come into conflict if they can't be all fully achieved at the same time. Conflicts are resolved by casting all objectives to the same unit, and weighing these normalized objectives relative to each other.
+In inverse kinematics, we compute a velocity $v \in \mathfrak{c}$ that satisfies the first-order differential equation:
+
+$$
+J_e(q) v = \dot{e}(q) = -\alpha e(q)
+$$
+
+where $J\_e(q) := \frac{\partial e}{\partial q}$ is the [task Jacobian](https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html).
+
+We can define multiple tasks, but some of them will come into conflict if they can't be all fully achieved at the same time. Conflicts are resolved by casting all objectives to a common unit, and weighing these normalized objectives relative to each other.
 
 ### Task costs
 
