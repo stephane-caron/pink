@@ -31,19 +31,12 @@ $$
 J_e(q) v = \dot{e}(q) = -\alpha e(q)
 $$
 
-where $J\_e(q) := \frac{\partial e}{\partial q}$ is the [task Jacobian](https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html). We can define multiple tasks, but some of them will come into conflict if they can't be all fully achieved at the same time. Conflicts are resolved by casting all objectives to a common unit, and weighing these normalized objectives relative to each other:
-
-$$
-\underset{v}{\text{minimize}} \sum_{\text{task } e} \Vert J_e(q) v + \alpha e(q) \Vert^2_{W_e}
-$$
-
-Finally, we include configuration and velocity limits, making our problem a quadratic program:
+where $J\_e(q) := \frac{\partial e}{\partial q}$ is the [task Jacobian](https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html). We can define multiple tasks, but some of them will come into conflict if they can't be all fully achieved at the same time. Conflicts are resolved by casting all objectives to a common unit, and weighing these normalized objectives relative to each other. We also include configuration and velocity limits, making our overall optimization problem a quadratic program:
 
 $$
 \begin{align}
-\underset{v}{\text{minimize}} & \sum_{\text{task } e} \Vert J_e(q) v + \alpha e(q) \Vert^2_{W_e} \\
-\text{subject to}
-    & v_{\text{min}}(q) \leq v \leq v_{\text{max}}(q)
+\underset{v \in \mathfrak{c}}{\text{minimize}} \ & \sum_{\text{task } e} \Vert J_e(q) v + \alpha e(q) \Vert^2_{W_e} \\
+\text{subject to} \ & v_{\text{min}}(q) \leq v \leq v_{\text{max}}(q)
 \end{align}
 $$
 
