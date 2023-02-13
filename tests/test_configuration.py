@@ -26,11 +26,12 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
+from pink import Configuration
 from pink.exceptions import BodyNotFound, NotWithinConfigurationLimits
 
 
 class TestConfiguration(unittest.TestCase):
-    def test_assume_configuration(self):
+    def test_assume(self):
         """
         Assuming a configuration does not change data.
         """
@@ -38,7 +39,7 @@ class TestConfiguration(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         robot.data.J.fill(42.0)
-        configuration = pink.assume_configuration(robot, robot.q0)
+        configuration = Configuration.assume(robot, robot.q0)
         self.assertTrue(np.allclose(configuration.data.J, 42.0))
 
     def test_apply_configuration(self):

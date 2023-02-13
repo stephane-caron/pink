@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- Rename ``assume_configuration`` to ``Configuration.assume``
+
 ## [0.8.0] - 2023/02/09
 
 ### Added

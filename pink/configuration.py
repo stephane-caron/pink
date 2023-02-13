@@ -85,6 +85,19 @@ class Configuration:
         self.q = q_readonly
         self.tangent = model.tangent
 
+    @staticmethod
+    def assume(robot: pin.RobotWrapper, q: np.ndarray):
+        """Assume that the provided robot wrapper has already been configured.
+
+        Args:
+            robot: Robot wrapper with its initial data.
+            q: Configuration matching the robot wrapper's data.
+
+        Returns:
+            Robot configuration.
+        """
+        return Configuration(robot.model, robot.data, q)
+
     def check_limits(self, tol: float = 1e-6) -> None:
         """Check that the current configuration is within limits.
 
@@ -174,21 +187,6 @@ class Configuration:
             New configuration vector after integration.
         """
         return pin.integrate(self.model, self.q, velocity * dt)
-
-
-def assume_configuration(
-    robot: pin.RobotWrapper, q: np.ndarray
-) -> Configuration:
-    """Assume that the provided robot wrapper has already been configured.
-
-    Args:
-        robot: Robot wrapper with its initial data.
-        q: Configuration matching the robot wrapper's data.
-
-    Returns:
-        Robot configuration.
-    """
-    return Configuration(robot.model, robot.data, q)
 
 
 def apply_configuration(
