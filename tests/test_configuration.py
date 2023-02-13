@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test the Configuration type.
-"""
+"""Test the Configuration type."""
 
 import unittest
 
@@ -390,9 +388,7 @@ class TestConfiguration(unittest.TestCase):
         self.assertTrue(np.allclose(robot.data.J, 12.0))
 
     def test_transform_found(self):
-        """
-        Return the pose of an existing robot body.
-        """
+        """Return the pose of an existing robot body."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -408,9 +404,7 @@ class TestConfiguration(unittest.TestCase):
         )
 
     def test_transform_not_found(self):
-        """
-        Raise an error when the request robot body is not found.
-        """
+        """Raise an error when the request robot body is not found."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -419,9 +413,7 @@ class TestConfiguration(unittest.TestCase):
             configuration.get_transform_body_to_world("foo")
 
     def test_check_limits(self):
-        """
-        Raise an error if and only if a joint limit is exceened.
-        """
+        """Raise an error if and only if a joint limit is exceened."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -434,9 +426,7 @@ class TestConfiguration(unittest.TestCase):
             configuration.check_limits()
 
     def test_q_is_a_read_only_copy(self):
-        """
-        The `q` attribute of a configuration is a read-only copy.
-        """
+        """The `q` attribute of a configuration is a read-only copy."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -450,9 +440,7 @@ class TestConfiguration(unittest.TestCase):
             configuration.q[2] += 3.0  # read-only
 
     def test_tangent_eye(self):
-        """
-        Configuration's tangent eye is an identity matrix.
-        """
+        """Configuration's tangent eye is an identity matrix."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -461,9 +449,7 @@ class TestConfiguration(unittest.TestCase):
         self.assertTrue(np.allclose(configuration.tangent.eye.dot(v), v))
 
     def test_tangent_ones(self):
-        """
-        Configuration's tangent ones is a vector of 1.0's.
-        """
+        """Configuration's tangent ones is a vector of 1.0's."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -471,9 +457,7 @@ class TestConfiguration(unittest.TestCase):
         self.assertEqual(np.sum(configuration.tangent.ones), robot.model.nv)
 
     def test_tangent_zeros(self):
-        """
-        Configuration's tangent ones is a vector of 0.0's.
-        """
+        """Configuration's tangent ones is a vector of 0.0's."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
