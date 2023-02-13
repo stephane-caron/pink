@@ -473,3 +473,10 @@ class TestConfiguration(unittest.TestCase):
         configuration = Configuration(robot.model, robot.data, robot.q0)
         with self.assertRaises(BodyNotFound):
             configuration.get_body_jacobian("does_not_exist")
+
+    def test_get_integrate_inplace(self):
+        robot = load_robot_description("sigmaban_description", root_joint=None)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+        velocity = robot.model.tangent.ones
+        configuration.integrate_inplace(velocity, dt=1e-3)
+        self.assertGreater(np.linalg.norm(configuration.q - robot.q0), 2e-3)
