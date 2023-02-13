@@ -53,26 +53,39 @@ class Configuration:
         copy constructor. TODO(scaron): bring it up upstream.
 
     Attributes:
-        data: Data with kinematics matching the configuration vector
-            :data:`Configuration.q`.
+        data: Data corresponding to :data:`Configuration.model`.
         model: Kinodynamic model.
-        q: Configuration vector matching the kinematics in
-            :data:`Configuration.data`.
+        q: Configuration vector for the robot model.
     """
 
     data: pin.Data
     model: pin.Model
     q: np.ndarray
 
-    def __init__(self, model: pin.Model, data: pin.Data, q: np.ndarray):
+    def __init__(
+        self,
+        model: pin.Model,
+        data: pin.Data,
+        q: np.ndarray,
+        copy_data=True,
+        forward_kinematics=True,
+    ):
         """Initialize configuration.
 
         Args:
             model: Kinodynamic model.
-            data: Data with kinematics matching the configuration vector
-                :data:`Configuration.q`.
-            q: Configuration vector matching the kinematics in
-                :data:`Configuration.data`.
+            data: Data corresponding to the model.
+            q: Configuration vector.
+            copy_data: If true (default), work on an internal copy of the input
+                data. Otherwise, work on the input data directly.
+            forward_kinematics: If true (default), compute forward kinematics
+                from the q into the internal data.
+
+        Notes:
+            Configurations copy data and run forward kinematics by default so
+            that they are less error-prone for newcomers. You can avoid copies
+            or forward kinematics (e.g. if it is already computed by the
+            caller) using constructor parameters.
         """
         if not hasattr(model, "tangent"):
             model.tangent = VectorSpace(model.nv)
@@ -80,23 +93,18 @@ class Configuration:
             model.bounded_tangent = BoundedTangent(model)
         q_readonly = q.copy()
         q_readonly.setflags(write=False)
-        self.data = data
+        self.data = data.copy() if copy_data else data
         self.model = model
         self.q = q_readonly
         self.tangent = model.tangent
+        #
+        if forward_kinematics:
+            self.update()
 
-    @staticmethod
-    def assume(robot: pin.RobotWrapper, q: np.ndarray):
-        """Assume that the provided robot wrapper has already been configured.
-
-        Args:
-            robot: Robot wrapper with its initial data.
-            q: Configuration matching the robot wrapper's data.
-
-        Returns:
-            Robot configuration.
-        """
-        return Configuration(robot.model, robot.data, q)
+    def update(self) -> None:
+        """Run forward kinematics from the configuration."""
+        pin.computeJointJacobians(self.model, self.data, self.q)
+        pin.updateFramePlacements(self.model, self.data)
 
     def check_limits(self, tol: float = 1e-6) -> None:
         """Check that the current configuration is within limits.
@@ -188,19 +196,12 @@ class Configuration:
         """
         return pin.integrate(self.model, self.q, velocity * dt)
 
+    def integrate_inplace(self, velocity, dt) -> None:
+        """Integrate a velocity starting from the current configuration.
 
-def apply_configuration(
-    robot: pin.RobotWrapper, q: np.ndarray
-) -> Configuration:
-    """Apply configuration (forward kinematics) to a robot wrapper.
-
-    Args:
-        robot: Robot wrapper with its initial data.
-        q: Configuration vector to apply.
-
-    Returns:
-        Configured robot.
-    """
-    pin.computeJointJacobians(robot.model, robot.data, q)
-    pin.updateFramePlacements(robot.model, robot.data)
-    return Configuration(robot.model, robot.data, q)
+        Args:
+            velocity: Velocity in tangent space.
+            dt: Integration duration in [s].
+        """
+        self.q = pin.integrate(self.model, self.q, velocity * dt)
+        self.update()

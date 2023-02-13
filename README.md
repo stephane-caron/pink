@@ -92,7 +92,7 @@ import pink
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 robot = load_robot_description("upkie_description")
-configuration = pink.apply_configuration(robot, robot.q0)
+configuration = pink.Configuration(robot.model, robot.data, robot.q0)
 for body, task in tasks.items():
     if type(task) is BodyTask:
         task.set_target(configuration.get_transform_body_to_world(body))
@@ -108,8 +108,7 @@ Pink solves differential inverse kinematics, meaning it outputs a velocity that 
 dt = 6e-3  # [s]
 for t in np.arange(0.0, 42.0, dt):
     velocity = solve_ik(configuration, tasks.values(), dt, solver="quadprog")
-    q = configuration.integrate(velocity, dt)
-    configuration = pink.apply_configuration(robot, q)
+    configuration.integrate_inplace(velocity, dt)
     time.sleep(dt)
 ```
 
