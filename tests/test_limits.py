@@ -25,23 +25,25 @@ import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-from pink import apply_configuration
+from pink import Configuration
 from pink.limits import compute_velocity_limits
 
 
 class TestLimits(unittest.TestCase):
     def setUp(self):
-        self.robot = load_robot_description(
+        robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
+        self.data = robot.data
+        self.model = robot.model
+        self.robot = robot
 
     def test_limit_dimension(self):
         """Velocity limit dimension is the number of bounded joints."""
-        model = self.robot.model
-        configuration = apply_configuration(self.robot, self.robot.q0)
+        configuration = Configuration(self.model, self.data, self.robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
-        self.assertEqual(v_max.shape, (model.bounded_tangent.dim,))
-        self.assertEqual(v_min.shape, (model.bounded_tangent.dim,))
+        self.assertEqual(v_max.shape, (self.model.bounded_tangent.dim,))
+        self.assertEqual(v_min.shape, (self.model.bounded_tangent.dim,))
 
     def test_model_with_no_joint_limit(self):
         """Model with no joint limit has no velocity-limit vector."""
@@ -50,7 +52,7 @@ class TestLimits(unittest.TestCase):
             0, pin.JointModelSpherical(), pin.SE3.Identity(), "spherical"
         )
         robot = pin.RobotWrapper(model=model)
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
         self.assertIsNone(v_max)
         self.assertIsNone(v_min)
@@ -69,7 +71,7 @@ class TestLimits(unittest.TestCase):
             max_config=np.array([0.0]),
         )
         robot = pin.RobotWrapper(model=model)
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
         self.assertIsNone(v_max)
         self.assertIsNone(v_min)
@@ -80,7 +82,7 @@ class TestLimits(unittest.TestCase):
         When we are far away from configuration limits, the velocity limit is
         simply the configuration-agnostic one from the robot.
         """
-        configuration = apply_configuration(self.robot, self.robot.q0)
+        configuration = Configuration(self.model, self.data, self.robot.q0)
         v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
         v_lim = configuration.model.bounded_tangent.velocity_limit
         tol = 1e-10
@@ -90,16 +92,15 @@ class TestLimits(unittest.TestCase):
     def test_configuration_limit_repulsion(self):
         """Velocities are scaled down when close to a configuration limit."""
         dt = 1e-3  # [s]
-        model = self.robot.model
-        configuration = apply_configuration(self.robot, self.robot.q0)
+        configuration = Configuration(self.model, self.data, self.robot.q0)
         slack_vel = 5.5e-4 * configuration.tangent.ones
-        bounded_slack_vel = slack_vel[model.bounded_tangent.indices]
-        model.upperPositionLimit = configuration.integrate(slack_vel, dt)
+        bounded_slack_vel = slack_vel[self.model.bounded_tangent.indices]
+        self.model.upperPositionLimit = configuration.integrate(slack_vel, dt)
         v_max, v_min = compute_velocity_limits(
             configuration, dt, config_limit_gain=0.5
         )
         tol = 1e-10
         self.assertLess(
-            np.max(v_max - model.bounded_tangent.velocity_limit), tol
+            np.max(v_max - self.model.bounded_tangent.velocity_limit), tol
         )
         self.assertLess(np.max(v_max - bounded_slack_vel), tol)

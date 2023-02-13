@@ -25,8 +25,7 @@ import qpsolvers
 from numpy.linalg import norm
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-import pink
-from pink import apply_configuration, build_ik, solve_ik
+from pink import Configuration, build_ik, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
 from pink.tasks import BodyTask
 
@@ -42,7 +41,7 @@ class TestSolveIK(unittest.TestCase):
         )
         q = robot.q0
         q[7] = 20  # above limit for Upkie's first joint
-        configuration = pink.apply_configuration(robot, q)
+        configuration = Configuration(robot.model, robot.data, q)
         with self.assertRaises(NotWithinConfigurationLimits):
             solve_ik(configuration, [], dt=1.0, solver="quadprog")
 
@@ -53,7 +52,7 @@ class TestSolveIK(unittest.TestCase):
             0, pin.JointModelSpherical(), pin.SE3.Identity(), "spherical"
         )
         robot = pin.RobotWrapper(model=model)
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         problem = build_ik(configuration, [], dt=1.0)
         self.assertIsNone(problem.G)
         self.assertIsNone(problem.h)
@@ -63,7 +62,7 @@ class TestSolveIK(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         tasks = []
         v = solve_ik(configuration, tasks, dt=1e-3, solver="quadprog")
         self.assertTrue(np.allclose(v, np.zeros(robot.nv)))
@@ -73,7 +72,7 @@ class TestSolveIK(unittest.TestCase):
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
@@ -88,7 +87,7 @@ class TestSolveIK(unittest.TestCase):
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         task = BodyTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
@@ -125,7 +124,7 @@ class TestSolveIK(unittest.TestCase):
             self.assertLess(error, last_error)  # error stictly decreases
             last_error = error
             q = configuration.integrate(velocity, dt)
-            configuration = apply_configuration(robot, q)
+            configuration = Configuration(robot.model, robot.data, q)
             velocity = solve_ik(configuration, [task], dt, solver="quadprog")
 
         # After nb_steps we are at the target and not moving
@@ -146,7 +145,7 @@ class TestSolveIK(unittest.TestCase):
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         contact_task = BodyTask(
             "right_contact", position_cost=1.0, orientation_cost=1.0
         )
@@ -183,7 +182,7 @@ class TestSolveIK(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         left_ankle_task = BodyTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
         )
@@ -213,7 +212,7 @@ class TestSolveIK(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
 
         # Define tasks
         left_ankle_task = BodyTask(
@@ -253,7 +252,7 @@ class TestSolveIK(unittest.TestCase):
             if norm(velocity) < 1e-10:
                 break
             q = configuration.integrate(velocity, dt)
-            configuration = apply_configuration(robot, q)
+            configuration = Configuration(robot.model, robot.data, q)
         self.assertLess(nb_iter, 42)
         self.assertLess(norm(velocity), 1e-10)
         self.assertLess(
@@ -269,7 +268,7 @@ class TestSolveIK(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         left_ankle_task = BodyTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
         )

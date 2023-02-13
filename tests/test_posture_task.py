@@ -23,7 +23,7 @@ import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-import pink
+from pink import Configuration
 from pink.tasks import PostureTask, TargetNotSet
 
 
@@ -40,7 +40,7 @@ class TestPostureTask(unittest.TestCase):
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
-        self.configuration = pink.apply_configuration(robot, robot.q0)
+        self.configuration = Configuration(robot.model, robot.data, robot.q0)
 
     def test_task_repr(self):
         """String representation reports the task gain, costs and target."""

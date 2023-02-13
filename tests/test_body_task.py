@@ -24,7 +24,7 @@ import pinocchio as pin
 from qpsolvers import solve_qp
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-import pink
+from pink import Configuration
 from pink.tasks import BodyTask, TargetNotSet
 
 
@@ -43,7 +43,7 @@ class TestBodyTask(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        self.configuration = pink.apply_configuration(robot, robot.q0)
+        self.configuration = Configuration(robot.model, robot.data, robot.q0)
 
     def test_set_target_from_configuration(self):
         task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)

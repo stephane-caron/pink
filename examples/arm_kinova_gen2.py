@@ -53,10 +53,13 @@ if __name__ == "__main__":
 
     tasks = [end_effector_task, posture_task]
 
-    q = custom_configuration_vector(
-        robot, j2s6s200_joint_2=1.0, j2s6s200_joint_3=1.0, j2s6s200_joint_5=1.0
+    q_ref = custom_configuration_vector(
+        robot,
+        j2s6s200_joint_2=1.0,
+        j2s6s200_joint_3=1.0,
+        j2s6s200_joint_5=1.0,
     )
-    configuration = pink.apply_configuration(robot, q)
+    configuration = pink.Configuration(robot.model, robot.data, q_ref)
     for task in tasks:
         task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
@@ -89,10 +92,9 @@ if __name__ == "__main__":
 
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks, dt, solver=solver)
-        q = configuration.integrate(velocity, dt)
-        configuration = pink.apply_configuration(robot, q)
+        configuration.integrate_inplace(velocity, dt)
 
         # Visualize result at fixed FPS
-        viz.display(q)
+        viz.display(configuration.q)
         rate.sleep()
         t += dt

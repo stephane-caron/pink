@@ -13,8 +13,7 @@ instance how it appears in a closed-loop inverse kinematics:
     while True:
         # [...] <- update task targets here
         velocity = solve_ik(configuration, tasks, rate.dt, solver=solver)
-        q = configuration.integrate(velocity, rate.dt)
-        configuration = pink.apply_configuration(robot, q)
+        configuration.integrate_inplace(velocity, rate.dt)
         rate.sleep()
 
 See the ``examples/`` folder in the repository for complete use cases.

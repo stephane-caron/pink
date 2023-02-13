@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Rename ``assume_configuration`` to ``Configuration.assume``
+- Refactor ``assume_configuration`` into ``Configuration`` constructor
+- Refactor ``apply_configuration`` into ``Configuration`` constructor
 
 ## [0.8.0] - 2023/02/09
 

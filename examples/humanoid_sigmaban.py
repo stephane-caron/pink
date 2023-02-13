@@ -47,7 +47,7 @@ if __name__ == "__main__":
     viz.initViewer(open=True)
     viz.loadViewerModel()
 
-    configuration = pink.apply_configuration(robot, robot.q0)
+    configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     viz.display(configuration.q)
     viewer = viz.viewer
 
@@ -118,10 +118,9 @@ if __name__ == "__main__":
     while True:
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks, dt, solver=solver)
-        q = configuration.integrate(velocity, dt)
-        configuration = pink.apply_configuration(robot, q)
+        configuration.integrate_inplace(velocity, dt)
 
         # Visualize result at fixed FPS
-        viz.display(q)
+        viz.display(configuration.q)
         rate.sleep()
         t += dt

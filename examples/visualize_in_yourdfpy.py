@@ -64,7 +64,7 @@ if __name__ == "__main__":
         ),
     }
 
-    configuration = pink.apply_configuration(robot, robot.q0)
+    configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     for body, task in tasks.items():
         if type(task) is BodyTask:
             task.set_target_from_configuration(configuration)
@@ -103,8 +103,7 @@ if __name__ == "__main__":
 
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks.values(), dt, solver=solver)
-        q = configuration.integrate(velocity, dt)
-        configuration = pink.apply_configuration(robot, q)
+        configuration.integrate_inplace(velocity, dt)
 
         # Display resulting configuration
         actuated_joints = configuration.q[7:]

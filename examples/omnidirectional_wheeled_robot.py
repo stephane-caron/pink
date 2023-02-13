@@ -22,12 +22,12 @@ Illustrates the notion of screw path.
 
 import os
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import BodyTask
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     tasks = [base_task]
 
     # Initialize tasks from the initial configuration
-    configuration = pink.apply_configuration(robot, robot.q0)
+    configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     base_task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
 
@@ -91,10 +91,9 @@ if __name__ == "__main__":
 
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(configuration, tasks, dt, solver=solver)
-        q = configuration.integrate(velocity, dt)
-        configuration = pink.apply_configuration(robot, q)
+        configuration.integrate_inplace(velocity, dt)
 
         # Visualize result at fixed FPS
-        viz.display(q)
+        viz.display(configuration.q)
         rate.sleep()
         t += dt

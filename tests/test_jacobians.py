@@ -23,7 +23,7 @@ import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-import pink
+from pink import Configuration
 from pink.tasks import BodyTask
 
 
@@ -44,6 +44,8 @@ class TestJacobians(unittest.TestCase):
         robot = load_robot_description("ur3_description")
         self.assertEqual(robot.nq, 6)
         self.body = "ee_link"
+        self.data = robot.data
+        self.model = robot.model
         self.random_dirs = random_dirs
         self.random_q = random_q
         self.robot = robot
@@ -59,11 +61,11 @@ class TestJacobians(unittest.TestCase):
         task.set_target(pin.SE3.Random())
 
         def e(q):
-            configuration = pink.apply_configuration(self.robot, q)
+            configuration = Configuration(self.model, self.data, q)
             return task.compute_error_in_body(configuration)
 
         def J(q):
-            configuration = pink.apply_configuration(self.robot, q)
+            configuration = Configuration(self.model, self.data, q)
             jacobian, _ = task.compute_task_dynamics(configuration)
             return jacobian
 

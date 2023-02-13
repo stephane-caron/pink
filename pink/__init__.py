@@ -17,7 +17,7 @@
 
 """Python inverse kinematics for your robot model based on Pinocchio."""
 
-from .configuration import Configuration, apply_configuration
+from .configuration import Configuration
 from .solve_ik import build_ik, solve_ik
 from .tasks import Task
 from .utils import custom_configuration_vector
@@ -26,7 +26,6 @@ __version__ = "0.9.0rc0"
 
 __all__ = [
     "Configuration",
-    "apply_configuration",
     "build_ik",
     "custom_configuration_vector",
     "solve_ik",

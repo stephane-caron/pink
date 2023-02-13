@@ -25,32 +25,18 @@ import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-import pink
 from pink import Configuration
 from pink.exceptions import BodyNotFound, NotWithinConfigurationLimits
 
 
 class TestConfiguration(unittest.TestCase):
-    def test_assume(self):
-        """
-        Assuming a configuration does not change data.
-        """
+    def test_constructor(self):
+        """Constructing a configuration computes Jacobians."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         robot.data.J.fill(42.0)
-        configuration = Configuration.assume(robot, robot.q0)
-        self.assertTrue(np.allclose(configuration.data.J, 42.0))
-
-    def test_apply_configuration(self):
-        """
-        Applying a configuration computes Jacobians.
-        """
-        robot = load_robot_description(
-            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
-        )
-        robot.data.J.fill(42.0)
-        configuration = pink.apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         J_check = np.array(
             [
                 [
@@ -369,6 +355,40 @@ class TestConfiguration(unittest.TestCase):
         )
         self.assertTrue(np.allclose(configuration.data.J, J_check))
 
+    def test_copy_no_forward_kinematics(self):
+        """Refer to the input data, compute forward kinematics."""
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        robot.data.J.fill(42.0)
+        configuration = Configuration(
+            robot.model,
+            robot.data,
+            robot.q0,
+            copy_data=False,
+            forward_kinematics=True,
+        )
+        self.assertFalse(np.allclose(configuration.data.J, 42.0))
+        configuration.data.J.fill(12.0)
+        self.assertTrue(np.allclose(robot.data.J, 12.0))
+
+    def test_no_copy_no_forward_kinematics(self):
+        """Not copying means working directly on the underlying data."""
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        robot.data.J.fill(42.0)
+        configuration = Configuration(
+            robot.model,
+            robot.data,
+            robot.q0,
+            copy_data=False,
+            forward_kinematics=False,
+        )
+        self.assertTrue(np.allclose(configuration.data.J, 42.0))
+        configuration.data.J.fill(12.0)
+        self.assertTrue(np.allclose(robot.data.J, 12.0))
+
     def test_transform_found(self):
         """
         Return the pose of an existing robot body.
@@ -376,7 +396,7 @@ class TestConfiguration(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = pink.apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         transform_pelvis_to_world = configuration.get_transform_body_to_world(
             "PELVIS_S"
         )
@@ -394,7 +414,7 @@ class TestConfiguration(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = pink.apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         with self.assertRaises(KeyError):
             configuration.get_transform_body_to_world("foo")
 
@@ -406,10 +426,10 @@ class TestConfiguration(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         q = robot.q0
-        configuration = pink.apply_configuration(robot, q)
+        configuration = Configuration(robot.model, robot.data, q)
         configuration.check_limits()
         q[-10] += 1e4  # move configuration out of bounds
-        configuration = pink.apply_configuration(robot, q)
+        configuration = Configuration(robot.model, robot.data, q)
         with self.assertRaises(NotWithinConfigurationLimits):
             configuration.check_limits()
 
@@ -421,7 +441,7 @@ class TestConfiguration(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         original_q = robot.q0
-        configuration = pink.apply_configuration(robot, original_q)
+        configuration = Configuration(robot.model, robot.data, original_q)
         the_answer = 42.0
         self.assertNotEqual(configuration.q[2], the_answer)
         original_q[2] = the_answer
@@ -436,7 +456,7 @@ class TestConfiguration(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = pink.apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         v = np.array([i for i in range(robot.model.nv)])
         self.assertTrue(np.allclose(configuration.tangent.eye.dot(v), v))
 
@@ -447,7 +467,7 @@ class TestConfiguration(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = pink.apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         self.assertEqual(np.sum(configuration.tangent.ones), robot.model.nv)
 
     def test_tangent_zeros(self):
@@ -457,7 +477,7 @@ class TestConfiguration(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = pink.apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         self.assertAlmostEqual(np.sum(configuration.tangent.zeros), 0.0)
         self.assertEqual(len(configuration.tangent.zeros), robot.model.nv)
 
@@ -468,6 +488,6 @@ class TestConfiguration(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
-        configuration = pink.apply_configuration(robot, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         with self.assertRaises(BodyNotFound):
             configuration.get_body_jacobian("does_not_exist")
