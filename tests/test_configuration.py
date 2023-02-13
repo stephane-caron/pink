@@ -465,10 +465,8 @@ class TestConfiguration(unittest.TestCase):
         self.assertAlmostEqual(np.sum(configuration.tangent.zeros), 0.0)
         self.assertEqual(len(configuration.tangent.zeros), robot.model.nv)
 
-    def test_get_body_jacobian(self):
-        """
-        Querying a body that does not exist raises a ValueError.
-        """
+    def test_body_jacobian_not_found(self):
+        """Querying a body that does not exist raises a ValueError."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
