@@ -19,12 +19,16 @@
 
 from .body_task import BodyTask
 from .exceptions import TargetNotSet
+from .joint_coupling_task import JointCouplingTask
+from .linear_holonomic_task import LinearHolonomicTask
 from .posture_task import PostureTask
 from .task import Task
 
 __all__ = [
     "BodyTask",
-    "PostureTask",
     "TargetNotSet",
+    "JointCouplingTask",
+    "LinearHolonomicTask",
+    "PostureTask",
     "Task",
 ]

@@ -70,9 +70,9 @@ class TestBodyTask(unittest.TestCase):
         """Raise an exception when the target is not set."""
         task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         with self.assertRaises(TargetNotSet):
-            task.compute_error_in_body(self.configuration)
+            task.compute_error(self.configuration)
         with self.assertRaises(TargetNotSet):
-            task.compute_task_dynamics(self.configuration)
+            task.compute_jacobian(self.configuration)
 
     def test_target_set_properly(self):
         """Return target properly once it's set."""
@@ -109,7 +109,8 @@ class TestBodyTask(unittest.TestCase):
         task = BodyTask("r_ankle", position_cost=1.0, orientation_cost=0.1)
         target = self.configuration.get_transform_body_to_world("r_ankle")
         task.set_target(target)  # error == 0
-        J, e = task.compute_task_dynamics(self.configuration)
+        J = task.compute_jacobian(self.configuration)
+        e = task.compute_error(self.configuration)
         self.assertTrue(
             np.allclose(J, self.configuration.get_body_jacobian("r_ankle"))
         )
@@ -126,7 +127,8 @@ class TestBodyTask(unittest.TestCase):
             * transform_target_to_body
         )
         task.set_target(target)
-        J, e = task.compute_task_dynamics(self.configuration)
+        J = task.compute_jacobian(self.configuration)
+        e = task.compute_error(self.configuration)
         task.set_position_cost(1.0)
         task.set_orientation_cost(1.0)
         task.lm_damping = 0.0
@@ -149,7 +151,8 @@ class TestBodyTask(unittest.TestCase):
             * transform_target_to_body
         )
         task.set_target(target)
-        J, e = task.compute_task_dynamics(self.configuration)
+        J = task.compute_jacobian(self.configuration)
+        e = task.compute_error(self.configuration)
         qd = np.random.random(J.shape[1:])
         test_cases = {
             "position_only": (1.0, 0.0, slice(0, 3)),

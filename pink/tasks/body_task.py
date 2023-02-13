@@ -149,13 +149,16 @@ class BodyTask(Task):
         """
         self.set_target(configuration.get_transform_body_to_world(self.body))
 
-    def compute_error_in_body(
-        self, configuration: Configuration
-    ) -> np.ndarray:
-        r"""Compute the body twist error.
+    def compute_error(self, configuration: Configuration) -> np.ndarray:
+        r"""Compute body task error.
 
-        The body twist error is the (box minus) difference between target and
-        current body configuration:
+        Mathematically this error is a twist :math:`e(q) \in se(3)` expressed
+        in the local frame (i.e., it is a bodytwist ). We map it to
+        :math:`\mathbb{R}^6` using Pinocchio's convention (linear coordinates
+        followed by angular coordinates).
+
+        The error is the right-minus difference between target and current body
+        configuration:
 
         .. math::
 
@@ -165,11 +168,14 @@ class BodyTask(Task):
         where :math:`b` denotes the body frame, :math:`t` the target frame and
         :math:`0` the inertial frame.
 
+        See :func:`Task.compute_error` for more context, and [MLT]_ for details
+        on the right-minus operator.
+
         Args:
-            configuration: Robot configuration to read values from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
-            Coordinate vector of the body twist error.
+            Body task error :math:`e(q)`.
         """
         if self.transform_target_to_world is None:
             raise TargetNotSet(f"no target set for body {self.body}")
@@ -182,26 +188,22 @@ class BodyTask(Task):
         )
         return error_in_body
 
-    def compute_task_dynamics(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the task dynamics matrix and vector.
+    def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
+        r"""Compute the body task Jacobian.
 
-        Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
-        that the task dynamics are:
+        The task Jacobian :math:`J(q) \in \mathbb{R}^{6 \times n_v}` appears in
+        the task dynamics:
 
         .. math::
 
             J(q) \Delta q = \alpha e(q)
 
-        The Jacobian matrix is :math:`J(q) \in \mathbb{R}^{6 \times n}`,
-        with :math:`n` the dimension of the robot's tangent space, and the
-        error vector is :math:`e(q) \in \mathbb{R}^6`.
-
-        See :func:`Task.compute_task_dynamics` for more context.
+        The derivation of the formula for this Jacobian is detailed in
+        [BodyTaskJacobian2023]_. See also :func:`Task.compute_jacobian` for
+        more context on task Jacobians.
 
         Args:
-            configuration: Robot configuration to read values from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
             Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
@@ -219,9 +221,7 @@ class BodyTask(Task):
             self.transform_target_to_world.inverse() * transform_body_to_world
         )
         J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
-
-        error_in_body = self.compute_error_in_body(configuration)
-        return J, self.gain * error_in_body
+        return J
 
     def compute_qp_objective(
         self, configuration: Configuration
@@ -243,22 +243,21 @@ class BodyTask(Task):
         :math:`\Delta t` to get a commanded velocity).
 
         Args:
-            configuration: Robot configuration to read values from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
-            Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
-            objective.
+            Pair :math:`(H(q), c(q))` of Hessian matrix and linear vector of
+            the QP objective.
 
         See Also:
-            Levenberg-Marquardt damping is described in
-            "Solvability-Unconcerned Inverse Kinematics by the
-            Levenberg-Marquardt Method" (Sugihara, 2011). The dimensional
-            analysis in this class is our own.
+            Levenberg-Marquardt damping is described in [Sugihara2011]_. The
+            dimensional analysis in this class is our own.
         """
-        jacobian, error = self.compute_task_dynamics(configuration)
+        jacobian = self.compute_jacobian(configuration)
+        gain_error = self.gain * self.compute_error(configuration)
         weight = np.diag(self.cost)  # [cost] * [twist]^{-1}
         weighted_jacobian = weight @ jacobian  # [cost]
-        weighted_error = weight @ error  # [cost]
+        weighted_error = weight @ gain_error  # [cost]
         mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2
         eye_tg = configuration.tangent.eye
         # Our Levenberg-Marquardt damping `mu * eye_tg` is isotropic in the

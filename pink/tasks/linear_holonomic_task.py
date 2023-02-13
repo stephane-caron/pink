@@ -15,34 +15,59 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""All kinematic tasks derive from the :class:`Task` base class.
+"""Linear Holonomic task implementation."""
 
-The formalism used in this implementation is written down in `this note on
-task-based inverse kinematics
-<https://scaron.info/robotics/inverse-kinematics.html>`_. As of February 2022
-it hasn't been updated with the proper dimensional analysis, but the core
-concepts and notations are there.
-"""
-
-import abc
-from typing import Tuple
+from typing import Sequence, Tuple, Union
 
 import numpy as np
 
 from ..configuration import Configuration
+from .exceptions import TaskJacobianNotSet
+from .task import Task
 
 
-class Task(abc.ABC):
-    r"""Abstract base class for kinematic tasks.
+class LinearHolonomicTask(Task):
+    r"""General class for linear holonomic tasks.
 
     Attributes:
-        gain: Task gain :math:`\alpha \in [0, 1]` for additional low-pass
-            filtering. Defaults to 1.0 (no filtering) for dead-beat control.
+        A: matrix that relates the following relationship:
+
+        .. math::
+            e(q) = Aq - b
+            \dot{e}(q) := A\dot{q}
+
+        where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the task 
+            aims to derive to zero (:math:`k` is the dimension of the task).
+        cost: joint angular error cost in 
+            :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
+
+    Note:
+        A linear holonomic task is typically used for a robot 
+        that has mechanical constraint (e.g., closed loop kinematics).
+        Floating base coordinates are not affected by this task.
     """
 
-    gain: float = 1.0
+    A: np.ndarray
+    cost: Union[float, Sequence[float]]
 
-    @abc.abstractmethod
+    def __init__(
+        self, A: np.ndarray, cost: Union[float, Sequence[float]]
+    ) -> None:
+        r"""Create task.
+
+        Args:
+            A: Jacobian matrix of a linear holonomic contraint.
+            cost: joint angular error cost in
+                :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
+        """
+        if isinstance(cost, float):
+            assert A.shape[0] == 1
+        else:
+            assert A.shape[0] == len(cost)
+
+        self.A = A
+        self.cost = cost
+
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task error function.
 
@@ -69,8 +94,11 @@ class Task(abc.ABC):
         Returns:
             Task error vector :math:`e(q)`.
         """
+        if self.A is None:
+            raise TaskJacobianNotSet("no task Jacobian set")
 
-    @abc.abstractmethod
+        return np.zeros(self.A.shape[0])
+
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task Jacobian at a given configuration.
 
@@ -93,8 +121,11 @@ class Task(abc.ABC):
         Returns:
             Task Jacobian :math:`J(q)`.
         """
+        if self.A is None:
+            raise TaskJacobianNotSet("no task Jacobian set")
 
-    @abc.abstractmethod
+        return self.A
+
     def compute_qp_objective(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -105,23 +136,34 @@ class Task(abc.ABC):
 
         .. math::
 
-            \| J \Delta q - \alpha e \|_{W}^2 = \frac{1}{2} \Delta q^T H
-            \Delta q + c^T q
+            \| J \Delta q - \alpha e \|_{W}^2
+            = \frac{1}{2} \Delta q^T H \Delta q + c^T q
 
-        The weight matrix :math:`W \in \mathbb{R}^{k \times k}` weighs and
+        The weight matrix :math:`W \in \mathbb{R}^{n \times n}` weighs and
         normalizes task coordinates to the same unit. The unit of the overall
-        contribution is [cost]^2. The configuration displacement :math:`\Delta
-        q` is the output of inverse kinematics (we divide it by :math:`\Delta
-        t` to get a commanded velocity).
+        contribution is :math:`[\mathrm{cost}]^2`. The configuration
+        displacement :math:`\Delta q` is the output of inverse kinematics (we
+        divide it by :math:`\Delta t` to get a commanded velocity).
 
         Args:
-            configuration: Robot configuration :math:`q`.
+            configuration: Robot configuration.
 
         Returns:
-            Pair :math:`(H(q), c(q))` of Hessian matrix and linear vector of
-            the QP objective.
+            Pair :math:`(H)` of Hessian matrix of the QP objective.
         """
+        jacobian = self.compute_jacobian(configuration)
+        gain_error = self.gain * self.compute_error(
+            configuration
+        )  # np.zeros(k)
+        weight = (
+            self.cost if isinstance(self.cost, float) else np.diag(self.cost)
+        )
+        weighted_jacobian = np.dot(weight, jacobian)  # [cost]
+        weighted_error = np.dot(weight, gain_error)  # [cost] np.zeros(k)
+        H = weighted_jacobian.T @ weighted_jacobian
+        c = -weighted_error.T @ weighted_jacobian  # np.zeros(H.shape[0])
+        return (H, c)
 
     def __repr__(self):
         """Human-readable representation of the task."""
-        return f"Task(gain={self.gain})"
+        return f"LinearHolonomicTask(cost={self.cost}, gain={self.gain})"

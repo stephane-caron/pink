@@ -106,10 +106,7 @@ class TestSolveIK(unittest.TestCase):
 
         # Initially we are nowhere near the target and moving
         self.assertFalse(np.allclose(velocity, 0.0))
-        self.assertAlmostEqual(
-            norm(task.compute_error_in_body(configuration)),
-            0.1,
-        )
+        self.assertAlmostEqual(norm(task.compute_error(configuration)), 0.1)
         self.assertFalse(
             configuration.get_transform_body_to_world("left_contact").isApprox(
                 transform_target_to_world, prec=1e-4
@@ -118,7 +115,7 @@ class TestSolveIK(unittest.TestCase):
 
         last_error = 1e6
         for nb_steps in range(42):
-            error = norm(task.compute_error_in_body(configuration))
+            error = norm(task.compute_error(configuration))
             if error < 1e-6 and np.allclose(velocity, 0.0):
                 break
             self.assertLess(error, last_error)  # error stictly decreases
@@ -129,10 +126,7 @@ class TestSolveIK(unittest.TestCase):
 
         # After nb_steps we are at the target and not moving
         self.assertTrue(np.allclose(velocity, 0.0))
-        self.assertAlmostEqual(
-            norm(task.compute_error_in_body(configuration)),
-            0.0,
-        )
+        self.assertAlmostEqual(norm(task.compute_error(configuration)), 0.0)
         self.assertTrue(
             configuration.get_transform_body_to_world("left_contact").isApprox(
                 transform_target_to_world, prec=1e-8
@@ -257,7 +251,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertLess(norm(velocity), 1e-10)
         self.assertLess(
             max(
-                norm(task.compute_error_in_body(configuration))
+                norm(task.compute_error(configuration))
                 for task in tasks
             ),
             0.5,

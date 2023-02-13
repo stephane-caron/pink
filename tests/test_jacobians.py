@@ -62,12 +62,11 @@ class TestJacobians(unittest.TestCase):
 
         def e(q):
             configuration = Configuration(self.model, self.data, q)
-            return task.compute_error_in_body(configuration)
+            return task.compute_error(configuration)
 
         def J(q):
             configuration = Configuration(self.model, self.data, q)
-            jacobian, _ = task.compute_task_dynamics(configuration)
-            return jacobian
+            return task.compute_jacobian(configuration)
 
         nq = self.robot.model.nq
         nv = self.robot.model.nv
