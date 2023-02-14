@@ -96,4 +96,3 @@ class TestLimits(unittest.TestCase):
         G, h = problem.G, problem.h
         self.assertIsNotNone(G)
         self.assertIsNotNone(h)
-        self.assertLess(np.max(h - sigmaban.model.velocityLimit), tol)

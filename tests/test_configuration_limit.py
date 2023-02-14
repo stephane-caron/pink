@@ -105,9 +105,7 @@ class TestConfigurationLimit(unittest.TestCase):
             +slack_vel * configuration.tangent.ones, dt
         )
 
-        limit = ConfigurationLimit(robot.model)
-        G, h = limit.compute_qp_inequalities(
-            robot.model, configuration.q, dt, config_limit_gain=0.5
-        )
+        limit = ConfigurationLimit(robot.model, config_limit_gain=0.5)
+        G, h = limit.compute_qp_inequalities(configuration.q, dt)
         self.assertLess(np.max(h), slack_vel * dt + tol)
         self.assertGreater(np.min(h), -slack_vel * dt - tol)
