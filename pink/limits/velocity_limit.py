@@ -48,7 +48,10 @@ class VelocityLimit(Limit):
         Args:
             model: robot model.
         """
-        has_velocity_limit = model.velocityLimit < 1e100
+        has_velocity_limit = np.logical_and(
+            model.velocityLimit < 1e20,
+            model.velocityLimit > 1e-10,
+        )
 
         joints = [
             joint
