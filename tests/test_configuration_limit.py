@@ -19,8 +19,8 @@
 
 import unittest
 
-import pinocchio as pin
 import numpy as np
+import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
@@ -36,8 +36,10 @@ class TestConfigurationLimit(unittest.TestCase):
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
         model = robot.model
+        self.data = robot.data
         self.limit = ConfigurationLimit(model)
         self.model = model
+        self.robot = robot
 
     def test_dimensions(self):
         """Check dimensions of configuration limit projection."""

@@ -65,7 +65,6 @@ class VelocityLimit:
         dim = len(indices)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
 
-        self.dim = dim
         self.indices = indices
         self.joints = joints
         self.model = model

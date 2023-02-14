@@ -26,7 +26,6 @@ from pink.limits import VelocityLimit
 
 
 class TestVelocityLimit(unittest.TestCase):
-
     """Test fixture for velocity limit."""
 
     def setUp(self):
@@ -45,11 +44,11 @@ class TestVelocityLimit(unittest.TestCase):
             self.assertGreaterEqual(joint.idx_v, 0)
         nb = len(self.limit.joints)  # those are only revolute joints
         nv = self.model.nv
-        self.assertEqual(self.limit.dim, nb)
+        self.assertEqual(len(self.limit.indices), nb)
         self.assertEqual(self.limit.projection_matrix.shape, (nb, nv))
 
     def test_model_with_no_limit(self):
         """Check that unbounded models don't fail."""
         empty_model = pin.Model()
         empty_bounded = VelocityLimit(empty_model)
-        self.assertEqual(empty_bounded.dim, 0)
+        self.assertEqual(len(empty_bounded.indices), 0)
