@@ -34,16 +34,22 @@ class TestLimits(unittest.TestCase):
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
+        limits = [
+            ConfigurationLimit(robot.model),
+            VelocityLimit(robot.model),
+        ]
         self.data = robot.data
+        self.limits = limits
         self.model = robot.model
         self.robot = robot
 
     def test_limit_dimension(self):
         """Velocity limit dimension is the number of bounded joints."""
-        configuration = Configuration(self.model, self.data, self.robot.q0)
-        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
-        self.assertEqual(v_max.shape, (self.model.bounded_tangent.dim,))
-        self.assertEqual(v_min.shape, (self.model.bounded_tangent.dim,))
+        dt = 1e-3  # [s]
+        for limit in self.limits:
+            G, h = limit.compute_qp_inequalities(self.model, self.robot.q0, dt)
+            self.assertEqual(G.shape[0], h.shape[0])
+            self.assertEqual(G.shape[1], (self.model.bounded_tangent.dim,))
 
     def test_model_with_no_joint_limit(self):
         """Model with no joint limit has no velocity-limit vector."""
@@ -52,10 +58,10 @@ class TestLimits(unittest.TestCase):
             0, pin.JointModelSpherical(), pin.SE3.Identity(), "spherical"
         )
         robot = pin.RobotWrapper(model=model)
-        configuration = Configuration(robot.model, robot.data, robot.q0)
-        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
-        self.assertIsNone(v_max)
-        self.assertIsNone(v_min)
+        dt = 1e-3  # [s]
+        for limit in self.limits:
+            return_value = limit.compute_qp_inequalities(model, robot.q0, dt)
+            self.assertIsNone(return_value)
 
     def test_model_with_limitless_joint(self):
         """Same as previous test, but the joint has a limit set to zero."""
@@ -71,10 +77,10 @@ class TestLimits(unittest.TestCase):
             max_config=np.array([0.0]),
         )
         robot = pin.RobotWrapper(model=model)
-        configuration = Configuration(robot.model, robot.data, robot.q0)
-        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
-        self.assertIsNone(v_max)
-        self.assertIsNone(v_min)
+        dt = 1e-3  # [s]
+        for limit in self.limits:
+            return_value = limit.compute_qp_inequalities(model, robot.q0, dt)
+            self.assertIsNone(return_value)
 
     def test_forward_velocity_limit(self):
         """Velocity limits have no effect far from configuration limits.
@@ -120,7 +126,9 @@ class TestLimits(unittest.TestCase):
             "sigmaban_description",
             commit="d5d023fd35800d00d7647000bce8602617a4960d",
         )
-        configuration = Configuration(sigmaban.model, sigmaban.data, sigmaban.q0)
+        configuration = Configuration(
+            sigmaban.model, sigmaban.data, sigmaban.q0
+        )
         v_max, v_min = compute_velocity_limits(
             configuration, dt, config_limit_gain=0.5
         )
