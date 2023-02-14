@@ -22,9 +22,10 @@ from typing import List, Optional, Tuple
 
 import numpy as np
 import pinocchio as pin
+from .limit import Limit
 
 
-class ConfigurationLimit:
+class ConfigurationLimit(Limit):
     """Subspace of the tangent space restricted to joints with position limits.
 
     Attributes:
