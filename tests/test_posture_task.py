@@ -57,6 +57,7 @@ class TestPostureTask(unittest.TestCase):
             task.compute_jacobian(self.configuration)
 
     def test_set_target_from_configuration(self):
+        """Check that target is set from its configuration value."""
         task = PostureTask(cost=1.0)
         task.set_target_from_configuration(self.configuration)
         self.assertTrue(np.allclose(self.configuration.q, task.target_q))

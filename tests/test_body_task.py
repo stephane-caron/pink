@@ -29,9 +29,7 @@ from pink.tasks import BodyTask, TargetNotSet
 
 
 class TestBodyTask(unittest.TestCase):
-
-    """
-    Test consistency of the body task.
+    """Test consistency of the body task.
 
     Note:
         This fixture only tests the task itself. Integration tests with the IK
@@ -46,6 +44,7 @@ class TestBodyTask(unittest.TestCase):
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
 
     def test_set_target_from_configuration(self):
+        """Read target after setting it to a known value."""
         task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         task.set_target_from_configuration(self.configuration)
         transform_ankle_to_world = (

@@ -31,7 +31,6 @@ from pink.tasks import BodyTask
 
 
 class TestSolveIK(unittest.TestCase):
-
     """Test fixture for the solve_ik function."""
 
     def test_checks_configuration_limits(self):

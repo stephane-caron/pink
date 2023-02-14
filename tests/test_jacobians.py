@@ -28,12 +28,10 @@ from pink.tasks import BodyTask
 
 
 class TestJacobians(unittest.TestCase):
-
-    """
-    Test task Jacobian matrices against finite differences.
-    """
+    """Test task Jacobian matrices against finite differences."""
 
     def setUp(self, nb_configs=10, nb_dirs=2):
+        """Prepare test fixture."""
         np.random.seed(42)
         random_dq = 2.0 * np.random.random((nb_dirs, 6)) - 1.0
         l2norms = np.sqrt((random_dq * random_dq).sum(axis=1))
@@ -51,8 +49,7 @@ class TestJacobians(unittest.TestCase):
         self.robot = robot
 
     def test_body_task(self, tol=1e-6):
-        """
-        Test BodyTask Jacobian matrix.
+        """Test BodyTask Jacobian matrix.
 
         Args:
             tol: Test tolerance.
