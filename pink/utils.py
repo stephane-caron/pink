@@ -84,7 +84,6 @@ def get_joint_idx(model: pin.Model, joint_name: str) -> Tuple[int, int]:
 class VectorSpace:
     """Wrapper to refer to a vector space and its characteristic matrices."""
 
-    __dim: int
     __eye: np.ndarray
     __ones: np.ndarray
     __zeros: np.ndarray
@@ -101,15 +100,9 @@ class VectorSpace:
         eye.setflags(write=False)
         ones.setflags(write=False)
         zeros.setflags(write=False)
-        self.__dim = dim
         self.__eye = eye
         self.__ones = ones
         self.__zeros = zeros
-
-    @property
-    def dim(self) -> int:
-        """Dimension of the vector space."""
-        return self.__dim
 
     @property
     def eye(self) -> np.ndarray:
