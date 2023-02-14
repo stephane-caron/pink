@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test submodels.
-"""
+"""Test configuration limit."""
 
 import unittest
 
@@ -29,15 +27,10 @@ from pink.utils import VectorSpace
 
 
 class TestConfigurationLimit(unittest.TestCase):
-
-    """
-    Test fixture for configuration limit.
-    """
+    """Test fixture for configuration limit."""
 
     def setUp(self):
-        """
-        Set test fixture up.
-        """
+        """Set test fixture up."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
