@@ -22,7 +22,8 @@ import unittest
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-from pink.configuration_limit import ConfigurationLimit
+from pink import Configuration
+from pink.limits import ConfigurationLimit
 from pink.utils import VectorSpace
 
 

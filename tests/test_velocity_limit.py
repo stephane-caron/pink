@@ -22,8 +22,7 @@ import unittest
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-from pink.utils import VectorSpace
-from pink.velocity_limit import VelocityLimit
+from pink.limits import VelocityLimit
 
 
 class TestVelocityLimit(unittest.TestCase):
@@ -38,14 +37,6 @@ class TestVelocityLimit(unittest.TestCase):
         model = robot.model
         self.limit = VelocityLimit(model)
         self.model = model
-        self.tangent = VectorSpace(model.nv)
-
-    def test_tangent(self):
-        """Check dimensions of regular tangent space."""
-        nv = self.model.nv
-        self.assertEqual(self.tangent.eye.shape, (nv, nv))
-        self.assertEqual(self.tangent.ones.shape, (nv,))
-        self.assertEqual(self.tangent.zeros.shape, (nv,))
 
     def test_dimensions(self):
         """Check dimensions of configuration limit projection."""

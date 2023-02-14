@@ -22,9 +22,10 @@ import unittest
 
 import numpy as np
 import pinocchio as pin
-from pink.tasks.utils import body_minus, spatial_minus
-from pink.utils import custom_configuration_vector
 from robot_descriptions.loaders.pinocchio import load_robot_description
+
+from pink.tasks.utils import body_minus, spatial_minus
+from pink.utils import VectorSpace, custom_configuration_vector
 
 
 class TestUtils(unittest.TestCase):
@@ -47,3 +48,14 @@ class TestUtils(unittest.TestCase):
         Y = pin.SE3.Random()
         self.assertTrue(np.allclose(Y, X * pin.exp6(body_minus(Y, X))))
         self.assertTrue(np.allclose(Y, pin.exp6(spatial_minus(Y, X)) * X))
+
+    def test_vector_space(self):
+        """Check dimensions of regular tangent space."""
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        nv = robot.model.nv
+        tangent = VectorSpace(robot.model.nv)
+        self.assertEqual(tangent.eye.shape, (nv, nv))
+        self.assertEqual(tangent.ones.shape, (nv,))
+        self.assertEqual(tangent.zeros.shape, (nv,))
