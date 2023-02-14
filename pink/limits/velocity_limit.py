@@ -23,8 +23,10 @@ from typing import List, Optional, Tuple
 import numpy as np
 import pinocchio as pin
 
+from .limit import Limit
 
-class VelocityLimit:
+
+class VelocityLimit(Limit):
     """Subset of velocity-limited joints in a robot model.
 
     Attributes:
