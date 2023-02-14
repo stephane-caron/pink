@@ -74,7 +74,8 @@ class TestConfigurationLimit(unittest.TestCase):
         robot = load_robot_description(
             "upkie_description",
             root_joint=pin.JointModelFreeFlyer(),
-            commit="62f3ba24c2045b44faedb7c6c6167e74e157b49e",
+            # https://github.com/robot-descriptions/robot_descriptions.py/issues/31
+            # commit="62f3ba24c2045b44faedb7c6c6167e74e157b49e",
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
         limit = ConfigurationLimit(robot.model)
