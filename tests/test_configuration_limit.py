@@ -20,11 +20,11 @@
 import unittest
 
 import pinocchio as pin
+import numpy as np
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
 from pink.limits import ConfigurationLimit
-from pink.utils import VectorSpace
 
 
 class TestConfigurationLimit(unittest.TestCase):
@@ -38,14 +38,6 @@ class TestConfigurationLimit(unittest.TestCase):
         model = robot.model
         self.limit = ConfigurationLimit(model)
         self.model = model
-        self.tangent = VectorSpace(model.nv)
-
-    def test_tangent(self):
-        """Check dimensions of regular tangent space."""
-        nv = self.model.nv
-        self.assertEqual(self.tangent.eye.shape, (nv, nv))
-        self.assertEqual(self.tangent.ones.shape, (nv,))
-        self.assertEqual(self.tangent.zeros.shape, (nv,))
 
     def test_dimensions(self):
         """Check dimensions of configuration limit projection."""
