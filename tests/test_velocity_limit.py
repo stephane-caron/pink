@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test submodels.
-"""
+"""Test velocity limit."""
 
 import unittest
 
@@ -30,14 +28,10 @@ from pink.velocity_limit import VelocityLimit
 
 class TestVelocityLimit(unittest.TestCase):
 
-    """
-    Test fixture for velocity limit.
-    """
+    """Test fixture for velocity limit."""
 
     def setUp(self):
-        """
-        Set test fixture up.
-        """
+        """Set test fixture up."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
