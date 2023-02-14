@@ -140,5 +140,12 @@ Install the library and use it! Report bugs in the [issue tracker](https://githu
 
 ## See also
 
+Software:
+
 - [Jink.jl](https://github.com/adubredu/Jink.jl): Julia package for differential multi-task inverse kinematics.
 - [pymanoid](https://github.com/stephane-caron/pymanoid): precursor to Pink based on OpenRAVE.
+
+Technical notes:
+
+- [Inverse kinematics](https://scaron.info/robotics/inverse-kinematics.html): a general introduction to differential inverse kinematics.
+- [Jacobian of a kinematic task and derivatives on manifolds](https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html).
