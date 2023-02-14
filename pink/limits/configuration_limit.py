@@ -16,29 +16,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Subset of velocity-limited joints in a robot model."""
+"""Subset of bounded joints associated with a robot model."""
 
 from typing import List, Optional, Tuple
 
 import numpy as np
 import pinocchio as pin
 
-from .utils import VectorSpace
 
-
-class VelocityLimit(VectorSpace):
-    """Subset of velocity-limited joints in a robot model.
+class ConfigurationLimit:
+    """Subspace of the tangent space restricted to joints with position limits.
 
     Attributes:
-        indices: Tangent indices corresponding to velocity-limited joints.
-        joints: List of velocity-limited joints.
-        model: Robot model.
-        projection_matrix: From full to velocity-limited tangent vectors.
     """
 
     indices: np.ndarray
     joints: list
-    model: pin.Model
     projection_matrix: Optional[np.ndarray]
 
     def __init__(self, model: pin.Model):
@@ -47,14 +40,17 @@ class VelocityLimit(VectorSpace):
         Args:
             model: robot model.
         """
-        has_velocity_limit = model.velocityLimit < 1e100
+        has_configuration_limit = np.logical_and(
+            model.upperPositionLimit < 1e20,
+            model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
+        )
 
         joints = [
             joint
             for joint in model.joints
-            if joint.idx_v >= 0
-            and has_velocity_limit[
-                slice(joint.idx_v, joint.idx_v + joint.nv)
+            if joint.idx_q >= 0
+            and has_configuration_limit[
+                slice(joint.idx_q, joint.idx_q + joint.nq)
             ].all()
         ]
 
@@ -65,7 +61,6 @@ class VelocityLimit(VectorSpace):
         indices.setflags(write=False)
 
         dim = len(indices)
-        super().__init__(dim)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
 
         self.indices = indices
@@ -73,11 +68,12 @@ class VelocityLimit(VectorSpace):
         self.model = model
         self.projection_matrix = projection_matrix
 
-    def compute_velocity_limits(
+    def compute_qp_inequalities(
         self,
         model: pin.Model,
         q: np.ndarray,
         dt: float,
+        config_limit_gain: float = 0.5,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute the configuration-dependent velocity limits.
 
@@ -85,25 +81,37 @@ class VelocityLimit(VectorSpace):
 
         .. math::
 
-            -v_{max} \leq v \leq v_{max}
+            \frac{q \ominus q_{min}}{\mathrm{d}t} \leq
+            \leq v \leq
+            \frac{q_{max} \ominus q}{\mathrm{d}t}
 
-        where :math:`v_{max} \in {\cal T}` is the robot's velocity limit
-        vector and :math:`v` is the velocity computed by the inverse
-        kinematics.
+        where :math:`q \in {\cal C}` is the robot's configuration and :math:`v
+        \in T_q({\cal C})` is the velocity in the tangent space at :math:`q`.
+        The velocity limits correspond to the time-derivatives of the
+        configuration limit :math:`q_{min} \leq q \leq q_{max}`.
 
         Args:
             model: Robot model.
             q: Robot configuration.
             dt: Integration timestep in [s].
+            config_limit_gain: gain between 0 and 1 to steer away from
+                configuration limits. It is described in "Real-time prioritized
+                kinematic control under inequality constraints for redundant
+                manipulators" (Kanoun, 2012). More details in `this writeup
+                <https://scaron.info/teaching/inverse-kinematics.html>`__.
 
         Returns:
             Pair :math:`(G, h)` representing the inequality constraint as
             :math:`G \Delta q \leq h`, or ``None`` if there is no limit.
         """
+        assert 0.0 < config_limit_gain <= 1.0
         if not self.joints:
             return None
 
-        v_max = model.velocityLimit[self.indices]
+        Delta_q_max = pin.difference(model, q, model.upperPositionLimit)
+        Delta_q_min = pin.difference(model, q, model.lowerPositionLimit)
+        Delta_q_max = config_limit_gain * Delta_q_max[self.indices]
+        Delta_q_min = config_limit_gain * Delta_q_min[self.indices]
         G = np.vstack([self.projection_matrix, -self.projection_matrix])
-        h = np.hstack([dt * v_max, dt * v_max])
+        h = np.hstack([Delta_q_max, -Delta_q_min])
         return G, h
