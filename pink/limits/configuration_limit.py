@@ -112,7 +112,7 @@ class ConfigurationLimit(Limit):
             Pair :math:`(G, h)` representing the inequality constraint as
             :math:`G \Delta q \leq h`, or ``None`` if there is no limit.
         """
-        if not self.joints:
+        if self.projection_matrix is None:  # no joint (thus checked for mypy)
             return None
 
         Delta_q_max = pin.difference(
