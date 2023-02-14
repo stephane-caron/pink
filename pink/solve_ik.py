@@ -90,7 +90,7 @@ def __compute_qp_inequalities(
     G_list = []
     h_list = []
     for limit in (configuration_limit, velocity_limit):
-        matvec = limit.compute_velocity_limits(model, q, dt)
+        matvec = limit.compute_qp_inequalities(model, q, dt)
         if matvec is not None:
             G_list.append(matvec[0])
             h_list.append(matvec[1])
