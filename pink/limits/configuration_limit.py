@@ -22,6 +22,7 @@ from typing import List, Optional, Tuple
 
 import numpy as np
 import pinocchio as pin
+
 from .limit import Limit
 
 
@@ -29,11 +30,14 @@ class ConfigurationLimit(Limit):
     """Subspace of the tangent space restricted to joints with position limits.
 
     Attributes:
+        model: Robot model the limit applies to.
+        joints: Joints with configuration limits.
     """
 
     indices: np.ndarray
+    model: pin.Model
     joints: list
-    projection_matrix: Optional[np.ndarray]
+    __projection_matrix: Optional[np.ndarray]
 
     def __init__(self, model: pin.Model):
         """Initialize bounded tangent of a model.
@@ -67,11 +71,10 @@ class ConfigurationLimit(Limit):
         self.indices = indices
         self.joints = joints
         self.model = model
-        self.projection_matrix = projection_matrix
+        self.__projection_matrix = projection_matrix
 
     def compute_qp_inequalities(
         self,
-        model: pin.Model,
         q: np.ndarray,
         dt: float,
         config_limit_gain: float = 0.5,
@@ -90,7 +93,6 @@ class ConfigurationLimit(Limit):
         :math:`q_{min} \leq q \leq q_{max}`.
 
         Args:
-            model: Robot model.
             q: Robot configuration.
             dt: Integration timestep in [s].
             config_limit_gain: gain between 0 and 1 to steer away from
@@ -107,10 +109,14 @@ class ConfigurationLimit(Limit):
         if not self.joints:
             return None
 
-        Delta_q_max = pin.difference(model, q, model.upperPositionLimit)
-        Delta_q_min = pin.difference(model, q, model.lowerPositionLimit)
+        Delta_q_max = pin.difference(
+            self.model, q, self.model.upperPositionLimit
+        )
+        Delta_q_min = pin.difference(
+            self.model, q, self.model.lowerPositionLimit
+        )
         Delta_q_max = config_limit_gain * Delta_q_max[self.indices]
         Delta_q_min = config_limit_gain * Delta_q_min[self.indices]
-        G = np.vstack([self.projection_matrix, -self.projection_matrix])
+        G = np.vstack([self.__projection_matrix, -self.__projection_matrix])
         h = np.hstack([Delta_q_max, -Delta_q_min])
         return G, h

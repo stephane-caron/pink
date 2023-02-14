@@ -79,7 +79,7 @@ class TestConfigurationLimit(unittest.TestCase):
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
         limit = ConfigurationLimit(robot.model)
-        G, h = limit.compute_qp_inequalities(robot.model, robot.q0, dt=1e-3)
+        G, h = limit.compute_qp_inequalities(robot.q0, dt=1e-3)
         v_lim = configuration.model.velocityLimit
         self.assertLess(np.max(+G @ v_lim - h), -tol)
         self.assertLess(np.max(-G @ v_lim - h), -tol)
