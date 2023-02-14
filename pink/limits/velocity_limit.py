@@ -74,7 +74,6 @@ class VelocityLimit(Limit):
 
     def compute_qp_inequalities(
         self,
-        model: pin.Model,
         q: np.ndarray,
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
@@ -91,7 +90,6 @@ class VelocityLimit(Limit):
         computed by the inverse kinematics.
 
         Args:
-            model: Robot model.
             q: Robot configuration.
             dt: Integration timestep in [s].
 
@@ -102,7 +100,7 @@ class VelocityLimit(Limit):
         if not self.joints:
             return None
 
-        v_max = model.velocityLimit[self.indices]
+        v_max = self.model.velocityLimit[self.indices]
         G = np.vstack([self.projection_matrix, -self.projection_matrix])
         h = np.hstack([dt * v_max, dt * v_max])
         return G, h

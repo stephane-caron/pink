@@ -21,7 +21,6 @@ import abc
 from typing import Optional, Tuple
 
 import numpy as np
-import pinocchio as pin
 
 
 class Limit(abc.ABC):
@@ -30,7 +29,6 @@ class Limit(abc.ABC):
     @abc.abstractmethod
     def compute_qp_inequalities(
         self,
-        model: pin.Model,
         q: np.ndarray,
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
@@ -47,7 +45,6 @@ class Limit(abc.ABC):
         space at :math:`q`.
 
         Args:
-            model: Robot model.
             q: Robot configuration.
             dt: Integration timestep in [s].
 

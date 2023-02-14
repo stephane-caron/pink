@@ -31,26 +31,17 @@ from pink.solve_ik import build_ik
 class TestLimits(unittest.TestCase):
     """Tests that should pass for all limits."""
 
-    def setUp(self):
+    def test_limit_dimension(self):
+        """Velocity limit dimension is the number of bounded joints."""
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
-        limits = [
-            ConfigurationLimit(robot.model),
-            VelocityLimit(robot.model),
-        ]
-        self.data = robot.data
-        self.limits = limits
-        self.model = robot.model
-        self.robot = robot
-
-    def test_limit_dimension(self):
-        """Velocity limit dimension is the number of bounded joints."""
+        model = robot.model
         dt = 1e-3  # [s]
-        for limit in self.limits:
-            G, h = limit.compute_qp_inequalities(self.model, self.robot.q0, dt)
+        for limit in [ConfigurationLimit(model), VelocityLimit(model)]:
+            G, h = limit.compute_qp_inequalities(robot.q0, dt)
             self.assertEqual(G.shape[0], h.shape[0])
-            self.assertEqual(G.shape[1], (self.model.bounded_tangent.dim,))
+            self.assertEqual(G.shape[1], model.nv)
 
     def test_model_with_no_joint_limit(self):
         """Model with no joint limit has no velocity-limit vector."""
@@ -60,8 +51,8 @@ class TestLimits(unittest.TestCase):
         )
         robot = pin.RobotWrapper(model=model)
         dt = 1e-3  # [s]
-        for limit in self.limits:
-            return_value = limit.compute_qp_inequalities(model, robot.q0, dt)
+        for limit in [ConfigurationLimit(model), VelocityLimit(model)]:
+            return_value = limit.compute_qp_inequalities(robot.q0, dt)
             self.assertIsNone(return_value)
 
     def test_model_with_limitless_joint(self):
@@ -79,8 +70,8 @@ class TestLimits(unittest.TestCase):
         )
         robot = pin.RobotWrapper(model=model)
         dt = 1e-3  # [s]
-        for limit in self.limits:
-            return_value = limit.compute_qp_inequalities(model, robot.q0, dt)
+        for limit in [ConfigurationLimit(model), VelocityLimit(model)]:
+            return_value = limit.compute_qp_inequalities(robot.q0, dt)
             self.assertIsNone(return_value)
 
     def test_velocity_without_configuration_limits(self, tol: float = 1e-10):
