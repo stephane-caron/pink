@@ -25,6 +25,7 @@ from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
 from pink.limits import ConfigurationLimit, VelocityLimit
+from pink.solve_ik import build_ik
 
 
 class TestLimits(unittest.TestCase):
@@ -82,35 +83,6 @@ class TestLimits(unittest.TestCase):
             return_value = limit.compute_qp_inequalities(model, robot.q0, dt)
             self.assertIsNone(return_value)
 
-    def test_forward_velocity_limit(self):
-        """Velocity limits have no effect far from configuration limits.
-
-        When we are far away from configuration limits, the velocity limit is
-        simply the configuration-agnostic one from the robot.
-        """
-        configuration = Configuration(self.model, self.data, self.robot.q0)
-        v_max, v_min = compute_velocity_limits(configuration, dt=1e-3)
-        v_lim = configuration.model.bounded_tangent.velocity_limit
-        tol = 1e-10
-        self.assertLess(np.max(v_max - v_lim), tol)
-        self.assertLess(np.max(-v_lim - v_min), tol)
-
-    def test_configuration_limit_repulsion(self):
-        """Velocities are scaled down when close to a configuration limit."""
-        dt = 1e-3  # [s]
-        configuration = Configuration(self.model, self.data, self.robot.q0)
-        slack_vel = 5.5e-4 * configuration.tangent.ones
-        bounded_slack_vel = slack_vel[self.model.bounded_tangent.indices]
-        self.model.upperPositionLimit = configuration.integrate(slack_vel, dt)
-        v_max, v_min = compute_velocity_limits(
-            configuration, dt, config_limit_gain=0.5
-        )
-        tol = 1e-10
-        self.assertLess(
-            np.max(v_max - self.model.bounded_tangent.velocity_limit), tol
-        )
-        self.assertLess(np.max(v_max - bounded_slack_vel), tol)
-
     def test_velocity_without_configuration_limits(self, tol: float = 1e-10):
         """Velocity limits are loaded for a model without config limits.
 
@@ -129,11 +101,8 @@ class TestLimits(unittest.TestCase):
         configuration = Configuration(
             sigmaban.model, sigmaban.data, sigmaban.q0
         )
-        v_max, v_min = compute_velocity_limits(
-            configuration, dt, config_limit_gain=0.5
-        )
-        self.assertIsNotNone(v_max)
-        self.assertIsNotNone(v_min)
-        self.assertLess(
-            np.max(v_max - sigmaban.model.bounded_tangent.velocity_limit), tol
-        )
+        problem = build_ik(configuration, [], dt)
+        G, h = problem.G, problem.h
+        self.assertIsNotNone(G)
+        self.assertIsNotNone(h)
+        self.assertLess(np.max(h - sigmaban.model.velocityLimit), tol)
