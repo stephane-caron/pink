@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test velocity and actuated-joint limits.
-"""
+"""Tests that should pass for all limits."""
 
 import unittest
 
@@ -26,10 +24,12 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.limits import compute_velocity_limits
+from pink.limits import ConfigurationLimit, VelocityLimit
 
 
 class TestLimits(unittest.TestCase):
+    """Tests that should pass for all limits."""
+
     def setUp(self):
         robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
