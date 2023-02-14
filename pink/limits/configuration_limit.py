@@ -77,18 +77,16 @@ class ConfigurationLimit:
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute the configuration-dependent velocity limits.
 
-        Those limits are defined by:
+        Those limits are returned as:
 
         .. math::
 
-            \frac{q \ominus q_{min}}{\mathrm{d}t} \leq
-            \leq v \leq
-            \frac{q_{max} \ominus q}{\mathrm{d}t}
+            {q \ominus q_{min}} \leq \Delta q \leq {q_{max} \ominus q}
 
-        where :math:`q \in {\cal C}` is the robot's configuration and :math:`v
-        \in T_q({\cal C})` is the velocity in the tangent space at :math:`q`.
-        The velocity limits correspond to the time-derivatives of the
-        configuration limit :math:`q_{min} \leq q \leq q_{max}`.
+        where :math:`q \in {\cal C}` is the robot's configuration and
+        :math:`\Delta q \in T_q({\cal C})` is the displacement in the tangent
+        space at :math:`q`. These limits correspond to the derivative of
+        :math:`q_{min} \leq q \leq q_{max}`.
 
         Args:
             model: Robot model.

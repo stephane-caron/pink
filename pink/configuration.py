@@ -27,8 +27,8 @@ data.
 import numpy as np
 import pinocchio as pin
 
-from .limits import ConfigurationLimit, VelocityLimit
 from .exceptions import BodyNotFound, NotWithinConfigurationLimits
+from .limits import ConfigurationLimit, VelocityLimit
 from .utils import VectorSpace, get_root_joint_dim
 
 

@@ -83,11 +83,11 @@ class VelocityLimit:
 
         .. math::
 
-            -v_{max} \leq v \leq v_{max}
+            -\mathrm{d}t v_{max} \leq \Delta q \leq \mathrm{d}t v_{max}
 
         where :math:`v_{max} \in {\cal T}` is the robot's velocity limit
-        vector and :math:`v` is the velocity computed by the inverse
-        kinematics.
+        vector and :math:`\Delta q \in T_q({\cal C})` is the displacement
+        computed by the inverse kinematics.
 
         Args:
             model: Robot model.
