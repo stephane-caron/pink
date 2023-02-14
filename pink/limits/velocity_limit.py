@@ -33,7 +33,8 @@ class VelocityLimit(Limit):
         indices: Tangent indices corresponding to velocity-limited joints.
         joints: List of velocity-limited joints.
         model: Robot model.
-        projection_matrix: From full to velocity-limited tangent vectors.
+        projection_matrix: Projection from tangent space to subspace with
+            velocity-limited joints.
     """
 
     indices: np.ndarray
