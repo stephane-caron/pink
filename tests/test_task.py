@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test base class for kinematic tasks.
-"""
+"""Test base class for kinematic tasks."""
 
 import unittest
 
@@ -25,15 +23,13 @@ from pink.tasks import Task
 
 
 class TestTask(unittest.TestCase):
+    """Test abstract base class for tasks."""
+
     def setUp(self):
-        """
-        Prepare test fixture.
-        """
+        """Prepare test fixture."""
         Task.__abstractmethods__ = set()  # allow instantiation
 
     def test_task_repr(self):
-        """
-        String representation reports the task gain.
-        """
+        """String representation reports the task gain."""
         task = Task()
         self.assertTrue("gain=" in repr(task))

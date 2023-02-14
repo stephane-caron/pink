@@ -28,6 +28,8 @@ from pink.exceptions import BodyNotFound, NotWithinConfigurationLimits
 
 
 class TestConfiguration(unittest.TestCase):
+    """Test configuration type."""
+
     def test_constructor(self):
         """Constructing a configuration computes Jacobians."""
         robot = load_robot_description(
@@ -475,6 +477,7 @@ class TestConfiguration(unittest.TestCase):
             configuration.get_body_jacobian("does_not_exist")
 
     def test_get_integrate_inplace(self):
+        """Test in-place integration."""
         robot = load_robot_description("sigmaban_description", root_joint=None)
         configuration = Configuration(robot.model, robot.data, robot.q0)
         velocity = robot.model.tangent.ones

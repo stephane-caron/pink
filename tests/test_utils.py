@@ -29,6 +29,8 @@ from pink.utils import VectorSpace, custom_configuration_vector
 
 
 class TestUtils(unittest.TestCase):
+    """Test utility classes and functions."""
+
     def test_custom_configuration_vector(self):
         """Check a custom configuration vector for Upkie.
 
