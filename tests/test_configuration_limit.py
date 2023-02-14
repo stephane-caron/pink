@@ -48,11 +48,37 @@ class TestConfigurationLimit(unittest.TestCase):
             self.assertGreaterEqual(joint.idx_v, 0)
         nb = len(self.limit.joints)  # those are only revolute joints
         nv = self.model.nv
-        self.assertEqual(self.limit.dim, nb)
+        self.assertEqual(len(self.limit.indices), nb)
         self.assertEqual(self.limit.projection_matrix.shape, (nb, nv))
 
     def test_model_with_no_limit(self):
         """Check that unbounded models don't fail."""
         empty_model = pin.Model()
         empty_bounded = ConfigurationLimit(empty_model)
-        self.assertEqual(empty_bounded.dim, 0)
+        self.assertEqual(len(empty_bounded.indices), 0)
+
+    def test_far_from_limit(self, tol=1e-10):
+        """Limit has no effect when the configuration is far away.
+
+        Args:
+            tol: Numerical tolerance.
+
+        When we are far away from configuration limits, the velocity limit is
+        simply the configuration-agnostic one from the robot.
+
+        Note:
+            This test works with a commit-pinned description of Upkie. It will
+            not work for any description, as a robot may have e.g. some
+            velocity-unbounded joints.
+        """
+        robot = load_robot_description(
+            "upkie_description",
+            root_joint=pin.JointModelFreeFlyer(),
+            commit="62f3ba24c2045b44faedb7c6c6167e74e157b49e",
+        )
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+        limit = ConfigurationLimit(robot.model)
+        G, h = limit.compute_qp_inequalities(robot.model, robot.q0, dt=1e-3)
+        v_lim = configuration.model.velocityLimit
+        self.assertLess(np.max(+G @ v_lim - h), -tol)
+        self.assertLess(np.max(-G @ v_lim - h), -tol)
