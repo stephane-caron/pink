@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Add ``pink.limits`` submodule
+- Move configuration limit to ``ConfigurationLimit`` class
+- Move velocity limit to ``VelocityLimit`` class
 - Refactor ``apply_configuration`` into ``Configuration`` constructor
 - Refactor ``assume_configuration`` into ``Configuration`` constructor
 - Refactor task dynamics into ``compute_error`` and ``compute_jacobian``
