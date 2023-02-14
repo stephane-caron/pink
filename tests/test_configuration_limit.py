@@ -83,3 +83,31 @@ class TestConfigurationLimit(unittest.TestCase):
         v_lim = configuration.model.velocityLimit
         self.assertLess(np.max(+G @ v_lim - h), -tol)
         self.assertLess(np.max(-G @ v_lim - h), -tol)
+
+    def test_configuration_limit_repulsion(self, tol=1e-10):
+        """Velocities are scaled down when close to a configuration limit.
+
+        Args:
+            tol: Numerical tolerance.
+        """
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        dt = 1e-3  # [s]
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+        slack_vel = 5.5e-4  # [rad] / [s]
+
+        # Clamp configuration limit to q +/- slack_vel * dt
+        robot.model.lowerPositionLimit = configuration.integrate(
+            -slack_vel * configuration.tangent.ones, dt
+        )
+        robot.model.upperPositionLimit = configuration.integrate(
+            +slack_vel * configuration.tangent.ones, dt
+        )
+
+        limit = ConfigurationLimit(robot.model)
+        G, h = limit.compute_qp_inequalities(
+            robot.model, configuration.q, dt, config_limit_gain=0.5
+        )
+        self.assertLess(np.max(h), slack_vel * dt + tol)
+        self.assertGreater(np.min(h), -slack_vel * dt - tol)
