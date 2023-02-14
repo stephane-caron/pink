@@ -116,6 +116,13 @@ If task targets are continuously updated, there will be no stationary solution t
 
 ## Examples
 
+Basic examples are the best to get started:
+
+* [Double pendulum](https://github.com/tasts-robots/pink/blob/master/examples/double_pendulum.py)
+* [Loading a custom URDF](https://github.com/tasts-robots/pink/blob/master/examples/load_custom_urdf.py)
+* [Visualization in MeshCat](https://github.com/tasts-robots/pink/blob/master/examples/visualize_in_meshcat.py)
+* [Visualization in yourdfpy](https://github.com/tasts-robots/pink/blob/master/examples/visualize_in_yourdfpy.py)
+
 Pink works with all kinds of robot morphologies:
 
 * Arm: [Kinova Gen2](https://github.com/tasts-robots/pink/blob/master/examples/arm_kinova_gen2.py)
@@ -124,13 +131,6 @@ Pink works with all kinds of robot morphologies:
 * Humanoid: [SigmaBan](https://github.com/tasts-robots/pink/blob/master/examples/humanoid_sigmaban.py)
 * Wheeled biped: [Upkie](https://github.com/tasts-robots/pink/blob/master/examples/wheeled_biped_upkie.py)
 * Wheeled: [Omnidirectional robot](https://github.com/tasts-robots/pink/blob/master/examples/omnidirectional_wheeled_robot.py)
-
-Basic examples are the best to get started:
-
-* [Double pendulum](https://github.com/tasts-robots/pink/blob/master/examples/double_pendulum.py)
-* [Loading a custom URDF](https://github.com/tasts-robots/pink/blob/master/examples/load_custom_urdf.py)
-* [Visualization in MeshCat](https://github.com/tasts-robots/pink/blob/master/examples/visualize_in_meshcat.py)
-* [Visualization in yourdfpy](https://github.com/tasts-robots/pink/blob/master/examples/visualize_in_yourdfpy.py)
 
 Check out the [examples](https://github.com/tasts-robots/pink/tree/master/examples) folder for more.
 
