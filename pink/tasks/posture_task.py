@@ -150,9 +150,10 @@ class PostureTask(Task):
             Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
             objective.
         """
-        jacobian, error = self.compute_task_dynamics(configuration)
+        jacobian = self.compute_jacobian(configuration)
+        gain_error = self.gain * self.compute_error(configuration)
         weighted_jacobian = self.cost * jacobian  # [cost]
-        weighted_error = self.cost * error  # [cost]
+        weighted_error = self.cost * gain_error  # [cost]
         H = weighted_jacobian.T @ weighted_jacobian
         c = -weighted_error.T @ weighted_jacobian
         return (H, c)
