@@ -80,40 +80,49 @@ class PostureTask(Task):
         """
         self.set_target(configuration.q)
 
-    def compute_task_dynamics(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the task dynamics matrix and vector.
+    def compute_error(self, configuration: Configuration) -> np.ndarray:
+        """Compute posture task error.
 
-        Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
-        that the task dynamics are:
-
-        .. math::
-
-            J(q) \Delta q = \alpha e(q)
-
-        The Jacobian matrix is :math:`J(q) \in \mathbb{R}^{n \times n}`,
-        with :math:`n` the dimension of the robot's tangent space, and the
-        error vector is :math:`e(q) \in \mathbb{R}^n`. Both depend on the
-        configuration :math:`q` of the robot.
-
-        See :func:`Task.compute_task_dynamics` for more context.
+        See :func:`Task.compute_error` for more context.
 
         Args:
-            configuration: Robot configuration to read kinematics from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
-            Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
-            both expressed in the body frame.
+            Posture task error :math:`e(q)`.
         """
         if self.target_q is None:
             raise TargetNotSet("no posture target")
         _, nv = get_root_joint_dim(configuration.model)
-        jacobian = configuration.tangent.eye[nv:, :]
-        error = pin.difference(
+        return pin.difference(
             configuration.model, configuration.q, self.target_q
         )[nv:]
-        return (jacobian, self.gain * error)
+
+    def compute_jacobian(
+        self, configuration: Configuration
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        r"""Compute posture task Jacobian.
+
+        The task Jacobian is the identity :math:`I_{n_v} \in \mathbb{R}^{n_v
+        \times n_v}`, with :math:`n_v` the dimension of the robot's tangent
+        space, so that the task dynamics are:
+
+        .. math::
+
+            J(q) \Delta q = \Delta_q = \alpha (q^* - q)
+
+        See :func:`Task.compute_jacobian` for more context.
+
+        Args:
+            configuration: Robot configuration :math:`q`.
+
+        Returns:
+            Posture task Jacobian :math:`J(q)`.
+        """
+        if self.target_q is None:
+            raise TargetNotSet("no posture target")
+        _, nv = get_root_joint_dim(configuration.model)
+        return configuration.tangent.eye[nv:, :]
 
     def compute_qp_objective(
         self, configuration: Configuration
