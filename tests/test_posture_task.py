@@ -105,7 +105,8 @@ class TestPostureTask(unittest.TestCase):
         task = PostureTask(cost=0.0)
         q = self.configuration.q
         task.set_target(q)
-        J, e = task.compute_task_dynamics(self.configuration)
+        J = task.compute_jacobian(self.configuration)
+        e = task.compute_error(self.configuration)
         H, c = task.compute_qp_objective(self.configuration)
         qd = np.random.random(J.shape[1:])
         cost = qd.T @ H @ qd + c @ qd
