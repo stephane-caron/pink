@@ -43,25 +43,32 @@ class Task(abc.ABC):
     gain: float = 1.0
 
     @abc.abstractmethod
-    def compute_task_dynamics(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the task dynamics matrix and vector.
+    def compute_error(self, configuration: Configuration) -> np.ndarray:
+        r"""Compute the task error function.
 
-        Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
-        that the task dynamics are:
+        The error function :math:`e(q) \in \mathbb{R}^{k}` is the quantity that
+        the task aims to drive to zero (:math:`k` is the dimension of the
+        task). It appears in the first-order task dynamics:
 
         .. math::
 
             J(q) \Delta q = \alpha e(q)
 
-        The Jacobian matrix is :math:`J(q) \in \mathbb{R}^{k \times n_v}`,
-        with :math:`n_v` the dimension of the robot's tangent space and
-        :math:`k` the dimension of the task. The error vector :math:`e(q) \in
-        \mathbb{R}^k` is multiplied by the task gain :math:`\alpha \in [0,
-        1]`. The gain is usually 1 for dead-beat control (*i.e.* converge as
-        fast as possible), but it can also be lower for some extra low-pass
-        filtering.
+        The Jacobian matrix :math:`J(q) \in \mathbb{R}^{k \times n_v}`,
+        with :math:`n_v` the dimension of the robot's tangent space, is
+        computed by :func:`Task.compute_jacobian`, while the configuration
+        displacement :math:`\\Delta q` is the output of inverse kinematics. The
+        error vector :math:`e(q)` is multiplied by the task gain :math:`\alpha
+        \in [0, 1]`. The gain is usually 1 for dead-beat control (*i.e.*
+        converge as fast as possible), but it can also be lower for some extra
+        low-pass filtering.
+
+        Args:
+            configuration: Robot configuration :math:`q`.
+
+        Returns:
+            Task error vector :math:`e(q)`.
+        """
 
         Both :math:`J(q)` and :math:`(e)` depend on the configuration :math:`q`
         of the robot. The configuration displacement :math:`\\Delta q` is the
