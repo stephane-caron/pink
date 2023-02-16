@@ -52,7 +52,9 @@ class TestPostureTask(unittest.TestCase):
         """Raise an exception when the target is not set."""
         task = PostureTask(cost=1.0)
         with self.assertRaises(TargetNotSet):
-            task.compute_task_dynamics(self.configuration)
+            task.compute_error(self.configuration)
+        with self.assertRaises(TargetNotSet):
+            task.compute_jacobian(self.configuration)
 
     def test_set_target_from_configuration(self):
         task = PostureTask(cost=1.0)
@@ -80,7 +82,7 @@ class TestPostureTask(unittest.TestCase):
         """Error is zero when the target and body are at the same location."""
         task = PostureTask(cost=1.0)
         task.set_target(self.configuration.q)  # error == 0
-        _, e = task.compute_task_dynamics(self.configuration)
+        e = task.compute_error(self.configuration)
         self.assertLess(np.linalg.norm(e), 1e-10)
 
     def test_unit_cost_qp_objective(self):
@@ -92,7 +94,8 @@ class TestPostureTask(unittest.TestCase):
         q_new[3] += 1.0
         q_new[5] += 1.0
         self.configuration.q = q_new
-        J, e = task.compute_task_dynamics(self.configuration)
+        e = task.compute_error(self.configuration)
+        J = task.compute_jacobian(self.configuration)
         H, c = task.compute_qp_objective(self.configuration)
         self.assertTrue(np.allclose(J.T @ J, H))
         self.assertTrue(np.allclose(-e.T @ J, c))
