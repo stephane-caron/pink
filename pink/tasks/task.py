@@ -70,16 +70,28 @@ class Task(abc.ABC):
             Task error vector :math:`e(q)`.
         """
 
-        Both :math:`J(q)` and :math:`(e)` depend on the configuration :math:`q`
-        of the robot. The configuration displacement :math:`\\Delta q` is the
-        output of inverse kinematics.
+    @abc.abstractmethod
+    def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
+        r"""Compute the task Jacobian at a given configuration.
+
+        The task Jacobian :math:`J(q) \in \mathbb{R}^{k \times n_v}` appears in
+        the first-order task dynamics:
+
+        .. math::
+
+            J(q) \Delta q = \alpha e(q)
+
+        The error :math:`e(q) \in \mathbb{R}^{k \times n_v}`, with :math:`k`
+        the dimension of the task and :math:`n_v` the dimension of the robot's
+        tangent space, is computed by :func:`Task.compute_error`, while the
+        configuration displacement :math:`\\Delta q` is the output of inverse
+        kinematics.
 
         Args:
-            configuration: Robot configuration to read values from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
-            Tuple :math:`(J, e)` of Jacobian matrix and error vector, both
-            expressed in the body frame.
+            Task Jacobian :math:`J(q)`.
         """
 
     @abc.abstractmethod
