@@ -62,7 +62,7 @@ class TestJacobians(unittest.TestCase):
 
         def e(q):
             configuration = Configuration(self.model, self.data, q)
-            return task.compute_error_in_body(configuration)
+            return task.compute_error(configuration)
 
         def J(q):
             configuration = Configuration(self.model, self.data, q)
