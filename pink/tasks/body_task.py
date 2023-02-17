@@ -188,7 +188,7 @@ class BodyTask(Task):
         )
         return error_in_body
 
-    def compute_task_dynamics(
+    def compute_jacobian(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
         r"""Compute the task dynamics matrix and vector.
@@ -259,7 +259,8 @@ class BodyTask(Task):
             Levenberg-Marquardt Method" (Sugihara, 2011). The dimensional
             analysis in this class is our own.
         """
-        jacobian, error = self.compute_task_dynamics(configuration)
+        jacobian = self.compute_jacobian(configuration)
+        gain_error = self.gain * self.compute_error(configuration)
         weight = np.diag(self.cost)  # [cost] * [twist]^{-1}
         weighted_jacobian = weight @ jacobian  # [cost]
         weighted_error = weight @ error  # [cost]
