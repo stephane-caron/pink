@@ -6,8 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Refactor ``assume_configuration`` into ``Configuration`` constructor
 - Refactor ``apply_configuration`` into ``Configuration`` constructor
+- Refactor ``assume_configuration`` into ``Configuration`` constructor
+- Refactor task dynamics into ``compute_error`` and ``compute_jacobian``
 
 ## [0.8.0] - 2023/02/09
 
