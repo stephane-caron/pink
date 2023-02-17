@@ -115,11 +115,11 @@ class Task(abc.ABC):
         t` to get a commanded velocity).
 
         Args:
-            configuration: Robot configuration to read values from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
-            Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
-            objective.
+            Pair :math:`(H(q), c(q))` of Hessian matrix and linear vector of
+            the QP objective.
         """
 
     def __repr__(self):
