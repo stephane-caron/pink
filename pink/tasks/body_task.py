@@ -191,23 +191,21 @@ class BodyTask(Task):
     def compute_jacobian(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the task dynamics matrix and vector.
+        r"""Compute the body task Jacobian.
 
-        Those are the matrix :math:`J(q)` and vector :math:`\alpha e(q)` such
-        that the task dynamics are:
+        The task Jacobian :math:`J(q) \in \mathbb{R}^{6 \times n_v}` appears in
+        the task dynamics:
 
         .. math::
 
             J(q) \Delta q = \alpha e(q)
 
-        The Jacobian matrix is :math:`J(q) \in \mathbb{R}^{6 \times n}`,
-        with :math:`n` the dimension of the robot's tangent space, and the
-        error vector is :math:`e(q) \in \mathbb{R}^6`.
-
-        See :func:`Task.compute_task_dynamics` for more context.
+        The detailed derivation of the formula for this Jacobian is detailed in
+        [BodyTaskJacobian2023]_. See also :func:`Task.compute_jacobian` for
+        more context on task Jacobians.
 
         Args:
-            configuration: Robot configuration to read values from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
             Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
