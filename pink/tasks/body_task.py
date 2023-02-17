@@ -245,23 +245,21 @@ class BodyTask(Task):
         :math:`\Delta t` to get a commanded velocity).
 
         Args:
-            configuration: Robot configuration to read values from.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
-            Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
-            objective.
+            Pair :math:`(H(q), c(q))` of Hessian matrix and linear vector of
+            the QP objective.
 
         See Also:
-            Levenberg-Marquardt damping is described in
-            "Solvability-Unconcerned Inverse Kinematics by the
-            Levenberg-Marquardt Method" (Sugihara, 2011). The dimensional
-            analysis in this class is our own.
+            Levenberg-Marquardt damping is described in [Sugihara2011]_. The
+            dimensional analysis in this class is our own.
         """
         jacobian = self.compute_jacobian(configuration)
         gain_error = self.gain * self.compute_error(configuration)
         weight = np.diag(self.cost)  # [cost] * [twist]^{-1}
         weighted_jacobian = weight @ jacobian  # [cost]
-        weighted_error = weight @ error  # [cost]
+        weighted_error = weight @ gain_error  # [cost]
         mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2
         eye_tg = configuration.tangent.eye
         # Our Levenberg-Marquardt damping `mu * eye_tg` is isotropic in the
