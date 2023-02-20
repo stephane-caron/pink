@@ -98,9 +98,7 @@ class PostureTask(Task):
             configuration.model, configuration.q, self.target_q
         )[nv:]
 
-    def compute_jacobian(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute posture task Jacobian.
 
         The task Jacobian is the identity :math:`I_{n_v} \in \mathbb{R}^{n_v

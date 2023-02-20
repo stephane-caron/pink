@@ -188,9 +188,7 @@ class BodyTask(Task):
         )
         return error_in_body
 
-    def compute_jacobian(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the body task Jacobian.
 
         The task Jacobian :math:`J(q) \in \mathbb{R}^{6 \times n_v}` appears in
