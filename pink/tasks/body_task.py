@@ -199,8 +199,8 @@ class BodyTask(Task):
             J(q) \Delta q = \alpha e(q)
 
         The derivation of the formula for this Jacobian is detailed in
-        [BodyTaskJacobian2023]_. See also :func:`Task.compute_jacobian` for
-        more context on task Jacobians.
+        [BodyTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
+        context on task Jacobians.
 
         Args:
             configuration: Robot configuration :math:`q`.
