@@ -106,30 +106,15 @@ if __name__ == "__main__":
     posture_task = PostureTask(
         cost=1e-1,  # [cost] / [rad]
     )
-    # 1.LinearHolonomicTask test
-    # A = np.zeros((2,configuration.model.nv))
-    # r_knee_fe_jp_idx = get_joint_idx(configuration.model, "r_knee_fe_jp")
-    # r_knee_fe_jd_idx = get_joint_idx(configuration.model, "r_knee_fe_jd")
-    # l_knee_fe_jp_idx = get_joint_idx(configuration.model, "l_knee_fe_jp")
-    # l_knee_fe_jd_idx = get_joint_idx(configuration.model, "l_knee_fe_jd")
-    # A[0,r_knee_fe_jp_idx] = 1.0
-    # A[0,r_knee_fe_jd_idx] = -1.0
-    # A[1,l_knee_fe_jp_idx] = 1.0
-    # A[1,l_knee_fe_jd_idx] = -1.0
 
-    # linear_holonomic_task = LinearHolonomicTask(A, [100.0, 100.0])
-    # tasks = [left_foot_task, pelvis_task, right_foot_task, right_wrist_task,
-    # posture_task, linear_holonomic_task]
-
-    # 2.JointCouplingTask test
-    r_knee_holonomic_task = JointCouplingTask()
-    r_knee_holonomic_task.add_coupling(
+    # Joint coupling task
+    r_knee_holonomic_task = JointCouplingTask(
         ["r_knee_fe_jp", "r_knee_fe_jd"], [1.0, -1.0], 100.0, configuration
     )
-    l_knee_holonomic_task = JointCouplingTask()
-    l_knee_holonomic_task.add_coupling(
+    l_knee_holonomic_task = JointCouplingTask(
         ["l_knee_fe_jp", "l_knee_fe_jd"], [1.0, -1.0], 100.0, configuration
     )
+
     tasks = [
         left_foot_task,
         pelvis_task,

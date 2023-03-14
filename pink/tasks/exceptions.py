@@ -25,4 +25,4 @@ class TargetNotSet(PinkError):
 
 
 class TaskJacobianNotSet(PinkError):
-    """Exception raised when attempting to compute with an unset task Jacobian matrix."""
+    """Exception raised when attempting to compute with a not proper Jacobian."""

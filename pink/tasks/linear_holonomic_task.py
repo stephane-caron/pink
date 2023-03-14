@@ -32,17 +32,17 @@ class LinearHolonomicTask(Task):
     Attributes:
         A: matrix that relates the following relationship:
 
-        .. math::
-            e(q) = Aq - b
-            \dot{e}(q) := A\dot{q}
+            .. math::
+                e(q) = Aq - b
+                \dot{e}(q) := A\dot{q}
 
-        where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the task 
-            aims to derive to zero (:math:`k` is the dimension of the task).
-        cost: joint angular error cost in 
+            where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the task
+                aims to derive to zero (:math:`k` is the dimension of the task).
+        cost: joint angular error cost in
             :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
 
     Note:
-        A linear holonomic task is typically used for a robot 
+        A linear holonomic task is typically used for a robot
         that has mechanical constraint (e.g., closed loop kinematics).
         Floating base coordinates are not affected by this task.
     """
@@ -60,11 +60,7 @@ class LinearHolonomicTask(Task):
             cost: joint angular error cost in
                 :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
         """
-        if isinstance(cost, float):
-            assert A.shape[0] == 1
-        else:
-            assert A.shape[0] == len(cost)
-
+        assert A.shape[0] == 1 if isinstance(cost, float) else len(cost)
         self.A = A
         self.cost = cost
 
@@ -94,9 +90,10 @@ class LinearHolonomicTask(Task):
         Returns:
             Task error vector :math:`e(q)`.
         """
-        if self.A is None:
-            raise TaskJacobianNotSet("no task Jacobian set")
-
+        if self.A.shape[1] != configuration.model.nv:
+            raise TaskJacobianNotSet(
+                "task Jacobian dimension is not set properly"
+            )
         return np.zeros(self.A.shape[0])
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
@@ -121,9 +118,10 @@ class LinearHolonomicTask(Task):
         Returns:
             Task Jacobian :math:`J(q)`.
         """
-        if self.A is None:
-            raise TaskJacobianNotSet("no task Jacobian set")
-
+        if self.A.shape[1] != configuration.model.nv:
+            raise TaskJacobianNotSet(
+                "task Jacobian dimension is not set properly"
+            )
         return self.A
 
     def compute_qp_objective(
@@ -152,16 +150,14 @@ class LinearHolonomicTask(Task):
             Pair :math:`(H)` of Hessian matrix of the QP objective.
         """
         jacobian = self.compute_jacobian(configuration)
-        gain_error = self.gain * self.compute_error(
-            configuration
-        )  # np.zeros(k)
+        gain_error = self.gain * self.compute_error(configuration)
         weight = (
             self.cost if isinstance(self.cost, float) else np.diag(self.cost)
         )
         weighted_jacobian = np.dot(weight, jacobian)  # [cost]
-        weighted_error = np.dot(weight, gain_error)  # [cost] np.zeros(k)
+        weighted_error = np.dot(weight, gain_error)  # [cost]
         H = weighted_jacobian.T @ weighted_jacobian
-        c = -weighted_error.T @ weighted_jacobian  # np.zeros(H.shape[0])
+        c = -weighted_error.T @ weighted_jacobian
         return (H, c)
 
     def __repr__(self):
