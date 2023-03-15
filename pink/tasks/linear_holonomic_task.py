@@ -152,8 +152,10 @@ class LinearHolonomicTask(Task):
         """
         jacobian = self.compute_jacobian(configuration)
         gain_error = self.gain * self.compute_error(configuration)
-        weight = (
-            self.cost if isinstance(self.cost, float) else np.diag(self.cost)
+        weight = np.diag(
+            [self.cost] * jacobian.shape[0]
+            if isinstance(self.cost, float)
+            else self.cost
         )
         weighted_jacobian = np.dot(weight, jacobian)  # [cost]
         weighted_error = np.dot(weight, gain_error)  # [cost]
