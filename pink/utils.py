@@ -22,6 +22,8 @@ from typing import Tuple
 import numpy as np
 import pinocchio as pin
 
+from .exceptions import PinkError
+
 
 def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
     """Generate a configuration vector where named joints have specific values.
@@ -57,6 +59,26 @@ def get_root_joint_dim(model: pin.Model) -> Tuple[int, int]:
         root_joint = model.joints[root_joint_id]
         return root_joint.nq, root_joint.nv
     return 0, 0
+
+
+def get_joint_idx(model: pin.Model, joint_name: str) -> Tuple[int, int]:
+    """Get joint index in the configuration and tangent space.
+
+    Args:
+        model: Robot model.
+        joint_name: Joint name.
+
+    Returns:
+        idx_q: Joint idx in configuration space.
+        idx_v: Joint idx in tangent space.
+    """
+    if model.existJointName(joint_name):
+        joint_id = model.getJointId(joint_name)
+        joint = model.joints[joint_id]
+        return joint.idx_q, joint.idx_v
+    raise PinkError(
+        f"cannot find the joint index corresponding to joint {joint_name}"
+    )
 
 
 class VectorSpace:
