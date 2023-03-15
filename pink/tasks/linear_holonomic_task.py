@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Linear Holonomic task implementation."""
+"""Linear holonomic task :math:`A q = b`."""
 
 from typing import Sequence, Tuple, Union
 
@@ -27,17 +27,17 @@ from .task import Task
 
 
 class LinearHolonomicTask(Task):
-    r"""General class for linear holonomic tasks.
+    r"""Linear holonomic task :math:`A q = 0`.
 
     Attributes:
-        A: matrix that relates the following relationship:
+        A: matrix that defines the task:
 
             .. math::
-                e(q) = Aq - b
-                \dot{e}(q) := A\dot{q}
+                e(q) = A q
+                \dot{e}(q) := A \dot{q}
 
             where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the
-            task aims to derive to zero (:math:`k` is the dimension of the
+            task aims to drive to zero (:math:`k` is the dimension of the
             task).
         cost: joint angular error cost in
             :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
@@ -57,7 +57,7 @@ class LinearHolonomicTask(Task):
         r"""Create task.
 
         Args:
-            A: Jacobian matrix of a linear holonomic contraint.
+            A: Jacobian matrix of the task.
             cost: joint angular error cost in
                 :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
         """

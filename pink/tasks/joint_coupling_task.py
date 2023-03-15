@@ -27,7 +27,7 @@ from .linear_holonomic_task import LinearHolonomicTask
 
 
 class JointCouplingTask(LinearHolonomicTask):
-    r"""Child class for linear holonomic tasks.
+    r"""Coupling between two revolute joints.
 
     Note:
         This task only considers a 1-Dimensional task.
