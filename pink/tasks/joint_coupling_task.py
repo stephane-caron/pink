@@ -51,8 +51,8 @@ class JointCouplingTask(LinearHolonomicTask):
             configuration: Robot configuration.
         """
         assert len(joint_name_list) == len(ratios)
-        self.A = np.zeros((1, configuration.model.nv))
+        A = np.zeros((1, configuration.model.nv))
         for joint, ratio in zip(joint_name_list, ratios):
             _, joint_v_idx = get_joint_idx(configuration.model, joint)
-            self.A[:, joint_v_idx] = ratio
-        self.cost = cost
+            A[:, joint_v_idx] = ratio
+        super().__init__(A, cost)
