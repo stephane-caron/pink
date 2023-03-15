@@ -18,13 +18,18 @@
 """Kinematic tasks."""
 
 from .body_task import BodyTask
-from .exceptions import TargetNotSet
+from .exceptions import TargetNotSet, TaskJacobianNotSet
+from .joint_coupling_task import JointCouplingTask
+from .linear_holonomic_task import LinearHolonomicTask
 from .posture_task import PostureTask
 from .task import Task
 
 __all__ = [
     "BodyTask",
-    "PostureTask",
     "TargetNotSet",
+    "TaskJacobianNotSet",
+    "JointCouplingTask",
+    "LinearHolonomicTask",
+    "PostureTask",
     "Task",
 ]
