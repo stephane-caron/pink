@@ -36,8 +36,9 @@ class LinearHolonomicTask(Task):
                 e(q) = Aq - b
                 \dot{e}(q) := A\dot{q}
 
-            where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the task
-                aims to derive to zero (:math:`k` is the dimension of the task).
+            where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the
+            task aims to derive to zero (:math:`k` is the dimension of the
+            task).
         cost: joint angular error cost in
             :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
 
