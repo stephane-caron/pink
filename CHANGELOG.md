@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [0.9.0] - 2023/03/15
+
+### Added
+
+- Example: Draco 3 humanoid by @shbang91
+- Joint-coupling task by @shbang91
+- Linear holonomic task by @shbang91
+- Unit tests for joint-coupling and linear holonomic tasks by @shbang91
 
 ### Changed
 
