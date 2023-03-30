@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.0] - 2023/03/30
+
+### Added
+
+- Base class ``Limit`` for configuration and velocity limits
+- In-place integration of a velocity from a configuration
+- Unit tests for configuration limits
+- Unit tests for velocity limits
+
+### Changed
+
+- Add ``pink.limits`` submodule
+- Configuration and velocity limits are now stacked rather than pre-reduced
+- Move configuration limit to ``ConfigurationLimit`` class
+- Move velocity limit to ``VelocityLimit`` class
+
 ## [0.9.0] - 2023/03/15
 
 ### Added
@@ -13,9 +29,6 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Add ``pink.limits`` submodule
-- Move configuration limit to ``ConfigurationLimit`` class
-- Move velocity limit to ``VelocityLimit`` class
 - Refactor ``apply_configuration`` into ``Configuration`` constructor
 - Refactor ``assume_configuration`` into ``Configuration`` constructor
 - Refactor task dynamics into ``compute_error`` and ``compute_jacobian``
