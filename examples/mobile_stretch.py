@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Move a Stretch RE1 between two jumping targets."""
+"""Move a Stretch RE1 with a fixed fingertip target around the origin."""
 
 import numpy as np
 import pinocchio as pin
@@ -37,6 +37,10 @@ except ModuleNotFoundError:
         "try ``pip install robot_descriptions``"
     )
 
+# Trajectory parameters to play with ;)
+circle_radius = 0.5  # [m]
+fingertip_height = 0.7  # [m]
+
 if __name__ == "__main__":
     robot = load_robot_description(
         "stretch_description", root_joint=pin.JointModelPlanar()
@@ -46,21 +50,30 @@ if __name__ == "__main__":
     # Initialize visualizer
     viz = start_meshcat_visualizer(robot)
     viewer = viz.viewer
-    meshcat_shapes.frame(viewer["target_frame"], opacity=0.5)
-    meshcat_shapes.frame(viewer["tip_frame"], opacity=1.0)
+    meshcat_shapes.frame(viewer["base_target_frame"], opacity=0.5)
+    meshcat_shapes.frame(viewer["fingertip_target_frame"], opacity=1.0)
 
     # Define tasks
     base_task = BodyTask(
         "base_link",
-        position_cost=1.0,  # [cost] / [m]
-        orientation_cost=1e-5,  # [cost] / [rad]
+        position_cost=0.1,  # [cost] / [m]
+        orientation_cost=1.0,  # [cost] / [rad]
     )
-    base_task.gain = 0.22  # slow things down
-    tasks = [base_task]
+    fingertip_task = BodyTask(
+        "link_gripper_fingertip_right",
+        position_cost=1.0,
+        orientation_cost=1e-4,
+    )
+    tasks = [base_task, fingertip_task]
 
     # Initialize tasks from the initial configuration
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     base_task.set_target_from_configuration(configuration)
+    transform_fingertip_target_to_world = pin.SE3(
+        rotation=np.eye(3), translation=np.array([0.0, 0.0, fingertip_height])
+    ) * configuration.get_transform_body_to_world(fingertip_task.body)
+    center_translation = transform_fingertip_target_to_world.translation[:2]
+    fingertip_task.set_target(transform_fingertip_target_to_world)
     viz.display(configuration.q)
 
     # Select QP solver
@@ -71,18 +84,23 @@ if __name__ == "__main__":
     rate = RateLimiter(frequency=100.0)
     dt = rate.period
     t = 0.0  # [s]
-    jump_period = 4.0
     while True:
         # Update task targets
-        jumpy = 0.0 if (t / jump_period) % 1.0 <= 0.5 else -1.0
         T = base_task.transform_target_to_world
-        T.translation[0] = 0.2 * jumpy
-        T.rotation = pin.utils.rpyToMatrix(0.0, 0.0, np.pi * jumpy)
+        u = np.array([np.cos(t), np.sin(t)])
+        T.translation[:2] = center_translation + circle_radius * u
+        T.rotation = pin.utils.rpyToMatrix(0.0, 0.0, 0.5 * np.pi * t)
 
         # Update visualizer frames
-        viewer["target_frame"].set_transform(T.np)
-        viewer["tip_frame"].set_transform(
+        viewer["base_target_frame"].set_transform(T.np)
+        viewer["fingertip_target_frame"].set_transform(
+            fingertip_task.transform_target_to_world.np
+        )
+        viewer["base_frame"].set_transform(
             configuration.get_transform_body_to_world(base_task.body).np
+        )
+        viewer["fingertip_frame"].set_transform(
+            configuration.get_transform_body_to_world(fingertip_task.body).np
         )
 
         # Compute velocity and integrate it into next configuration
