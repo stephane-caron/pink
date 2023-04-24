@@ -28,7 +28,7 @@ from .task import Task
 from .utils import body_minus
 
 
-class BodyTask(Task):
+class FrameTask(Task):
     r"""Regulate the pose of a robot body in the world frame.
 
     Attributes:
@@ -199,7 +199,7 @@ class BodyTask(Task):
             J(q) \Delta q = \alpha e(q)
 
         The derivation of the formula for this Jacobian is detailed in
-        [BodyTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
+        [FrameTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
         context on task Jacobians.
 
         Args:
@@ -270,7 +270,7 @@ class BodyTask(Task):
     def __repr__(self):
         """Human-readable representation of the task."""
         return (
-            f"BodyTask({self.body}, "
+            f"FrameTask({self.body}, "
             f"gain={self.gain}, "
             f"orientation_cost={self.cost[3:6]}, "
             f"position_cost={self.cost[0:3]}, "

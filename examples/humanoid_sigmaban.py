@@ -25,7 +25,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.tasks import BodyTask, PostureTask
+from pink.tasks import FrameTask, PostureTask
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -51,17 +51,17 @@ if __name__ == "__main__":
     viz.display(configuration.q)
     viewer = viz.viewer
 
-    left_foot_task = BodyTask(
+    left_foot_task = FrameTask(
         "left_foot_tip",
         position_cost=1.0,
         orientation_cost=1.0,
     )
-    torso_task = BodyTask(
+    torso_task = FrameTask(
         "torso",
         position_cost=1.0,
         orientation_cost=1.0,
     )
-    right_foot_task = BodyTask(
+    right_foot_task = FrameTask(
         "right_foot_tip",
         position_cost=1.0,
         orientation_cost=1.0,

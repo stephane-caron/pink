@@ -27,7 +27,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.tasks import BodyTask, PostureTask
+from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
 
 if __name__ == "__main__":
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     # Define tasks
     tasks = {
-        "tip": BodyTask(
+        "tip": FrameTask(
             "link3",
             position_cost=1.0,  # [cost] / [m]
             orientation_cost=1e-3,  # [cost] / [rad]

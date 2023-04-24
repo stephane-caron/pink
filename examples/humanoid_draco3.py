@@ -31,7 +31,7 @@ sys.path.append(cwd)
 import pink
 from pink import solve_ik
 from pink.tasks import (
-    BodyTask,
+    FrameTask,
     JointCouplingTask,
     PostureTask,
 )
@@ -91,16 +91,16 @@ if __name__ == "__main__":
     viz.display(configuration.q)
 
     # Tasks initialization for IK
-    left_foot_task = BodyTask(
+    left_foot_task = FrameTask(
         "l_foot_contact", position_cost=1.0, orientation_cost=1.0
     )
-    pelvis_task = BodyTask(
+    pelvis_task = FrameTask(
         "torso_com_link", position_cost=1.0, orientation_cost=0.0
     )
-    right_foot_task = BodyTask(
+    right_foot_task = FrameTask(
         "r_foot_contact", position_cost=1.0, orientation_cost=1.0
     )
-    right_wrist_task = BodyTask(
+    right_wrist_task = FrameTask(
         "r_hand_contact", position_cost=4.0, orientation_cost=4.0
     )
     posture_task = PostureTask(
