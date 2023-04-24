@@ -26,7 +26,7 @@ from loop_rate_limiters import RateLimiter
 import meshcat_shapes
 import pink
 from pink import solve_ik
-from pink.tasks import BodyTask
+from pink.tasks import FrameTask
 from pink.visualization import start_meshcat_visualizer
 
 try:
@@ -54,12 +54,12 @@ if __name__ == "__main__":
     meshcat_shapes.frame(viewer["fingertip_target_frame"], opacity=1.0)
 
     # Define tasks
-    base_task = BodyTask(
+    base_task = FrameTask(
         "base_link",
         position_cost=0.1,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
     )
-    fingertip_task = BodyTask(
+    fingertip_task = FrameTask(
         "link_gripper_fingertip_right",
         position_cost=1.0,
         orientation_cost=1e-4,

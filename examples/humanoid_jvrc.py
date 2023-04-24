@@ -25,7 +25,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.tasks import BodyTask
+from pink.tasks import FrameTask
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -78,14 +78,14 @@ if __name__ == "__main__":
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     viz.display(configuration.q)
 
-    left_foot_task = BodyTask(
+    left_foot_task = FrameTask(
         "l_ankle", position_cost=1.0, orientation_cost=3.0
     )
-    pelvis_task = BodyTask("PELVIS_S", position_cost=1.0, orientation_cost=0.0)
-    right_foot_task = BodyTask(
+    pelvis_task = FrameTask("PELVIS_S", position_cost=1.0, orientation_cost=0.0)
+    right_foot_task = FrameTask(
         "r_ankle", position_cost=1.0, orientation_cost=3.0
     )
-    right_wrist_task = BodyTask(
+    right_wrist_task = FrameTask(
         "r_wrist", position_cost=1.0, orientation_cost=3.0
     )
     tasks = [left_foot_task, pelvis_task, right_foot_task, right_wrist_task]

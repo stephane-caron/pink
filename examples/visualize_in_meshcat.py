@@ -25,7 +25,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.tasks import BodyTask, PostureTask
+from pink.tasks import FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
 
@@ -45,17 +45,17 @@ if __name__ == "__main__":
     viz = start_meshcat_visualizer(robot)
 
     tasks = {
-        "base": BodyTask(
+        "base": FrameTask(
             "base",
             position_cost=1.0,  # [cost] / [m]
             orientation_cost=1.0,  # [cost] / [rad]
         ),
-        "left_contact": BodyTask(
+        "left_contact": FrameTask(
             "left_contact",
             position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
             orientation_cost=0.0,  # [cost] / [rad]
         ),
-        "right_contact": BodyTask(
+        "right_contact": FrameTask(
             "right_contact",
             position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
             orientation_cost=0.0,  # [cost] / [rad]
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     for body, task in tasks.items():
-        if type(task) is BodyTask:
+        if type(task) is FrameTask:
             task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
 

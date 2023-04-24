@@ -24,7 +24,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks import BodyTask
+from pink.tasks import FrameTask
 
 
 class TestJacobians(unittest.TestCase):
@@ -49,12 +49,12 @@ class TestJacobians(unittest.TestCase):
         self.robot = robot
 
     def test_body_task(self, tol=1e-6):
-        """Test BodyTask Jacobian matrix.
+        """Test FrameTask Jacobian matrix.
 
         Args:
             tol: Test tolerance.
         """
-        task = BodyTask(self.body, position_cost=1.0, orientation_cost=1.0)
+        task = FrameTask(self.body, position_cost=1.0, orientation_cost=1.0)
         task.set_target(pin.SE3.Random())
 
         def e(q):

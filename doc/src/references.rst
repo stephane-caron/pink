@@ -4,7 +4,7 @@
 References
 **********
 
-.. [BodyTaskJacobian] `Jacobian of a kinematic task and derivatives on manifolds <https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html>`_. S. Caron. 2023.
+.. [FrameTaskJacobian] `Jacobian of a kinematic task and derivatives on manifolds <https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html>`_. S. Caron. 2023.
 
 .. [MLT] `A micro Lie theory for state estimation in robotics <https://arxiv.org/abs/1812.01537>`_. J. Solà, J. Deray, D. Atchuthan. 2018.
 

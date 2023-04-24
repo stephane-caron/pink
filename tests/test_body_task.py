@@ -25,10 +25,10 @@ from qpsolvers import solve_qp
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks import BodyTask, TargetNotSet
+from pink.tasks import FrameTask, TargetNotSet
 
 
-class TestBodyTask(unittest.TestCase):
+class TestFrameTask(unittest.TestCase):
     """Test consistency of the body task.
 
     Note:
@@ -45,7 +45,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_set_target_from_configuration(self):
         """Read target after setting it to a known value."""
-        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         task.set_target_from_configuration(self.configuration)
         transform_ankle_to_world = (
             self.configuration.get_transform_body_to_world("l_ankle")
@@ -58,7 +58,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_task_repr(self):
         """String representation reports the task gain, costs and target."""
-        earflap_task = BodyTask(
+        earflap_task = FrameTask(
             "earflap", position_cost=1.0, orientation_cost=0.1
         )
         self.assertTrue("gain=" in repr(earflap_task))
@@ -67,7 +67,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_target_not_set(self):
         """Raise an exception when the target is not set."""
-        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         with self.assertRaises(TargetNotSet):
             task.compute_error(self.configuration)
         with self.assertRaises(TargetNotSet):
@@ -75,7 +75,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_target_set_properly(self):
         """Return target properly once it's set."""
-        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         T = self.configuration.get_transform_body_to_world("l_ankle")
         task.set_target(T)
         self.assertIsNotNone(task.transform_target_to_world)
@@ -89,7 +89,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_target_is_a_copy(self):
         """Target is saved as a copy, not a reference to the original."""
-        task = BodyTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         target = self.configuration.get_transform_body_to_world("l_ankle")
         task.set_target(target)
         y = target.translation[1]
@@ -105,7 +105,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_zero_error_when_target_at_body(self):
         """Error is zero when the target and body are at the same location."""
-        task = BodyTask("r_ankle", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("r_ankle", position_cost=1.0, orientation_cost=0.1)
         target = self.configuration.get_transform_body_to_world("r_ankle")
         task.set_target(target)  # error == 0
         J = task.compute_jacobian(self.configuration)
@@ -117,7 +117,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_unit_cost_qp_objective(self):
         """Unit cost means the QP objective is exactly (J^T J, -e^T J)."""
-        task = BodyTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
         transform_target_to_body = pin.SE3(
             np.eye(3), np.array([0.0, 0.01, 0.0])
         )
@@ -141,7 +141,7 @@ class TestBodyTask(unittest.TestCase):
         A zero yields the same QP objective as disabling the corresponding
         Jacobian and error coordinates.
         """
-        task = BodyTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
         transform_target_to_body = pin.SE3(
             np.eye(3), np.array([0.1, 0.02, 0.01])
         )
@@ -177,7 +177,7 @@ class TestBodyTask(unittest.TestCase):
 
     def test_lm_damping_has_no_effect_at_target(self):
         """Levenberg-Marquardt damping has no effect when the error is zero."""
-        task = BodyTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
         target = self.configuration.get_transform_body_to_world("l_wrist")
         task.set_target(target)
         task.lm_damping = 1e-8
@@ -192,7 +192,7 @@ class TestBodyTask(unittest.TestCase):
 
         That is, unless the task is fulfilled, it reduces velocities.
         """
-        task = BodyTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
+        task = FrameTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
         transform_target_to_body = pin.SE3(
             np.eye(3), np.array([0.0, 2.0, 0.0])
         )

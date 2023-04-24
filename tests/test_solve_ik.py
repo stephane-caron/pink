@@ -27,7 +27,7 @@ from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration, build_ik, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
-from pink.tasks import BodyTask
+from pink.tasks import FrameTask
 
 
 class TestSolveIK(unittest.TestCase):
@@ -72,7 +72,7 @@ class TestSolveIK(unittest.TestCase):
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        task = BodyTask(
+        task = FrameTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
         task.set_target(
@@ -87,7 +87,7 @@ class TestSolveIK(unittest.TestCase):
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        task = BodyTask(
+        task = FrameTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
         transform_init_to_world = configuration.get_transform_body_to_world(
@@ -139,7 +139,7 @@ class TestSolveIK(unittest.TestCase):
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        contact_task = BodyTask(
+        contact_task = FrameTask(
             "right_contact", position_cost=1.0, orientation_cost=1.0
         )
         transform_target_to_world = configuration.get_transform_body_to_world(
@@ -176,13 +176,13 @@ class TestSolveIK(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        left_ankle_task = BodyTask(
+        left_ankle_task = FrameTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
         )
-        right_ankle_task = BodyTask(
+        right_ankle_task = FrameTask(
             "r_ankle", position_cost=1.0, orientation_cost=3.0
         )
-        pelvis_task = BodyTask(
+        pelvis_task = FrameTask(
             "PELVIS_S", position_cost=1.0, orientation_cost=3.0
         )
 
@@ -208,13 +208,13 @@ class TestSolveIK(unittest.TestCase):
         configuration = Configuration(robot.model, robot.data, robot.q0)
 
         # Define tasks
-        left_ankle_task = BodyTask(
+        left_ankle_task = FrameTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
         )
-        right_ankle_task = BodyTask(
+        right_ankle_task = FrameTask(
             "r_ankle", position_cost=1.0, orientation_cost=3.0
         )
-        pelvis_task = BodyTask(
+        pelvis_task = FrameTask(
             "PELVIS_S", position_cost=1.0, orientation_cost=0.0
         )
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
@@ -262,13 +262,13 @@ class TestSolveIK(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        left_ankle_task = BodyTask(
+        left_ankle_task = FrameTask(
             "l_ankle", position_cost=1.0, orientation_cost=3.0
         )
-        right_ankle_task = BodyTask(
+        right_ankle_task = FrameTask(
             "r_ankle", position_cost=1.0, orientation_cost=3.0
         )
-        pelvis_task = BodyTask(
+        pelvis_task = FrameTask(
             "PELVIS_S", position_cost=1.0, orientation_cost=3.0
         )
         left_ankle_task.set_target(

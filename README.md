@@ -47,20 +47,20 @@ Pink provides an API to describe the problem as tasks with targets, and automati
 Here is the example of a biped robot that controls the position and orientation of its base, left and right contact frames. A fourth "posture" task, giving a preferred angle for each joint, is added for regularization:
 
 ```python
-from pink.tasks import BodyTask, PostureTask
+from pink.tasks import FrameTask, PostureTask
 
 tasks = {
-    "base": BodyTask(
+    "base": FrameTask(
         "base",
         position_cost=1.0,              # [cost] / [m]
         orientation_cost=1.0,           # [cost] / [rad]
     ),
-    "left_contact": BodyTask(
+    "left_contact": FrameTask(
         "left_contact",
         position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
         orientation_cost=0.0,           # [cost] / [rad]
     ),
-    "right_contact": BodyTask(
+    "right_contact": FrameTask(
         "right_contact",
         position_cost=[0.1, 0.0, 0.1],  # [cost] / [m]
         orientation_cost=0.0,           # [cost] / [rad]
@@ -94,7 +94,7 @@ from robot_descriptions.loaders.pinocchio import load_robot_description
 robot = load_robot_description("upkie_description")
 configuration = pink.Configuration(robot.model, robot.data, robot.q0)
 for body, task in tasks.items():
-    if type(task) is BodyTask:
+    if type(task) is FrameTask:
         task.set_target(configuration.get_transform_body_to_world(body))
 ```
 
