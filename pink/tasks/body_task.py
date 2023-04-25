@@ -209,7 +209,7 @@ class FrameTask(Task):
             Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
             both expressed in the body frame.
         """
-        jacobian_in_body = configuration.get_body_jacobian(self.body)
+        jacobian_in_body = configuration.get_frame_jacobian(self.body)
 
         # TODO(scaron): fix sign of error and box minus
         if self.transform_target_to_world is None:

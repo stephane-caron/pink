@@ -132,7 +132,7 @@ class Configuration:
                     q_max[i],
                 )
 
-    def get_body_jacobian(self, body: str) -> np.ndarray:
+    def get_frame_jacobian(self, body: str) -> np.ndarray:
         r"""Compute the Jacobian matrix of the body velocity.
 
         This matrix :math:`{}_B J_{WB}` is related to the body velocity

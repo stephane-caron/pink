@@ -474,7 +474,7 @@ class TestConfiguration(unittest.TestCase):
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
         with self.assertRaises(BodyNotFound):
-            configuration.get_body_jacobian("does_not_exist")
+            configuration.get_frame_jacobian("does_not_exist")
 
     def test_get_integrate_inplace(self):
         """Test in-place integration."""
