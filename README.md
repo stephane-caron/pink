@@ -95,7 +95,7 @@ robot = load_robot_description("upkie_description")
 configuration = pink.Configuration(robot.model, robot.data, robot.q0)
 for body, task in tasks.items():
     if type(task) is FrameTask:
-        task.set_target(configuration.get_transform_body_to_world(body))
+        task.set_target(configuration.get_transform_frame_to_world(body))
 ```
 
 A task can be added to the inverse kinematics once both its cost and target (if applicable) are defined.

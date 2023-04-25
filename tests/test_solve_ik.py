@@ -76,7 +76,7 @@ class TestSolveIK(unittest.TestCase):
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
         task.set_target(
-            configuration.get_transform_body_to_world("left_contact")
+            configuration.get_transform_frame_to_world("left_contact")
         )
         velocity = solve_ik(configuration, [task], dt=5e-3, solver="quadprog")
         self.assertTrue(np.allclose(velocity, 0.0))
@@ -90,7 +90,7 @@ class TestSolveIK(unittest.TestCase):
         task = FrameTask(
             "left_contact", position_cost=1.0, orientation_cost=1.0
         )
-        transform_init_to_world = configuration.get_transform_body_to_world(
+        transform_init_to_world = configuration.get_transform_frame_to_world(
             "left_contact"
         )
         transform_target_to_init = pin.SE3(
@@ -107,7 +107,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertFalse(np.allclose(velocity, 0.0))
         self.assertAlmostEqual(norm(task.compute_error(configuration)), 0.1)
         self.assertFalse(
-            configuration.get_transform_body_to_world("left_contact").isApprox(
+            configuration.get_transform_frame_to_world("left_contact").isApprox(
                 transform_target_to_world, prec=1e-4
             )
         )
@@ -127,7 +127,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(velocity, 0.0))
         self.assertAlmostEqual(norm(task.compute_error(configuration)), 0.0)
         self.assertTrue(
-            configuration.get_transform_body_to_world("left_contact").isApprox(
+            configuration.get_transform_frame_to_world("left_contact").isApprox(
                 transform_target_to_world, prec=1e-8
             )
         )
@@ -142,7 +142,7 @@ class TestSolveIK(unittest.TestCase):
         contact_task = FrameTask(
             "right_contact", position_cost=1.0, orientation_cost=1.0
         )
-        transform_target_to_world = configuration.get_transform_body_to_world(
+        transform_target_to_world = configuration.get_transform_frame_to_world(
             "right_contact"
         ).copy()
         self.assertTrue(
@@ -187,13 +187,13 @@ class TestSolveIK(unittest.TestCase):
         )
 
         left_ankle_task.set_target(
-            configuration.get_transform_body_to_world("l_ankle")
+            configuration.get_transform_frame_to_world("l_ankle")
         )
         right_ankle_task.set_target(
-            configuration.get_transform_body_to_world("r_ankle")
+            configuration.get_transform_frame_to_world("r_ankle")
         )
         pelvis_task.set_target(
-            configuration.get_transform_body_to_world("PELVIS_S")
+            configuration.get_transform_frame_to_world("PELVIS_S")
         )
 
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
@@ -227,15 +227,15 @@ class TestSolveIK(unittest.TestCase):
             np.eye(3), np.array([-0.1, 0.0, 0.0])
         )
         left_ankle_task.set_target(
-            configuration.get_transform_body_to_world("l_ankle")
+            configuration.get_transform_frame_to_world("l_ankle")
             * transform_l_ankle_target_to_init
         )
         right_ankle_task.set_target(
-            configuration.get_transform_body_to_world("r_ankle")
+            configuration.get_transform_frame_to_world("r_ankle")
             * transform_r_ankle_target_to_init
         )
         pelvis_task.set_target(
-            configuration.get_transform_body_to_world("PELVIS_S")
+            configuration.get_transform_frame_to_world("PELVIS_S")
         )
 
         # Run IK in closed loop
@@ -272,13 +272,13 @@ class TestSolveIK(unittest.TestCase):
             "PELVIS_S", position_cost=1.0, orientation_cost=3.0
         )
         left_ankle_task.set_target(
-            configuration.get_transform_body_to_world("l_ankle")
+            configuration.get_transform_frame_to_world("l_ankle")
         )
         right_ankle_task.set_target(
-            configuration.get_transform_body_to_world("r_ankle")
+            configuration.get_transform_frame_to_world("r_ankle")
         )
         pelvis_task.set_target(
-            configuration.get_transform_body_to_world("PELVIS_S")
+            configuration.get_transform_frame_to_world("PELVIS_S")
         )
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
         dt = 5e-3

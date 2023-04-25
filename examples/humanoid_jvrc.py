@@ -90,7 +90,7 @@ if __name__ == "__main__":
     )
     tasks = [left_foot_task, pelvis_task, right_foot_task, right_wrist_task]
 
-    pelvis_pose = configuration.get_transform_body_to_world("PELVIS_S").copy()
+    pelvis_pose = configuration.get_transform_frame_to_world("PELVIS_S").copy()
     pelvis_pose.translation[0] += 0.05
     meshcat_shapes.frame(viz.viewer["pelvis_pose"])
     viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
@@ -104,19 +104,19 @@ if __name__ == "__main__":
     )
 
     left_foot_task.set_target(
-        configuration.get_transform_body_to_world("l_ankle")
+        configuration.get_transform_frame_to_world("l_ankle")
         * transform_l_ankle_target_to_init
     )
     right_foot_task.set_target(
-        configuration.get_transform_body_to_world("r_ankle")
+        configuration.get_transform_frame_to_world("r_ankle")
         * transform_r_ankle_target_to_init
     )
     pelvis_task.set_target(
-        configuration.get_transform_body_to_world("PELVIS_S")
+        configuration.get_transform_frame_to_world("PELVIS_S")
     )
 
     right_wrist_pose = WavingPose(
-        configuration.get_transform_body_to_world("r_wrist")
+        configuration.get_transform_frame_to_world("r_wrist")
     )
 
     wrist_frame = viz.viewer["right_wrist_pose"]

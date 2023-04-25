@@ -166,7 +166,7 @@ class Configuration:
         )
         return J
 
-    def get_transform_body_to_world(self, body: str) -> pin.SE3:
+    def get_transform_frame_to_world(self, body: str) -> pin.SE3:
         """Get the pose of a body frame in the current configuration.
 
         Args:
