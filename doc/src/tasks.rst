@@ -15,7 +15,7 @@ Base task
 Body task
 =========
 
-.. automodule:: pink.tasks.body_task
+.. automodule:: pink.tasks.frame_task
     :members:
 
 Joint coupling task

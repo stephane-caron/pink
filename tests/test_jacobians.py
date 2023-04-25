@@ -48,7 +48,7 @@ class TestJacobians(unittest.TestCase):
         self.random_q = random_q
         self.robot = robot
 
-    def test_body_task(self, tol=1e-6):
+    def test_frame_task(self, tol=1e-6):
         """Test FrameTask Jacobian matrix.
 
         Args:
