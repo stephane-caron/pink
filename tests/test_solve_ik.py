@@ -159,7 +159,7 @@ class TestSolveIK(unittest.TestCase):
             damping=1e-12,
             solver="quadprog",
         )
-        jacobian_contact_in_contact = configuration.get_body_jacobian(
+        jacobian_contact_in_contact = configuration.get_frame_jacobian(
             "right_contact"
         )
         velocity_contact_in_contact = jacobian_contact_in_contact @ velocity

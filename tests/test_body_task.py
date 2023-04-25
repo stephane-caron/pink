@@ -111,7 +111,7 @@ class TestFrameTask(unittest.TestCase):
         J = task.compute_jacobian(self.configuration)
         e = task.compute_error(self.configuration)
         self.assertTrue(
-            np.allclose(J, self.configuration.get_body_jacobian("r_ankle"))
+            np.allclose(J, self.configuration.get_frame_jacobian("r_ankle"))
         )
         self.assertLess(np.linalg.norm(e), 1e-10)
 
