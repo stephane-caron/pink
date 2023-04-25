@@ -41,6 +41,23 @@ class TestFrameTask(unittest.TestCase):
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
+        frame_name = "ee_frame"
+        joint_name = robot.model.names[-1]
+        parent_joint = robot.model.getJointId(joint_name)
+        parent_frame = robot.model.getFrameId(joint_name)
+        placement = pin.SE3.Identity()
+        
+        ee_frame = robot.model.addFrame(
+            pin.Frame(frame_name,
+                            parent_joint,
+                            parent_frame,
+                            placement,
+                            pin.FrameType.OP_FRAME
+                            )
+        )
+        robot.data = pin.Data(robot.model)
+
+        
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
 
     def test_set_target_from_configuration(self):
@@ -208,3 +225,17 @@ class TestFrameTask(unittest.TestCase):
         qd_1 = solve_qp(H_1, c_1, solver="quadprog")  # H_1 p.s.d. (LM damping)
         qd_2 = solve_qp(H_2, c_2, solver="quadprog")  # idem for H_2
         self.assertGreater(np.linalg.norm(qd_2 - qd_1), 1e-6)
+
+    def test_task_on_user_added_op_frame(self):
+        """Error is zero when the target and body are at the same location."""
+
+        task = FrameTask("ee_frame", [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
+        target = self.configuration.get_transform_frame_to_world("ee_frame")
+        task.set_target(target)  # error == 0
+        J = task.compute_jacobian(self.configuration)
+        e = task.compute_error(self.configuration)
+        self.assertTrue(
+            np.allclose(J, self.configuration.get_frame_jacobian("ee_frame"))
+        )
+        self.assertLess(np.linalg.norm(e), 1e-10)
+        
