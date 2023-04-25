@@ -160,9 +160,9 @@ class Configuration:
         """
         if not self.model.existFrame(body):
             raise BodyNotFound(f"body {body} does not exist")
-        body_id = self.model.getFrameId(body)
+        frame_id = self.model.getFrameId(body)
         J: np.ndarray = pin.getFrameJacobian(
-            self.model, self.data, body_id, pin.ReferenceFrame.LOCAL
+            self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL
         )
         return J
 
@@ -178,9 +178,9 @@ class Configuration:
         Raises:
             KeyError: if the body name is not found in the robot model.
         """
-        body_id = self.model.getFrameId(body)
+        frame_id = self.model.getFrameId(body)
         try:
-            return self.data.oMf[body_id].copy()
+            return self.data.oMf[frame_id].copy()
         except IndexError as index_error:
             raise KeyError(
                 f'Body "{body}" not found in robot model'
