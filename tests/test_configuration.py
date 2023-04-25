@@ -395,7 +395,7 @@ class TestConfiguration(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        transform_pelvis_to_world = configuration.get_transform_body_to_world(
+        transform_pelvis_to_world = configuration.get_transform_frame_to_world(
             "PELVIS_S"
         )
         self.assertTrue(
@@ -412,7 +412,7 @@ class TestConfiguration(unittest.TestCase):
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
         with self.assertRaises(KeyError):
-            configuration.get_transform_body_to_world("foo")
+            configuration.get_transform_frame_to_world("foo")
 
     def test_check_limits(self):
         """Raise an error if and only if a joint limit is exceened."""

@@ -126,7 +126,7 @@ if __name__ == "__main__":
     ]
 
     # Task target specifications
-    pelvis_pose = configuration.get_transform_body_to_world(
+    pelvis_pose = configuration.get_transform_frame_to_world(
         "torso_com_link"
     ).copy()
     pelvis_pose.translation[0] += 0.05
@@ -140,22 +140,22 @@ if __name__ == "__main__":
     )
 
     left_foot_task.set_target(
-        configuration.get_transform_body_to_world("l_foot_contact")
+        configuration.get_transform_frame_to_world("l_foot_contact")
         * transform_l_ankle_target_to_init
     )
     right_foot_task.set_target(
-        configuration.get_transform_body_to_world("r_foot_contact")
+        configuration.get_transform_frame_to_world("r_foot_contact")
         * transform_r_ankle_target_to_init
     )
 
     pelvis_task.set_target(
-        configuration.get_transform_body_to_world("torso_com_link")
+        configuration.get_transform_frame_to_world("torso_com_link")
     )
 
     posture_task.set_target_from_configuration(configuration)
 
     right_wrist_pose = WavingPose(
-        configuration.get_transform_body_to_world("r_hand_contact")
+        configuration.get_transform_frame_to_world("r_hand_contact")
     )
 
     wrist_frame = viz.viewer["right_wrist_pose"]

@@ -71,7 +71,7 @@ if __name__ == "__main__":
     )
     tasks = [left_foot_task, torso_task, right_foot_task, posture_task]
 
-    torso_pose = configuration.get_transform_body_to_world("torso").copy()
+    torso_pose = configuration.get_transform_frame_to_world("torso").copy()
     # torso_pose.translation[0] += 0.05
     torso_task.set_target(torso_pose)
     posture_task.set_target_from_configuration(configuration)
@@ -84,14 +84,14 @@ if __name__ == "__main__":
     )
 
     left_foot_task.set_target(
-        configuration.get_transform_body_to_world("left_foot_tip")
+        configuration.get_transform_frame_to_world("left_foot_tip")
         * transform_left_foot_tip_target_to_init
     )
     right_foot_task.set_target(
-        configuration.get_transform_body_to_world("right_foot_tip")
+        configuration.get_transform_frame_to_world("right_foot_tip")
         * transform_right_foot_tip_target_to_init
     )
-    torso_task.set_target(configuration.get_transform_body_to_world("torso"))
+    torso_task.set_target(configuration.get_transform_frame_to_world("torso"))
 
     # Display targets
     meshcat_shapes.frame(viewer["left_foot_target"], opacity=0.5)

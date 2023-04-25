@@ -97,7 +97,7 @@ if __name__ == "__main__":
         viewer["right_contact_target"].set_transform(right_contact_target.np)
         for body in ["left_contact", "right_contact"]:
             viewer[body].set_transform(
-                configuration.get_transform_body_to_world(body).np
+                configuration.get_transform_frame_to_world(body).np
             )
 
         # Compute velocity and integrate it into next configuration

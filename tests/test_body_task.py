@@ -48,7 +48,7 @@ class TestFrameTask(unittest.TestCase):
         task = FrameTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
         task.set_target_from_configuration(self.configuration)
         transform_ankle_to_world = (
-            self.configuration.get_transform_body_to_world("l_ankle")
+            self.configuration.get_transform_frame_to_world("l_ankle")
         )
         self.assertTrue(
             np.allclose(
@@ -76,7 +76,7 @@ class TestFrameTask(unittest.TestCase):
     def test_target_set_properly(self):
         """Return target properly once it's set."""
         task = FrameTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
-        T = self.configuration.get_transform_body_to_world("l_ankle")
+        T = self.configuration.get_transform_frame_to_world("l_ankle")
         task.set_target(T)
         self.assertIsNotNone(task.transform_target_to_world)
         if task.transform_target_to_world is not None:  # help mypy
@@ -90,7 +90,7 @@ class TestFrameTask(unittest.TestCase):
     def test_target_is_a_copy(self):
         """Target is saved as a copy, not a reference to the original."""
         task = FrameTask("l_ankle", position_cost=1.0, orientation_cost=0.1)
-        target = self.configuration.get_transform_body_to_world("l_ankle")
+        target = self.configuration.get_transform_frame_to_world("l_ankle")
         task.set_target(target)
         y = target.translation[1]
         target.translation[1] += 12.0
@@ -106,7 +106,7 @@ class TestFrameTask(unittest.TestCase):
     def test_zero_error_when_target_at_body(self):
         """Error is zero when the target and body are at the same location."""
         task = FrameTask("r_ankle", position_cost=1.0, orientation_cost=0.1)
-        target = self.configuration.get_transform_body_to_world("r_ankle")
+        target = self.configuration.get_transform_frame_to_world("r_ankle")
         task.set_target(target)  # error == 0
         J = task.compute_jacobian(self.configuration)
         e = task.compute_error(self.configuration)
@@ -122,7 +122,7 @@ class TestFrameTask(unittest.TestCase):
             np.eye(3), np.array([0.0, 0.01, 0.0])
         )
         target = (
-            self.configuration.get_transform_body_to_world("r_wrist")
+            self.configuration.get_transform_frame_to_world("r_wrist")
             * transform_target_to_body
         )
         task.set_target(target)
@@ -146,7 +146,7 @@ class TestFrameTask(unittest.TestCase):
             np.eye(3), np.array([0.1, 0.02, 0.01])
         )
         target = (
-            self.configuration.get_transform_body_to_world("l_wrist")
+            self.configuration.get_transform_frame_to_world("l_wrist")
             * transform_target_to_body
         )
         task.set_target(target)
@@ -178,7 +178,7 @@ class TestFrameTask(unittest.TestCase):
     def test_lm_damping_has_no_effect_at_target(self):
         """Levenberg-Marquardt damping has no effect when the error is zero."""
         task = FrameTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
-        target = self.configuration.get_transform_body_to_world("l_wrist")
+        target = self.configuration.get_transform_frame_to_world("l_wrist")
         task.set_target(target)
         task.lm_damping = 1e-8
         H_1, c_1 = task.compute_qp_objective(self.configuration)
@@ -197,7 +197,7 @@ class TestFrameTask(unittest.TestCase):
             np.eye(3), np.array([0.0, 2.0, 0.0])
         )
         target = (
-            self.configuration.get_transform_body_to_world("r_wrist")
+            self.configuration.get_transform_frame_to_world("r_wrist")
             * transform_target_to_body
         )
         task.set_target(target)

@@ -73,10 +73,10 @@ if __name__ == "__main__":
         custom_configuration_vector(robot, left_knee=0.2, right_knee=-0.2)
     )
 
-    left_contact_target = configuration.get_transform_body_to_world(
+    left_contact_target = configuration.get_transform_frame_to_world(
         "left_contact"
     )
-    right_contact_target = configuration.get_transform_body_to_world(
+    right_contact_target = configuration.get_transform_frame_to_world(
         "right_contact"
     )
 

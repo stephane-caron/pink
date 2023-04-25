@@ -85,7 +85,7 @@ if __name__ == "__main__":
         # Update visualization frames
         viewer["end_effector_target"].set_transform(end_effector_target.np)
         viewer["end_effector"].set_transform(
-            configuration.get_transform_body_to_world(
+            configuration.get_transform_frame_to_world(
                 end_effector_task.body
             ).np
         )

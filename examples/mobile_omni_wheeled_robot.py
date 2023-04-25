@@ -86,7 +86,7 @@ if __name__ == "__main__":
         # Update visualizer frames
         viewer["target_frame"].set_transform(T.np)
         viewer["tip_frame"].set_transform(
-            configuration.get_transform_body_to_world(base_task.body).np
+            configuration.get_transform_frame_to_world(base_task.body).np
         )
 
         # Compute velocity and integrate it into next configuration

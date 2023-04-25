@@ -147,7 +147,7 @@ class FrameTask(Task):
         Args:
             configuration: Robot configuration.
         """
-        self.set_target(configuration.get_transform_body_to_world(self.body))
+        self.set_target(configuration.get_transform_frame_to_world(self.body))
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute body task error.
@@ -179,12 +179,12 @@ class FrameTask(Task):
         """
         if self.transform_target_to_world is None:
             raise TargetNotSet(f"no target set for body {self.body}")
-        transform_body_to_world = configuration.get_transform_body_to_world(
+        transform_frame_to_world = configuration.get_transform_frame_to_world(
             self.body
         )
         error_in_body: np.ndarray = body_minus(
             self.transform_target_to_world,
-            transform_body_to_world,
+            transform_frame_to_world,
         )
         return error_in_body
 
@@ -214,11 +214,11 @@ class FrameTask(Task):
         # TODO(scaron): fix sign of error and box minus
         if self.transform_target_to_world is None:
             raise TargetNotSet(f"no target set for body {self.body}")
-        transform_body_to_world = configuration.get_transform_body_to_world(
+        transform_frame_to_world = configuration.get_transform_frame_to_world(
             self.body
         )
         transform_body_to_target = (
-            self.transform_target_to_world.inverse() * transform_body_to_world
+            self.transform_target_to_world.inverse() * transform_frame_to_world
         )
         J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
         return J
