@@ -182,11 +182,11 @@ class FrameTask(Task):
         transform_frame_to_world = configuration.get_transform_frame_to_world(
             self.body
         )
-        error_in_body: np.ndarray = body_minus(
+        error_in_frame: np.ndarray = body_minus(
             self.transform_target_to_world,
             transform_frame_to_world,
         )
-        return error_in_body
+        return error_in_frame
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the body task Jacobian.
@@ -209,7 +209,7 @@ class FrameTask(Task):
             Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
             both expressed in the body frame.
         """
-        jacobian_in_body = configuration.get_frame_jacobian(self.body)
+        jacobian_in_frame = configuration.get_frame_jacobian(self.body)
 
         # TODO(scaron): fix sign of error and box minus
         if self.transform_target_to_world is None:
@@ -217,10 +217,10 @@ class FrameTask(Task):
         transform_frame_to_world = configuration.get_transform_frame_to_world(
             self.body
         )
-        transform_body_to_target = (
+        transform_frame_to_target = (
             self.transform_target_to_world.inverse() * transform_frame_to_world
         )
-        J = pin.Jlog6(transform_body_to_target) @ jacobian_in_body
+        J = pin.Jlog6(transform_frame_to_target) @ jacobian_in_frame
         return J
 
     def compute_qp_objective(

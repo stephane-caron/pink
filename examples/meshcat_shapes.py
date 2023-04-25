@@ -47,19 +47,19 @@ def __attach_axes(
     direction_names = ["x", "y", "z"]
     colors = [0xFF0000, 0x00FF00, 0x0000FF]
     rotation_axes = [[0, 0, 1], [0, 1, 0], [1, 0, 0]]
-    position_cylinder_in_body = 0.5 * length * np.eye(3)
+    position_cylinder_in_frame = 0.5 * length * np.eye(3)
     for i in range(3):
         dir_name = direction_names[i]
         material = meshcat.geometry.MeshLambertMaterial(
             color=colors[i], opacity=opacity
         )
-        transform_cylinder_to_body = meshcat.transformations.rotation_matrix(
+        transform_cylinder_to_frame = meshcat.transformations.rotation_matrix(
             np.pi / 2, rotation_axes[i]
         )
-        transform_cylinder_to_body[0:3, 3] = position_cylinder_in_body[i]
+        transform_cylinder_to_frame[0:3, 3] = position_cylinder_in_frame[i]
         cylinder = meshcat.geometry.Cylinder(length, thickness)
         handle[dir_name].set_object(cylinder, material)
-        handle[dir_name].set_transform(transform_cylinder_to_body)
+        handle[dir_name].set_transform(transform_cylinder_to_frame)
 
 
 def frame(

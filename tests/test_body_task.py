@@ -118,12 +118,12 @@ class TestFrameTask(unittest.TestCase):
     def test_unit_cost_qp_objective(self):
         """Unit cost means the QP objective is exactly (J^T J, -e^T J)."""
         task = FrameTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
-        transform_target_to_body = pin.SE3(
+        transform_target_to_frame = pin.SE3(
             np.eye(3), np.array([0.0, 0.01, 0.0])
         )
         target = (
             self.configuration.get_transform_frame_to_world("r_wrist")
-            * transform_target_to_body
+            * transform_target_to_frame
         )
         task.set_target(target)
         J = task.compute_jacobian(self.configuration)
@@ -142,12 +142,12 @@ class TestFrameTask(unittest.TestCase):
         Jacobian and error coordinates.
         """
         task = FrameTask("l_wrist", position_cost=1.0, orientation_cost=0.1)
-        transform_target_to_body = pin.SE3(
+        transform_target_to_frame = pin.SE3(
             np.eye(3), np.array([0.1, 0.02, 0.01])
         )
         target = (
             self.configuration.get_transform_frame_to_world("l_wrist")
-            * transform_target_to_body
+            * transform_target_to_frame
         )
         task.set_target(target)
         J = task.compute_jacobian(self.configuration)
@@ -193,12 +193,12 @@ class TestFrameTask(unittest.TestCase):
         That is, unless the task is fulfilled, it reduces velocities.
         """
         task = FrameTask("r_wrist", position_cost=1.0, orientation_cost=0.1)
-        transform_target_to_body = pin.SE3(
+        transform_target_to_frame = pin.SE3(
             np.eye(3), np.array([0.0, 2.0, 0.0])
         )
         target = (
             self.configuration.get_transform_frame_to_world("r_wrist")
-            * transform_target_to_body
+            * transform_target_to_frame
         )
         task.set_target(target)
         task.lm_damping = 1e-8
