@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unrelease
+## Unreleased
 
 ### Added
 
 - Example: Stretch RE1
+
+### Changed
+
+- Handle all frames, including non-body frames (thanks to @proyan)
+- Rename ``BodyTask`` to ``FrameTask``
 
 ## [0.10.0] - 2023/03/30
 
