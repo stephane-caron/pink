@@ -17,8 +17,8 @@
 
 """Kinematic tasks."""
 
-from .frame_task import FrameTask
 from .exceptions import TargetNotSet, TaskJacobianNotSet
+from .frame_task import FrameTask
 from .joint_coupling_task import JointCouplingTask
 from .linear_holonomic_task import LinearHolonomicTask
 from .posture_task import PostureTask
