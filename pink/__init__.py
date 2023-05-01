@@ -22,7 +22,7 @@ from .solve_ik import build_ik, solve_ik
 from .tasks import Task
 from .utils import custom_configuration_vector
 
-__version__ = "0.10.0"
+__version__ = "0.11.0"
 
 __all__ = [
     "Configuration",
