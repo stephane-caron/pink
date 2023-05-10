@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Universal Robots UR3 arm tracking a moving target."""
+"""A pair of UR3 arms on a mobile body tracking moving targets."""
 
 from typing import Tuple
 
