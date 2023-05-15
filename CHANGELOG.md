@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - Example: flying dual-arm with UR3
 
+### Changed
+
+- Drop support for Python 3.7
+
 ## [0.11.0] - 2023/05/01
 
 ### Added
