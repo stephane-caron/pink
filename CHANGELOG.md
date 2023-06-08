@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Example: UR5 arm
 - Example: flying dual-arm with UR3
 
 ### Changed
