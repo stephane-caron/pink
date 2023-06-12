@@ -188,11 +188,9 @@ class LinearHolonomicTask(Task):
         Returns:
             Task Jacobian :math:`J(q)`.
         """
-        if self.A.shape[1] != configuration.model.nv:
-            raise TaskJacobianNotSet(
-                "task Jacobian dimension is not set properly"
-            )
-        return self.A
+        return self.A @ pin.dDifference(
+            configuration.model, self.q_0, self.q, pin.ARG1
+        )
 
     def compute_qp_objective(
         self, configuration: Configuration
