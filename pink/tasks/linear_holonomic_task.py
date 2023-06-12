@@ -27,7 +27,6 @@ from .task import Task
 from .exceptions import TaskJacobianNotSet
 
 
-
 class LinearHolonomicTask(Task):
     r"""Linear holonomic task :math:`A (q \ominus q_0) = b`.
 
@@ -144,7 +143,11 @@ class LinearHolonomicTask(Task):
         """
         assert len(A.shape) == 2
         assert len(b.shape) == 1
-        assert b.shape[0] == A.shape[0] == (1 if isinstance(cost, float) else len(cost))
+        assert (
+            b.shape[0]
+            == A.shape[0]
+            == (1 if isinstance(cost, float) else len(cost))
+        )
 
         self.A = A
         self.b = b
@@ -172,8 +175,7 @@ class LinearHolonomicTask(Task):
             Task error vector :math:`e(q)`.
         """
         q_ref = (
-            pin.neutral(configuration.model)
-            if self.q_0 is None else self.q_0
+            pin.neutral(configuration.model) if self.q_0 is None else self.q_0
         )
         if not self.A.shape[1] == configuration.model.nv:
             raise TaskJacobianNotSet
@@ -203,8 +205,7 @@ class LinearHolonomicTask(Task):
             Task Jacobian :math:`J(q)`.
         """
         q_ref = (
-            pin.neutral(configuration.model)
-            if self.q_0 is None else self.q_0
+            pin.neutral(configuration.model) if self.q_0 is None else self.q_0
         )
         if not self.A.shape[1] == configuration.model.nv:
             raise TaskJacobianNotSet
