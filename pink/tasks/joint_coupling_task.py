@@ -20,6 +20,7 @@
 from typing import Sequence
 
 import numpy as np
+import pinocchio as pin
 
 from ..configuration import Configuration
 from ..utils import get_joint_idx
@@ -51,8 +52,18 @@ class JointCouplingTask(LinearHolonomicTask):
             configuration: Robot configuration.
         """
         assert len(joint_name_list) == len(ratios)
+
         A = np.zeros((1, configuration.model.nv))
+
         for joint, ratio in zip(joint_name_list, ratios):
-            _, joint_v_idx = get_joint_idx(configuration.model, joint)
-            A[:, joint_v_idx] = ratio
-        super().__init__(A, cost)
+            joint_obj = model.joints[model.getJointId(joint)]
+            strt = joint_obj.idx_v
+            end = strt + joint_obj.nv
+            A[:, strt:end] = ratio
+
+        super().__init__(
+            A,
+            np.zeros(1),
+            pin.neutral(configuration.model),
+            cost
+        )
