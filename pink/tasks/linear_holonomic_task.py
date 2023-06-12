@@ -24,6 +24,8 @@ import pinocchio as pin
 
 from ..configuration import Configuration
 from .task import Task
+from .exceptions import TaskJacobianNotSet
+
 
 
 class LinearHolonomicTask(Task):
@@ -140,7 +142,10 @@ class LinearHolonomicTask(Task):
                 associated with the task, of dimension :math:`n_q`.
             cost: cost vector of dimension :math:`p`.
         """
-        assert A.shape[0] == 1 if isinstance(cost, float) else len(cost)
+        assert len(A.shape) == 2
+        assert len(b.shape) == 1
+        assert b.shape[0] == A.shape[0] == (1 if isinstance(cost, float) else len(cost))
+
         self.A = A
         self.b = b
         self.cost = cost
@@ -168,8 +173,10 @@ class LinearHolonomicTask(Task):
         """
         q_ref = (
             pin.neutral(configuration.model)
-            if self.q0 is None else self.q0
+            if self.q_0 is None else self.q_0
         )
+        if not self.A.shape[1] == configuration.model.nv:
+            raise TaskJacobianNotSet
         return (
             self.A
             @ pin.difference(configuration.model, q_ref, configuration.q)
@@ -197,10 +204,12 @@ class LinearHolonomicTask(Task):
         """
         q_ref = (
             pin.neutral(configuration.model)
-            if self.q0 is None else self.q0
+            if self.q_0 is None else self.q_0
         )
+        if not self.A.shape[1] == configuration.model.nv:
+            raise TaskJacobianNotSet
         return self.A @ pin.dDifference(
-            configuration.model, q_ref, self.q, pin.ARG1
+            configuration.model, q_ref, configuration.q, pin.ARG1
         )
 
     def compute_qp_objective(
