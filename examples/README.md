@@ -23,14 +23,3 @@ https://user-images.githubusercontent.com/1189580/231776286-7dbba695-1e34-408c-9
 |------|---------------|------------------|
 | Mobile base | $0.1$ | 1 |
 | Fingertip | 1 | $10^{-4}$ |
-
-## UR5 arm
-
-A UR5 arm tracking a moving target:
-
-https://github.com/tasts-robots/pink/assets/1189580/90633629-a4e2-4756-a72c-0ef6aa14bd0b
-
-| Task | Cost |
-|------|------|
-| End-effector | 1 |
-| Posture | $10^{-3}$ |
