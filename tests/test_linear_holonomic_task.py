@@ -54,14 +54,14 @@ class TestLinearHolonomicTask(unittest.TestCase):
         )
         A[:, r_knee_fe_jp_v_idx] = 1.0
         A[:, r_knee_fe_jd_v_idx] = -1.0
-        task = LinearHolonomicTask(A=A, cost=1.0)
+        task = LinearHolonomicTask(A=A, b=np.zeros(1), q_0=None, cost=1.0)
         self.assertTrue("cost=" in repr(task))
         self.assertTrue("gain=" in repr(task))
 
     def test_jacobian_not_set_properly(self):
         """Raise an exception when the task Jacobian is not set properly."""
         A = np.zeros((1, self.configuration.model.nq))
-        task = LinearHolonomicTask(A=A, cost=1.0)
+        task = LinearHolonomicTask(A=A, b=np.zeros(1), q_0=None, cost=1.0)
         with self.assertRaises(TaskJacobianNotSet):
             task.compute_error(self.configuration)
         with self.assertRaises(TaskJacobianNotSet):
@@ -86,7 +86,7 @@ class TestLinearHolonomicTask(unittest.TestCase):
         )
         A[:, l_knee_fe_jp_v_idx] = 1.0
         A[:, l_knee_fe_jd_v_idx] = -1.0
-        task = LinearHolonomicTask(A=A, cost=[1.0, 1.0])
+        task = LinearHolonomicTask(A=A, b=np.zeros(2), q_0=None, cost=[1.0, 1.0])
         e = task.compute_error(self.configuration)
         J = task.compute_jacobian(self.configuration)
         H, c = task.compute_qp_objective(self.configuration)
@@ -112,7 +112,7 @@ class TestLinearHolonomicTask(unittest.TestCase):
         )
         A[:, l_knee_fe_jp_v_idx] = 1.0
         A[:, l_knee_fe_jd_v_idx] = -1.0
-        task = LinearHolonomicTask(A=A, cost=[0.0, 0.0])
+        task = LinearHolonomicTask(A=A, b=np.zeros(2), q_0=None, cost=[0.0, 0.0])
         J = task.compute_jacobian(self.configuration)
         e = task.compute_error(self.configuration)
         H, c = task.compute_qp_objective(self.configuration)
