@@ -15,26 +15,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Linear holonomic task :math:`A q = b`."""
+r"""Linear holonomic task :math:`A (q \ominus q_0) = b`."""
 
 from typing import Sequence, Tuple, Union
 
 import numpy as np
+import pinocchio as pin
 
 from ..configuration import Configuration
-from .exceptions import TaskJacobianNotSet
 from .task import Task
 
 
 class LinearHolonomicTask(Task):
-    r"""Linear holonomic task :math:`A q = 0`.
+    r"""Linear holonomic task :math:`A (q \ominus q_0) = b`.
 
     Attributes:
         A: matrix that defines the task:
 
-            .. math::
-                e(q) = A q
-                \dot{e}(q) := A \dot{q}
+            .. raw:: latex html
+
+                \begin{align}
+                e(q) & = A (q \ominus^\ell q_0) - b \\
+                \dot{e}(q) & := A \dot{q}
+                \end{align}
 
             where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the
             task aims to drive to zero (:math:`k` is the dimension of the
@@ -46,44 +49,113 @@ class LinearHolonomicTask(Task):
         A linear holonomic task is typically used for a robot
         that has mechanical constraint (e.g., closed loop kinematics).
         Floating base coordinates are not affected by this task.
+
+    Notes:
+        To be fully explicit, our quantities in the task equation :math:`e(q) =
+        A (q \ominus^\ell q_0) - b` belong to the following sets:
+
+            .. raw:: latex html
+
+                \begin{align}
+                e(q) & \in \mathbb{R}^p &
+                A & \in \mathcal{L}(\mathfrak{g}^\ell_{q_0}, \mathbb{R}^p) &
+                b & \in \mathbb{R}^p
+                \end{align}
+
+        where :math:`\mathfrak{g}^\ell_{q_0}` is the Lie algebra associated
+        with the Lie group :math:`\mathcal{C}` (our configuration space), taken
+        in the local frame (:math:`\ell`, *a.k.a* body frame) at the reference
+        configuration :math:`q_0`.
+
+        We take the *local* difference :math:`q \ominus^\ell q_0` between our
+        configurations :math:`q \in \mathcal{C}` and :math:`q_0 \in
+        \mathcal{C}`, which is an element of the local Lie algebra in
+        :math:`\mathfrak{g}^\ell_{q_0}` at :math:`q_0`. In Pinocchio the
+        convention is to use local differences, unless specified otherwise
+        (e.g. world-aligned frames). It should not be confused with the general
+        Lie difference :math:`\ominus` (that one is never used in practice),
+        nor the spatial difference :math:`\ominus^s`, which is an element of
+        the spatial Lie algebra :math:`\mathfrak{g}^s_{q_0}` associated with
+        :math:`q_0`:
+
+            .. raw:: latex html
+
+                \begin{align}
+                q \ominus q_0 & \in \mathcal{T}_{q_0} \mathcal{C} \\
+                q \ominus^\ell q_0 & \in \mathfrak{g}^\ell_{q_0} \\
+                q \ominus^s q_0 & \in \mathfrak{g}^s_{q_0}
+                \end{align}
+
+        On a side note, here's a look at the dimensions of these elements:
+
+            .. raw:: latex html
+
+                \begin{align}
+                \mathrm{dim}(q) = \mathrm{dim}(q_0) = n_q \\
+                \mathrm{dim}(q \ominus q_0) = n_q \\
+                \mathrm{dim}(q \ominus^\ell q_0)
+                = \mathrm{dim}(q \ominus^s q_0)
+                = n_v
+                \end{align}
+
+        Finally, we derive the Jacobian of our error :math:`e(q)` as follows,
+        denoting by :math:`a = \log(q_0^{-1} q)` so that :math:`q \ominus^\ell
+        q_0 = \log(a)`:
+
+            .. raw:: latex html
+
+                \begin{align}
+                \left.\frac{\partial e(q)}{\partial q} \right|_{\ell}
+                = A \left. \frac{\partial \log}{\partial q}
+                \right|_{\ell}^{\ell} \left.
+                \frac{\partial a}{\partial q} \right|_{\ell} = A \left.
+                \frac{\partial \log}{\partial q}
+                \right|_{\ell}
+                \end{align}
+
+        By virtue of the identity :math:`\left.{}^\ell \frac{\partial
+        a}{\partial q}\right|_{\ell} = I_{\mathfrak{g}}`. (See Yann de
+        Mont-Marin's future blog for details :p)
     """
 
     A: np.ndarray
     cost: Union[float, Sequence[float]]
 
     def __init__(
-        self, A: np.ndarray, cost: Union[float, Sequence[float]]
+        self,
+        A: np.ndarray,
+        b: np.ndarray,
+        q_0: np.ndarray,
+        cost: Union[float, Sequence[float]],
     ) -> None:
         r"""Create task.
 
         Args:
-            A: Jacobian matrix of the task.
-            cost: joint angular error cost in
-                :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
+            A: Jacobian matrix of the task, of size :math:`p \times n_v`.
+            b: target vector of the task, of dimension :math:`p`.
+            q_0: stationary configuration :math:`q_0 \in \mathcal{C}`
+                associated with the task, of dimension :math:`n_q`.
+            cost: cost vector of dimension :math:`p`.
         """
         assert A.shape[0] == 1 if isinstance(cost, float) else len(cost)
         self.A = A
+        self.b = b
         self.cost = cost
+        self.q_0 = q_0
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task error function.
 
-        The error function :math:`e(q) \in \mathbb{R}^{k}` is the quantity that
-        the task aims to drive to zero (:math:`k` is the dimension of the
+        The error function :math:`e(q) \in \mathbb{R}^{p}` is the quantity that
+        the task aims to drive to zero (:math:`p` is the dimension of the
         task). It appears in the first-order task dynamics:
 
         .. math::
 
             J(q) \Delta q = \alpha e(q)
 
-        The Jacobian matrix :math:`J(q) \in \mathbb{R}^{k \times n_v}`,
-        with :math:`n_v` the dimension of the robot's tangent space, is
-        computed by :func:`Task.compute_jacobian`, while the configuration
-        displacement :math:`\\Delta q` is the output of inverse kinematics. The
-        error vector :math:`e(q)` is multiplied by the task gain :math:`\alpha
-        \in [0, 1]`. The gain is usually 1 for dead-beat control (*i.e.*
-        converge as fast as possible), but it can also be lower for some extra
-        low-pass filtering.
+        See the description of the task above for details about the calculation
+        of this Jacobian.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -91,27 +163,24 @@ class LinearHolonomicTask(Task):
         Returns:
             Task error vector :math:`e(q)`.
         """
-        if self.A.shape[1] != configuration.model.nv:
-            raise TaskJacobianNotSet(
-                "task Jacobian dimension is not set properly"
-            )
-        return np.zeros(self.A.shape[0])
+        return (
+            self.A
+            @ pin.difference(configuration.model, self.q0, configuration.q)
+            - self.b
+        )
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task Jacobian at a given configuration.
 
-        The task Jacobian :math:`J(q) \in \mathbb{R}^{k \times n_v}` appears in
+        The task Jacobian :math:`J(q) \in \mathbb{R}^{p \times n_v}` appears in
         the first-order task dynamics:
 
         .. math::
 
             J(q) \Delta q = \alpha e(q)
 
-        The error :math:`e(q) \in \mathbb{R}^{k \times n_v}`, with :math:`k`
-        the dimension of the task and :math:`n_v` the dimension of the robot's
-        tangent space, is computed by :func:`Task.compute_error`, while the
-        configuration displacement :math:`\\Delta q` is the output of inverse
-        kinematics.
+        See the description of the task above for details about the calculation
+        of this Jacobian.
 
         Args:
             configuration: Robot configuration :math:`q`.
