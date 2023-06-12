@@ -166,9 +166,13 @@ class LinearHolonomicTask(Task):
         Returns:
             Task error vector :math:`e(q)`.
         """
+        q_ref = (
+            pin.neutral(configuration.model)
+            if self.q0 is None else self.q0
+        )
         return (
             self.A
-            @ pin.difference(configuration.model, self.q0, configuration.q)
+            @ pin.difference(configuration.model, q_ref, configuration.q)
             - self.b
         )
 
@@ -191,8 +195,12 @@ class LinearHolonomicTask(Task):
         Returns:
             Task Jacobian :math:`J(q)`.
         """
+        q_ref = (
+            pin.neutral(configuration.model)
+            if self.q0 is None else self.q0
+        )
         return self.A @ pin.dDifference(
-            configuration.model, self.q_0, self.q, pin.ARG1
+            configuration.model, q_ref, self.q, pin.ARG1
         )
 
     def compute_qp_objective(
