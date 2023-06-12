@@ -42,6 +42,9 @@ class LinearHolonomicTask(Task):
             where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the
             task aims to drive to zero (:math:`k` is the dimension of the
             task).
+        b: vector that defines the affine part of the task
+        q0: element for which we work in the Lie algebra. If set to None, it
+            will use the neutral configuration of the robot.
         cost: joint angular error cost in
             :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
 
