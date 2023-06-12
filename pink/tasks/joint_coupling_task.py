@@ -56,7 +56,7 @@ class JointCouplingTask(LinearHolonomicTask):
         A = np.zeros((1, configuration.model.nv))
 
         for joint, ratio in zip(joint_name_list, ratios):
-            joint_obj = model.joints[model.getJointId(joint)]
+            joint_obj = configuration.model.joints[configuration.model.getJointId(joint)]
             strt = joint_obj.idx_v
             end = strt + joint_obj.nv
             A[:, strt:end] = ratio
