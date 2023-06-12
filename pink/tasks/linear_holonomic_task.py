@@ -23,8 +23,8 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from .task import Task
 from .exceptions import TaskJacobianNotSet
+from .task import Task
 
 
 class LinearHolonomicTask(Task):
