@@ -23,3 +23,5 @@ https://user-images.githubusercontent.com/1189580/231776286-7dbba695-1e34-408c-9
 |------|---------------|------------------|
 | Mobile base | $0.1$ | 1 |
 | Fingertip | 1 | $10^{-4}$ |
+
+## UR5 arm
