@@ -108,10 +108,18 @@ if __name__ == "__main__":
 
     # Joint coupling task
     r_knee_holonomic_task = JointCouplingTask(
-        ["r_knee_fe_jp", "r_knee_fe_jd"], [1.0, -1.0], 100.0, configuration
+        ["r_knee_fe_jp", "r_knee_fe_jd"],
+        [1.0, -1.0],
+        100.0,
+        configuration,
+        lm_damping=1e-7,
     )
     l_knee_holonomic_task = JointCouplingTask(
-        ["l_knee_fe_jp", "l_knee_fe_jd"], [1.0, -1.0], 100.0, configuration
+        ["l_knee_fe_jp", "l_knee_fe_jd"],
+        [1.0, -1.0],
+        100.0,
+        configuration,
+        lm_damping=1e-7,
     )
 
     tasks = [
