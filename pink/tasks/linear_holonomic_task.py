@@ -217,4 +217,8 @@ class LinearHolonomicTask(Task):
 
     def __repr__(self):
         """Human-readable representation of the task."""
-        return f"LinearHolonomicTask(cost={self.cost}, gain={self.gain})"
+        return (
+            f"LinearHolonomicTask(cost={self.cost}, "
+            f"gain={self.gain}, "
+            f"lm_damping={self.lm_damping})"
+        )

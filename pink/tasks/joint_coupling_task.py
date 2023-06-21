@@ -76,3 +76,13 @@ class JointCouplingTask(LinearHolonomicTask):
             cost=cost,
             lm_damping=lm_damping,
         )
+        self.joint_names = joint_names
+
+    def __repr__(self):
+        """Human-readable representation of the task."""
+        return (
+            f"JointCouplingTask(joint_names={self.joint_names}, "
+            f"cost={self.cost}, "
+            f"gain={self.gain}, "
+            f"lm_damping={self.lm_damping})"
+        )
