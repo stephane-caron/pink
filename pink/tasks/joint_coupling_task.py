@@ -33,9 +33,11 @@ class JointCouplingTask(LinearHolonomicTask):
         This task only considers a 1-Dimensional task.
     """
 
+    joint_names: Sequence[str]
+
     def __init__(
         self,
-        joint_name_list: Sequence[str],
+        joint_names: Sequence[str],
         ratios: Sequence[float],
         cost: float,
         configuration: Configuration,
@@ -44,7 +46,7 @@ class JointCouplingTask(LinearHolonomicTask):
         r"""Compute Jacobian matrix of a linear holonomic constraint.
 
         Args:
-            joint_name_list: a list of joint names consisting of a linear
+            joint_names: a list of joint names consisting of a linear
                 holonomic constraint.
             ratios: a list of ratios that each joint takes in a linear
                 holonomic constraint.
@@ -56,10 +58,10 @@ class JointCouplingTask(LinearHolonomicTask):
                 jerky under unfeasible targets, but beware that too large a
                 damping can slow down the task.
         """
-        assert len(joint_name_list) == len(ratios)
+        assert len(joint_names) == len(ratios)
 
         A = np.zeros((1, configuration.model.nv))
-        for joint, ratio in zip(joint_name_list, ratios):
+        for joint, ratio in zip(joint_names, ratios):
             joint_obj = configuration.model.joints[
                 configuration.model.getJointId(joint)
             ]
