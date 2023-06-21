@@ -44,7 +44,7 @@ class LinearHolonomicTask(Task):
             task aims to drive to zero (:math:`k` is the dimension of the
             task).
         b: vector that defines the affine part of the task
-        q0: element for which we work in the Lie algebra. If set to None, it
+        q_0: element for which we work in the Lie algebra. If set to None, it
             will use the neutral configuration of the robot.
 
     Note:
@@ -121,6 +121,8 @@ class LinearHolonomicTask(Task):
     """
 
     A: np.ndarray
+    b: np.ndarray
+    q_0: np.ndarray
 
     def __init__(
         self,
