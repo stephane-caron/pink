@@ -17,7 +17,7 @@
 
 """Body task implementation."""
 
-from typing import Optional, Sequence, Tuple, Union
+from typing import Optional, Sequence, Union
 
 import numpy as np
 import pinocchio as pin
@@ -222,50 +222,6 @@ class FrameTask(Task):
         )
         J = pin.Jlog6(transform_frame_to_target) @ jacobian_in_frame
         return J
-
-    def compute_qp_objective(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the matrix-vector pair :math:`(H, c)` of the QP objective.
-
-        This pair is such that the contribution of the task to the QP objective
-        of the IK is:
-
-        .. math::
-
-            \| J \Delta q - \alpha e \|_{W}^2
-            = \frac{1}{2} \Delta q^T H \Delta q + c^T q
-
-        The weight matrix :math:`W \in \mathbb{R}^{6 \times 6}` combines
-        position and orientation costs. The unit of the overall contribution is
-        :math:`[\mathrm{cost}]^2`. The configuration displacement
-        :math:`\Delta q` is the output of inverse kinematics (we divide it by
-        :math:`\Delta t` to get a commanded velocity).
-
-        Args:
-            configuration: Robot configuration :math:`q`.
-
-        Returns:
-            Pair :math:`(H(q), c(q))` of Hessian matrix and linear vector of
-            the QP objective.
-
-        See Also:
-            Levenberg-Marquardt damping is described in [Sugihara2011]_. The
-            dimensional analysis in this class is our own.
-        """
-        jacobian = self.compute_jacobian(configuration)
-        gain_error = self.gain * self.compute_error(configuration)
-        weight = np.diag(self.cost)  # [cost] * [twist]^{-1}
-        weighted_jacobian = weight @ jacobian  # [cost]
-        weighted_error = weight @ gain_error  # [cost]
-        mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2
-        eye_tg = configuration.tangent.eye
-        # Our Levenberg-Marquardt damping `mu * eye_tg` is isotropic in the
-        # robot's tangent space. If it helps we can add a tangent-space scaling
-        # to damp the floating base differently from joint angular velocities.
-        H = weighted_jacobian.T @ weighted_jacobian + mu * eye_tg
-        c = -weighted_error.T @ weighted_jacobian
-        return (H, c)
 
     def __repr__(self):
         """Human-readable representation of the task."""
