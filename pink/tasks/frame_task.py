@@ -46,7 +46,6 @@ class FrameTask(Task):
     """
 
     body: str
-    cost: np.ndarray
     lm_damping: float
     transform_target_to_world: Optional[pin.SE3]
 
@@ -55,7 +54,6 @@ class FrameTask(Task):
         body: str,
         position_cost: Union[float, Sequence[float]],
         orientation_cost: Union[float, Sequence[float]],
-        cost: Union[float, np.ndarray] = 1.0,
         lm_damping: float = 0.0,
     ) -> None:
         r"""Define a new body task.
@@ -70,18 +68,10 @@ class FrameTask(Task):
                 normalized cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
                 If this is a vector, the cost is anisotropic and each
                 coordinate corresponds to an axis in the local body frame.
-            cost: 6D vector that specifies how much each coordinate (in the
-                local body frame) contributes to the cost. Position costs come
-                first (Pinocchio spatial vector convention) and are in
-                :math:`[\mathrm{cost}] / [\mathrm{m}]`, where the the unit of
-                :math:`[\mathrm{cost}]` up to the user. They are followed by
-                orientation costs in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
-                Set a cost to zero to disable the task along a coordinate (no
-                cost no effect).
             lm_damping: Levenberg-Marquardt damping (see class attributes). The
                 default value is conservatively low.
         """
-        super().__init__(cost=cost, lm_damping=lm_damping)
+        super().__init__(cost=np.ones(6), lm_damping=lm_damping)
         self.body = body
         self.lm_damping = lm_damping
         self.transform_target_to_world = None
