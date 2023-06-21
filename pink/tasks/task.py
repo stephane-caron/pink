@@ -183,4 +183,9 @@ class Task(abc.ABC):
 
     def __repr__(self):
         """Human-readable representation of the task."""
-        return f"Task(gain={self.gain})"
+        return (
+            f"Task("
+            f"cost={self.cost}, "
+            f"gain={self.gain}, "
+            f"lm_damping={self.lm_damping})"
+        )
