@@ -26,6 +26,7 @@ from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
 from pink.tasks import FrameTask, TargetNotSet
+from pink.tasks.exceptions import TaskDefinitionError
 
 
 class TestFrameTask(unittest.TestCase):
@@ -226,7 +227,6 @@ class TestFrameTask(unittest.TestCase):
 
     def test_task_on_user_added_op_frame(self):
         """Error is zero when the target and body are at the same location."""
-
         task = FrameTask("ee_frame", [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
         target = self.configuration.get_transform_frame_to_world("ee_frame")
         task.set_target(target)  # error == 0
@@ -236,3 +236,10 @@ class TestFrameTask(unittest.TestCase):
             np.allclose(J, self.configuration.get_frame_jacobian("ee_frame"))
         )
         self.assertLess(np.linalg.norm(e), 1e-10)
+
+    def test_inconsistent_cost(self):
+        """Exception when the cost is not a vector any more."""
+        task = FrameTask("ee_frame", [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
+        task.cost = 42.0
+        with self.assertRaises(TaskDefinitionError):
+            task.set_position_cost(1.0)

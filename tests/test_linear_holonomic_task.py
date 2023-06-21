@@ -24,8 +24,8 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks.exceptions import TaskDefinitionError
 from pink.tasks import LinearHolonomicTask, TaskJacobianNotSet
+from pink.tasks.exceptions import TaskDefinitionError
 from pink.utils import get_joint_idx
 
 
@@ -44,7 +44,7 @@ class TestLinearHolonomicTask(unittest.TestCase):
         )
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
 
-    def test_inconsistent(self):
+    def test_inconsistent_definition(self):
         """Exception when the task is not defined properly."""
         with self.assertRaises(TaskDefinitionError):
             LinearHolonomicTask(A=np.ones((3, 4)), b=np.ones(5), q_0=None)
