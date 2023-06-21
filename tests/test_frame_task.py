@@ -79,7 +79,7 @@ class TestFrameTask(unittest.TestCase):
         )
         self.assertTrue("gain=" in repr(earflap_task))
         self.assertTrue("cost=" in repr(earflap_task))
-        self.assertTrue("target=" in repr(earflap_task))
+        self.assertTrue("transform_target_to_world=" in repr(earflap_task))
 
     def test_target_not_set(self):
         """Raise an exception when the target is not set."""
