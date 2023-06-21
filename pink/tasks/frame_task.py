@@ -231,9 +231,10 @@ class FrameTask(Task):
             self.cost if isinstance(self.cost, float) else self.cost[0:3]
         )
         return (
-            f"FrameTask(body={self.body}, "
+            "FrameTask("
+            f"body={self.body}, "
             f"gain={self.gain}, "
             f"orientation_cost={orientation_cost}, "
             f"position_cost={position_cost}, "
-            f"target={self.transform_target_to_world})"
+            f"transform_target_to_world={self.transform_target_to_world})"
         )
