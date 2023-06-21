@@ -35,8 +35,6 @@ class PostureTask(Task):
     are not affected by this task.
 
     Attributes:
-        cost: joint angular error cost in
-            :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
         target_q: Target vector in the configuration space.
 
     A posture task is typically used for regularization as it has a steady
@@ -64,7 +62,6 @@ class PostureTask(Task):
             for the floating base.
         """
         super().__init__(cost=cost, lm_damping=lm_damping)
-        self.cost = cost
         self.target_q = None
 
     def set_target(self, target_q: np.ndarray) -> None:

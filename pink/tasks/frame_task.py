@@ -55,7 +55,7 @@ class FrameTask(Task):
         body: str,
         position_cost: Union[float, Sequence[float]],
         orientation_cost: Union[float, Sequence[float]],
-        cost: Union[float, Sequence[float]] = 1.0,
+        cost: Union[float, np.ndarray] = 1.0,
         lm_damping: float = 0.0,
     ) -> None:
         r"""Define a new body task.

@@ -17,7 +17,7 @@
 
 r"""Linear holonomic task :math:`A (q \ominus q_0) = b`."""
 
-from typing import Sequence, Union
+from typing import Union
 
 import numpy as np
 import pinocchio as pin
@@ -121,14 +121,13 @@ class LinearHolonomicTask(Task):
     """
 
     A: np.ndarray
-    cost: Union[float, Sequence[float]]
 
     def __init__(
         self,
         A: np.ndarray,
         b: np.ndarray,
         q_0: np.ndarray,
-        cost: Union[float, Sequence[float]],
+        cost: Union[float, np.ndarray],
         lm_damping: float,
     ) -> None:
         r"""Create task.
