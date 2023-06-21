@@ -25,7 +25,7 @@ concepts and notations are there.
 """
 
 import abc
-from typing import Tuple
+from typing import Sequence, Tuple, Union
 
 import numpy as np
 
@@ -36,11 +36,30 @@ class Task(abc.ABC):
     r"""Abstract base class for kinematic tasks.
 
     Attributes:
+        cost: cost vector with the same dimension as the error of the task. Its
+            units depends on the error as well.
         gain: Task gain :math:`\alpha \in [0, 1]` for additional low-pass
             filtering. Defaults to 1.0 (no filtering) for dead-beat control.
+        lm_damping: Unitless scale of the Levenberg-Marquardt (only when
+            the error is large) regularization term, which helps when
+            targets are unfeasible. Increase this value if the task is too
+            jerky under unfeasible targets, but beware that a larger
+            damping slows down the task.
     """
 
-    gain: float = 1.0
+    cost: Union[float, Sequence[float]]
+    gain: float
+    lm_damping: float
+
+    def __init__(
+        self,
+        cost: Union[float, Sequence[float]],
+        gain: float = 1.0,
+        lm_damping: float = 0.0,
+    ):
+        self.cost = cost
+        self.gain = gain
+        self.lm_damping = lm_damping
 
     @abc.abstractmethod
     def compute_error(self, configuration: Configuration) -> np.ndarray:
@@ -136,6 +155,7 @@ class Task(abc.ABC):
                 else self.cost
             )
         )
+
         weighted_jacobian = weight @ jacobian  # [cost]
         weighted_error = weight @ gain_error  # [cost]
         mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2

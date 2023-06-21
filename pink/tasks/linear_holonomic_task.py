@@ -17,7 +17,7 @@
 
 r"""Linear holonomic task :math:`A (q \ominus q_0) = b`."""
 
-from typing import Sequence, Tuple, Union
+from typing import Sequence, Union
 
 import numpy as np
 import pinocchio as pin
@@ -46,8 +46,6 @@ class LinearHolonomicTask(Task):
         b: vector that defines the affine part of the task
         q0: element for which we work in the Lie algebra. If set to None, it
             will use the neutral configuration of the robot.
-        cost: joint angular error cost in
-            :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
 
     Note:
         A linear holonomic task is typically used for a robot
@@ -131,6 +129,7 @@ class LinearHolonomicTask(Task):
         b: np.ndarray,
         q_0: np.ndarray,
         cost: Union[float, Sequence[float]],
+        lm_damping: float,
     ) -> None:
         r"""Create task.
 
@@ -140,7 +139,13 @@ class LinearHolonomicTask(Task):
             q_0: stationary configuration :math:`q_0 \in \mathcal{C}`
                 associated with the task, of dimension :math:`n_q`.
             cost: cost vector of dimension :math:`p`.
+            lm_damping: Unitless scale of the Levenberg-Marquardt (only when
+                the error is large) regularization term, which helps when
+                targets are unfeasible. Increase this value if the task is too
+                jerky under unfeasible targets, but beware that too large a
+                damping can slow down the task.
         """
+        super().__init__(cost=cost, lm_damping=lm_damping)
         assert len(A.shape) == 2
         assert len(b.shape) == 1
         assert (
@@ -151,7 +156,6 @@ class LinearHolonomicTask(Task):
 
         self.A = A
         self.b = b
-        self.cost = cost
         self.q_0 = q_0
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:

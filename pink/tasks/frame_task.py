@@ -33,19 +33,6 @@ class FrameTask(Task):
 
     Attributes:
         body: Body frame name, typically the link name from the URDF.
-        cost: 6D vector that specifies how much each coordinate (in the local
-            body frame) contributes to the cost. Position costs come first
-            (Pinocchio spatial vector convention) and are in
-            :math:`[\mathrm{cost}] / [\mathrm{m}]`, where the the unit of
-            :math:`[\mathrm{cost}]` up to the user. They are followed by
-            orientation costs in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
-            Set a cost to zero to disable the task along a coordinate (no cost
-            no effect).
-        lm_damping: Unitless scale of the Levenberg-Marquardt (only when
-            the error is large) regularization term, which helps when
-            targets are unfeasible. Increase this value if the task is too
-            jerky under unfeasible targets, but beware that a larger
-            damping slows down the task.
         transform_target_to_world: Target pose for the body frame.
 
     Costs are designed so that position/orientation costs can be compared
@@ -68,7 +55,8 @@ class FrameTask(Task):
         body: str,
         position_cost: Union[float, Sequence[float]],
         orientation_cost: Union[float, Sequence[float]],
-        lm_damping: float = 1e-6,
+        cost: Union[float, Sequence[float]] = 1.0,
+        lm_damping: float = 0.0,
     ) -> None:
         r"""Define a new body task.
 
@@ -82,11 +70,19 @@ class FrameTask(Task):
                 normalized cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
                 If this is a vector, the cost is anisotropic and each
                 coordinate corresponds to an axis in the local body frame.
+            cost: 6D vector that specifies how much each coordinate (in the
+                local body frame) contributes to the cost. Position costs come
+                first (Pinocchio spatial vector convention) and are in
+                :math:`[\mathrm{cost}] / [\mathrm{m}]`, where the the unit of
+                :math:`[\mathrm{cost}]` up to the user. They are followed by
+                orientation costs in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
+                Set a cost to zero to disable the task along a coordinate (no
+                cost no effect).
             lm_damping: Levenberg-Marquardt damping (see class attributes). The
                 default value is conservatively low.
         """
+        super().__init__(cost=cost, lm_damping=lm_damping)
         self.body = body
-        self.cost = np.ones(6)
         self.lm_damping = lm_damping
         self.transform_target_to_world = None
         #
@@ -108,6 +104,8 @@ class FrameTask(Task):
             assert position_cost >= 0.0
         else:  # not isinstance(position_cost, float)
             assert all(cost >= 0.0 for cost in position_cost)
+        if isinstance(self.cost, float):
+            self.cost = self.cost * np.ones(6)
         self.cost[0:3] = position_cost
 
     def set_orientation_cost(
@@ -125,6 +123,8 @@ class FrameTask(Task):
             assert orientation_cost >= 0.0
         else:  # not isinstance(orientation_cost, float)
             assert all(cost >= 0.0 for cost in orientation_cost)
+        if isinstance(self.cost, float):
+            self.cost = self.cost * np.ones(6)
         self.cost[3:6] = orientation_cost
 
     def set_target(
@@ -225,10 +225,16 @@ class FrameTask(Task):
 
     def __repr__(self):
         """Human-readable representation of the task."""
+        orientation_cost = (
+            self.cost if isinstance(self.cost, float) else self.cost[3:6]
+        )
+        position_cost = (
+            self.cost if isinstance(self.cost, float) else self.cost[0:3]
+        )
         return (
             f"FrameTask({self.body}, "
             f"gain={self.gain}, "
-            f"orientation_cost={self.cost[3:6]}, "
-            f"position_cost={self.cost[0:3]}, "
+            f"orientation_cost={orientation_cost}, "
+            f"position_cost={position_cost}, "
             f"target={self.transform_target_to_world})"
         )
