@@ -24,5 +24,9 @@ class TargetNotSet(PinkError):
     """Exception raised when attempting to compute with an unset target."""
 
 
+class TaskDefinitionError(PinkError):
+    """Exception raised when a task definition is ill-formed."""
+
+
 class TaskJacobianNotSet(PinkError):
     """Exception raised when attempting to compute without a task Jacobian."""
