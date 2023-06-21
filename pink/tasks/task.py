@@ -53,7 +53,7 @@ class Task(abc.ABC):
 
     def __init__(
         self,
-        cost: Optional[Union[float, np.ndarray]] = None,
+        cost: Optional[Union[float, Sequence[float], np.ndarray]] = None,
         gain: float = 1.0,
         lm_damping: float = 0.0,
     ):
