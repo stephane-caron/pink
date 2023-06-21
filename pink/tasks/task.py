@@ -25,7 +25,7 @@ concepts and notations are there.
 """
 
 import abc
-from typing import Sequence, Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
