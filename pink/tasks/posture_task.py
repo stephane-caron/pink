@@ -49,8 +49,8 @@ class PostureTask(Task):
         r"""Create task.
 
         Args:
-            cost: joint angular error cost in
-                :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
+            cost: value used to cast joint angle differences to a homogeneous
+                cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
             lm_damping: Unitless scale of the Levenberg-Marquardt (only when
                 the error is large) regularization term, which helps when
                 targets are unfeasible. Increase this value if the task is too

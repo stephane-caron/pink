@@ -48,9 +48,8 @@ class JointCouplingTask(LinearHolonomicTask):
                 holonomic constraint.
             ratios: a list of ratios that each joint takes in a linear
                 holonomic constraint.
-            cost: cost vector with the same dimension as the error of the task.
-                Its units depends on the error as well.
-            configuration: Robot configuration.
+            cost: value used to cast joint angle differences to a cost, in
+                :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
             lm_damping: Unitless scale of the Levenberg-Marquardt (only when
                 the error is large) regularization term, which helps when
                 targets are unfeasible. Increase this value if the task is too

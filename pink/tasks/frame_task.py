@@ -71,7 +71,8 @@ class FrameTask(Task):
             lm_damping: Levenberg-Marquardt damping (see class attributes). The
                 default value is conservatively low.
         """
-        super().__init__(cost=np.ones(6), lm_damping=lm_damping)
+        to_be_updated_cost = np.ones(6)  # updated below
+        super().__init__(cost=to_be_updated_cost, lm_damping=lm_damping)
         self.body = body
         self.lm_damping = lm_damping
         self.transform_target_to_world = None
@@ -80,7 +81,7 @@ class FrameTask(Task):
         self.set_orientation_cost(orientation_cost)
 
     def set_position_cost(
-        self, position_cost: Union[float, Sequence[float]]
+        self, position_cost: Union[float, Sequence[float], np.ndarray]
     ) -> None:
         r"""Set a new cost for all 3D position coordinates.
 
@@ -99,7 +100,7 @@ class FrameTask(Task):
         self.cost[0:3] = position_cost
 
     def set_orientation_cost(
-        self, orientation_cost: Union[float, Sequence[float]]
+        self, orientation_cost: Union[float, Sequence[float], np.ndarray]
     ) -> None:
         r"""Set a new cost for all 3D orientation coordinates.
 
