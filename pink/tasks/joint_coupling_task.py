@@ -71,6 +71,6 @@ class JointCouplingTask(LinearHolonomicTask):
             A,
             np.zeros(1),
             pin.neutral(configuration.model),
-            cost,
+            cost=cost,
             lm_damping=lm_damping,
         )
