@@ -107,9 +107,9 @@ class TestSolveIK(unittest.TestCase):
         self.assertFalse(np.allclose(velocity, 0.0))
         self.assertAlmostEqual(norm(task.compute_error(configuration)), 0.1)
         self.assertFalse(
-            configuration.get_transform_frame_to_world("left_contact").isApprox(
-                transform_target_to_world, prec=1e-4
-            )
+            configuration.get_transform_frame_to_world(
+                "left_contact"
+            ).isApprox(transform_target_to_world, prec=1e-4)
         )
 
         last_error = 1e6
@@ -127,9 +127,9 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(velocity, 0.0))
         self.assertAlmostEqual(norm(task.compute_error(configuration)), 0.0)
         self.assertTrue(
-            configuration.get_transform_frame_to_world("left_contact").isApprox(
-                transform_target_to_world, prec=1e-8
-            )
+            configuration.get_transform_frame_to_world(
+                "left_contact"
+            ).isApprox(transform_target_to_world, prec=1e-8)
         )
         self.assertLess(nb_steps, 3)
 
@@ -249,10 +249,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertLess(nb_iter, 42)
         self.assertLess(norm(velocity), 1e-10)
         self.assertLess(
-            max(
-                norm(task.compute_error(configuration))
-                for task in tasks
-            ),
+            max(norm(task.compute_error(configuration)) for task in tasks),
             0.5,
         )
 

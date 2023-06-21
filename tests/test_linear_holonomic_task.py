@@ -24,6 +24,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
+from pink.tasks.exceptions import TaskDefinitionError
 from pink.tasks import LinearHolonomicTask, TaskJacobianNotSet
 from pink.utils import get_joint_idx
 
@@ -42,6 +43,11 @@ class TestLinearHolonomicTask(unittest.TestCase):
             "draco3_description", root_joint=pin.JointModelFreeFlyer()
         )
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
+
+    def test_inconsistent(self):
+        """Exception when the task is not defined properly."""
+        with self.assertRaises(TaskDefinitionError):
+            LinearHolonomicTask(A=np.ones((3, 4)), b=np.ones(5), q_0=None)
 
     def test_task_repr(self):
         """String representation reports the task gain, costs and target."""
@@ -86,7 +92,9 @@ class TestLinearHolonomicTask(unittest.TestCase):
         )
         A[:, l_knee_fe_jp_v_idx] = 1.0
         A[:, l_knee_fe_jd_v_idx] = -1.0
-        task = LinearHolonomicTask(A=A, b=np.zeros(2), q_0=None, cost=[1.0, 1.0])
+        task = LinearHolonomicTask(
+            A=A, b=np.zeros(2), q_0=None, cost=[1.0, 1.0]
+        )
         e = task.compute_error(self.configuration)
         J = task.compute_jacobian(self.configuration)
         H, c = task.compute_qp_objective(self.configuration)
@@ -112,9 +120,10 @@ class TestLinearHolonomicTask(unittest.TestCase):
         )
         A[:, l_knee_fe_jp_v_idx] = 1.0
         A[:, l_knee_fe_jd_v_idx] = -1.0
-        task = LinearHolonomicTask(A=A, b=np.zeros(2), q_0=None, cost=[0.0, 0.0])
+        task = LinearHolonomicTask(
+            A=A, b=np.zeros(2), q_0=None, cost=[0.0, 0.0]
+        )
         J = task.compute_jacobian(self.configuration)
-        e = task.compute_error(self.configuration)
         H, c = task.compute_qp_objective(self.configuration)
         qd = np.random.random(J.shape[1:])
         cost = qd.T @ H @ qd + c @ qd
