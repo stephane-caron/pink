@@ -35,10 +35,11 @@ class FrameTask(Task):
         body: Body frame name, typically the link name from the URDF.
         transform_target_to_world: Target pose for the body frame.
 
-    Costs are designed so that position/orientation costs can be compared
-    between tasks. For example, if task 1 has a position cost of 1.0 and task 2
-    a position cost of 0.1, then a 1 [cm] error in task 1 costs as much as a 10
-    [cm] error in task 2.
+    Costs are designed so that errors with varying SI units, here position and
+    orientation displacements, can be cast to homogeneous values. For example,
+    if task "foo" has a position cost of 1.0 and task "bar" a position cost of
+    0.1, then a 1 [cm] error in task "foo" costs as much as a 10 [cm] error in
+    task "bar".
 
     Note:
         Dimensionally, the 6D cost vector is a (normalized) force screw and our

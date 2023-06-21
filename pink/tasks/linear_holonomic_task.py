@@ -17,7 +17,7 @@
 
 r"""Linear holonomic task :math:`A (q \ominus q_0) = b`."""
 
-from typing import Union
+from typing import Union, Sequence
 
 import numpy as np
 import pinocchio as pin
