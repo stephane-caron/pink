@@ -145,13 +145,10 @@ class LinearHolonomicTask(Task):
                 damping can slow down the task.
         """
         super().__init__(cost=cost, lm_damping=lm_damping)
-        assert len(A.shape) == 2
-        assert len(b.shape) == 1
-        assert (
-            b.shape[0]
-            == A.shape[0]
-            == (1 if isinstance(cost, float) else len(cost))
-        )
+        if b.shape[0] != A.shape[0]:
+            raise TaskDefinitionError(
+                f"Shape mismatch between {A.shape=} and {b.shape=}"
+            )
         self.A = A
         self.b = b
         self.q_0 = q_0
