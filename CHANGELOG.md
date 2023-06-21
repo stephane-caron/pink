@@ -11,7 +11,13 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Cost vector is now defined for all tasks
 - Drop support for Python 3.7
+- Levenberg-Marquardt damping is now defined for all tasks
+
+### Fixed
+
+- Example: Draco 3 numerical stability
 
 ## [0.11.0] - 2023/05/01
 
