@@ -47,13 +47,13 @@ class Task(abc.ABC):
             damping slows down the task.
     """
 
-    cost: Union[float, Sequence[float]]
+    cost: Optional[Union[float, np.ndarray]]
     gain: float
     lm_damping: float
 
     def __init__(
         self,
-        cost: Union[float, Sequence[float]],
+        cost: Optional[Union[float, np.ndarray]] = None,
         gain: float = 1.0,
         lm_damping: float = 0.0,
     ):
