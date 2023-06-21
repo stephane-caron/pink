@@ -52,6 +52,8 @@ class JointCouplingTask(LinearHolonomicTask):
                 holonomic constraint.
             cost: value used to cast joint angle differences to a cost, in
                 :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
+            configuration: Configuration used to retrieve joint indices from
+                joint names.
             lm_damping: Unitless scale of the Levenberg-Marquardt (only when
                 the error is large) regularization term, which helps when
                 targets are unfeasible. Increase this value if the task is too
