@@ -17,7 +17,7 @@
 
 """Posture task implementation."""
 
-from typing import Optional, Tuple
+from typing import Optional
 
 import numpy as np
 import pinocchio as pin
@@ -126,40 +126,6 @@ class PostureTask(Task):
             raise TargetNotSet("no posture target")
         _, nv = get_root_joint_dim(configuration.model)
         return configuration.tangent.eye[nv:, :]
-
-    def compute_qp_objective(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the matrix-vector pair :math:`(H, c)` of the QP objective.
-
-        This pair is such that the contribution of the task to the QP objective
-        of the IK is:
-
-        .. math::
-
-            \| J \Delta q - \alpha e \|_{W}^2
-            = \frac{1}{2} \Delta q^T H \Delta q + c^T q
-
-        The weight matrix :math:`W \in \mathbb{R}^{n \times n}` weighs and
-        normalizes task coordinates to the same unit. The unit of the overall
-        contribution is :math:`[\mathrm{cost}]^2`. The configuration
-        displacement :math:`\Delta q` is the output of inverse kinematics (we
-        divide it by :math:`\Delta t` to get a commanded velocity).
-
-        Args:
-            configuration: Robot configuration.
-
-        Returns:
-            Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
-            objective.
-        """
-        jacobian = self.compute_jacobian(configuration)
-        gain_error = self.gain * self.compute_error(configuration)
-        weighted_jacobian = self.cost * jacobian  # [cost]
-        weighted_error = self.cost * gain_error  # [cost]
-        H = weighted_jacobian.T @ weighted_jacobian
-        c = -weighted_error.T @ weighted_jacobian
-        return (H, c)
 
     def __repr__(self):
         """Human-readable representation of the task."""
