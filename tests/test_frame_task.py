@@ -243,3 +243,5 @@ class TestFrameTask(unittest.TestCase):
         task.cost = 42.0
         with self.assertRaises(TaskDefinitionError):
             task.set_position_cost(1.0)
+        with self.assertRaises(TaskDefinitionError):
+            task.set_orientation_cost(1.0)
