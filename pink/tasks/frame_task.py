@@ -23,7 +23,7 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from .exceptions import TargetNotSet
+from .exceptions import TargetNotSet, TaskDefinitionError
 from .task import Task
 from .utils import body_minus
 
@@ -95,9 +95,13 @@ class FrameTask(Task):
             assert position_cost >= 0.0
         else:  # not isinstance(position_cost, float)
             assert all(cost >= 0.0 for cost in position_cost)
-        if isinstance(self.cost, float):
-            self.cost = self.cost * np.ones(6)
-        self.cost[0:3] = position_cost
+        if isinstance(self.cost, np.ndarray):
+            self.cost[0:3] = position_cost
+        else:  # self.cost is not a vector
+            raise TaskDefinitionError(
+                "Frame task cost should be a vector, "
+                f"currently cost={self.cost}"
+            )
 
     def set_orientation_cost(
         self, orientation_cost: Union[float, Sequence[float], np.ndarray]
@@ -114,9 +118,13 @@ class FrameTask(Task):
             assert orientation_cost >= 0.0
         else:  # not isinstance(orientation_cost, float)
             assert all(cost >= 0.0 for cost in orientation_cost)
-        if isinstance(self.cost, float):
-            self.cost = self.cost * np.ones(6)
-        self.cost[3:6] = orientation_cost
+        if isinstance(self.cost, np.ndarray):
+            self.cost[3:6] = orientation_cost
+        else:  # self.cost is not a vector
+            raise TaskDefinitionError(
+                "Frame task cost should be a vector, "
+                f"currently cost={self.cost}"
+            )
 
     def set_target(
         self,
