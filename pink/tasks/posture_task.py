@@ -45,20 +45,25 @@ class PostureTask(Task):
     toward a preferred orientation.
     """
 
-    cost: float
     target_q: Optional[np.ndarray]
 
-    def __init__(self, cost: float) -> None:
+    def __init__(self, cost: float, lm_damping: float = 0.0) -> None:
         r"""Create task.
 
         Args:
             cost: joint angular error cost in
                 :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
+            lm_damping: Unitless scale of the Levenberg-Marquardt (only when
+                the error is large) regularization term, which helps when
+                targets are unfeasible. Increase this value if the task is too
+                jerky under unfeasible targets, but beware that too large a
+                damping can slow down the task.
 
         Note:
             We assume that the first seven coordinates of the configuration are
             for the floating base.
         """
+        super().__init__(cost=cost, lm_damping=lm_damping)
         self.cost = cost
         self.target_q = None
 
