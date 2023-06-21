@@ -17,12 +17,12 @@
 
 """DRACO 3 humanoid standing on two feet and reaching with a hand."""
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, JointCouplingTask, PostureTask
@@ -83,16 +83,24 @@ if __name__ == "__main__":
 
     # Tasks initialization for IK
     left_foot_task = FrameTask(
-        "l_foot_contact", position_cost=1.0, orientation_cost=1.0
+        "l_foot_contact",
+        position_cost=1.0,
+        orientation_cost=1.0,
     )
     pelvis_task = FrameTask(
-        "torso_com_link", position_cost=1.0, orientation_cost=0.0
+        "torso_com_link",
+        position_cost=1.0,
+        orientation_cost=0.0,
     )
     right_foot_task = FrameTask(
-        "r_foot_contact", position_cost=1.0, orientation_cost=1.0
+        "r_foot_contact",
+        position_cost=1.0,
+        orientation_cost=1.0,
     )
     right_wrist_task = FrameTask(
-        "r_hand_contact", position_cost=4.0, orientation_cost=4.0
+        "r_hand_contact",
+        position_cost=4.0,
+        orientation_cost=4.0,
     )
     posture_task = PostureTask(
         cost=1e-1,  # [cost] / [rad]
