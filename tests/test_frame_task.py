@@ -46,18 +46,16 @@ class TestFrameTask(unittest.TestCase):
         parent_joint = robot.model.getJointId(joint_name)
         parent_frame = robot.model.getFrameId(joint_name)
         placement = pin.SE3.Identity()
-        
-        ee_frame = robot.model.addFrame(
-            pin.Frame(frame_name,
-                            parent_joint,
-                            parent_frame,
-                            placement,
-                            pin.FrameType.OP_FRAME
-                            )
+        robot.model.addFrame(
+            pin.Frame(
+                frame_name,
+                parent_joint,
+                parent_frame,
+                placement,
+                pin.FrameType.OP_FRAME,
+            )
         )
         robot.data = pin.Data(robot.model)
-
-        
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
 
     def test_set_target_from_configuration(self):
@@ -238,4 +236,3 @@ class TestFrameTask(unittest.TestCase):
             np.allclose(J, self.configuration.get_frame_jacobian("ee_frame"))
         )
         self.assertLess(np.linalg.norm(e), 1e-10)
-        
