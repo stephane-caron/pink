@@ -47,7 +47,6 @@ class FrameTask(Task):
     """
 
     body: str
-    lm_damping: float
     transform_target_to_world: Optional[pin.SE3]
 
     def __init__(
