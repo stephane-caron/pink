@@ -47,7 +47,7 @@ class Task(abc.ABC):
             damping slows down the task.
     """
 
-    cost: Optional[Union[float, np.ndarray]]
+    cost: Optional[Union[float, Sequence[float], np.ndarray]]
     gain: float
     lm_damping: float
 

@@ -127,17 +127,17 @@ class LinearHolonomicTask(Task):
         A: np.ndarray,
         b: np.ndarray,
         q_0: np.ndarray,
-        cost: Union[float, np.ndarray],
+        cost: Union[float, Sequence[float], np.ndarray],
         lm_damping: float,
     ) -> None:
         r"""Create task.
 
         Args:
             A: Jacobian matrix of the task, of size :math:`p \times n_v`.
-            b: target vector of the task, of dimension :math:`p`.
-            q_0: stationary configuration :math:`q_0 \in \mathcal{C}`
+            b: Target vector of the task, of dimension :math:`p`.
+            q_0: Stationary configuration :math:`q_0 \in \mathcal{C}`
                 associated with the task, of dimension :math:`n_q`.
-            cost: cost vector of dimension :math:`p`.
+            cost: Cost vector of dimension :math:`p`.
             lm_damping: Unitless scale of the Levenberg-Marquardt (only when
                 the error is large) regularization term, which helps when
                 targets are unfeasible. Increase this value if the task is too
@@ -152,7 +152,6 @@ class LinearHolonomicTask(Task):
             == A.shape[0]
             == (1 if isinstance(cost, float) else len(cost))
         )
-
         self.A = A
         self.b = b
         self.q_0 = q_0
