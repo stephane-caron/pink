@@ -45,7 +45,7 @@ class TestJointCouplingTask(unittest.TestCase):
     def test_task_repr(self):
         """String representation reports the task gain, costs and target."""
         task = JointCouplingTask(
-            joint_name_list=["r_knee_fe_jp", "r_knee_fe_jd"],
+            joint_names=["r_knee_fe_jp", "r_knee_fe_jd"],
             ratios=[1.0, -1.0],
             cost=1.0,
             configuration=self.configuration,
@@ -56,7 +56,7 @@ class TestJointCouplingTask(unittest.TestCase):
     def test_unit_cost_qp_objective(self):
         """A unit cost vector means the QP objective is (J^T J, -e^T J)."""
         task = JointCouplingTask(
-            joint_name_list=["r_knee_fe_jp", "r_knee_fe_jd"],
+            joint_names=["r_knee_fe_jp", "r_knee_fe_jd"],
             ratios=[1.0, -1.0],
             cost=1.0,
             configuration=self.configuration,
@@ -70,7 +70,7 @@ class TestJointCouplingTask(unittest.TestCase):
     def test_zero_cost_same_as_disabling_task(self):
         """The task has no effect when its cost is zero."""
         task = JointCouplingTask(
-            joint_name_list=["r_knee_fe_jp", "r_knee_fe_jd"],
+            joint_names=["r_knee_fe_jp", "r_knee_fe_jd"],
             ratios=[1.0, -1.0],
             cost=0.0,
             configuration=self.configuration,
