@@ -94,7 +94,6 @@ class Task(abc.ABC):
             Task Jacobian :math:`J(q)`.
         """
 
-    @abc.abstractmethod
     def compute_qp_objective(
         self, configuration: Configuration
     ) -> Tuple[np.ndarray, np.ndarray]:
@@ -120,7 +119,33 @@ class Task(abc.ABC):
         Returns:
             Pair :math:`(H(q), c(q))` of Hessian matrix and linear vector of
             the QP objective.
+
+        See Also:
+            Levenberg-Marquardt damping is described in [Sugihara2011]_. The
+            dimensional analysis in this class is our own.
         """
+        jacobian = self.compute_jacobian(configuration)
+        gain_error = self.gain * self.compute_error(configuration)
+
+        weight = (
+            np.eye(jacobian.shape[0])
+            if self.cost is None
+            else np.diag(
+                [self.cost] * jacobian.shape[0]
+                if isinstance(self.cost, float)
+                else self.cost
+            )
+        )
+        weighted_jacobian = weight @ jacobian  # [cost]
+        weighted_error = weight @ gain_error  # [cost]
+        mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2
+        eye_tg = configuration.tangent.eye
+        # Our Levenberg-Marquardt damping `mu * eye_tg` is isotropic in the
+        # robot's tangent space. If it helps we can add a tangent-space scaling
+        # to damp the floating base differently from joint angular velocities.
+        H = weighted_jacobian.T @ weighted_jacobian + mu * eye_tg
+        c = -weighted_error.T @ weighted_jacobian
+        return (H, c)
 
     def __repr__(self):
         """Human-readable representation of the task."""

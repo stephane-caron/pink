@@ -213,44 +213,6 @@ class LinearHolonomicTask(Task):
             configuration.model, q_ref, configuration.q, pin.ARG1
         )
 
-    def compute_qp_objective(
-        self, configuration: Configuration
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the matrix-vector pair :math:`(H, c)` of the QP objective.
-
-        This pair is such that the contribution of the task to the QP objective
-        of the IK is:
-
-        .. math::
-
-            \| J \Delta q - \alpha e \|_{W}^2
-            = \frac{1}{2} \Delta q^T H \Delta q + c^T q
-
-        The weight matrix :math:`W \in \mathbb{R}^{n \times n}` weighs and
-        normalizes task coordinates to the same unit. The unit of the overall
-        contribution is :math:`[\mathrm{cost}]^2`. The configuration
-        displacement :math:`\Delta q` is the output of inverse kinematics (we
-        divide it by :math:`\Delta t` to get a commanded velocity).
-
-        Args:
-            configuration: Robot configuration.
-
-        Returns:
-            Pair :math:`(H)` of Hessian matrix of the QP objective.
-        """
-        jacobian = self.compute_jacobian(configuration)
-        gain_error = self.gain * self.compute_error(configuration)
-        weight = np.diag(
-            [self.cost] * jacobian.shape[0]
-            if isinstance(self.cost, float)
-            else self.cost
-        )
-        weighted_jacobian = np.dot(weight, jacobian)  # [cost]
-        weighted_error = np.dot(weight, gain_error)  # [cost]
-        H = weighted_jacobian.T @ weighted_jacobian
-        c = -weighted_error.T @ weighted_jacobian
-        return (H, c)
-
     def __repr__(self):
         """Human-readable representation of the task."""
         return f"LinearHolonomicTask(cost={self.cost}, gain={self.gain})"
