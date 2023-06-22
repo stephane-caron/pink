@@ -46,11 +46,6 @@ class LinearHolonomicTask(Task):
         q_0: element for which we work in the Lie algebra. If set to None, it
             will use the neutral configuration of the robot.
 
-    Note:
-        A linear holonomic task is typically used for a robot
-        that has mechanical constraint (e.g., closed loop kinematics).
-        Floating base coordinates are not affected by this task.
-
     Notes:
         To be fully explicit, our quantities in the task equation :math:`e(q) =
         A (q \ominus^\ell q_0) - b` belong to the following sets:
