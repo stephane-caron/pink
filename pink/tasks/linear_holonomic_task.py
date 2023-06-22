@@ -40,9 +40,8 @@ class LinearHolonomicTask(Task):
                 \dot{e}(q) & := A \dot{q}
                 \end{align}
 
-            where :math: `e(q) \in \mathbb{R}^{k}` is the quantity that the
-            task aims to drive to zero (:math:`k` is the dimension of the
-            task).
+            where :math:`e(q) \in \mathbb{R}^{k}` is the quantity that the task
+            aims to drive to zero (:math:`k` is the dimension of the task).
         b: vector that defines the affine part of the task
         q_0: element for which we work in the Lie algebra. If set to None, it
             will use the neutral configuration of the robot.
