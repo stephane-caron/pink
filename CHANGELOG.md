@@ -2,18 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [1.0.0] 2-23/06/22
 
 ### Added
 
 - Example: UR5 arm
 - Example: flying dual-arm with UR3
+- General linear holonomic task (thanks to @ymontmarin)
 
 ### Changed
 
 - Cost vector is now defined for all tasks
 - Drop support for Python 3.7
 - Levenberg-Marquardt damping is now defined for all tasks
+- Update joint-coupling task to derive from general linear holonomic task
 
 ### Fixed
 
