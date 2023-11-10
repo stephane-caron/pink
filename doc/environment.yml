@@ -1,0 +1,8 @@
+name: pink
+channels:
+    - conda-forge
+dependencies:
+    - pinocchio
+    - pip >=21.3.1
+    - pip:
+        - pin-pink
