@@ -9,7 +9,7 @@
 
 A UR5 arm tracking a moving target:
 
-https://github.com/tasts-robots/pink/assets/1189580/d0d6aae9-326b-45fe-8cd3-013f29f7343a
+https://github.com/stephane-caron/pink/assets/1189580/d0d6aae9-326b-45fe-8cd3-013f29f7343a
 
 | Task | Cost |
 |------|------|
@@ -20,7 +20,7 @@ https://github.com/tasts-robots/pink/assets/1189580/d0d6aae9-326b-45fe-8cd3-013f
 
 A pair of UR3 arms on a mobile body tracking moving targets:
 
-https://github.com/tasts-robots/pink/assets/1189580/ef3f2571-6188-4b14-ae3f-b22428b11f5c
+https://github.com/stephane-caron/pink/assets/1189580/ef3f2571-6188-4b14-ae3f-b22428b11f5c
 
 | Task | Cost |
 |------|------|
@@ -33,7 +33,7 @@ https://github.com/tasts-robots/pink/assets/1189580/ef3f2571-6188-4b14-ae3f-b224
 
 A Draco 3 humanoid moving its right hand laterally while standing. This model includes a closed kinematic chain, implemented in the example with a ``JointCouplingTask``:
 
-https://github.com/tasts-robots/pink/assets/1189580/db6acda8-82a4-4f4d-9acf-1fc3d831e222
+https://github.com/stephane-caron/pink/assets/1189580/db6acda8-82a4-4f4d-9acf-1fc3d831e222
 
 | Task | Cost |
 |------|------|
@@ -49,7 +49,7 @@ https://github.com/tasts-robots/pink/assets/1189580/db6acda8-82a4-4f4d-9acf-1fc3
 
 Move a Stretch RE1 with a fixed fingertip target around the origin:
 
-https://github.com/tasts-robots/pink/assets/1189580/711c4b92-6234-41bd-945b-e6c043f6b2e6
+https://github.com/stephane-caron/pink/assets/1189580/711c4b92-6234-41bd-945b-e6c043f6b2e6
 
 | Task | Position cost | Orientation cost |
 |------|---------------|------------------|
