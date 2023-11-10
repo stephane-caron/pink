@@ -80,7 +80,7 @@ def __compute_qp_inequalities(
     Notes:
         We trim comparisons to infinity (equivalently: big floats) because some
         solvers don't support it. See for instance
-        https://github.com/tasts-robots/pink/issues/10.
+        https://github.com/stephane-caron/pink/issues/10.
     """
     configuration_limit = configuration.model.configuration_limit
     velocity_limit = configuration.model.velocity_limit

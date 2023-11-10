@@ -1,4 +1,4 @@
-:github_url: https://github.com/tasts-robots/pink/tree/master/doc/src/tasks.rst
+:github_url: https://github.com/stephane-caron/pink/tree/master/doc/src/tasks.rst
 
 .. _Tasks:
 

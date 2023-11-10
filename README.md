@@ -2,9 +2,9 @@
 
 <img src="https://user-images.githubusercontent.com/1189580/172797197-9aa46561-cfaa-4046-bd60-f681d85b055d.png" align="right" height=140>
 
-[![Build](https://img.shields.io/github/actions/workflow/status/tasts-robots/pink/main.yml?branch=master)](https://github.com/tasts-robots/pink/actions)
-[![Coverage](https://coveralls.io/repos/github/tasts-robots/pink/badge.svg?branch=master)](https://coveralls.io/github/tasts-robots/pink?branch=master)
-[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://tasts-robots.org/doc/pink/)
+[![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/main.yml?branch=master)](https://github.com/stephane-caron/pink/actions)
+[![Coverage](https://coveralls.io/repos/github/stephane-caron/pink/badge.svg?branch=master)](https://coveralls.io/github/stephane-caron/pink?branch=master)
+[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://scaron.info/doc/pink/)
 [![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 
 **P**ython **in**verse **k**inematics for articulated robot models, based on [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
@@ -116,23 +116,23 @@ If task targets are continuously updated, there will be no stationary solution t
 
 Basic examples to get started:
 
-* [Double pendulum](https://github.com/tasts-robots/pink/blob/master/examples/double_pendulum.py)
-* [Loading a custom URDF](https://github.com/tasts-robots/pink/blob/master/examples/load_custom_urdf.py)
-* [Visualization in MeshCat](https://github.com/tasts-robots/pink/blob/master/examples/visualize_in_meshcat.py)
-* [Visualization in yourdfpy](https://github.com/tasts-robots/pink/blob/master/examples/visualize_in_yourdfpy.py)
+* [Double pendulum](https://github.com/stephane-caron/pink/blob/master/examples/double_pendulum.py)
+* [Loading a custom URDF](https://github.com/stephane-caron/pink/blob/master/examples/load_custom_urdf.py)
+* [Visualization in MeshCat](https://github.com/stephane-caron/pink/blob/master/examples/visualize_in_meshcat.py)
+* [Visualization in yourdfpy](https://github.com/stephane-caron/pink/blob/master/examples/visualize_in_yourdfpy.py)
 
 Pink works with all kinds of robot morphologies:
 
-* Arms: [Kinova Gen2](https://github.com/tasts-robots/pink/blob/master/examples/arm_kinova_gen2.py), [UR3](https://github.com/tasts-robots/pink/blob/master/examples/arm_ur3.py)
-* Humanoids: [JVRC-1](https://github.com/tasts-robots/pink/blob/master/examples/humanoid_jvrc.py), [SigmaBan](https://github.com/tasts-robots/pink/blob/master/examples/humanoid_sigmaban.py)
-* Mobile base: [Omnidirectional robot](https://github.com/tasts-robots/pink/blob/master/examples/mobile_omni_wheeled_robot.py), [Stretch R1](https://github.com/tasts-robots/pink/blob/master/examples/mobile_stretch.py)
-* Wheeled biped: [Upkie](https://github.com/tasts-robots/pink/blob/master/examples/wheeled_biped_upkie.py)
+* Arms: [Kinova Gen2](https://github.com/stephane-caron/pink/blob/master/examples/arm_kinova_gen2.py), [UR3](https://github.com/stephane-caron/pink/blob/master/examples/arm_ur3.py)
+* Humanoids: [JVRC-1](https://github.com/stephane-caron/pink/blob/master/examples/humanoid_jvrc.py), [SigmaBan](https://github.com/stephane-caron/pink/blob/master/examples/humanoid_sigmaban.py)
+* Mobile base: [Omnidirectional robot](https://github.com/stephane-caron/pink/blob/master/examples/mobile_omni_wheeled_robot.py), [Stretch R1](https://github.com/stephane-caron/pink/blob/master/examples/mobile_stretch.py)
+* Wheeled biped: [Upkie](https://github.com/stephane-caron/pink/blob/master/examples/wheeled_biped_upkie.py)
 
-Check out the [examples](https://github.com/tasts-robots/pink/tree/master/examples) folder for more.
+Check out the [examples](https://github.com/stephane-caron/pink/tree/master/examples) folder for more.
 
 ## How can I help?
 
-Install the library and use it! Report bugs in the [issue tracker](https://github.com/tasts-robots/pink/issues). If you are a developer with some robotics experience looking to hack on open source, check out the [contribution guidelines](CONTRIBUTING.md).
+Install the library and use it! Report bugs in the [issue tracker](https://github.com/stephane-caron/pink/issues). If you are a developer with some robotics experience looking to hack on open source, check out the [contribution guidelines](CONTRIBUTING.md).
 
 ## See also
 

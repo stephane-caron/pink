@@ -59,7 +59,7 @@ if __name__ == "__main__":
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1e-5,  # [cost] / [rad]
     )
-    base_task.gain = 0.22  # slow things down
+    base_task.gain = 0.05  # slow things down
     tasks = [base_task]
 
     # Initialize tasks from the initial configuration

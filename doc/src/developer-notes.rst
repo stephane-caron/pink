@@ -1,4 +1,4 @@
-:github_url: https://github.com/tasts-robots/pink/tree/master/doc/src/developer-notes.rst
+:github_url: https://github.com/stephane-caron/pink/tree/master/doc/src/developer-notes.rst
 
 ***************
 Developer notes
