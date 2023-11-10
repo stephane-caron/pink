@@ -38,7 +38,7 @@ keywords = ["inverse", "kinematics", "pinocchio"]
 Documentation = "https://stephane-caron.github.io/pink/"
 Source = "https://github.com/stephane-caron/pink"
 Tracker = "https://github.com/stephane-caron/pink/issues"
-Changelog = "https://github.com/stephane-caron/pink/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/stephane-caron/pink/blob/main/CHANGELOG.md"
 
 [tool.black]
 line-length = 79
