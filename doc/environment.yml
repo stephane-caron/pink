@@ -9,4 +9,5 @@ dependencies:
         - pin-pink
         - sphinx >= 7.2.2
         - sphinx-autodoc-typehints
+        - sphinx-favicon
         - sphinx-mathjax-offline
