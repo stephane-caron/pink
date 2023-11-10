@@ -36,7 +36,7 @@ extensions = [
     "sphinx-mathjax-offline",
     "sphinx.ext.napoleon",  # before sphinx_autodoc_typehints
     "sphinx_autodoc_typehints",
-    "sphinx-favicon",
+    "sphinx_favicon",
 ]
 
 # List of modules to be mocked up
