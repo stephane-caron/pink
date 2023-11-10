@@ -19,7 +19,7 @@ import re
 import sys
 from os.path import abspath, dirname, join
 
-sys.path.insert(0, abspath("../.."))
+sys.path.insert(0, abspath(".."))
 
 # -- General configuration ------------------------------------------------
 
