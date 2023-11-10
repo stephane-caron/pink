@@ -74,7 +74,7 @@ version = None  # read from __init__.py
 release = None  # read from __init__.py
 
 # Read version info directly from the module's __init__.py
-init_path = join(dirname(dirname(dirname(str(abspath(__file__))))), "pink")
+init_path = join(dirname(dirname(str(abspath(__file__)))), "pink")
 with open(f"{init_path}/__init__.py", "r") as fh:
     for line in fh:
         match = re.match(
