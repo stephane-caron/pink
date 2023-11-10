@@ -3,7 +3,7 @@
 This project's goal is to make it easy to do inverse kinematics on all kinds of robot models. All contributions are welcome, for example here are some ways to help:
 
 - Try out the [examples](examples) and report any issue
-- Propose improvements or ask questions about the [documentation](https://scaron.info/doc/pink/)
+- Propose improvements or ask questions about the [documentation](https://stephane-caron.github.io/pink/)
 - Pick something you want to do with one of the many [robot descriptions](https://github.com/robot-descriptions/robot_descriptions.py) and write a new example
 - Find a use case that is not covered and write a unit test for it
 - Benchmark the performance of the following design choice depending on the number and types of tasks:

@@ -4,7 +4,7 @@
 
 [![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/main.yml?branch=master)](https://github.com/stephane-caron/pink/actions)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/pink/badge.svg?branch=master)](https://coveralls.io/github/stephane-caron/pink?branch=master)
-[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://scaron.info/doc/pink/)
+[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://stephane-caron.github.io/pink/)
 [![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 
 **P**ython **in**verse **k**inematics for articulated robot models, based on [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
@@ -110,7 +110,7 @@ for t in np.arange(0.0, 42.0, dt):
     time.sleep(dt)
 ```
 
-If task targets are continuously updated, there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://scaron.info/doc/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) will take care of both configuration and velocity limits read from the robot model.
+If task targets are continuously updated, there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://stephane-caron.github.io/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) will take care of both configuration and velocity limits read from the robot model.
 
 ## Examples
 

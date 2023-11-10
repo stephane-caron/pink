@@ -35,7 +35,7 @@ dependencies = [
 keywords = ["inverse", "kinematics", "pinocchio"]
 
 [project.urls]
-Documentation = "https://scaron.info/doc/pink/"
+Documentation = "https://stephane-caron.github.io/pink/"
 Source = "https://github.com/stephane-caron/pink"
 Tracker = "https://github.com/stephane-caron/pink/issues"
 Changelog = "https://github.com/stephane-caron/pink/blob/master/CHANGELOG.md"
