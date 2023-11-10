@@ -11,3 +11,4 @@ dependencies:
         - sphinx-autodoc-typehints
         - sphinx-favicon
         - sphinx-mathjax-offline
+        - sphinx_rtd_theme
