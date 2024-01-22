@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Don't check configuration limits when building IK matrices
 
-## [1.0.0] - 2023/06/22
+## [1.0.0] - 2023-06-22
 
 ### Added
 
@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 
 - Example: Draco 3 numerical stability
 
-## [0.11.0] - 2023/05/01
+## [0.11.0] - 2023-05-01
 
 ### Added
 
@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file.
 - Handle all frames, including non-body frames (thanks to @proyan)
 - Rename ``BodyTask`` to ``FrameTask``
 
-## [0.10.0] - 2023/03/30
+## [0.10.0] - 2023-03-30
 
 ### Added
 
@@ -54,7 +54,7 @@ All notable changes to this project will be documented in this file.
 - Move configuration limit to ``ConfigurationLimit`` class
 - Move velocity limit to ``VelocityLimit`` class
 
-## [0.9.0] - 2023/03/15
+## [0.9.0] - 2023-03-15
 
 ### Added
 
@@ -69,7 +69,7 @@ All notable changes to this project will be documented in this file.
 - Refactor ``assume_configuration`` into ``Configuration`` constructor
 - Refactor task dynamics into ``compute_error`` and ``compute_jacobian``
 
-## [0.8.0] - 2023/02/09
+## [0.8.0] - 2023-02-09
 
 ### Added
 
@@ -87,7 +87,7 @@ All notable changes to this project will be documented in this file.
 
 - Jacobian of the body task
 
-## [0.7.0] - 2023/01/16
+## [0.7.0] - 2023-01-16
 
 ### Added
 
@@ -105,7 +105,7 @@ All notable changes to this project will be documented in this file.
 
 - Empty inequalities when model has no bounded joint
 
-## [0.6.0] - 2022/12/01
+## [0.6.0] - 2022-12-01
 
 ### Added
 
@@ -116,7 +116,7 @@ All notable changes to this project will be documented in this file.
 - Example: reduce Upkie model in leg extension example
 - Solver keyword argument is now mandatory
 
-## [0.5.0] - 2022/09/26
+## [0.5.0] - 2022-09-26
 
 ### Added
 
@@ -145,7 +145,7 @@ All notable changes to this project will be documented in this file.
 
 - Unbounded velocities when the backend solver is CVXOPT
 
-## [0.4.0] - 2022/06/21
+## [0.4.0] - 2022-06-21
 
 ### Added
 
@@ -165,7 +165,7 @@ All notable changes to this project will be documented in this file.
 
 - Unit tests for robot models
 
-## [0.3.0] - 2022/03/30
+## [0.3.0] - 2022-03-30
 
 ### Added
 
@@ -177,7 +177,7 @@ All notable changes to this project will be documented in this file.
 - Bumped status to alpha
 - Configuration limit check now has a tolerance argument
 
-## [0.2.0] - 2022/03/29
+## [0.2.0] - 2022-03-29
 
 ### Added
 
@@ -197,7 +197,7 @@ All notable changes to this project will be documented in this file.
 - Don't distribute robot models with the library
 - IK unit test that used robot instead of configuration
 
-## [0.1.0] - 2022/03/17
+## [0.1.0] - 2022-03-17
 
 ### Added
 
@@ -212,7 +212,7 @@ All notable changes to this project will be documented in this file.
 
 - Add floating base joint when loading JVRC model
 
-## [0.0.2] - 2022/03/16
+## [0.0.2] - 2022-03-16
 
 ### Added
 
@@ -227,6 +227,6 @@ All notable changes to this project will be documented in this file.
 - Documentation reads versions from the main module
 - Remove unused mock imports
 
-## [0.0.1] - 2022/02/06
+## [0.0.1] - 2022-02-06
 
 Python package infrastructure.
