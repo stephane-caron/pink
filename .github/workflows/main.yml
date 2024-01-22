@@ -91,3 +91,10 @@ jobs:
                   tox
               env:
                   PLATFORM: ${{ matrix.os }}
+
+    ci_success:
+        name: "CI success"
+        runs-on: ubuntu-latest
+        needs: [coverage, lint, test]
+        steps:
+            - run: echo "CI workflow completed successfully"
