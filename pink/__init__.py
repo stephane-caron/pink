@@ -11,7 +11,7 @@ from .solve_ik import build_ik, solve_ik
 from .tasks import Task
 from .utils import custom_configuration_vector
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 __all__ = [
     "Configuration",
