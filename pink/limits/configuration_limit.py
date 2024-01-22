@@ -47,8 +47,11 @@ class ConfigurationLimit(Limit):
         assert 0.0 < config_limit_gain <= 1.0
 
         has_configuration_limit = np.logical_and(
-            model.upperPositionLimit < 1e20,
-            model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
+            model.hasConfigurationLimit(),
+            np.logical_and(
+                model.upperPositionLimit < 1e20,
+                model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
+            ),
         )
 
         joints = [
