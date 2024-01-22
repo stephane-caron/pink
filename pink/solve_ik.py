@@ -133,7 +133,6 @@ def build_ik(
     Returns:
         Quadratic program of the inverse kinematics problem.
     """
-    configuration.check_limits()
     P, q = __compute_qp_objective(configuration, tasks, damping)
     G, h = __compute_qp_inequalities(configuration, dt)
     problem = qpsolvers.Problem(P, q, G, h)

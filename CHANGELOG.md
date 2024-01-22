@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- Don't check configuration limits when building IK matrices
+
 ## [1.0.0] - 2023/06/22
 
 ### Added
