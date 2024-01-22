@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - Don't check configuration limits when building IK matrices
 
+### Fixed
+
+- Configuration limits when model has unbounded revolute joints
+
 ## [1.0.0] - 2023-06-22
 
 ### Added
