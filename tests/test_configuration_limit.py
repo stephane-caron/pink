@@ -98,3 +98,8 @@ class TestConfigurationLimit(unittest.TestCase):
         G, h = limit.compute_qp_inequalities(configuration.q, dt)
         self.assertLess(np.max(h), slack_vel * dt + tol)
         self.assertGreater(np.min(h), -slack_vel * dt - tol)
+
+    def test_gen2_description(self):
+        robot = load_robot_description("gen2_description")
+        limit = ConfigurationLimit(robot.model)
+        self.assertEqual(tuple(limit.indices), (1, 2, 4))
