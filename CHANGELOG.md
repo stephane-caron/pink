@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Example on how differential IK may converge to a local constrained optimum
+
 ## [1.1.0] - 2023-01-22
 
 ### Changed
