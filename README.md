@@ -132,7 +132,7 @@ Check out the examples directory for more code.
 
 ## Global inverse kinematics
 
-Pink implements **differential** inverse kinematics, a first-order algorithm that converges to the closest (potentially constrained) optimum of its cost function. It thus does not solve the more difficult problem of [global inverse kinematics](https://github.com/stephane-caron/pink/discussions/66). Differential IK is a greedy algorithm: it always steps in a direction that locally reduces the overall cost, which can take the robot straight into a configuration limit. This behavior is illustrated in the [simple pendulum with configuration limit](https://github.com/stephane-caron/pink/blob/main/examples/simple_pendulum_configuration_limit.py) example.
+Pink implements differential inverse kinematics, a first-order algorithm that converges to the closest optimum of its cost function. It is a **local** method that does not solve the more difficult problem of [global inverse kinematics](https://github.com/stephane-caron/pink/discussions/66). That is, it may converge to a global optimum, or to a local one stuck to some configuration limits. This behavior is illustrated in the [simple pendulum with configuration limit](https://github.com/stephane-caron/pink/blob/main/examples/simple_pendulum_configuration_limit.py) example.
 
 ## How can I help?
 
