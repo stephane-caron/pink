@@ -128,7 +128,11 @@ Pink works with all kinds of robot morphologies:
 * Mobile base: [Omnidirectional robot](https://github.com/stephane-caron/pink/blob/main/examples/mobile_omni_wheeled_robot.py), [Stretch R1](https://github.com/stephane-caron/pink/blob/main/examples/mobile_stretch.py)
 * Wheeled biped: [Upkie](https://github.com/stephane-caron/pink/blob/main/examples/wheeled_biped_upkie.py)
 
-Check out the [examples](https://github.com/stephane-caron/pink/tree/main/examples) folder for more.
+Check out the examples directory for more code.
+
+## Global inverse kinematics
+
+Pink implements **differential** inverse kinematics, a first-order algorithm that converges to the closest (potentially constrained) optimum of its cost function. It thus does not solve the more difficult problem of [global inverse kinematics](https://github.com/stephane-caron/pink/discussions/66). Differential IK is a greedy algorithm: it always steps in a direction that locally reduces the overall cost, which can take the robot straight into a configuration limit. This behavior is illustrated in the [simple pendulum with configuration limit](https://github.com/stephane-caron/pink/blob/main/examples/simple_pendulum_configuration_limit.py) example.
 
 ## How can I help?
 
