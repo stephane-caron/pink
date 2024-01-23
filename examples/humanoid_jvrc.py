@@ -6,15 +6,15 @@
 
 """JVRC-1 humanoid standing on two feet and reaching with a hand."""
 
-import meshcat_shapes
 import numpy as np
+import pink
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
-
-import pink
 from pink import solve_ik
 from pink.tasks import FrameTask
+
+import meshcat_shapes
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -70,7 +70,9 @@ if __name__ == "__main__":
     left_foot_task = FrameTask(
         "l_ankle", position_cost=1.0, orientation_cost=3.0
     )
-    pelvis_task = FrameTask("PELVIS_S", position_cost=1.0, orientation_cost=0.0)
+    pelvis_task = FrameTask(
+        "PELVIS_S", position_cost=1.0, orientation_cost=0.0
+    )
     right_foot_task = FrameTask(
         "r_ankle", position_cost=1.0, orientation_cost=3.0
     )
