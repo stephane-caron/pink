@@ -7,14 +7,14 @@
 """DRACO 3 humanoid standing on two feet and reaching with a hand."""
 
 import numpy as np
+import pink
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
-
-import meshcat_shapes
-import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, JointCouplingTask, PostureTask
+
+import meshcat_shapes
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description

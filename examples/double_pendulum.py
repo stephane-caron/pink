@@ -8,19 +8,18 @@
 
 import os
 
-import meshcat_shapes
 import numpy as np
+import pink
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
-
-import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
 
-if __name__ == "__main__":
+import meshcat_shapes
 
+if __name__ == "__main__":
     # Load robot description
     urdf_path = os.path.join(
         os.path.dirname(__file__),

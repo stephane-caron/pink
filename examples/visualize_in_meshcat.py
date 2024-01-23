@@ -6,17 +6,17 @@
 
 """Upkie wheeled biped bending its knees."""
 
-import meshcat_shapes
 import numpy as np
+import pink
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
-
-import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
+
+import meshcat_shapes
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
