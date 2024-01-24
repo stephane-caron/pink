@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Python inverse kinematics for your robot model based on Pinocchio."""
+"""Inverse kinematics for articulated robot models, based on Pinocchio."""
 
 from .configuration import Configuration
 from .solve_ik import build_ik, solve_ik
