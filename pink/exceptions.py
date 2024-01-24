@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+# Copyright 2024 Inria
 
 """Exceptions specific to Pink."""
 
@@ -13,6 +14,10 @@ class PinkError(Exception):
 
 class BodyNotFound(PinkError):
     """Exception raised when a body is not found in the robot model."""
+
+
+class ConfigurationError(PinkError):
+    """Exception raised when encountering an invalid configuration vector."""
 
 
 class NotWithinConfigurationLimits(PinkError):
