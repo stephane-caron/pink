@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Example on how differential IK may converge to a local constrained optimum
+- Handle unbounded joints in custom configuration vectors
 
 ## [1.1.0] - 2023-01-22
 
