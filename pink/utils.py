@@ -11,7 +11,7 @@ from typing import Tuple
 import numpy as np
 import pinocchio as pin
 
-from .exceptions import PinkError
+from .exceptions import ConfigurationError, PinkError
 
 
 def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
@@ -26,10 +26,15 @@ def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
         keyword arguments, and other joints have their neutral value.
     """
     q = pin.neutral(robot.model)
-    for joint_name, joint_value in kwargs.items():
-        joint_id = robot.model.getJointId(joint_name)
+    for name, value in kwargs.items():
+        joint_id = robot.model.getJointId(name)
         joint = robot.model.joints[joint_id]
-        q[joint.idx_q] = joint_value
+        value = np.array(value).flatten()
+        if value.shape[0] != joint.nq:
+            raise ConfigurationError(
+                f"Joint '{name}' has {joint.nq=} but is set to {value.shape=}"
+            )
+        q[joint.idx_q : joint.idx_q + joint.nq] = value
     return q
 
 
