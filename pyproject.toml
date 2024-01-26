@@ -14,7 +14,7 @@ maintainers = [
 dynamic = ['version', 'description']
 requires-python = ">=3.8"
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Framework :: Robot Framework :: Library",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
