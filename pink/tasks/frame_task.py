@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Body task implementation."""
+"""Frame task implementation."""
 
 from typing import Optional, Sequence, Union
 
@@ -18,11 +18,11 @@ from .utils import body_minus
 
 
 class FrameTask(Task):
-    r"""Regulate the pose of a robot body in the world frame.
+    r"""Regulate the pose of a robot frame in the world frame.
 
     Attributes:
-        body: Body frame name, typically the link name from the URDF.
-        transform_target_to_world: Target pose for the body frame.
+        frame: Frame name, typically the name of a link or joint from the URDF.
+        transform_target_to_world: Target pose of the frame.
 
     Costs are designed so that errors with varying SI units, here position and
     orientation displacements, can be cast to homogeneous values. For example,
