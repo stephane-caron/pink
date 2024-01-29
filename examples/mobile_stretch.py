@@ -60,7 +60,7 @@ if __name__ == "__main__":
     base_task.set_target_from_configuration(configuration)
     transform_fingertip_target_to_world = pin.SE3(
         rotation=np.eye(3), translation=np.array([0.0, 0.0, fingertip_height])
-    ) * configuration.get_transform_frame_to_world(fingertip_task.body)
+    ) * configuration.get_transform_frame_to_world(fingertip_task.frame)
     center_translation = transform_fingertip_target_to_world.translation[:2]
     fingertip_task.set_target(transform_fingertip_target_to_world)
     viz.display(configuration.q)
@@ -86,10 +86,10 @@ if __name__ == "__main__":
             fingertip_task.transform_target_to_world.np
         )
         viewer["base_frame"].set_transform(
-            configuration.get_transform_frame_to_world(base_task.body).np
+            configuration.get_transform_frame_to_world(base_task.frame).np
         )
         viewer["fingertip_frame"].set_transform(
-            configuration.get_transform_frame_to_world(fingertip_task.body).np
+            configuration.get_transform_frame_to_world(fingertip_task.frame).np
         )
 
         # Compute velocity and integrate it into next configuration
