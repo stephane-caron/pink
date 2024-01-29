@@ -21,7 +21,8 @@ class FrameTask(Task):
     r"""Regulate the pose of a robot frame in the world frame.
 
     Attributes:
-        frame: Frame name, typically the name of a link or joint from the URDF.
+        frame: Frame name, typically the name of a link or joint from the robot
+            description.
         transform_target_to_world: Target pose of the frame.
 
     Costs are designed so that errors with varying SI units, here position and
@@ -35,34 +36,35 @@ class FrameTask(Task):
         objective function is a (normalized) energy.
     """
 
-    body: str
+    frame: str
     transform_target_to_world: Optional[pin.SE3]
 
     def __init__(
         self,
-        body: str,
+        frame: str,
         position_cost: Union[float, Sequence[float]],
         orientation_cost: Union[float, Sequence[float]],
         lm_damping: float = 0.0,
     ) -> None:
-        r"""Define a new body task.
+        r"""Define a new frame task.
 
         Args:
-            body: Name of the body frame to move to the target pose.
+            frame: Frame name, typically the name of a link or joint from the
+                robot description.
             position_cost: Contribution of position errors to the normalized
                 cost, in :math:`[\mathrm{cost}] / [\mathrm{m}]`. If this is a
                 vector, the cost is anisotropic and each coordinate corresponds
-                to an axis in the local body frame.
+                to an axis of the frame.
             orientation_cost: Contribution of orientation errors to the
                 normalized cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
                 If this is a vector, the cost is anisotropic and each
-                coordinate corresponds to an axis in the local body frame.
+                coordinate corresponds to an axis of the frame.
             lm_damping: Levenberg-Marquardt damping (see class attributes). The
                 default value is conservatively low.
         """
         to_be_updated_cost = np.ones(6)  # updated below
         super().__init__(cost=to_be_updated_cost, lm_damping=lm_damping)
-        self.body = body
+        self.frame = frame
         self.lm_damping = lm_damping
         self.transform_target_to_world = None
         #
@@ -78,7 +80,7 @@ class FrameTask(Task):
             position_cost: Contribution of position errors to the normalized
                 cost, in :math:`[\mathrm{cost}] / [\mathrm{m}]`. If this is a
                 vector, the cost is anisotropic and each coordinate corresponds
-                to an axis in the local body frame.
+                to an axis of the frame.
         """
         if isinstance(position_cost, float):
             assert position_cost >= 0.0
@@ -101,7 +103,7 @@ class FrameTask(Task):
             orientation_cost: Contribution of orientation errors to the
                 normalized cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`.
                 If this is a vector, the cost is anisotropic and each
-                coordinate corresponds to an axis in the local body frame.
+                coordinate corresponds to an axis of the frame.
         """
         if isinstance(orientation_cost, float):
             assert orientation_cost >= 0.0
@@ -135,25 +137,25 @@ class FrameTask(Task):
         Args:
             configuration: Robot configuration.
         """
-        self.set_target(configuration.get_transform_frame_to_world(self.body))
+        self.set_target(configuration.get_transform_frame_to_world(self.frame))
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
-        r"""Compute body task error.
+        r"""Compute frame task error.
 
         Mathematically this error is a twist :math:`e(q) \in se(3)` expressed
-        in the local frame (i.e., it is a bodytwist ). We map it to
-        :math:`\mathbb{R}^6` using Pinocchio's convention (linear coordinates
-        followed by angular coordinates).
+        in the local frame (i.e., it is a *body* twist). We map it to
+        :math:`\mathbb{R}^6` using Pinocchio's convention where linear
+        coordinates are followed by angular coordinates.
 
-        The error is the right-minus difference between target and current body
-        configuration:
+        The error is the right-minus difference between the target pose
+        :math:`T_{0t}` and current frame pose :math:`T_{0b}`:
 
         .. math::
 
             e(q) := {}_b \xi_{0b} = -(T_{t0} \boxminus T_{b0})
             = -\log(T_{t0} \cdot T_{0b}) = -\log(T_{tb}) = \log(T_{bt})
 
-        where :math:`b` denotes the body frame, :math:`t` the target frame and
+        where :math:`b` denotes our frame, :math:`t` the target frame and
         :math:`0` the inertial frame.
 
         See :func:`Task.compute_error` for more context, and [MLT]_ for details
@@ -163,12 +165,12 @@ class FrameTask(Task):
             configuration: Robot configuration :math:`q`.
 
         Returns:
-            Body task error :math:`e(q)`.
+            Frame task error :math:`e(q)`.
         """
         if self.transform_target_to_world is None:
-            raise TargetNotSet(f"no target set for body {self.body}")
+            raise TargetNotSet(f"no target set for frame '{self.frame}'")
         transform_frame_to_world = configuration.get_transform_frame_to_world(
-            self.body
+            self.frame
         )
         error_in_frame: np.ndarray = body_minus(
             self.transform_target_to_world,
@@ -177,7 +179,7 @@ class FrameTask(Task):
         return error_in_frame
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
-        r"""Compute the body task Jacobian.
+        r"""Compute the frame task Jacobian.
 
         The task Jacobian :math:`J(q) \in \mathbb{R}^{6 \times n_v}` appears in
         the task dynamics:
@@ -195,15 +197,15 @@ class FrameTask(Task):
 
         Returns:
             Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
-            both expressed in the body frame.
+            both expressed locally in the frame.
         """
-        jacobian_in_frame = configuration.get_frame_jacobian(self.body)
+        jacobian_in_frame = configuration.get_frame_jacobian(self.frame)
 
         # TODO(scaron): fix sign of error and box minus
         if self.transform_target_to_world is None:
-            raise TargetNotSet(f"no target set for body {self.body}")
+            raise TargetNotSet(f"no target set for frame '{self.frame}'")
         transform_frame_to_world = configuration.get_transform_frame_to_world(
-            self.body
+            self.frame
         )
         transform_frame_to_target = (
             self.transform_target_to_world.inverse() * transform_frame_to_world
@@ -221,7 +223,7 @@ class FrameTask(Task):
         )
         return (
             "FrameTask("
-            f"body={self.body}, "
+            f"frame={self.frame}, "
             f"gain={self.gain}, "
             f"orientation_cost={orientation_cost}, "
             f"position_cost={position_cost}, "
