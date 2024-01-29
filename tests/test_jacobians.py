@@ -30,7 +30,7 @@ class TestJacobians(unittest.TestCase):
         )
         robot = load_robot_description("ur3_description")
         self.assertEqual(robot.nq, 6)
-        self.body = "ee_link"
+        self.link = "ee_link"
         self.data = robot.data
         self.model = robot.model
         self.random_dirs = random_dirs
@@ -43,7 +43,7 @@ class TestJacobians(unittest.TestCase):
         Args:
             tol: Test tolerance.
         """
-        task = FrameTask(self.body, position_cost=1.0, orientation_cost=1.0)
+        task = FrameTask(self.link, position_cost=1.0, orientation_cost=1.0)
         task.set_target(pin.SE3.Random())
 
         def e(q):

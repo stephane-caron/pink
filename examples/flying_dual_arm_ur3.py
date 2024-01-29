@@ -187,15 +187,15 @@ if __name__ == "__main__":
         # Update visualization frames
         viewer["base_target"].set_transform(base_target.np)
         viewer["base"].set_transform(
-            configuration.get_transform_frame_to_world(base_task.body).np
+            configuration.get_transform_frame_to_world(base_task.frame).np
         )
         viewer["left_ee_target"].set_transform(left_ee_target.np)
         viewer["left_ee"].set_transform(
-            configuration.get_transform_frame_to_world(left_ee_task.body).np
+            configuration.get_transform_frame_to_world(left_ee_task.frame).np
         )
         viewer["right_ee_target"].set_transform(right_ee_target.np)
         viewer["right_ee"].set_transform(
-            configuration.get_transform_frame_to_world(right_ee_task.body).np
+            configuration.get_transform_frame_to_world(right_ee_task.frame).np
         )
 
         # Compute velocity and integrate it into next configuration
