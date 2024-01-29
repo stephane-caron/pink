@@ -11,6 +11,10 @@ All notable changes to this project will be documented in this file.
 - Expose all tasks from the top-level `pink` module
 - Handle unbounded joints in custom configuration vectors
 
+### Changed
+
+- **Breaking:** Rename ``FrameTask.body`` to ``FrameTask.frame``
+
 ## [1.1.0] - 2023-01-22
 
 ### Changed
