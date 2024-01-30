@@ -5,11 +5,20 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/main.yml?branch=main)](https://github.com/stephane-caron/pink/actions)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/pink/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/pink?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://stephane-caron.github.io/pink/)
+[![Conda version](https://anaconda.org/conda-forge/pink/badges/version.svg)](https://anaconda.org/conda-forge/pink)
 [![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 
 **P**ython **in**verse **k**inematics for articulated robot models, based on [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
 
 ## Installation
+
+The recommended way to install pink for best performance is via Conda:
+
+```
+conda install -c conda-forge pink
+```
+
+Alternatively you can install the library from PyPI:
 
 ```console
 pip install pin-pink
