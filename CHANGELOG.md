@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Distribute the library on conda-forge
 - Example on how differential IK may converge to a local constrained optimum
 - Handle unbounded joints in custom configuration vectors
 
