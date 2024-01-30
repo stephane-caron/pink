@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Distribute the library on conda-forge
 - Example on how differential IK may converge to a local constrained optimum
+- Expose all tasks from the top-level `pink` module
 - Handle unbounded joints in custom configuration vectors
 
 ## [1.1.0] - 2023-01-22
