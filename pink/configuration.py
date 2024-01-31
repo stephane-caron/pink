@@ -155,24 +155,24 @@ class Configuration:
         )
         return J
 
-    def get_transform_frame_to_world(self, body: str) -> pin.SE3:
-        """Get the pose of a body frame in the current configuration.
+    def get_transform_frame_to_world(self, frame: str) -> pin.SE3:
+        """Get the pose of a frame in the current configuration.
 
         Args:
-            body: Body frame name, typically the link name from the URDF.
+            frame: Name of a frame, typically a link name from the URDF.
 
         Returns:
-            Current transform from body frame to world frame.
+            Current transform from the given frame to the world frame.
 
         Raises:
-            KeyError: if the body name is not found in the robot model.
+            KeyError: if the frame name is not found in the robot model.
         """
-        frame_id = self.model.getFrameId(body)
+        frame_id = self.model.getFrameId(frame)
         try:
             return self.data.oMf[frame_id].copy()
         except IndexError as index_error:
             raise KeyError(
-                f'Body "{body}" not found in robot model'
+                f'Frame "{frame}" not found in robot model'
             ) from index_error
 
     def integrate(self, velocity, dt) -> np.ndarray:
