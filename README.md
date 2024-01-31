@@ -12,13 +12,13 @@
 
 ## Installation
 
-The recommended way to install pink for best performance is via Conda:
+For best performance we recommended installing Pink from Conda:
 
-```
+```console
 conda install -c conda-forge pink
 ```
 
-Alternatively you can install the library from PyPI:
+You can also install it from PyPI:
 
 ```console
 pip install pin-pink
