@@ -33,7 +33,7 @@ class FrameNotFound(PinkError):
         self.name = name
         frame_names = [frame.name for frame in frames]
         self.message = (
-            f'Frame "{name}" not found in robot model frames: {frame_names}'
+            f'Name "{name}" is not a robot frame name in {frame_names}'
         )
         super().__init__(self.message)
 
