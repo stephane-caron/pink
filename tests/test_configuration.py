@@ -400,7 +400,7 @@ class TestConfiguration(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        with self.assertRaises(KeyError):
+        with self.assertRaises(FrameNotFound):
             configuration.get_transform_frame_to_world("foo")
 
     def test_check_limits(self):
