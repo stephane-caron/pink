@@ -121,10 +121,11 @@ class Configuration:
                     q_max[i],
                 )
 
-    def get_frame_jacobian(self, body: str) -> np.ndarray:
-        r"""Compute the Jacobian matrix of the body velocity.
+    def get_frame_jacobian(self, frame: str) -> np.ndarray:
+        r"""Compute the Jacobian matrix of a frame velocity.
 
-        This matrix :math:`{}_B J_{WB}` is related to the body velocity
+        Denoting our frame by :math:`B` and the world frame by :math:`W`, the
+        Jacobian matrix :math:`{}_B J_{WB}` is related to the body velocity
         :math:`{}_B v_{WB}` by:
 
         .. math::
@@ -132,10 +133,10 @@ class Configuration:
             {}_B v_{WB} = {}_B J_{WB} \dot{q}
 
         Args:
-            body: Body frame name, typically the link name from the URDF.
+            frame: Name of the frame, typically a link name from the URDF.
 
         Returns:
-            Jacobian :math:`{}_B J_{WB}` of the body twist.
+            Jacobian :math:`{}_B J_{WB}` of the frame.
 
         When the robot model includes a floating base
         (pin.JointModelFreeFlyer), the configuration vector :math:`q` consists
@@ -147,9 +148,9 @@ class Configuration:
           in the inertial frame, formatted as :math:`[q_x, q_y, q_z, q_w]`.
         - ``q[7:]``: joint angles in [rad].
         """
-        if not self.model.existFrame(body):
-            raise FrameNotFound(f"body {body} does not exist")
-        frame_id = self.model.getFrameId(body)
+        if not self.model.existFrame(frame):
+            raise FrameNotFound(frame, self.model.frames)
+        frame_id = self.model.getFrameId(frame)
         J: np.ndarray = pin.getFrameJacobian(
             self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL
         )
@@ -171,9 +172,7 @@ class Configuration:
         try:
             return self.data.oMf[frame_id].copy()
         except IndexError as index_error:
-            raise KeyError(
-                f'Frame "{frame}" not found in robot model'
-            ) from index_error
+            raise FrameNotFound(frame, self.model.frames) from index_error
 
     def integrate(self, velocity, dt) -> np.ndarray:
         """Integrate a velocity starting from the current configuration.

@@ -19,6 +19,24 @@ class ConfigurationError(PinkError):
 class FrameNotFound(PinkError):
     """Exception raised when a frame is not found in the robot model."""
 
+    def __init__(
+        self,
+        name: str,
+        frames,
+    ) -> None:
+        """Create exception.
+
+        Args:
+            name: Name of the frame.
+            frames: List of all robot frames.
+        """
+        self.name = name
+        frame_names = [frame.name for frame in frames]
+        self.message = (
+            f'Frame "{name}" not found in robot model frames: {frame_names}'
+        )
+        super().__init__(self.message)
+
 
 class NotWithinConfigurationLimits(PinkError):
     """Exception thrown when a robot configuration violates its limits.
