@@ -12,12 +12,12 @@ class PinkError(Exception):
     """Base class for Pink exceptions."""
 
 
-class BodyNotFound(PinkError):
-    """Exception raised when a body is not found in the robot model."""
-
-
 class ConfigurationError(PinkError):
     """Exception raised when encountering an invalid configuration vector."""
+
+
+class FrameNotFound(PinkError):
+    """Exception raised when a frame is not found in the robot model."""
 
 
 class NotWithinConfigurationLimits(PinkError):

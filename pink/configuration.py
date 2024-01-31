@@ -16,7 +16,7 @@ data.
 import numpy as np
 import pinocchio as pin
 
-from .exceptions import BodyNotFound, NotWithinConfigurationLimits
+from .exceptions import FrameNotFound, NotWithinConfigurationLimits
 from .limits import ConfigurationLimit, VelocityLimit
 from .utils import VectorSpace, get_root_joint_dim
 
@@ -148,7 +148,7 @@ class Configuration:
         - ``q[7:]``: joint angles in [rad].
         """
         if not self.model.existFrame(body):
-            raise BodyNotFound(f"body {body} does not exist")
+            raise FrameNotFound(f"body {body} does not exist")
         frame_id = self.model.getFrameId(body)
         J: np.ndarray = pin.getFrameJacobian(
             self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL

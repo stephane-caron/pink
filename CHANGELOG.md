@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - **Breaking:** Rename ``FrameTask.body`` to ``FrameTask.frame``
+- **Breaking:** Rename ``BodyNotFound`` exception to ``FrameNotFound``
 
 ## [1.1.0] - 2023-01-22
 

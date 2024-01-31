@@ -13,7 +13,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.exceptions import BodyNotFound, NotWithinConfigurationLimits
+from pink.exceptions import FrameNotFound, NotWithinConfigurationLimits
 
 
 class TestConfiguration(unittest.TestCase):
@@ -462,7 +462,7 @@ class TestConfiguration(unittest.TestCase):
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
-        with self.assertRaises(BodyNotFound):
+        with self.assertRaises(FrameNotFound):
             configuration.get_frame_jacobian("does_not_exist")
 
     def test_get_integrate_inplace(self):
