@@ -56,8 +56,8 @@ class Configuration:
         model: pin.Model,
         data: pin.Data,
         q: np.ndarray,
-        copy_data=True,
-        forward_kinematics=True,
+        copy_data: bool = True,
+        forward_kinematics: bool = True,
     ):
         """Initialize configuration.
 
