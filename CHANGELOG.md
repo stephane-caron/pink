@@ -16,6 +16,10 @@ All notable changes to this project will be documented in this file.
 - **Breaking:** Rename ``FrameTask.body`` to ``FrameTask.frame``
 - **Breaking:** Rename ``BodyNotFound`` exception to ``FrameNotFound``
 
+### Removed
+
+- Unused spatial-minus utility function
+
 ## [1.1.0] - 2023-01-22
 
 ### Changed
