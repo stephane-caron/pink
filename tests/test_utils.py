@@ -14,7 +14,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink.exceptions import ConfigurationError
-from pink.tasks.utils import body_minus, spatial_minus
+from pink.tasks.utils import body_minus
 from pink.utils import VectorSpace, custom_configuration_vector
 
 
@@ -50,7 +50,6 @@ class TestUtils(unittest.TestCase):
         X = pin.SE3.Random()
         Y = pin.SE3.Random()
         self.assertTrue(np.allclose(Y, X * pin.exp6(body_minus(Y, X))))
-        self.assertTrue(np.allclose(Y, pin.exp6(spatial_minus(Y, X)) * X))
 
     def test_vector_space(self):
         """Check dimensions of regular tangent space."""

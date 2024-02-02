@@ -10,45 +10,6 @@ import numpy as np
 import pinocchio as pin
 
 
-def spatial_minus(Y: pin.SE3, X: pin.SE3) -> np.ndarray:
-    r"""Compute the left minus :math:`Y \ominus_0 X`.
-
-    The left minus operator is defined by:
-
-    .. math::
-
-        Y \ominus_0 X = \log(Y \cdot X^{-1})
-
-    This operator allows us to think about orientation "differences" as
-    similarly as possible to position differences, but mind the frames! If we
-    denote by :math:`Y = T_{0y}` and :math:`X = T_{0x}` the two transforms,
-    from respectively frames :math:`y` and :math:`x` to the inertial frame
-    :math:`0`, the twist resulting from a left minus is expressed in the
-    inertial frame:
-
-    .. math::
-
-        {}_0 \xi_{0x} = Y \ominus_0 X = \log(T_{0y} T_{x0})
-
-    A twist like :math:`{}_0 \xi_{0x}` in the inertial frame is called a
-    spatial motion vector.
-
-    Args:
-        Y: Transform :math:`Y = T_{0y}` on the left-hand side of the operator.
-        X: Transform :math:`X = T_{0x}` on the right-hand side of the operator.
-
-    Returns:
-        Spatial motion vector resulting from the difference :math:`\ominus_0`
-        between :math:`Y` and :math:`X`.
-
-    Notes:
-        The `micro Lie theory <https://arxiv.org/abs/1812.01537>`_ describes
-        the difference between the left and right minus operators.
-    """
-    spatial_twist: np.ndarray = pin.log(Y.act(X.inverse())).vector
-    return spatial_twist
-
-
 def body_minus(Y: pin.SE3, X: pin.SE3) -> np.ndarray:
     r"""Compute the right minus :math:`Y \ominus X`.
 
