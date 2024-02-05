@@ -188,12 +188,11 @@ class FrameTask(Task):
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the frame task Jacobian.
 
-        The task Jacobian :math:`J(q) \in \mathbb{R}^{6 \times n_v}` appears in
-        the task dynamics:
+        The task Jacobian :math:`J(q) \in \mathbb{R}^{6 \times n_v}` is the
+        derivative of the task error :math:`e(q) \in \mathbb{R}^6` with respect
+        to the configuration :math:`q`. The formula for the frame task is:
 
-        .. math::
-
-            J(q) \Delta q = \alpha e(q)
+            J(q) = -\text{Jlog}_6(T_{tb}) {}_b J_{0b}(q)
 
         The derivation of the formula for this Jacobian is detailed in
         [FrameTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
@@ -203,8 +202,7 @@ class FrameTask(Task):
             configuration: Robot configuration :math:`q`.
 
         Returns:
-            Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
-            both expressed locally in the frame.
+            Jacobian matrix :math:`J`, expressed locally in the frame.
         """
         if self.transform_target_to_world is None:
             raise TargetNotSet(f"no target set for frame '{self.frame}'")
