@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+# Copyright 2024 Inria
 
 """Test task Jacobian matrices against finite differences."""
 
@@ -13,7 +14,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks import FrameTask
+from pink.tasks import FrameTask, PostureTask, Task
 
 
 class TestJacobians(unittest.TestCase):
@@ -37,14 +38,12 @@ class TestJacobians(unittest.TestCase):
         self.random_q = random_q
         self.robot = robot
 
-    def test_frame_task(self, tol=1e-6):
-        """Check that task Jacobian is de/dq by finite differences.
+    def check_jacobian_finite_diff(self, task: Task, tol: float = 1e-6):
+        """Check that a task Jacobian is de/dq by finite differences.
 
         Args:
             tol: Test tolerance.
         """
-        task = FrameTask(self.link, position_cost=1.0, orientation_cost=1.0)
-        task.set_target(pin.SE3.Random())
 
         def e(q):
             configuration = Configuration(self.model, self.data, q)
@@ -54,8 +53,8 @@ class TestJacobians(unittest.TestCase):
             configuration = Configuration(self.model, self.data, q)
             return task.compute_jacobian(configuration)
 
-        nq = self.robot.model.nq
-        nv = self.robot.model.nv
+        nq = self.model.nq
+        nv = self.model.nv
         for q_0 in self.random_q:
             J_0 = J(q_0)
             e_0 = e(q_0)
@@ -67,3 +66,15 @@ class TestJacobians(unittest.TestCase):
                 J_finite[:, i] = (e(q_0 + h * e_i) - e_0) / h
 
             self.assertLess(np.linalg.norm(J_0 - J_finite, ord=np.inf), tol)
+
+    def test_frame_task(self, tol=1e-6):
+        frame_task = FrameTask(
+            self.link, position_cost=1.0, orientation_cost=1.0
+        )
+        frame_task.set_target(pin.SE3.Random())
+        self.check_jacobian_finite_diff(frame_task)
+
+    def test_posture_task(self, tol=1e-6):
+        posture_task = PostureTask(cost=1.0)
+        posture_task.set_target(self.robot.q0)
+        self.check_jacobian_finite_diff(posture_task)
