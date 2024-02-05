@@ -38,7 +38,7 @@ class TestJacobians(unittest.TestCase):
         self.robot = robot
 
     def test_frame_task(self, tol=1e-6):
-        """Test FrameTask Jacobian matrix.
+        """Check that task Jacobian is de/dq by finite differences.
 
         Args:
             tol: Test tolerance.
@@ -66,4 +66,4 @@ class TestJacobians(unittest.TestCase):
                 e_i = np.eye(nq)[i]
                 J_finite[:, i] = (e(q_0 + h * e_i) - e_0) / h
 
-            self.assertLess(np.linalg.norm(J_0 + J_finite, ord=np.inf), tol)
+            self.assertLess(np.linalg.norm(J_0 - J_finite, ord=np.inf), tol)
