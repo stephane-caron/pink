@@ -86,7 +86,7 @@ class PostureTask(Task):
             raise TargetNotSet("no posture target")
         _, nv = get_root_joint_dim(configuration.model)
         return pin.difference(
-            configuration.model, configuration.q, self.target_q
+            configuration.model, self.target_q, configuration.q
         )[nv:]
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
