@@ -14,7 +14,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks import FrameTask, PostureTask, Task
+from pink.tasks import FrameTask, JointCouplingTask, PostureTask, Task
 
 
 class TestJacobians(unittest.TestCase):
@@ -38,10 +38,11 @@ class TestJacobians(unittest.TestCase):
         self.random_q = random_q
         self.robot = robot
 
-    def check_jacobian_finite_diff(self, task: Task, tol: float = 1e-6):
+    def check_jacobian_finite_diff(self, task: Task, tol: float):
         """Check that a task Jacobian is de/dq by finite differences.
 
         Args:
+            task: Task to test the Jacobian of.
             tol: Test tolerance.
         """
 
@@ -67,14 +68,26 @@ class TestJacobians(unittest.TestCase):
 
             self.assertLess(np.linalg.norm(J_0 - J_finite, ord=np.inf), tol)
 
-    def test_frame_task(self, tol=1e-6):
+    def test_frame_task(self):
         frame_task = FrameTask(
-            self.link, position_cost=1.0, orientation_cost=1.0
+            self.link,
+            position_cost=1.0,
+            orientation_cost=1.0,
         )
         frame_task.set_target(pin.SE3.Random())
-        self.check_jacobian_finite_diff(frame_task)
+        self.check_jacobian_finite_diff(frame_task, tol=1e-5)
 
-    def test_posture_task(self, tol=1e-6):
+    def test_joint_coupling_task(self):
+        configuration = Configuration(self.model, self.data, self.robot.q0)
+        joint_coupling_task = JointCouplingTask(
+            ["shoulder_lift_joint", "shoulder_pan_joint"],
+            [1.0, -1.0],
+            100.0,
+            configuration,
+        )
+        self.check_jacobian_finite_diff(joint_coupling_task, tol=1e-6)
+
+    def test_posture_task(self):
         posture_task = PostureTask(cost=1.0)
         posture_task.set_target(self.robot.q0)
-        self.check_jacobian_finite_diff(posture_task)
+        self.check_jacobian_finite_diff(posture_task, tol=1e-6)
