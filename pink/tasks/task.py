@@ -74,16 +74,21 @@ class Task(abc.ABC):
 
         .. math::
 
-            J(q) \Delta q = \alpha e(q)
+            J(q) \Delta q = -\alpha e(q)
 
-        The Jacobian matrix :math:`J(q) \in \mathbb{R}^{k \times n_v}`,
-        with :math:`n_v` the dimension of the robot's tangent space, is
-        computed by :func:`Task.compute_jacobian`, while the configuration
-        displacement :math:`\\Delta q` is the output of inverse kinematics. The
-        error vector :math:`e(q)` is multiplied by the task gain :math:`\alpha
-        \in [0, 1]`. The gain is usually 1 for dead-beat control (*i.e.*
-        converge as fast as possible), but it can also be lower for some extra
-        low-pass filtering.
+        The Jacobian matrix :math:`J(q) \in \mathbb{R}^{k \times n_v}`, with
+        :math:`n_v` the dimension of the robot's tangent space, is the
+        derivative of the task error :math:`e(q)` with respect to the
+        configuration :math:`q \in \mathbb{R}^{n_q}`. This Jacobian is
+        implemented in :func:`Task.compute_jacobian`. Finally, the
+        configuration displacement :math:`\\Delta q` is the output of inverse
+        kinematics.
+
+        In the first-order task dynamics, the error :math:`e(q)` is multiplied
+        by the task gain :math:`\alpha \in [0, 1]`. This gain can be one for
+        dead-beat control (*i.e.* converge as fast as possible, but might be
+        unstable as it neglects our first-order approximation), but it can also
+        be lower a slower task (similar to low-pass filtering).
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -96,18 +101,10 @@ class Task(abc.ABC):
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task Jacobian at a given configuration.
 
-        The task Jacobian :math:`J(q) \in \mathbb{R}^{k \times n_v}` appears in
-        the first-order task dynamics:
-
-        .. math::
-
-            J(q) \Delta q = \alpha e(q)
-
-        The error :math:`e(q) \in \mathbb{R}^{k \times n_v}`, with :math:`k`
-        the dimension of the task and :math:`n_v` the dimension of the robot's
-        tangent space, is computed by :func:`Task.compute_error`, while the
-        configuration displacement :math:`\\Delta q` is the output of inverse
-        kinematics.
+        The task Jacobian :math:`J(q) \in \mathbb{R}^{k \times n_v}` is the
+        first-order derivative of the error :math:`e(q) \in \mathbb{R}^{k}`
+        that defines the task, with :math:`k` the dimension of the task and
+        :math:`n_v` the dimension of the robot's tangent space.
 
         Args:
             configuration: Robot configuration :math:`q`.
