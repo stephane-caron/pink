@@ -143,14 +143,7 @@ class LinearHolonomicTask(Task):
 
         The error function :math:`e(q) \in \mathbb{R}^{p}` is the quantity that
         the task aims to drive to zero (:math:`p` is the dimension of the
-        task). It appears in the first-order task dynamics:
-
-        .. math::
-
-            J(q) \Delta q = \alpha e(q)
-
-        See the description of the task above for details about the calculation
-        of this Jacobian.
+        task). See the documentation of :func:`Task.compute_error` for details.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -172,15 +165,8 @@ class LinearHolonomicTask(Task):
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the task Jacobian at a given configuration.
 
-        The task Jacobian :math:`J(q) \in \mathbb{R}^{p \times n_v}` appears in
-        the first-order task dynamics:
-
-        .. math::
-
-            J(q) \Delta q = \alpha e(q)
-
-        See the description of the task above for details about the calculation
-        of this Jacobian.
+        See the documentation of :func:`Task.compute_jacobian` for details on
+        the task Jacobian.
 
         Args:
             configuration: Robot configuration :math:`q`.

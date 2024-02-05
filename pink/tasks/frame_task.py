@@ -206,18 +206,16 @@ class FrameTask(Task):
             Pair :math:`(J, \alpha e)` of Jacobian matrix and error vector,
             both expressed locally in the frame.
         """
-        jacobian_in_frame = configuration.get_frame_jacobian(self.frame)
-
-        # TODO(scaron): fix sign of error and box minus
         if self.transform_target_to_world is None:
             raise TargetNotSet(f"no target set for frame '{self.frame}'")
         transform_frame_to_world = configuration.get_transform_frame_to_world(
             self.frame
         )
-        transform_frame_to_target = (
-            self.transform_target_to_world.inverse() * transform_frame_to_world
+        transform_frame_to_target = self.transform_target_to_world.actInv(
+            transform_frame_to_world
         )
-        J = pin.Jlog6(transform_frame_to_target) @ jacobian_in_frame
+        jacobian_in_frame = configuration.get_frame_jacobian(self.frame)
+        J = -pin.Jlog6(transform_frame_to_target) @ jacobian_in_frame
         return J
 
     def __repr__(self):
