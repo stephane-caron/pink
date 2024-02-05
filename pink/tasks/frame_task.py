@@ -14,7 +14,6 @@ import pinocchio as pin
 from ..configuration import Configuration
 from .exceptions import TargetNotSet, TaskDefinitionError
 from .task import Task
-from .utils import body_minus
 
 
 class FrameTask(Task):
@@ -172,10 +171,18 @@ class FrameTask(Task):
         transform_frame_to_world = configuration.get_transform_frame_to_world(
             self.frame
         )
-        error_in_frame: np.ndarray = body_minus(
-            self.transform_target_to_world,
-            transform_frame_to_world,
+        transform_target_to_frame = transform_frame_to_world.actInv(
+            self.transform_target_to_world
         )
+        # Reminder: log(transform_bar_to_foo) is always a twist in frame "foo".
+        # Here the error is such that the new frame after integration of the
+        # stationary body twist coincides with the target:
+        #
+        #     transform_new_to_world = transform_frame_to_world * exp(error)
+        #         = transform_frame_to_world * transform_target_to_frame
+        #         = transform_target_to_frame
+        #
+        error_in_frame: np.ndarray = pin.log(transform_target_to_frame).vector
         return error_in_frame
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
