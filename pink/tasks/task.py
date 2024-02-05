@@ -123,7 +123,7 @@ class Task(abc.ABC):
 
         .. math::
 
-            \| J \Delta q - \alpha e \|_{W}^2 = \frac{1}{2} \Delta q^T H
+            \| J \Delta q + \alpha e \|_{W}^2 = \frac{1}{2} \Delta q^T H
             \Delta q + c^T q
 
         The weight matrix :math:`W \in \mathbb{R}^{k \times k}` weighs and
@@ -144,7 +144,7 @@ class Task(abc.ABC):
             dimensional analysis in this class is our own.
         """
         jacobian = self.compute_jacobian(configuration)
-        gain_error = self.gain * self.compute_error(configuration)
+        minus_gain_error = -self.gain * self.compute_error(configuration)
 
         weight = (
             np.eye(jacobian.shape[0])
@@ -157,7 +157,7 @@ class Task(abc.ABC):
         )
 
         weighted_jacobian = weight @ jacobian  # [cost]
-        weighted_error = weight @ gain_error  # [cost]
+        weighted_error = weight @ minus_gain_error  # [cost]
         mu = self.lm_damping * weighted_error @ weighted_error  # [cost]^2
         eye_tg = configuration.tangent.eye
         # Our Levenberg-Marquardt damping `mu * eye_tg` is isotropic in the
