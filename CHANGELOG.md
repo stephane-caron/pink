@@ -10,11 +10,13 @@ All notable changes to this project will be documented in this file.
 - Example on how differential IK may converge to a local constrained optimum
 - Expose all tasks from the top-level `pink` module
 - Handle unbounded joints in custom configuration vectors
+- Unit test for posture task Jacobian
 
 ### Changed
 
-- **Breaking:** Rename ``FrameTask.body`` to ``FrameTask.frame``
+- **Breaking:** Define task Jacobian as derivative of the task error
 - **Breaking:** Rename ``BodyNotFound`` exception to ``FrameNotFound``
+- **Breaking:** Rename ``FrameTask.body`` to ``FrameTask.frame``
 
 ### Removed
 
