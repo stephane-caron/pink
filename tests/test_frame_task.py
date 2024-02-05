@@ -113,12 +113,11 @@ class TestFrameTask(unittest.TestCase):
         task = FrameTask("r_ankle", position_cost=1.0, orientation_cost=0.1)
         target = self.configuration.get_transform_frame_to_world("r_ankle")
         task.set_target(target)  # error == 0
-        J = task.compute_jacobian(self.configuration)
         e = task.compute_error(self.configuration)
-        self.assertTrue(
-            np.allclose(J, self.configuration.get_frame_jacobian("r_ankle"))
-        )
+        J = task.compute_jacobian(self.configuration)
+        J_ref = -self.configuration.get_frame_jacobian("r_ankle")  # at target
         self.assertLess(np.linalg.norm(e), 1e-10)
+        self.assertTrue(np.allclose(J, J_ref))
 
     def test_unit_cost_qp_objective(self):
         """Unit cost means the QP objective is exactly (J^T J, -e^T J)."""
@@ -138,7 +137,7 @@ class TestFrameTask(unittest.TestCase):
         task.lm_damping = 0.0
         H, c = task.compute_qp_objective(self.configuration)
         self.assertTrue(np.allclose(J.T @ J, H))
-        self.assertTrue(np.allclose(-e.T @ J, c))
+        self.assertTrue(np.allclose(e.T @ J, c))
 
     def test_zero_costs_same_as_disabling_lines(self):
         """Setting a position or orientation cost to zero.
@@ -175,7 +174,7 @@ class TestFrameTask(unittest.TestCase):
             task.lm_damping = 0.0
             H, c = task.compute_qp_objective(self.configuration)
             H_check = J[indexes].T @ J[indexes]
-            c_check = -e[indexes].T @ J[indexes]
+            c_check = e[indexes].T @ J[indexes]
             cost = qd.T @ H @ qd + c @ qd
             cost_check = qd.T @ H_check @ qd + c_check @ qd
             self.assertAlmostEqual(cost, cost_check)
@@ -219,12 +218,11 @@ class TestFrameTask(unittest.TestCase):
         task = FrameTask("ee_frame", [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
         target = self.configuration.get_transform_frame_to_world("ee_frame")
         task.set_target(target)  # error == 0
-        J = task.compute_jacobian(self.configuration)
         e = task.compute_error(self.configuration)
-        self.assertTrue(
-            np.allclose(J, self.configuration.get_frame_jacobian("ee_frame"))
-        )
+        J = task.compute_jacobian(self.configuration)
+        J_ref = -self.configuration.get_frame_jacobian("ee_frame")  # at target
         self.assertLess(np.linalg.norm(e), 1e-10)
+        self.assertTrue(np.allclose(J, J_ref))
 
     def test_inconsistent_cost(self):
         """Exception when the cost is not a vector any more."""
