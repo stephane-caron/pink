@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 
-- Unused spatial-minus utility function
+- Body-minus utility function
+- Spatial-minus utility function
 
 ## [1.1.0] - 2023-01-22
 
