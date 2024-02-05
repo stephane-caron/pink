@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+# Copyright 2024 Inria
 
 """Test fixture for the body task."""
 
