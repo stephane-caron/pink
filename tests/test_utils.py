@@ -14,7 +14,6 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink.exceptions import ConfigurationError
-from pink.tasks.utils import body_minus
 from pink.utils import VectorSpace, custom_configuration_vector
 
 
@@ -44,12 +43,6 @@ class TestUtils(unittest.TestCase):
         q = custom_configuration_vector(robot, j2s6s200_joint_1=[cos, sin])
         self.assertAlmostEqual(q[0], cos)
         self.assertAlmostEqual(q[1], sin)
-
-    def test_minus(self):
-        """Test Lie minus operators."""
-        X = pin.SE3.Random()
-        Y = pin.SE3.Random()
-        self.assertTrue(np.allclose(Y, X * pin.exp6(body_minus(Y, X))))
 
     def test_vector_space(self):
         """Check dimensions of regular tangent space."""
