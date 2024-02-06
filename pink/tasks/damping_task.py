@@ -30,6 +30,11 @@ class DampingTask(PostureTask):
         Args:
             cost: joint angular velocity cost, in
                 :math:`[\mathrm{cost}] [\mathrm{s}] / [\mathrm{rad}]`.
+            lm_damping: Unitless scale of the Levenberg-Marquardt (only when
+                the error is large) regularization term, which helps when
+                targets are unfeasible. Increase this value if the task is too
+                jerky under unfeasible targets, but beware that too large a
+                damping can slow down the task.
         """
         super().__init__(cost=cost, gain=0.0, lm_damping=lm_damping)
 
