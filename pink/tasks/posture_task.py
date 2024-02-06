@@ -77,7 +77,13 @@ class PostureTask(Task):
         self.set_target(configuration.q)
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
-        """Compute posture task error.
+        r"""Compute posture task error.
+
+        The posture task error is defined as:
+
+        .. math::
+
+            e(q) = q^* \ominus q
 
         See :func:`Task.compute_error` for more context.
 
@@ -91,11 +97,13 @@ class PostureTask(Task):
             raise TargetNotSet("no posture target")
         _, nv = get_root_joint_dim(configuration.model)
         return pin.difference(
-            configuration.model, self.target_q, configuration.q
+            configuration.model,
+            configuration.q,
+            self.target_q,
         )[nv:]
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
-        r"""Compute posture task Jacobian.
+        r"""Compute the posture task Jacobian.
 
         The task Jacobian is the identity :math:`I_{n_v} \in \mathbb{R}^{n_v
         \times n_v}`, with :math:`n_v` the dimension of the robot's tangent
@@ -103,7 +111,7 @@ class PostureTask(Task):
 
         .. math::
 
-            J(q) \Delta q = \Delta_q = \alpha (q^* - q)
+            J(q) \Delta q = \Delta q = \alpha (q^* \ominus q)
 
         See :func:`Task.compute_jacobian` for more context.
 
@@ -113,10 +121,8 @@ class PostureTask(Task):
         Returns:
             Posture task Jacobian :math:`J(q)`.
         """
-        if self.target_q is None:
-            raise TargetNotSet("no posture target")
         _, nv = get_root_joint_dim(configuration.model)
-        return configuration.tangent.eye[nv:, :]
+        return -configuration.tangent.eye[nv:, :]
 
     def __repr__(self):
         """Human-readable representation of the task."""
