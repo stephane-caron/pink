@@ -1,51 +1,70 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
+# SPDX-License-Identifier: Apache-2.0
 # Copyright 2023 Inria
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 """Damping task."""
 
 import numpy as np
+import pinocchio as pin
 
 from ..configuration import Configuration
-from .task import Task
+from ..utils import get_root_joint_dim
+from .posture_task import PostureTask
 
 
-class DampingTask(Task):
+class DampingTask(PostureTask):
     r"""Minimize joint velocities.
 
-    Damping is an analogy with forces that are proportional to velocity, and
-    thus fight against motion.
+    The word "damping" is used here by analogy with forces that fight against
+    motion, and bring the robot to a rest if nothing else drives it.
 
-    Attributes:
+    The damping task is implemented as a special case of the posture task where
+    the gain $\alpha$ is zero.
     """
 
-    cost: float
-
-    def __init__(self, cost: float) -> None:
+    def __init__(self, cost: float, lm_damping: float = 0.0) -> None:
         r"""Initialize task.
 
         Args:
             cost: joint angular velocity cost, in
                 :math:`[\mathrm{cost}] [\mathrm{s}] / [\mathrm{rad}]`.
         """
-        self.cost = cost
+        super().__init__(cost=cost, gain=0.0, lm_damping=lm_damping)
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
-        return np.zeros(configuration.model.nv)
+        r"""Compute damping task error.
 
-    def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
-        return configuration.tangent.eye...
-        return np.eye(configuration.model.nv)
+        The damping task error is defined as:
+
+        .. math::
+
+            e(q) = q_0 \ominus q,
+
+        where :math:`q_0` is the neutral configuration of the robot. The
+        damping task error is not relevant in itself, as the gain $\alpha$ of a
+        damping task is always zero. (Yet we still calculate it properly so
+        that the Jacobian is the derivative of the error, as unit tested.) See
+        :func:`Task.compute_error` for more context.
+
+        Args:
+            configuration: Robot configuration :math:`q`.
+
+        Returns:
+            Posture task error :math:`e(q)`.
+        """
+        _, nv = get_root_joint_dim(configuration.model)
+        return pin.difference(
+            configuration.model,
+            configuration.q,
+            pin.neutral(configuration.model),
+        )[nv:]
+
+    def __repr__(self):
+        """Human-readable representation of the task."""
+        return (
+            "DampingTask("
+            f"cost={self.cost}, "
+            f"lm_damping={self.lm_damping})"
+        )
