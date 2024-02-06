@@ -44,6 +44,7 @@ class FrameTask(Task):
         position_cost: Union[float, Sequence[float]],
         orientation_cost: Union[float, Sequence[float]],
         lm_damping: float = 0.0,
+        gain: float = 1.0,
     ) -> None:
         r"""Define a new frame task.
 
@@ -60,9 +61,15 @@ class FrameTask(Task):
                 coordinate corresponds to an axis of the frame.
             lm_damping: Levenberg-Marquardt damping (see class attributes). The
                 default value is conservatively low.
+            gain: Task gain :math:`\alpha \in [0, 1]` for additional low-pass
+                filtering. Defaults to 1.0 (no filtering) for dead-beat
+                control.
         """
-        to_be_updated_cost = np.ones(6)  # updated below
-        super().__init__(cost=to_be_updated_cost, lm_damping=lm_damping)
+        super().__init__(
+            cost=np.ones(6),  # updated below
+            gain=gain,
+            lm_damping=lm_damping,
+        )
         self.frame = frame
         self.lm_damping = lm_damping
         self.transform_target_to_world = None

@@ -114,6 +114,7 @@ class LinearHolonomicTask(Task):
         q_0: np.ndarray,
         cost: Optional[Union[float, Sequence[float], np.ndarray]] = None,
         lm_damping: float = 0.0,
+        gain: float = 1.0,
     ) -> None:
         r"""Create task.
 
@@ -128,8 +129,15 @@ class LinearHolonomicTask(Task):
                 targets are unfeasible. Increase this value if the task is too
                 jerky under unfeasible targets, but beware that too large a
                 damping can slow down the task.
+            gain: Task gain :math:`\alpha \in [0, 1]` for additional low-pass
+                filtering. Defaults to 1.0 (no filtering) for dead-beat
+                control.
         """
-        super().__init__(cost=cost, lm_damping=lm_damping)
+        super().__init__(
+            cost=cost,
+            gain=gain,
+            lm_damping=lm_damping,
+        )
         if b.shape[0] != A.shape[0]:
             raise TaskDefinitionError(
                 f"Shape mismatch between {A.shape=} and {b.shape=}"

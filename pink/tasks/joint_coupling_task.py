@@ -31,6 +31,7 @@ class JointCouplingTask(LinearHolonomicTask):
         cost: float,
         configuration: Configuration,
         lm_damping: float = 0.0,
+        gain: float = 1.0,
     ) -> None:
         r"""Compute Jacobian matrix of a linear holonomic constraint.
 
@@ -48,6 +49,9 @@ class JointCouplingTask(LinearHolonomicTask):
                 targets are unfeasible. Increase this value if the task is too
                 jerky under unfeasible targets, but beware that too large a
                 damping can slow down the task.
+            gain: Task gain :math:`\alpha \in [0, 1]` for additional low-pass
+                filtering. Defaults to 1.0 (no filtering) for dead-beat
+                control.
         """
         assert len(joint_names) == len(ratios)
 
@@ -65,6 +69,7 @@ class JointCouplingTask(LinearHolonomicTask):
             np.zeros(1),
             pin.neutral(configuration.model),
             cost=cost,
+            gain=gain,
             lm_damping=lm_damping,
         )
         self.joint_names = joint_names
