@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you find this code helpful, please cite it as below."
+title: "Pink: Python inverse kinematics based on Pinocchio"
+version: 1.1.0
+date-released: 2024-01-22
+url: "https://github.com/stephane-caron/pink"
+license: "Apache-2.0"
+authors:
+- family-names: "Caron"
+  given-names: "Stéphane"
+  orcid: "https://orcid.org/0000-0003-2906-692X"
+- family-names: "De Mont-Marin"
+  given-names: "Yann"
+  orcid: "https://orcid.org/0000-0002-5446-595X"
+- family-names: "Budhiraja"
+  given-names: "Rohan"
+- family-names: "Bang"
+  given-names: "Seung Hyeon"
