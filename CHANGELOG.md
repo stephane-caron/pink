@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Add ``gain`` keyword argument to all task constructors where is makes sense
 - Damping task that minimizes joint velocities
 - Distribute package on conda-forge
 - Example on how differential IK may converge to a local constrained optimum
