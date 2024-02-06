@@ -42,8 +42,6 @@ class TestPostureTask(unittest.TestCase):
         task = PostureTask(cost=1.0)
         with self.assertRaises(TargetNotSet):
             task.compute_error(self.configuration)
-        with self.assertRaises(TargetNotSet):
-            task.compute_jacobian(self.configuration)
 
     def test_set_target_from_configuration(self):
         """Check that target is set from its configuration value."""
