@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Damping task that minimizes joint velocities
 - Distribute package on conda-forge
 - Example on how differential IK may converge to a local constrained optimum
 - Expose all tasks from the top-level `pink` module
