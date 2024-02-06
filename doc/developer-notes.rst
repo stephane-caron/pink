@@ -12,9 +12,3 @@ Design guidelines
 * Pink is designed for clarity before performance
 * Leaky abstractions are our enemy
 * WIP
-
-Internal functions
-==================
-
-.. automodule:: pink.tasks.utils
-    :members:
