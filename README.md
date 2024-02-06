@@ -147,6 +147,22 @@ Pink implements differential inverse kinematics, a first-order algorithm that co
 
 Install the library and use it! Report bugs in the [issue tracker](https://github.com/stephane-caron/pink/issues). If you are a developer with some robotics experience looking to hack on open source, check out the [contribution guidelines](CONTRIBUTING.md).
 
+## Citation
+
+If you use Pink in your scientific works, please cite it *e.g.* as follows:
+
+```bibtex
+@software{pink2024,
+  title = {{Pink: Python inverse kinematics based on Pinocchio}},
+  author = {Caron, Stéphane and De Mont-Marin, Yann and Budhiraja, Rohan and Bang, Seung Hyeon},
+  license = {Apache-2.0},
+  month = jan,
+  url = {https://github.com/stephane-caron/pink},
+  version = {1.1.0},
+  year = {2024}
+}
+```
+
 ## See also
 
 Software:
