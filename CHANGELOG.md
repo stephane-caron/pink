@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 - Distribute package on conda-forge
 - Example on how differential IK may converge to a local constrained optimum
 - Expose all tasks from the top-level `pink` module
+- Frame task: ``set_target_orientation`` method
+- Frame task: ``set_target_position`` method
 - Handle unbounded joints in custom configuration vectors
 - Unit test for posture task Jacobian
 

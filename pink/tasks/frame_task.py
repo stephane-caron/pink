@@ -10,6 +10,7 @@ from typing import Optional, Sequence, Union
 
 import numpy as np
 import pinocchio as pin
+from numpy.typing import NDArray
 
 from ..configuration import Configuration
 from .exceptions import TargetNotSet, TaskDefinitionError
@@ -134,6 +135,26 @@ class FrameTask(Task):
                 the world frame.
         """
         self.transform_target_to_world = transform_target_to_world.copy()
+
+    def set_target_orientation(
+        self, rotation_target_to_world: NDArray[float]
+    ) -> None:
+        """Set the orientation of the target frame in the world frame.
+
+        Args:
+            rotation_target_to_world: Orientation of the task target frame in
+                the world frame.
+        """
+        self.transform_target_to_world.rotation = rotation_target_to_world
+
+    def set_target_position(self, translation_world_to_target_in_world: NDArray[float]) -> None:
+        """Set the position of the target frame in the world frame.
+
+        Args:
+            translation_world_to_target_in_world: Position of the task target
+                frame in the world frame.
+        """
+        self.transform_target_to_world.translation = translation_world_to_target_in_world
 
     def set_target_from_configuration(
         self, configuration: Configuration
