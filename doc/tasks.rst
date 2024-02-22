@@ -12,8 +12,8 @@ Base task
 .. automodule:: pink.tasks.task
     :members:
 
-Body task
-=========
+Frame task
+==========
 
 .. automodule:: pink.tasks.frame_task
     :members:
