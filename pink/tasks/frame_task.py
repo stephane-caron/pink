@@ -147,14 +147,18 @@ class FrameTask(Task):
         """
         self.transform_target_to_world.rotation = rotation_target_to_world
 
-    def set_target_position(self, translation_world_to_target_in_world: NDArray[float]) -> None:
+    def set_target_position(
+        self, translation_world_to_target_in_world: NDArray[float]
+    ) -> None:
         """Set the position of the target frame in the world frame.
 
         Args:
             translation_world_to_target_in_world: Position of the task target
                 frame in the world frame.
         """
-        self.transform_target_to_world.translation = translation_world_to_target_in_world
+        self.transform_target_to_world.translation = (
+            translation_world_to_target_in_world
+        )
 
     def set_target_from_configuration(
         self, configuration: Configuration
