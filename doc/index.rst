@@ -25,5 +25,3 @@ Inverse kinematics in Pink is defined by weighted :ref:`tasks <Tasks>` and :ref:
     inverse-kinematics.rst
     developer-notes.rst
     references.rst
-
-You can also download this documentation as a `PDF document <pink.pdf>`_.
