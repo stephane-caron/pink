@@ -8,7 +8,7 @@
 
 The formalism used in this implementation is written down in `this note on
 task-based inverse kinematics
-<https://scaron.info/robotics/inverse-kinematics.html>`_. As of February 2022
+<https://scaron.info/robotics/inverse-kinematics.html>`_. As of February 2022,
 it hasn't been updated with the proper dimensional analysis, but the core
 concepts and notations are there.
 """
