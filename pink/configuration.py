@@ -4,13 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Configuration type.
+"""Configuration space of a robot model.
 
 Pink uses `Pinocchio <https://github.com/stack-of-tasks/pinocchio>`__ for
-forward kinematics. It adds to it a :class:`Configuration` type to indicate
-that forward kinematics functions have been run, indicating that frame
-transforms and frame Jacobians used for IK can be queried from the robot's
-data.
+forward kinematics. A :class:`Configuration` is a pair of Pinocchio model and
+data where forward kinematics have been run, indicating that frame transforms
+and frame Jacobians used for IK can be queried.
 """
 
 import numpy as np
