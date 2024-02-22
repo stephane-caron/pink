@@ -82,7 +82,7 @@ Orientation (similarly position) costs can be scalars or 3D vectors. They specif
 
 ### Task targets
 
-Aside from their costs, most tasks take a second set of parameters called *target*. For example, a body task aims for a target transform, while a posture task aims for a target configuration vector. Targets are set by the `set_target` function:
+Aside from their costs, most tasks take a second set of parameters called *target*. For example, a frame task aims for a target transform, while a posture task aims for a target configuration vector. Targets are set by the `set_target` function:
 
 ```python
     tasks["posture"].set_target(

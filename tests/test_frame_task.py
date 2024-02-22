@@ -5,7 +5,7 @@
 # Copyright 2022 Stéphane Caron
 # Copyright 2024 Inria
 
-"""Test fixture for the body task."""
+"""Test fixture for the frame task."""
 
 import unittest
 
@@ -20,7 +20,7 @@ from pink.tasks.exceptions import TaskDefinitionError
 
 
 class TestFrameTask(unittest.TestCase):
-    """Test consistency of the body task.
+    """Test consistency of the frame task.
 
     Note:
         This fixture only tests the task itself. Integration tests with the IK
