@@ -23,11 +23,11 @@ from pink.visualization import start_meshcat_visualizer
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError:
+except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
         "Examples need robot_descriptions, "
         "try ``pip install robot_descriptions``"
-    )
+    ) from exc
 
 
 def create_floating_base(

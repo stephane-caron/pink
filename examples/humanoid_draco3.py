@@ -18,11 +18,11 @@ from pink.tasks import FrameTask, JointCouplingTask, PostureTask
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError:
+except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
         "Examples need robot_descriptions, "
         "try `pip install robot_descriptions`"
-    )
+    ) from exc
 
 
 class WavingPose:
