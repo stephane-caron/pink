@@ -13,8 +13,8 @@ import pink
 
 robot = load_robot_description("ur10_description")
 
-# Frame Details:
-frame_name = "ee_frame"
+# Frame details
+FRAME_NAME = "ee_frame"
 joint_name = robot.model.names[-1]
 parent_joint = robot.model.getJointId(joint_name)
 parent_frame = robot.model.getFrameId(joint_name)
@@ -22,7 +22,7 @@ placement = pinocchio.SE3.Identity()
 
 ee_frame = robot.model.addFrame(
     pinocchio.Frame(
-        frame_name,
+        FRAME_NAME,
         parent_joint,
         parent_frame,
         placement,
@@ -45,7 +45,7 @@ q_final = np.array(
 pinocchio.forwardKinematics(robot.model, robot.data, q_final)
 
 target_pose = robot.data.oMi[parent_joint]
-ee_task = pink.tasks.FrameTask(frame_name, [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
+ee_task = pink.tasks.FrameTask(FRAME_NAME, [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
 ee_task.set_target(target_pose)
 tasks = [ee_task]
 
