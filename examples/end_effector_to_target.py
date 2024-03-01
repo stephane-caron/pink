@@ -1,7 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#
+# SPDX-License-Identifier: Apache-2.0
+
+"""Move an end-effector to a prescribed target."""
+
 import numpy as np
-import pink
 import pinocchio
 from robot_descriptions.loaders.pinocchio import load_robot_description
+
+import pink
 
 robot = load_robot_description("ur10_description")
 

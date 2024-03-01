@@ -7,11 +7,12 @@
 """Upkie wheeled biped bending its knees."""
 
 import numpy as np
-import pink
 import pinocchio as pin
 import qpsolvers
 import yourdfpy
 from loop_rate_limiters import RateLimiter
+
+import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.utils import custom_configuration_vector

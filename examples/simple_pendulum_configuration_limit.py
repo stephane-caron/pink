@@ -26,16 +26,16 @@ to goal tip" distance, and make the pendulum turn anti-clockwise.
 
 import os
 
+import meshcat_shapes
 import numpy as np
-import pink
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
+
+import pink
 from pink import solve_ik
 from pink.tasks import FrameTask
 from pink.visualization import start_meshcat_visualizer
-
-import meshcat_shapes
 
 qp_solver = qpsolvers.available_solvers[0]
 if "quadprog" in qpsolvers.available_solvers:
