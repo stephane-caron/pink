@@ -2,7 +2,7 @@
 
 [![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/main.yml?branch=main)](https://github.com/stephane-caron/pink/actions)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/pink/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/pink?branch=main)
-[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://stephane-caron.github.io/pink/)
+[![Documentation](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/docs.yml?branch=main&label=docs)](https://stephane-caron.github.io/pink/)
 [![Conda version](https://anaconda.org/conda-forge/pink/badges/version.svg)](https://anaconda.org/conda-forge/pink)
 [![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/pin-pink/)
 
