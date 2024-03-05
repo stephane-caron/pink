@@ -6,10 +6,8 @@
 Pink
 ####
 
-.. image:: images/pink-round-corners-140x140.png
-   :height: 140px
-   :alt: alternate text
-   :align: right
+.. image:: https://user-images.githubusercontent.com/1189580/192318997-ed7574c3-8238-451d-9548-a769d46ec03b.png
+   :alt: Banner for Pink
 
 **P**\ ython **in**\ verse **k**\ inematics for articulated robot models, based on `Pinocchio <https://github.com/stack-of-tasks/pinocchio>`_.
 
