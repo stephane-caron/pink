@@ -65,6 +65,8 @@ class RelativeFrameTask(Task):
             gain=gain,
             lm_damping=lm_damping,
         )
+        self.frame = frame
+        self.root = root
         self.lm_damping = lm_damping
         self.transform_target_to_root = None
         #
