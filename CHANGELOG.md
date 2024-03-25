@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Function ``get_transform_frame_to_frame`` to Configuration class
+- Function ``get_transform`` in the Configuration class
 
 ## [2.0.0] - 2024-03-05
 
