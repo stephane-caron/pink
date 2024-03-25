@@ -12,11 +12,13 @@ from .frame_task import FrameTask
 from .joint_coupling_task import JointCouplingTask
 from .linear_holonomic_task import LinearHolonomicTask
 from .posture_task import PostureTask
+from .relative_frame_task import RelativeFrameTask
 from .task import Task
 
 __all__ = [
     "DampingTask",
     "FrameTask",
+    "RelativeFrameTask",
     "TargetNotSet",
     "TaskJacobianNotSet",
     "JointCouplingTask",
