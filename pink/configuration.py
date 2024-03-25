@@ -173,6 +173,23 @@ class Configuration:
         except IndexError as index_error:
             raise FrameNotFound(frame, self.model.frames) from index_error
 
+    def get_transform_frame_to_frame(self, source: str, dest: str) -> pin.SE3:
+        """Get the pose of a frame with respect to another frame.
+
+        Args:
+            source: Name of the frame to get the pose of.
+            dest: Name of the frame to get the pose in.
+
+        Returns:
+            Current transform from the source frame to the dest frame.
+
+        Raises:
+            KeyError: if any of the frame names is not found in the model.
+        """
+        transform_source_to_world = self.get_transform_frame_to_world(source)
+        transform_dest_to_world = self.get_transform_frame_to_world(dest)
+        return transform_dest_to_world.actInv(transform_source_to_world)
+
     def integrate(self, velocity, dt) -> np.ndarray:
         """Integrate a velocity starting from the current configuration.
 
