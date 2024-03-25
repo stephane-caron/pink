@@ -173,7 +173,7 @@ class Configuration:
         except IndexError as index_error:
             raise FrameNotFound(frame, self.model.frames) from index_error
 
-    def get_transform_frame_to_frame(self, source: str, dest: str) -> pin.SE3:
+    def get_transform(self, source: str, dest: str) -> pin.SE3:
         """Get the pose of a frame with respect to another frame.
 
         Args:

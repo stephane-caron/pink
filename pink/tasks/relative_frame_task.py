@@ -137,9 +137,7 @@ class RelativeFrameTask(Task):
         Args:
             configuration: Robot configuration.
         """
-        self.set_target(
-            configuration.get_transform_frame_to_frame(self.frame, self.root)
-        )
+        self.set_target(configuration.get_transform(self.frame, self.root))
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the error twist.
@@ -168,7 +166,7 @@ class RelativeFrameTask(Task):
                 f"target pose of frame '{self.frame}' "
                 f"in frame '{self.root}' is undefined"
             )
-        transform_frame_to_root = configuration.get_transform_frame_to_frame(
+        transform_frame_to_root = configuration.get_transform(
             self.frame, self.root
         )
         transform_target_to_frame = transform_frame_to_root.actInv(
