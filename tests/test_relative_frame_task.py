@@ -25,6 +25,7 @@ class TestRelativeFrameTask(unittest.TestCase):
             "stretch_description", root_joint=pin.JointModelPlanar()
         )
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
+        self.robot = robot
 
     def test_set_target_from_configuration(self):
         """Read target after setting it to a known value."""
@@ -68,6 +69,8 @@ class TestRelativeFrameTask(unittest.TestCase):
             position_cost=1.0,
             orientation_cost=0.1,
         )
+        relative_task.set_target_from_configuration(self.configuration)
+        frame_task.set_target_from_configuration(self.configuration)
         self.assertTrue(
             np.allclose(
                 relative_task.compute_error(self.configuration),
