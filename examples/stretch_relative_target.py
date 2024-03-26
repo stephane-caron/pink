@@ -5,7 +5,7 @@
 # Copyright 2022 Stéphane Caron
 # Copyright 2023 Inria
 
-"""Move a Stretch RE1 with a fixed fingertip target around the origin."""
+"""Move a Stretch RE1 with a fingertip target in the mobile-base frame."""
 
 import meshcat_shapes
 import numpy as np
@@ -27,8 +27,8 @@ except ModuleNotFoundError:
     )
 
 # Trajectory parameters to play with ;)
-circle_radius = 0.5  # [m]
-fingertip_height = 0.7  # [m]
+CIRCLE_RADIUS = 0.5  # [m]
+FINGERTIP_HEIGHT = 0.7  # [m]
 
 if __name__ == "__main__":
     robot = load_robot_description(
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     base_task.set_target_from_configuration(configuration)
     transform_fingertip_target_to_base = pin.SE3(
         rotation=np.eye(3),
-        translation=np.array([0.0, 0.0, fingertip_height]),
+        translation=np.array([0.0, 0.0, FINGERTIP_HEIGHT]),
     )
     transform_fingertip_to_world = configuration.get_transform_frame_to_world(
         fingertip_task.frame
@@ -82,18 +82,19 @@ if __name__ == "__main__":
         # Update base task target
         T = base_task.transform_target_to_world
         u = np.array([np.cos(t), np.sin(t)])
-        T.translation[:2] = center_translation + circle_radius * u
+        T.translation[:2] = center_translation + CIRCLE_RADIUS * u
         T.rotation = pin.utils.rpyToMatrix(0.0, 0.0, 0.5 * np.pi * t)
 
         # Update fingertip target
         fingertip_task.transform_target_to_root.translation[2] = (
-            fingertip_height + 0.1 * u[1]
+            FINGERTIP_HEIGHT + 0.1 * u[1]
         )
 
         # Update visualizer frames
         viewer["base_target_frame"].set_transform(T.np)
         transform_fingertip_target_to_world = (
-            configuration.get_transform_frame_to_world("base_link") * fingertip_task.transform_target_to_root
+            configuration.get_transform_frame_to_world("base_link")
+            * fingertip_task.transform_target_to_root
         )
         viewer["fingertip_target_frame"].set_transform(
             transform_fingertip_target_to_world.np
