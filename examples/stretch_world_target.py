@@ -27,8 +27,8 @@ except ModuleNotFoundError:
     )
 
 # Trajectory parameters to play with ;)
-circle_radius = 0.5  # [m]
-fingertip_height = 0.7  # [m]
+CIRCLE_RADIUS = 0.5  # [m]
+FINGERTIP_HEIGHT = 0.7  # [m]
 
 if __name__ == "__main__":
     robot = load_robot_description(
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     base_task.set_target_from_configuration(configuration)
     transform_fingertip_target_to_world = pin.SE3(
-        rotation=np.eye(3), translation=np.array([0.0, 0.0, fingertip_height])
+        rotation=np.eye(3), translation=np.array([0.0, 0.0, FINGERTIP_HEIGHT])
     ) * configuration.get_transform_frame_to_world(fingertip_task.frame)
     center_translation = transform_fingertip_target_to_world.translation[:2]
     fingertip_task.set_target(transform_fingertip_target_to_world)
@@ -77,12 +77,12 @@ if __name__ == "__main__":
         # Update base target
         T = base_task.transform_target_to_world
         u = np.array([np.cos(t), np.sin(t)])
-        T.translation[:2] = center_translation + circle_radius * u
+        T.translation[:2] = center_translation + CIRCLE_RADIUS * u
         T.rotation = pin.utils.rpyToMatrix(0.0, 0.0, 0.5 * np.pi * t)
 
         # Update fingertip target
         fingertip_task.transform_target_to_world.translation[2] = (
-            fingertip_height + 0.1 * u[1]
+            FINGERTIP_HEIGHT + 0.1 * u[1]
         )
 
         # Update visualizer frames
