@@ -201,9 +201,6 @@ class RelativeFrameTask(Task):
                 f"target pose of frame '{self.frame}' "
                 f"in frame '{self.root}' is undefined"
             )
-        transform_frame_to_root = configuration.get_transform(
-            self.frame, self.root
-        )
         transform_root_to_frame = configuration.get_transform(
             self.root, self.frame
         )
@@ -212,10 +209,13 @@ class RelativeFrameTask(Task):
         )
         jacobian_frame_in_frame = configuration.get_frame_jacobian(self.frame)
         jacobian_root_in_root = configuration.get_frame_jacobian(self.root)
-        action_frame_to_root = transform_frame_to_root.action
+        action_frame_to_target = transform_target_to_frame.actionInverse
+        action_root_to_target = transform_target_to_frame.actInv(
+            transform_root_to_frame
+        ).action
         J = pin.Jlog6(transform_target_to_frame) @ (
-            jacobian_root_in_root
-            - action_frame_to_root @ jacobian_frame_in_frame
+            action_root_to_target @ jacobian_root_in_root
+            - action_frame_to_target @ jacobian_frame_in_frame
         )
         return J
 
