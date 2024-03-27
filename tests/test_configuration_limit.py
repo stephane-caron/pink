@@ -65,12 +65,13 @@ class TestConfigurationLimit(unittest.TestCase):
             root_joint=pin.JointModelFreeFlyer(),
             commit="62f3ba24c2045b44faedb7c6c6167e74e157b49e",
         )
+        dt = 1e-3  # [s]
         configuration = Configuration(robot.model, robot.data, robot.q0)
         limit = ConfigurationLimit(robot.model)
-        G, h = limit.compute_qp_inequalities(robot.q0, dt=1e-3)
+        G, h = limit.compute_qp_inequalities(robot.q0, dt=dt)
         v_lim = configuration.model.velocityLimit
-        self.assertLess(np.max(+G @ v_lim - h), -tol)
-        self.assertLess(np.max(-G @ v_lim - h), -tol)
+        self.assertLess(np.max(+G @ v_lim * dt - h), -tol)
+        self.assertLess(np.max(-G @ v_lim * dt - h), -tol)
 
     def test_configuration_limit_repulsion(self, tol=1e-10):
         """Velocities are scaled down when close to a configuration limit.
