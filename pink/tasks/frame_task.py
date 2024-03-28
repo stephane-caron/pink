@@ -199,6 +199,8 @@ class FrameTask(Task):
         derivative of the task error :math:`e(q) \in \mathbb{R}^6` with respect
         to the configuration :math:`q`. The formula for the frame task is:
 
+        .. math::
+
             J(q) = -\text{Jlog}_6(T_{tb}) {}_b J_{0b}(q)
 
         The derivation of the formula for this Jacobian is detailed in
