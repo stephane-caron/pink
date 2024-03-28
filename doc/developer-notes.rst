@@ -1,4 +1,4 @@
-:github_url: https://github.com/stephane-caron/pink/tree/main/doc/src/developer-notes.rst
+:github_url: https://github.com/stephane-caron/pink/tree/main/doc/developer-notes.rst
 
 ***************
 Developer notes

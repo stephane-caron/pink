@@ -1,4 +1,4 @@
-:github_url: https://github.com/stephane-caron/pink/tree/main/doc/src/limits.rst
+:github_url: https://github.com/stephane-caron/pink/tree/main/doc/limits.rst
 
 .. _Limits:
 

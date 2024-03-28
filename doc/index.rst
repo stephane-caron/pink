@@ -1,4 +1,4 @@
-:github_url: https://github.com/stephane-caron/pink/tree/main/doc/src/index.rst
+:github_url: https://github.com/stephane-caron/pink/tree/main/doc/index.rst
 
 .. title:: Table of Contents
 

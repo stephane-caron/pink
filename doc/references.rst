@@ -1,4 +1,4 @@
-:github_url: https://github.com/stephane-caron/pink/tree/main/doc/src/references.rst
+:github_url: https://github.com/stephane-caron/pink/tree/main/doc/references.rst
 
 **********
 References
