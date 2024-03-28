@@ -1,0 +1,63 @@
+a, a:visited, a:focus {
+  color: rgb(176, 46, 118);
+  text-decoration: none;
+}
+
+a:hover, a:active {
+  color: rgb(72, 0, 32);
+  text-decoration: none;
+}
+
+.wy-menu-vertical header, .wy-menu-vertical p.caption {
+    color: white;
+    font-weight: 600;
+}
+
+.wy-menu-vertical a {
+    color: rgb(200, 178, 188);
+}
+
+.wy-menu-vertical a:hover {
+    background: rgb(176, 46, 118);
+    color: white;
+}
+
+.wy-menu-vertical header, .wy-menu-vertical p.caption {
+    color: black;
+    font-weight: 600;
+}
+
+.wy-menu-vertical a{
+    color: black;
+}
+.wy-nav-content-wrap, .wy-menu li.current > a {
+    background-color: white;
+}
+
+.wy-nav-side {
+    background: rgb(250, 231, 242);
+}
+
+.wy-nav-top {
+    background: rgb(250, 231, 242);
+}
+
+.wy-nav-top a {
+    color: black;
+}
+
+.wy-nav-top i {
+    color: rgb(176, 46, 118);
+}
+
+.wy-side-nav-search {
+    background: rgb(255, 183, 255);
+}
+
+.wy-side-nav-search > div.version {
+    color: black;
+}
+
+.wy-side-nav-search > a{
+    color: black;
+}
