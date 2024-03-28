@@ -148,10 +148,10 @@ class FrameTask(Task):
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute frame task error.
 
-        Mathematically this error is a twist :math:`e(q) \in se(3)` expressed
-        in the local frame (i.e., it is a *body* twist). We map it to
-        :math:`\mathbb{R}^6` using Pinocchio's convention where linear
-        coordinates are followed by angular coordinates.
+        This error is a twist :math:`e(q) \in se(3)` expressed in the local
+        frame (i.e. it is a *body* twist). We map it to :math:`\mathbb{R}^6`
+        using Pinocchio's convention where linear coordinates are followed by
+        angular coordinates.
 
         The error is the right-minus difference between the target pose
         :math:`T_{0t}` and current frame pose :math:`T_{0b}`:
