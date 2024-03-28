@@ -33,9 +33,9 @@ robot.data = pinocchio.Data(robot.model)
 low = robot.model.lowerPositionLimit
 high = robot.model.upperPositionLimit
 robot.q0 = pinocchio.neutral(robot.model)
-# Task Details:
-np.random.seed(0)
 
+# Task details
+np.random.seed(0)
 q_final = np.array(
     [
         np.random.uniform(low=low[i], high=high[i], size=(1,))[0]
@@ -49,26 +49,26 @@ ee_task = pink.tasks.FrameTask(FRAME_NAME, [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
 ee_task.set_target(target_pose)
 tasks = [ee_task]
 
-# IK:
+# Inverse kinematics parameters
 dt = 1e-2
 damping = 1e-8
-niter = 10000
+n_iter = 10000
 solver = "quadprog"
 
-pink_configuration = pink.Configuration(robot.model, robot.data, robot.q0)
+configuration = pink.Configuration(robot.model, robot.data, robot.q0)
 
-for i in range(niter):
+for i in range(n_iter):
     dv = pink.solve_ik(
-        pink_configuration,
-        [ee_task],  # , config_task],
+        configuration,
+        [ee_task],
         dt=dt,
         damping=damping,
         solver=solver,
     )
-    q_out = pinocchio.integrate(robot.model, pink_configuration.q, dv * dt)
-    pink_configuration = pink.Configuration(robot.model, robot.data, q_out)
+    q_out = pinocchio.integrate(robot.model, configuration.q, dv * dt)
+    configuration = pink.Configuration(robot.model, robot.data, q_out)
     pinocchio.updateFramePlacements(robot.model, robot.data)
-    err = ee_task.compute_error(pink_configuration)
+    err = ee_task.compute_error(configuration)
     print(i, err)
-    if np.linalg.norm(ee_task.compute_error(pink_configuration)) < 1e-8:
+    if np.linalg.norm(ee_task.compute_error(configuration)) < 1e-8:
         break
