@@ -81,7 +81,7 @@ class Task(abc.ABC):
         derivative of the task error :math:`e(q)` with respect to the
         configuration :math:`q \in \mathbb{R}^{n_q}`. This Jacobian is
         implemented in :func:`Task.compute_jacobian`. Finally, the
-        configuration displacement :math:`\\Delta q` is the output of inverse
+        configuration displacement :math:`\Delta q` is the output of inverse
         kinematics.
 
         In the first-order task dynamics, the error :math:`e(q)` is multiplied
