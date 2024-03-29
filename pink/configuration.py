@@ -12,6 +12,8 @@ data where forward kinematics have been run, indicating that frame transforms
 and frame Jacobians used for IK can be queried.
 """
 
+from typing import Optional
+
 import numpy as np
 import pinocchio as pin
 
@@ -89,10 +91,18 @@ class Configuration:
         self.tangent = model.tangent
         #
         if forward_kinematics:
-            self.update()
+            self.update(None)
 
-    def update(self) -> None:
-        """Run forward kinematics from the configuration."""
+    def update(self, q: Optional[np.ndarray] = None) -> None:
+        """Update configuration to a new vector and run forward kinematics.
+
+        Args:
+            q: New configuration vector.
+        """
+        if q is not None:
+            q_readonly = q.copy()
+            q_readonly.setflags(write=False)
+            self.q = q_readonly
         pin.computeJointJacobians(self.model, self.data, self.q)
         pin.updateFramePlacements(self.model, self.data)
 
@@ -209,5 +219,5 @@ class Configuration:
             velocity: Velocity in tangent space.
             dt: Integration duration in [s].
         """
-        self.q = pin.integrate(self.model, self.q, velocity * dt)
-        self.update()
+        q = pin.integrate(self.model, self.q, velocity * dt)
+        self.update(q)
