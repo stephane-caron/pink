@@ -194,8 +194,19 @@ class RelativeFrameTask(Task):
 
         .. math::
 
-            J(q) = \text{Jlog}_6(T_{bt}) (\text{Ad}_{T_{tr}) {}_r J_{0r}(q) -
-            \text{Ad}_{T_{tb}} {}_b J_{0b}(q))
+            J(q) = \text{Jlog}(T_{tf}) ({}_f J_{0f}(q) - \text{Ad}_{T_{fr}}{}_r J_{0r}(q))
+
+        The proof is as follow if we denote :math:`JT(q)` the left jacobian of 
+        :math:`T_{tf}(q) = T_{rt}^{-1} T_{0r}^{-1}(q) T_{0f}(q)` we have
+        .. math::
+            J(q) = \text{Jlog}(T_{tf}) JT
+
+            [Jv]^{up} = T_{tf}^{-1} \dot{T}_{tf}
+                      = T_{ft}T_{tr}T_{r0}\dot{T}_{0f} - T_{ft}T_{tr}T_{0r}^{-1}\dot{T}_{0r}T_{0r}^{-1}T_{0f}
+                      = T_{0f}^{-1}\dot{T}_{0f} - T_{fr}(T_{0r}^{-1}\dot{T}_{0r})T_{fr}^{-1}
+                      = [{}_f J_{0f} v - \text{Ad}_{T_{fr}}{}_r J_{0r} v]^{up}
+
+            J = {}_f J_{0f} - \text{Ad}_{T_{fr}}{}_r J_{0r}
 
         The formula implemented here is more general than the one detailed in
         [FrameTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
