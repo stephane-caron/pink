@@ -142,7 +142,7 @@ class TestRelativeFrameTask(unittest.TestCase):
         )
         self.configuration.update(q)
         relative_task.set_target_from_configuration(self.configuration)
-        J = -relative_task.compute_jacobian(self.configuration)
+        J = relative_task.compute_jacobian(self.configuration)
         J_check = np.array(
             [
                 [
