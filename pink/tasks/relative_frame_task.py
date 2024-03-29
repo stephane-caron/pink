@@ -96,7 +96,7 @@ class RelativeFrameTask(Task):
                         "seq of float or ndarray of size 1 or 3,"
                         f"currently cost={self.cost}"
                     )
-                assert np.all(position_cost >= 0.0)
+            assert np.all(position_cost >= 0.0)
 
         self.cost[0:3] = position_cost
 
@@ -123,7 +123,7 @@ class RelativeFrameTask(Task):
                         "seq of float or ndarray of size 1 or 3,"
                         f"currently cost={self.cost}"
                     )
-                assert np.all(orientation_cost >= 0.0)
+            assert np.all(orientation_cost >= 0.0)
 
         self.cost[3:] = orientation_cost
 
