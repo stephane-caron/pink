@@ -61,7 +61,7 @@ if __name__ == "__main__":
     base_task.set_target_from_configuration(configuration)
     transform_fingertip_target_to_base = pin.SE3(
         rotation=np.eye(3),
-        translation=np.array([0.0, 0.0, FINGERTIP_HEIGHT]),
+        translation=np.array([0.1, 0.0, FINGERTIP_HEIGHT]),
     )
     transform_fingertip_to_world = configuration.get_transform_frame_to_world(
         fingertip_task.frame
