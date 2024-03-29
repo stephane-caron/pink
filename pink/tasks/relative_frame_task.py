@@ -179,7 +179,7 @@ class RelativeFrameTask(Task):
         transform_frame_to_root = configuration.get_transform(
             self.frame, self.root
         )
-        transform_frame_to_target =  self.transform_target_to_root.actInv(
+        transform_frame_to_target = self.transform_target_to_root.actInv(
            transform_frame_to_root
         )
         error_in_frame: np.ndarray = pin.log(transform_frame_to_target).vector
@@ -196,7 +196,7 @@ class RelativeFrameTask(Task):
 
             J(q) = \text{Jlog}(T_{tf}) ({}_f J_{0f}(q) - \text{Ad}_{T_{fr}}{}_r J_{0r}(q))
 
-        The proof is as follow if we denote :math:`JT(q)` the left jacobian of 
+        The proof is as follow if we denote :math:`JT(q)` the left jacobian of
         :math:`T_{tf}(q) = T_{rt}^{-1} T_{0r}^{-1}(q) T_{0f}(q)` we have
         .. math::
             J(q) = \text{Jlog}(T_{tf}) JT
@@ -226,7 +226,7 @@ class RelativeFrameTask(Task):
         transform_frame_to_root = configuration.get_transform(
             self.frame, self.root
         )
-        transform_frame_to_target =  self.transform_target_to_root.actInv(
+        transform_frame_to_target = self.transform_target_to_root.actInv(
            transform_frame_to_root
         )
         action_root_to_frame = transform_frame_to_root.actionInverse
