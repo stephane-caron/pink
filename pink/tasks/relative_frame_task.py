@@ -26,7 +26,7 @@ class RelativeFrameTask(Task):
         root: Name of the robot frame the task is relative to.
         transform_target_to_root: Target pose of the frame.
     """
-
+    cost: np.ndarray
     frame: str
     root: str
     transform_target_to_root: Optional[pin.SE3]
