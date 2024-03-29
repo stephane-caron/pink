@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Configuration: update function now accepts a configuration vector argument
+- Costs: setting cost in relative task now accept plain float
 
 ## [2.0.0] - 2024-03-05
 
