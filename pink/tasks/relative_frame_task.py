@@ -86,15 +86,19 @@ class RelativeFrameTask(Task):
         """
         if isinstance(position_cost, float):
             assert position_cost >= 0.0
-        else:  # not isinstance(position_cost, float)
-            assert all(cost >= 0.0 for cost in position_cost)
-        if isinstance(self.cost, np.ndarray):
-            self.cost[0:3] = position_cost
-        else:  # self.cost is not a vector
-            raise TaskDefinitionError(
-                "Frame task cost should be a vector, "
-                f"currently cost={self.cost}"
-            )
+        else:  # Should be a ndarray or seq
+            if not isinstance(position_cost, np.ndarray):  # Must be seq
+                try:
+                    position_cost = np.array(position_cost)
+                except Exception:  # Not a proper float sequence
+                    raise TaskDefinitionError(
+                        "Position task cost should be a float or a "
+                        "seq of float or ndarray of size 1 or 3,"
+                        f"currently cost={self.cost}"
+                    )
+                assert np.all(position_cost >= 0.0)
+
+        self.cost[0:3] = position_cost
 
     def set_orientation_cost(
         self, orientation_cost: Union[float, Sequence[float], np.ndarray]
@@ -109,15 +113,19 @@ class RelativeFrameTask(Task):
         """
         if isinstance(orientation_cost, float):
             assert orientation_cost >= 0.0
-        else:  # not isinstance(orientation_cost, float)
-            assert all(cost >= 0.0 for cost in orientation_cost)
-        if isinstance(self.cost, np.ndarray):
-            self.cost[3:6] = orientation_cost
-        else:  # self.cost is not a vector
-            raise TaskDefinitionError(
-                "Frame task cost should be a vector, "
-                f"currently cost={self.cost}"
-            )
+        else:  # Should be a ndarray or seq
+            if not isinstance(orientation_cost, np.ndarray):  # Must be seq
+                try:
+                    orientation_cost = np.array(orientation_cost)
+                except Exception:  # Not a proper float sequence
+                    raise TaskDefinitionError(
+                        "Orientation task cost should be a float or a "
+                        "seq of float or ndarray of size 1 or 3,"
+                        f"currently cost={self.cost}"
+                    )
+                assert np.all(orientation_cost >= 0.0)
+
+        self.cost[3:] = orientation_cost
 
     def set_target(
         self,
