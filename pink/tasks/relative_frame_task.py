@@ -186,7 +186,8 @@ class RelativeFrameTask(Task):
 
         .. math::
 
-            J(q) = -\text{Jlog}_6(T_{tb}) {}_b J_{0b}(q)
+            J(q) = \text{Jlog}_6(T_{bt}) (\text{Ad}_{T_{tr}) {}_r J_{0r}(q) -
+            \text{Ad}_{T_{tb}} {}_b J_{0b}(q))
 
         The formula implemented here is more general than the one detailed in
         [FrameTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
