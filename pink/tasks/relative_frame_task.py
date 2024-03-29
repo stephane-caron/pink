@@ -159,7 +159,7 @@ class RelativeFrameTask(Task):
 
         .. math::
 
-            e(q) := {}_b \xi_{0b} = \log(T_{bt})
+            e(q) := \log(T_{tf}) = \log(T_{rt}^{-1} T_{rf})
 
         where :math:`b` denotes our frame, :math:`t` the target frame and
         :math:`0` the inertial frame. See also :func:`Task.compute_error` for
@@ -179,10 +179,10 @@ class RelativeFrameTask(Task):
         transform_frame_to_root = configuration.get_transform(
             self.frame, self.root
         )
-        transform_target_to_frame = transform_frame_to_root.actInv(
-            self.transform_target_to_root
+        transform_frame_to_target =  self.transform_target_to_root.actInv(
+           transform_frame_to_root
         )
-        error_in_frame: np.ndarray = pin.log(transform_target_to_frame).vector
+        error_in_frame: np.ndarray = pin.log(transform_frame_to_target).vector
         return error_in_frame
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
