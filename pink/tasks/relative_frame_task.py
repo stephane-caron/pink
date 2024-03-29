@@ -206,8 +206,8 @@ class RelativeFrameTask(Task):
         transform_root_to_frame = configuration.get_transform(
             self.root, self.frame
         )
-        transform_target_to_frame = self.transform_target_to_root.act(
-            transform_root_to_frame
+        transform_target_to_frame = transform_root_to_frame.act(
+            self.transform_target_to_root
         )
         jacobian_frame_in_frame = configuration.get_frame_jacobian(self.frame)
         jacobian_root_in_root = configuration.get_frame_jacobian(self.root)
