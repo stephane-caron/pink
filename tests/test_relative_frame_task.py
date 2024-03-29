@@ -69,6 +69,27 @@ class TestRelativeFrameTask(unittest.TestCase):
             position_cost=1.0,
             orientation_cost=0.1,
         )
+        q = np.array(
+            [
+                -0.53682227,
+                0.84369535,
+                -1.7703322,
+                0.2867902,
+                0.87828404,
+                0.11851416,
+                0.02568168,
+                0.04357896,
+                0.09986985,
+                -0.15279541,
+                -0.39004399,
+                -0.14194651,
+                0.15464511,
+                -0.16225863,
+                0.99645724,
+                0.08410094,
+            ]
+        )
+        self.configuration.update(q)
         relative_task.set_target_from_configuration(self.configuration)
         frame_task.set_target_from_configuration(self.configuration)
         self.assertTrue(
