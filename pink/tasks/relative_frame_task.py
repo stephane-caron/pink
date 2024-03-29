@@ -180,7 +180,7 @@ class RelativeFrameTask(Task):
             self.frame, self.root
         )
         transform_frame_to_target = self.transform_target_to_root.actInv(
-           transform_frame_to_root
+            transform_frame_to_root
         )
         error_in_frame: np.ndarray = pin.log(transform_frame_to_target).vector
         return error_in_frame
@@ -227,7 +227,7 @@ class RelativeFrameTask(Task):
             self.frame, self.root
         )
         transform_frame_to_target = self.transform_target_to_root.actInv(
-           transform_frame_to_root
+            transform_frame_to_root
         )
         action_root_to_frame = transform_frame_to_root.actionInverse
         jacobian_frame_in_frame = configuration.get_frame_jacobian(self.frame)
