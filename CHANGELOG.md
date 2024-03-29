@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 - Function ``get_transform`` in the Configuration class
 - Task: relative frame task, where target is w.r.t another robot frame
 
+### Changed
+
+- Configuration: update function now accepts a configuration vector argument
+
 ## [2.0.0] - 2024-03-05
 
 ### Added
