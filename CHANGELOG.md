@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Function ``get_transform`` in the Configuration class
-- Task: relative frame task
+- Task: relative frame task, where target is w.r.t another robot frame
 
 ## [2.0.0] - 2024-03-05
 
