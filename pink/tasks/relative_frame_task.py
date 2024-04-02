@@ -27,6 +27,7 @@ class RelativeFrameTask(Task):
         transform_target_to_root: Target pose of the frame.
     """
 
+    cost: np.ndarray
     frame: str
     root: str
     transform_target_to_root: Optional[pin.SE3]
@@ -86,15 +87,19 @@ class RelativeFrameTask(Task):
         """
         if isinstance(position_cost, float):
             assert position_cost >= 0.0
-        else:  # not isinstance(position_cost, float)
-            assert all(cost >= 0.0 for cost in position_cost)
-        if isinstance(self.cost, np.ndarray):
-            self.cost[0:3] = position_cost
-        else:  # self.cost is not a vector
-            raise TaskDefinitionError(
-                "Frame task cost should be a vector, "
-                f"currently cost={self.cost}"
-            )
+        else:  # Should be a ndarray or seq
+            if not isinstance(position_cost, np.ndarray):  # Must be seq
+                try:
+                    position_cost = np.array(position_cost)
+                except Exception:  # Not a proper float sequence
+                    raise TaskDefinitionError(
+                        "Position task cost should be a float or a "
+                        "seq of float or ndarray of size 1 or 3,"
+                        f"currently cost={self.cost}"
+                    )
+            assert np.all(position_cost >= 0.0)
+
+        self.cost[0:3] = position_cost
 
     def set_orientation_cost(
         self, orientation_cost: Union[float, Sequence[float], np.ndarray]
@@ -109,15 +114,19 @@ class RelativeFrameTask(Task):
         """
         if isinstance(orientation_cost, float):
             assert orientation_cost >= 0.0
-        else:  # not isinstance(orientation_cost, float)
-            assert all(cost >= 0.0 for cost in orientation_cost)
-        if isinstance(self.cost, np.ndarray):
-            self.cost[3:6] = orientation_cost
-        else:  # self.cost is not a vector
-            raise TaskDefinitionError(
-                "Frame task cost should be a vector, "
-                f"currently cost={self.cost}"
-            )
+        else:  # Should be a ndarray or seq
+            if not isinstance(orientation_cost, np.ndarray):  # Must be seq
+                try:
+                    orientation_cost = np.array(orientation_cost)
+                except Exception:  # Not a proper float sequence
+                    raise TaskDefinitionError(
+                        "Orientation task cost should be a float or a "
+                        "seq of float or ndarray of size 1 or 3,"
+                        f"currently cost={self.cost}"
+                    )
+            assert np.all(orientation_cost >= 0.0)
+
+        self.cost[3:] = orientation_cost
 
     def set_target(
         self,
@@ -151,7 +160,7 @@ class RelativeFrameTask(Task):
 
         .. math::
 
-            e(q) := {}_b \xi_{0b} = \log(T_{bt})
+            e(q) := \log(T_{tf}) = \log(T_{rt}^{-1} T_{rf})
 
         where :math:`b` denotes our frame, :math:`t` the target frame and
         :math:`0` the inertial frame. See also :func:`Task.compute_error` for
@@ -171,10 +180,10 @@ class RelativeFrameTask(Task):
         transform_frame_to_root = configuration.get_transform(
             self.frame, self.root
         )
-        transform_target_to_frame = transform_frame_to_root.actInv(
-            self.transform_target_to_root
+        transform_frame_to_target = self.transform_target_to_root.actInv(
+            transform_frame_to_root
         )
-        error_in_frame: np.ndarray = pin.log(transform_target_to_frame).vector
+        error_in_frame: np.ndarray = pin.log(transform_frame_to_target).vector
         return error_in_frame
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
@@ -186,8 +195,24 @@ class RelativeFrameTask(Task):
 
         .. math::
 
-            J(q) = \text{Jlog}_6(T_{bt}) (\text{Ad}_{T_{tr}) {}_r J_{0r}(q) -
-            \text{Ad}_{T_{tb}} {}_b J_{0b}(q))
+            J(q) = \text{Jlog}(T_{tf}) (
+                {}_f J_{0f}(q) - \text{Ad}_{T_{fr}}{}_r J_{0r}(q)
+            )
+
+        The proof is as follow if we denote :math:`JT(q)` the Jacobian in the
+        local frame :math:`T_{tf}(q) = T_{rt}^{-1} T_{0r}^{-1}(q) T_{0f}(q)`
+        we have
+        .. math::
+            J(q) = \text{Jlog}(T_{tf}) JT
+
+            [Jv]^{up} = T_{tf}^{-1} \dot{T}_{tf}
+                      = T_{ft}T_{tr}T_{r0}\dot{T}_{0f}
+                        - T_{ft}T_{tr}T_{0r}^{-1}\dot{T}_{0r}T_{0r}^{-1}T_{0f}
+                      = T_{0f}^{-1}\dot{T}_{0f}
+                        - T_{fr}(T_{0r}^{-1}\dot{T}_{0r})T_{fr}^{-1}
+                      = [{}_f J_{0f} v - \text{Ad}_{T_{fr}}{}_r J_{0r} v]^{up}
+
+            J = {}_f J_{0f} - \text{Ad}_{T_{fr}}{}_r J_{0r}
 
         The formula implemented here is more general than the one detailed in
         [FrameTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
@@ -204,21 +229,18 @@ class RelativeFrameTask(Task):
                 f"target pose of frame '{self.frame}' "
                 f"in frame '{self.root}' is undefined"
             )
-        transform_root_to_frame = configuration.get_transform(
-            self.root, self.frame
+        transform_frame_to_root = configuration.get_transform(
+            self.frame, self.root
         )
-        transform_target_to_frame = transform_root_to_frame.act(
-            self.transform_target_to_root
+        transform_frame_to_target = self.transform_target_to_root.actInv(
+            transform_frame_to_root
         )
+        action_root_to_frame = transform_frame_to_root.actionInverse
         jacobian_frame_in_frame = configuration.get_frame_jacobian(self.frame)
         jacobian_root_in_root = configuration.get_frame_jacobian(self.root)
-        action_frame_to_target = transform_target_to_frame.actionInverse
-        action_root_to_target = transform_target_to_frame.actInv(
-            transform_root_to_frame
-        ).action
-        J = pin.Jlog6(transform_target_to_frame) @ (
-            action_root_to_target @ jacobian_root_in_root
-            - action_frame_to_target @ jacobian_frame_in_frame
+        J = pin.Jlog6(transform_frame_to_target) @ (
+            jacobian_frame_in_frame
+            - action_root_to_frame @ jacobian_root_in_root
         )
         return J
 
