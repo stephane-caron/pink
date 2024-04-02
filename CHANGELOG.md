@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [2.1.0] - 2024-04-02
+
 ### Added
 
 - Function ``get_transform`` in the Configuration class
@@ -270,7 +272,8 @@ All notable changes to this project will be documented in this file.
 
 Python package infrastructure.
 
-[unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v2.0.0...HEAD
+[unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.11.0...v1.0.0

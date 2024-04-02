@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you find this code helpful, please cite it as below."
 title: "Pink: Python inverse kinematics based on Pinocchio"
-version: 2.0.0
-date-released: 2024-03-05
+version: 2.1.0
+date-released: 2024-04-02
 url: "https://github.com/stephane-caron/pink"
 license: "Apache-2.0"
 authors:
