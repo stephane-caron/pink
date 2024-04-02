@@ -15,6 +15,12 @@ Frame task
 .. automodule:: pink.tasks.frame_task
     :members:
 
+Relative frame task
+===================
+
+.. automodule:: pink.tasks.relative_frame_task
+    :members:
+
 Joint coupling task
 ===================
 
