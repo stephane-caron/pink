@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.napoleon",  # before sphinx_autodoc_typehints
     "sphinx_autodoc_typehints",
     "sphinx_favicon",
+    "sphinx.ext.intersphinx",
 ]
 
 # List of modules to be mocked up
@@ -329,3 +330,8 @@ favicons = [
         "type": "image/png",
     },
 ]
+
+intersphinx_mapping = {
+    "numpy": ("https://numpy.org/doc/stable", None),
+    "qpsolvers": ("https://qpsolvers.github.io/qpsolvers/", None),
+}
