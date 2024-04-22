@@ -2,11 +2,9 @@ name: pink
 channels:
     - conda-forge
 dependencies:
-    - quadprog
-    - pinocchio
+    - pink
     - pip >=21.3.1
     - pip:
-        - pin-pink
         - sphinx >= 7.2.2
         - sphinx-autodoc-typehints
         - sphinx-favicon
