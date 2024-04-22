@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+
+- Fix broken documentation links
+
 ## [2.1.0] - 2024-04-02
 
 ### Added
