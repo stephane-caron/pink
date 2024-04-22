@@ -163,8 +163,8 @@ class RelativeFrameTask(Task):
             e(q) := \log(T_{tf}) = \log(T_{rt}^{-1} T_{rf})
 
         where :math:`b` denotes our frame, :math:`t` the target frame and
-        :math:`0` the inertial frame. See also :func:`Task.compute_error` for
-        more context.
+        :math:`0` the inertial frame. See also
+        :func:`pink.tasks.task.Task.compute_error` for more context.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -217,8 +217,9 @@ class RelativeFrameTask(Task):
             \end{align}
 
         The formula implemented here is more general than the one detailed in
-        [FrameTaskJacobian]_. See also :func:`Task.compute_jacobian` for more
-        context on task Jacobians.
+        [FrameTaskJacobian]_. See also
+        :func:`pink.tasks.task.Task.compute_jacobian` for more context on task
+        Jacobians.
 
         Args:
             configuration: Robot configuration :math:`q`.
