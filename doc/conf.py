@@ -335,3 +335,7 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable", None),
     "qpsolvers": ("https://qpsolvers.github.io/qpsolvers/", None),
 }
+
+# Treat warnings as errors, in particular when a reference target (such as a
+# :func:`something`) is not found.
+nitpicky = True
