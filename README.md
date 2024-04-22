@@ -169,6 +169,7 @@ Software:
 - [Jink.jl](https://github.com/adubredu/Jink.jl): Julia package for differential multi-task inverse kinematics.
 - [PlaCo](https://github.com/rhoban/placo): C++ inverse kinematics based on Pinocchio.
 - [pymanoid](https://github.com/stephane-caron/pymanoid): precursor to Pink based on OpenRAVE.
+- [TSID](https://github.com/stack-of-tasks/tsid): C++ inverse kinematics based on Pinocchio.
 
 Technical notes:
 
