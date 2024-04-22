@@ -339,3 +339,10 @@ intersphinx_mapping = {
 # Treat warnings as errors, in particular when a reference target (such as a
 # :func:`something`) is not found.
 nitpicky = True
+
+nitpick_ignore = [
+    ("py:class", "pinocchio.pinocchio_pywrap.SE3"),
+    ("py:data", "typing.Optional"),
+    ("py:data", "typing.Tuple"),
+    ("py:data", "typing.Union"),
+]
