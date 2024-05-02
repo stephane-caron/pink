@@ -7,7 +7,7 @@
 """General description"""
 
 import abc
-from typing import Callable, Optional, Sequence, Tuple, Union
+from typing import Callable, Optional, Tuple, Union
 
 import numpy as np
 
@@ -22,7 +22,7 @@ class CBF(abc.ABC):
     """
 
     gain: Union[float, np.ndarray]
-    class_k_fns: Optional[Callable[[np.ndarray], np.ndarray]]
+    class_k_fns: Callable[[np.ndarray], float]
     safe_policy: Optional[np.ndarray]
     r: float
 
@@ -35,7 +35,7 @@ class CBF(abc.ABC):
     ):
         """..."""
         self.gain = gain
-        self.class_k_fn = class_k_fn if class_k_fn is not None else class_k_fn
+        self.class_k_fn = class_k_fn if class_k_fn is not None else lambda x: x
         self.safe_policy = safe_control
         self.r = r
 
