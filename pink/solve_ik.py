@@ -11,12 +11,16 @@ from typing import Iterable, Optional, Tuple
 import numpy as np
 import qpsolvers
 
+from .barriers import CBF
 from .configuration import Configuration
 from .tasks import Task
 
 
 def __compute_qp_objective(
-    configuration: Configuration, tasks: Iterable[Task], damping: float
+    configuration: Configuration,
+    tasks: Iterable[Task],
+    cbfs: Iterable[CBF],
+    damping: float,
 ) -> Tuple[np.ndarray, np.ndarray]:
     r"""Compute the QP objective function.
 
@@ -48,11 +52,18 @@ def __compute_qp_objective(
         H_task, c_task = task.compute_qp_objective(configuration)
         H += H_task
         c += c_task
+
+    for cbf in cbfs:
+        H_cbf, c_cbf = cbf.compute_qp_objective(configuration)
+        H += H_cbf
+        c += c_cbf
+
     return (H, c)
 
 
 def __compute_qp_inequalities(
     configuration,
+    cbfs: Iterable[CBF],
     dt: float,
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     r"""Compute inequality constraints for the quadratic program.
@@ -82,6 +93,10 @@ def __compute_qp_inequalities(
         if matvec is not None:
             G_list.append(matvec[0])
             h_list.append(matvec[1])
+    for cbf in cbfs:
+        G_cbf, h_cbf = cbf.compute_qp_inequality(configuration)
+        G_list.append(G_cbf)
+        h_list.append(h_cbf)
     if not G_list:
         return None, None
     return np.vstack(G_list), np.hstack(h_list)
@@ -90,6 +105,7 @@ def __compute_qp_inequalities(
 def build_ik(
     configuration: Configuration,
     tasks: Iterable[Task],
+    cbfs: Iterable[CBF],
     dt: float,
     damping: float = 1e-12,
 ) -> qpsolvers.Problem:
@@ -122,8 +138,8 @@ def build_ik(
     Returns:
         Quadratic program of the inverse kinematics problem.
     """
-    P, q = __compute_qp_objective(configuration, tasks, damping)
-    G, h = __compute_qp_inequalities(configuration, dt)
+    P, q = __compute_qp_objective(configuration, tasks, cbfs, damping)
+    G, h = __compute_qp_inequalities(configuration, cbfs, dt)
     problem = qpsolvers.Problem(P, q, G, h)
     return problem
 
