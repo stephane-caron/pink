@@ -54,6 +54,8 @@ class PositionCBF(CBF):
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         """..."""
+        # TODO: find proper place to write this
+        self.safe_policy = np.zeros(configuration.model.nq)
         pos_world = configuration.get_transform_frame_to_world(self.frame).translation
         cbfs = []
         if self.p_min is not None:
