@@ -28,15 +28,17 @@ class CBF(abc.ABC):
 
     def __init__(
         self,
-        gain: float = 1.0,
+        dim: int,
+        gain: Union[float, np.ndarray] = 1.0,
         class_k_fn: Optional[Callable[..., float]] = None,
-        safe_control: Optional[np.ndarray] = None,
-        r: float = 1.0,
+        safe_policy: Optional[np.ndarray] = None,
+        r: float = 3.0,
     ):
         """..."""
-        self.gain = gain
+        self.dim = dim
+        self.gain = gain if gain is np.ndarray else np.ones(dim) * gain
         self.class_k_fn = class_k_fn if class_k_fn is not None else lambda x: x
-        self.safe_policy = safe_control
+        self.safe_policy = safe_policy
         self.r = r
 
     @abc.abstractmethod
@@ -66,7 +68,7 @@ class CBF(abc.ABC):
         """..."""
         G = -self.compute_jacobian(configuration)
         barrier_value = self.compute_barrier(configuration)
-        h = self.gain * self.class_k_fns(barrier_value)
+        h = self.gain * self.class_k_fn(barrier_value)
 
         return (G, h)
 

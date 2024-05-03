@@ -7,7 +7,7 @@
 
 """Subset of bounded joints associated with a robot model."""
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import numpy as np
 import pinocchio as pin
@@ -25,9 +25,12 @@ class ConfigurationCBF(CBF):
     joints: list
     projection_matrix: Optional[np.ndarray]
 
-    def __init__(self, model: pin.Model, gain: float = 0.5):
+    def __init__(
+        self,
+        model: pin.Model,
+        gain: Union[float, np.ndarray] = 0.5,
+    ):
         """..."""
-        super().__init__(gain=gain, safe_control=None)
 
         has_configuration_limit = np.logical_and(
             model.hasConfigurationLimit(),
@@ -57,6 +60,8 @@ class ConfigurationCBF(CBF):
 
         dim = len(indices)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
+
+        super().__init__(dim, gain=gain, safe_policy=None)
 
         self.indices = indices
         self.joints = joints

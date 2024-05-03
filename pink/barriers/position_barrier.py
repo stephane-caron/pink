@@ -6,7 +6,7 @@
 
 """General description"""
 
-from typing import Callable, Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 
@@ -32,41 +32,44 @@ class PositionCBF(CBF):
         mask: Optional[np.ndarray] = None,
         min: Optional[np.ndarray] = None,
         max: Optional[np.ndarray] = None,
-        gain: float = 1.0,
+        gain: Union[float, np.ndarray] = 1.0,
     ):
-        # TODO: define safe control?
         """..."""
+        dim = 0
+        if min is not None:
+            dim += 3
+        if max is not None:
+            dim += 3
+
+        # TODO: define safe control?
         super().__init__(
+            dim,
             gain=gain,
-            class_k_fn=lambda h: 1 / (1 + np.linalg.norm(h)),
+            # class_k_fn=lambda h: 1 / (1 + np.linalg.norm(h)),
         )
 
+        self.frame = frame
         self.p_min = min
         self.p_max = max
-        self.dim = 0
-
-        if min is not None:
-            self.dim += 3
-        if max is not None:
-            self.dim += 3
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         """..."""
         pos_world = configuration.get_transform_frame_to_world(self.frame).translation
-        tasks = []
-        if min is not None:
-            tasks.append(pos_world - self.p_min)
-        if max is not None:
-            tasks.append(self.p_max - pos_world)
-        return np.concatenate(tasks)
+        cbfs = []
+        if self.p_min is not None:
+            cbfs.append(pos_world - self.p_min)
+        if self.p_max is not None:
+            cbfs.append(self.p_max - pos_world)
+
+        return np.concatenate(cbfs)
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         """..."""
         pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
-        jacobian = []
-        if min is not None:
-            jacobian.append(pos_jac.copy())
-        if max is not None:
-            jacobian.append(-pos_jac.copy())
+        jacobians = []
+        if self.p_min is not None:
+            jacobians.append(pos_jac.copy())
+        if self.p_max is not None:
+            jacobians.append(-pos_jac.copy())
 
-        return np.hstack(jacobian)
+        return np.hstack(jacobians)
