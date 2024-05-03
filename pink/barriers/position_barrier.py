@@ -41,7 +41,6 @@ class PositionCBF(CBF):
             class_k_fn=lambda h: 1 / (1 + np.linalg.norm(h)),
         )
 
-        self.mask = mask
         self.p_min = min
         self.p_max = max
         self.dim = 0
