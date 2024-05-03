@@ -19,8 +19,8 @@ from .tasks import Task
 def __compute_qp_objective(
     configuration: Configuration,
     tasks: Iterable[Task],
-    cbfs: Iterable[CBF],
     damping: float,
+    cbfs: Iterable[CBF] = [],
 ) -> Tuple[np.ndarray, np.ndarray]:
     r"""Compute the QP objective function.
 
@@ -63,8 +63,8 @@ def __compute_qp_objective(
 
 def __compute_qp_inequalities(
     configuration,
-    cbfs: Iterable[CBF],
     dt: float,
+    cbfs: Iterable[CBF] = [],
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     r"""Compute inequality constraints for the quadratic program.
 
@@ -105,9 +105,9 @@ def __compute_qp_inequalities(
 def build_ik(
     configuration: Configuration,
     tasks: Iterable[Task],
-    cbfs: Iterable[CBF],
     dt: float,
     damping: float = 1e-12,
+    cbfs: Iterable[CBF] = [],
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
 
@@ -138,8 +138,8 @@ def build_ik(
     Returns:
         Quadratic program of the inverse kinematics problem.
     """
-    P, q = __compute_qp_objective(configuration, tasks, cbfs, damping)
-    G, h = __compute_qp_inequalities(configuration, cbfs, dt)
+    P, q = __compute_qp_objective(configuration, tasks, damping, cbfs)
+    G, h = __compute_qp_inequalities(configuration, dt, cbfs)
     problem = qpsolvers.Problem(P, q, G, h)
     return problem
 
