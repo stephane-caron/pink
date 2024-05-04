@@ -50,7 +50,7 @@ class PositionCBF(CBF):
         super().__init__(
             dim,
             gain=gain,
-            class_k_fn=lambda h: h / (1 + np.linalg.norm(h)),
+            # class_k_fn=lambda h: h / (1 + np.linalg.norm(h)),
             r=r,
         )
 

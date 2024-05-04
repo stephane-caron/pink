@@ -41,7 +41,13 @@ if __name__ == "__main__":
         cost=1e-3,  # [cost] / [rad]
     )
 
-    pos_cbf = PositionCBF("ee_link", max=np.array([10, 0.6, 10]), gain=100.0)
+    pos_cbf = PositionCBF(
+        "ee_link",
+        indices=[1],
+        max=np.array([0.6]),
+        gain=np.array([100.0]),
+        r=1.0,
+    )
 
     tasks = [end_effector_task, posture_task]
 
@@ -79,13 +85,20 @@ if __name__ == "__main__":
         viewer["end_effector"].set_transform(configuration.get_transform_frame_to_world(end_effector_task.frame).np)
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks, dt, solver=solver, cbfs=[pos_cbf])
+        velocity = solve_ik(
+            configuration,
+            tasks,
+            dt,
+            solver=solver,
+            cbfs=[pos_cbf],
+        )
         configuration.integrate_inplace(velocity, dt)
 
-        G_cbf, h_cbf = pos_cbf.compute_qp_inequality(configuration=configuration)
-        print(f"CBF value: {G_cbf@configuration.q - h_cbf}")
-
-        print(configuration.get_transform_frame_to_world("ee_link").translation[1])
+        G, h = pos_cbf.compute_qp_inequality(configuration, dt=dt)
+        print(f"CBF value: {pos_cbf.compute_barrier(configuration)}")
+        print(f"CBF constraint: {G @ velocity * dt - h}")
+        print(f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]}")
+        print("-" * 60)
         # Visualize result at fixed FPS
         viz.display(configuration.q)
         rate.sleep()

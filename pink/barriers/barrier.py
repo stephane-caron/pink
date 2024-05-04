@@ -68,8 +68,8 @@ class CBF(abc.ABC):
         jac = self.compute_jacobian(configuration)
         safe_policy = self.compute_safe_policy(configuration)
 
-        H = self.r / (dt**2 * np.linalg.norm(jac) ** 2) * np.eye(configuration.model.nq)
-        c = -2 * self.r / (dt**2 * np.linalg.norm(jac) ** 2) * safe_policy
+        H = self.r / (np.linalg.norm(jac) ** 2) * np.eye(configuration.model.nq)
+        c = -2 * self.r / (np.linalg.norm(jac) ** 2) * safe_policy
         return (H, c)
 
     def compute_qp_inequality(
@@ -80,7 +80,7 @@ class CBF(abc.ABC):
         """..."""
         G = -self.compute_jacobian(configuration) / dt
         barrier_value = self.compute_barrier(configuration)
-        h = np.array([self.gain[i % 3] * self.class_k_fn(barrier_value[i]) for i in range(self.dim)])
+        h = np.array([self.gain[i] * self.class_k_fn(barrier_value[i]) for i in range(self.dim)])
 
         return (G, h)
 
