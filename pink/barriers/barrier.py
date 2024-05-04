@@ -31,14 +31,12 @@ class CBF(abc.ABC):
         dim: int,
         gain: Union[float, np.ndarray] = 1.0,
         class_k_fn: Optional[Callable[..., float]] = None,
-        safe_policy: Optional[np.ndarray] = None,
         r: float = 3.0,
     ):
         """..."""
         self.dim = dim
         self.gain = gain if gain is np.ndarray else np.ones(dim) * gain
         self.class_k_fn = class_k_fn if class_k_fn is not None else lambda x: x
-        self.safe_policy = safe_policy
         self.r = r
 
     @abc.abstractmethod
@@ -51,24 +49,38 @@ class CBF(abc.ABC):
         r"""..."""
         pass
 
-    def compute_qp_objective(self, configuration: Configuration) -> Tuple[np.ndarray, np.ndarray]:
+    def compute_safe_policy(self, configuration: Configuration) -> np.ndarray:
         r"""..."""
-        if self.safe_policy is None:
+        return np.zeros(configuration.model.nq)
+
+    def compute_qp_objective(
+        self,
+        configuration: Configuration,
+        dt: float = 1e-3,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        r"""..."""
+        if self.r < 1e-6:
             return (
                 np.zeros((configuration.model.nq, configuration.model.nq)),
                 np.zeros(configuration.model.nq),
             )
 
         jac = self.compute_jacobian(configuration)
-        H = self.r / np.linalg.norm(jac) ** 2 * np.eye(configuration.model.nq)
-        c = 2 * self.r / np.linalg.norm(jac) ** 2 * self.safe_policy
+        safe_policy = self.compute_safe_policy(configuration)
+
+        H = self.r / (dt**2 * np.linalg.norm(jac) ** 2) * np.eye(configuration.model.nq)
+        c = -2 * self.r / (dt**2 * np.linalg.norm(jac) ** 2) * safe_policy
         return (H, c)
 
-    def compute_qp_inequality(self, configuration: Configuration) -> Tuple[np.ndarray, np.ndarray]:
+    def compute_qp_inequality(
+        self,
+        configuration: Configuration,
+        dt: float = 1e-3,
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """..."""
-        G = -self.compute_jacobian(configuration)
+        G = -self.compute_jacobian(configuration) / dt
         barrier_value = self.compute_barrier(configuration)
-        h = self.gain * self.class_k_fn(barrier_value)
+        h = np.array([self.gain[i % 3] * self.class_k_fn(barrier_value[i]) for i in range(self.dim)])
 
         return (G, h)
 

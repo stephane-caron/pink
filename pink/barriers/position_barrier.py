@@ -6,7 +6,7 @@
 
 """General description"""
 
-from typing import Optional, Union
+from typing import Iterable, Optional, Union
 
 import numpy as np
 
@@ -22,6 +22,7 @@ class PositionCBF(CBF):
     """
 
     frame: str
+    indices: Iterable[int]
     p_min: Optional[np.ndarray]
     p_max: Optional[np.ndarray]
     mask: Optional[np.ndarray]
@@ -29,45 +30,49 @@ class PositionCBF(CBF):
     def __init__(
         self,
         frame: str,
+        indices: Iterable[int] = [],
         mask: Optional[np.ndarray] = None,
         min: Optional[np.ndarray] = None,
         max: Optional[np.ndarray] = None,
         gain: Union[float, np.ndarray] = 1.0,
+        r: float = 3.0,
     ):
         """..."""
+        indices = range(3) if indices == [] else indices
+
         dim = 0
         if min is not None:
-            dim += 3
+            dim += len(indices)
         if max is not None:
-            dim += 3
+            dim += len(indices)
 
         # TODO: define safe control?
         super().__init__(
             dim,
             gain=gain,
-            # class_k_fn=lambda h: 1 / (1 + np.linalg.norm(h)),
+            class_k_fn=lambda h: h / (1 + np.linalg.norm(h)),
+            r=r,
         )
 
+        self.indices = indices
         self.frame = frame
         self.p_min = min
         self.p_max = max
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         """..."""
-        # TODO: find proper place to write this
-        self.safe_policy = np.zeros(configuration.model.nq)
         pos_world = configuration.get_transform_frame_to_world(self.frame).translation
         cbfs = []
         if self.p_min is not None:
-            cbfs.append(pos_world - self.p_min)
+            cbfs.append(pos_world[self.indices] - self.p_min)
         if self.p_max is not None:
-            cbfs.append(self.p_max - pos_world)
+            cbfs.append(self.p_max - pos_world[self.indices])
 
         return np.concatenate(cbfs)
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         """..."""
-        pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
+        pos_jac = configuration.get_frame_jacobian(self.frame)[self.indices]
         jacobians = []
         if self.p_min is not None:
             jacobians.append(pos_jac.copy())
