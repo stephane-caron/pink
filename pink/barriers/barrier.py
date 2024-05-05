@@ -59,17 +59,17 @@ class CBF(abc.ABC):
         dt: float = 1e-3,
     ) -> Tuple[np.ndarray, np.ndarray]:
         r"""..."""
-        if self.r < 1e-6:
-            return (
-                np.zeros((configuration.model.nq, configuration.model.nq)),
-                np.zeros(configuration.model.nq),
-            )
-
         jac = self.compute_jacobian(configuration)
-        safe_policy = self.compute_safe_policy(configuration)
+        H = np.zeros((configuration.model.nq, configuration.model.nq))
+        # c = 1e-3 * np.linalg.norm(jac, axis=0) / dt
+        c = np.zeros(configuration.model.nq)
 
-        H = self.r / (np.linalg.norm(jac) ** 2) * np.eye(configuration.model.nq)
-        c = -2 * self.r / (np.linalg.norm(jac) ** 2) * safe_policy
+        if self.r > 1e-6:
+            safe_policy = self.compute_safe_policy(configuration)
+
+            H += self.r / (np.linalg.norm(jac) ** 2) * np.eye(configuration.model.nq)
+            c += -2 * self.r / (np.linalg.norm(jac) ** 2) * safe_policy
+
         return (H, c)
 
     def compute_qp_inequality(
