@@ -20,6 +20,7 @@ def __compute_qp_objective(
     configuration: Configuration,
     tasks: Iterable[Task],
     damping: float,
+    dt: float,
     cbfs: Iterable[CBF] = [],
 ) -> Tuple[np.ndarray, np.ndarray]:
     r"""Compute the QP objective function.
@@ -54,7 +55,7 @@ def __compute_qp_objective(
         c += c_task
 
     for cbf in cbfs:
-        H_cbf, c_cbf = cbf.compute_qp_objective(configuration)
+        H_cbf, c_cbf = cbf.compute_qp_objective(configuration, dt=dt)
         H += H_cbf
         c += c_cbf
 
@@ -94,7 +95,7 @@ def __compute_qp_inequalities(
             G_list.append(matvec[0])
             h_list.append(matvec[1])
     for cbf in cbfs:
-        G_cbf, h_cbf = cbf.compute_qp_inequality(configuration)
+        G_cbf, h_cbf = cbf.compute_qp_inequality(configuration, dt)
         G_list.append(G_cbf)
         h_list.append(h_cbf)
     if not G_list:
@@ -138,7 +139,7 @@ def build_ik(
     Returns:
         Quadratic program of the inverse kinematics problem.
     """
-    P, q = __compute_qp_objective(configuration, tasks, damping, cbfs)
+    P, q = __compute_qp_objective(configuration, tasks, damping, dt, cbfs)
     G, h = __compute_qp_inequalities(configuration, dt, cbfs)
     problem = qpsolvers.Problem(P, q, G, h)
     return problem
@@ -150,6 +151,7 @@ def solve_ik(
     dt: float,
     solver: str,
     damping: float = 1e-12,
+    cbfs: Iterable[CBF] = [],
     **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
@@ -182,7 +184,7 @@ def solve_ik(
         floating base differently from joint angular velocities.
     """
     configuration.check_limits()
-    problem = build_ik(configuration, tasks, dt, damping)
+    problem = build_ik(configuration, tasks, dt, damping, cbfs)
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
     assert Delta_q is not None
