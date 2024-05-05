@@ -32,9 +32,9 @@ if __name__ == "__main__":
 
     end_effector_task = FrameTask(
         "ee_link",
-        position_cost=1.0,  # [cost] / [m]
+        position_cost=50.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
-        lm_damping=1.0,  # tuned for this setup
+        lm_damping=100,  # tuned for this setup
     )
 
     posture_task = PostureTask(
@@ -51,11 +51,15 @@ if __name__ == "__main__":
 
     tasks = [end_effector_task, posture_task]
 
-    q_ref = custom_configuration_vector(
-        robot,
-        shoulder_lift_joint=1.0,
-        shoulder_pan_joint=1.0,
-        elbow_joint=1.0,
+    q_ref = np.array(
+        [
+            1.27153374,
+            -0.87988708,
+            1.89104795,
+            1.73996951,
+            -0.24610945,
+            -0.74979019,
+        ]
     )
     configuration = pink.Configuration(robot.model, robot.data, q_ref)
     for task in tasks:
@@ -95,8 +99,9 @@ if __name__ == "__main__":
         configuration.integrate_inplace(velocity, dt)
 
         G, h = pos_cbf.compute_qp_inequality(configuration, dt=dt)
-        print(f"CBF value: {pos_cbf.compute_barrier(configuration)}")
-        print(f"CBF constraint: {G @ velocity * dt - h}")
+        print(f"Task error: {end_effector_task.compute_error(configuration)}")
+        print(f"CBF value: {pos_cbf.compute_barrier(configuration)[0]:0.3f} >= 0")
+        print(f"CBF constraint: {(G @ velocity * dt - h)[0]:0.3f} <= 0")
         print(f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]}")
         print("-" * 60)
         # Visualize result at fixed FPS
