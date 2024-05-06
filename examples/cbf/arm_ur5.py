@@ -13,9 +13,8 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.barriers import PositionCBF
+from pink.barriers import PositionCBF, ConfigurationCBF
 from pink.tasks import FrameTask, PostureTask
-from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
 
 try:
@@ -48,6 +47,8 @@ if __name__ == "__main__":
         gain=np.array([100.0]),
         r=1.0,
     )
+    configuration_cbf = ConfigurationCBF(robot.model, gain=1, r=100.0)
+    cbf_list = [pos_cbf, configuration_cbf]
 
     tasks = [end_effector_task, posture_task]
 
@@ -81,7 +82,7 @@ if __name__ == "__main__":
     while True:
         # Update task targets
         end_effector_target = end_effector_task.transform_target_to_world
-        end_effector_target.translation[1] = 0.5 + 0.2 * np.sin(2.0 * t)
+        end_effector_target.translation[1] = 0.0 + 0.7 * np.sin(t / 2)
         end_effector_target.translation[2] = 0.2
 
         # Update visualization frames
@@ -89,20 +90,23 @@ if __name__ == "__main__":
         viewer["end_effector"].set_transform(configuration.get_transform_frame_to_world(end_effector_task.frame).np)
 
         # Compute velocity and integrate it into next configuration
+        # Note that default position limit handle given trajectory
+        # much worse than CBF. Hence, we disable it here.
         velocity = solve_ik(
             configuration,
             tasks,
             dt,
             solver=solver,
-            cbfs=[pos_cbf],
+            cbfs=cbf_list,
+            use_position_limit=False,
         )
         configuration.integrate_inplace(velocity, dt)
 
         G, h = pos_cbf.compute_qp_inequality(configuration, dt=dt)
         print(f"Task error: {end_effector_task.compute_error(configuration)}")
-        print(f"CBF value: {pos_cbf.compute_barrier(configuration)[0]:0.3f} >= 0")
-        print(f"CBF constraint: {(G @ velocity * dt - h)[0]:0.3f} <= 0")
-        print(f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]}")
+        print(f"Position CBF value: {pos_cbf.compute_barrier(configuration)[0]:0.3f} >= 0")
+        print(f"Configuration CBF value: {configuration_cbf.compute_barrier(configuration)} >= 0")
+        print(f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]} <= 0.6")
         print("-" * 60)
         # Visualize result at fixed FPS
         viz.display(configuration.q)
