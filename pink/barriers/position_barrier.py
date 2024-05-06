@@ -72,7 +72,14 @@ class PositionCBF(CBF):
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         """..."""
-        pos_jac = configuration.get_frame_jacobian(self.frame)[self.indices]
+        pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
+        # Transform jacobian to world aligned frame
+        rotation = configuration.get_transform_frame_to_world(self.frame).rotation
+        print(rotation.shape, pos_jac.shape)
+        pos_jac = rotation @ pos_jac
+        # Select only relevant indices
+        pos_jac = pos_jac[self.indices]
+
         jacobians = []
         if self.p_min is not None:
             jacobians.append(pos_jac.copy())
