@@ -35,7 +35,7 @@ class CBF(abc.ABC):
     ):
         """..."""
         self.dim = dim
-        self.gain = gain if gain is np.ndarray else np.ones(dim) * gain
+        self.gain = gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
         self.class_k_fn = class_k_fn if class_k_fn is not None else lambda x: x
         self.r = r
 
