@@ -29,6 +29,7 @@ class ConfigurationCBF(CBF):
         self,
         model: pin.Model,
         gain: Union[float, np.ndarray] = 0.5,
+        r: float = 3.0,
     ):
         """..."""
 
@@ -58,10 +59,15 @@ class ConfigurationCBF(CBF):
         indices = np.array(index_list)
         indices.setflags(write=False)
 
-        dim = len(indices)
+        dim = 2 * len(indices)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
 
-        super().__init__(dim, gain=gain, safe_policy=None)
+        super().__init__(
+            dim,
+            gain=gain,
+            class_k_fn=lambda h: h / (1 + np.linalg.norm(h)),
+            r=r,
+        )
 
         self.indices = indices
         self.joints = joints
@@ -71,10 +77,10 @@ class ConfigurationCBF(CBF):
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         """..."""
         q = configuration.q
-        delta_q_max = pin.difference(self.model, self.model.upperPositionLimit, q)
+        delta_q_max = pin.difference(self.model, q, self.model.upperPositionLimit)
         delta_q_min = pin.difference(self.model, q, self.model.lowerPositionLimit)
-        return np.hstack([delta_q_min[self.indices], delta_q_max[self.indices]])
+        return np.hstack([-delta_q_min[self.indices], delta_q_max[self.indices]])
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         """..."""
-        return np.vstack([-self.projection_matrix, self.projection_matrix])
+        return np.vstack([self.projection_matrix, -self.projection_matrix])
