@@ -25,13 +25,11 @@ class PositionCBF(CBF):
     indices: Iterable[int]
     p_min: Optional[np.ndarray]
     p_max: Optional[np.ndarray]
-    mask: Optional[np.ndarray]
 
     def __init__(
         self,
         frame: str,
         indices: Iterable[int] = [],
-        mask: Optional[np.ndarray] = None,
         min: Optional[np.ndarray] = None,
         max: Optional[np.ndarray] = None,
         gain: Union[float, np.ndarray] = 1.0,
