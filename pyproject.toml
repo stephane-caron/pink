@@ -19,9 +19,9 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
@@ -47,6 +47,8 @@ name = "pink"
 
 [tool.ruff]
 line-length = 79
+
+[tool.lint]
 select = [
     # pyflakes
     "F",
@@ -63,5 +65,5 @@ ignore = [
     "D405",  # British-style section names are also "proper"!
 ]
 
-[tool.ruff.pydocstyle]
+[tool.lint.ruff.pydocstyle]
 convention = "google"
