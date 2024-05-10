@@ -2,9 +2,9 @@
 
 .. _Barriers:
 
-****
+********
 Barriers
-****
+********
 
 .. automodule:: pink.barriers
     :members:
