@@ -22,7 +22,7 @@ Configuration Barrier
     :members:
 
 Spherical Collision-Avoidance Barrier
-====================================
+=====================================
 
 .. automodule:: pink.barriers.body_shperical_barrier
     :members:
