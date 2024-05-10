@@ -39,12 +39,8 @@ def __attach_axes(
     position_cylinder_in_frame = 0.5 * length * np.eye(3)
     for i in range(3):
         dir_name = direction_names[i]
-        material = meshcat.geometry.MeshLambertMaterial(
-            color=colors[i], opacity=opacity
-        )
-        transform_cylinder_to_frame = meshcat.transformations.rotation_matrix(
-            np.pi / 2, rotation_axes[i]
-        )
+        material = meshcat.geometry.MeshLambertMaterial(color=colors[i], opacity=opacity)
+        transform_cylinder_to_frame = meshcat.transformations.rotation_matrix(np.pi / 2, rotation_axes[i])
         transform_cylinder_to_frame[0:3, 3] = position_cylinder_in_frame[i]
         cylinder = meshcat.geometry.Cylinder(length, thickness)
         handle[dir_name].set_object(cylinder, material)
@@ -73,9 +69,20 @@ def frame(
         As per the de-facto standard (Blender, OpenRAVE, RViz, ...), the
         x-axis is red, the y-axis is green and the z-axis is blue.
     """
-    material = meshcat.geometry.MeshLambertMaterial(
-        color=origin_color, opacity=opacity
-    )
+    material = meshcat.geometry.MeshLambertMaterial(color=origin_color, opacity=opacity)
     sphere = meshcat.geometry.Sphere(origin_radius)
     handle.set_object(sphere, material)
     __attach_axes(handle, axis_length, axis_thickness, opacity)
+
+
+def sphere(
+    handle: meshcat.Visualizer,
+    radius: float = 0.01,
+    color: int = 0x000000,
+    opacity: float = 1.0,
+):
+    material = meshcat.geometry.MeshLambertMaterial(color=color, opacity=opacity)
+    sphere = meshcat.geometry.Sphere(
+        radius,
+    )
+    handle.set_object(sphere, material)
