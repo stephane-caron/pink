@@ -59,7 +59,9 @@ class PositionCBF(CBF):
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         """..."""
-        pos_world = configuration.get_transform_frame_to_world(self.frame).translation
+        pos_world = configuration.get_transform_frame_to_world(
+            self.frame
+        ).translation
         cbfs = []
         if self.p_min is not None:
             cbfs.append(pos_world[self.indices] - self.p_min)
@@ -72,7 +74,9 @@ class PositionCBF(CBF):
         """..."""
         pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
         # Transform jacobian to world aligned frame
-        rotation = configuration.get_transform_frame_to_world(self.frame).rotation
+        rotation = configuration.get_transform_frame_to_world(
+            self.frame
+        ).rotation
         pos_jac = rotation @ pos_jac
 
         # Select only relevant indices

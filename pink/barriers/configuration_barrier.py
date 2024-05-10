@@ -77,9 +77,15 @@ class ConfigurationCBF(CBF):
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         """..."""
         q = configuration.q
-        delta_q_max = pin.difference(self.model, q, self.model.upperPositionLimit)
-        delta_q_min = pin.difference(self.model, q, self.model.lowerPositionLimit)
-        return np.hstack([-delta_q_min[self.indices], delta_q_max[self.indices]])
+        delta_q_max = pin.difference(
+            self.model, q, self.model.upperPositionLimit
+        )
+        delta_q_min = pin.difference(
+            self.model, q, self.model.lowerPositionLimit
+        )
+        return np.hstack(
+            [-delta_q_min[self.indices], delta_q_max[self.indices]]
+        )
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         """..."""

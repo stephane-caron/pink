@@ -35,7 +35,9 @@ class CBF(abc.ABC):
     ):
         """..."""
         self.dim = dim
-        self.gain = gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        self.gain = (
+            gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        )
         self.class_k_fn = class_k_fn if class_k_fn is not None else lambda x: x
         self.r = r
 
@@ -67,7 +69,11 @@ class CBF(abc.ABC):
         if self.r > 1e-6:
             safe_policy = self.compute_safe_policy(configuration)
 
-            H += self.r / (np.linalg.norm(jac) ** 2) * np.eye(configuration.model.nq)
+            H += (
+                self.r
+                / (np.linalg.norm(jac) ** 2)
+                * np.eye(configuration.model.nq)
+            )
             c += -2 * self.r / (np.linalg.norm(jac) ** 2) * safe_policy
 
         return (H, c)
@@ -80,7 +86,12 @@ class CBF(abc.ABC):
         """..."""
         G = -self.compute_jacobian(configuration) / dt
         barrier_value = self.compute_barrier(configuration)
-        h = np.array([self.gain[i] * self.class_k_fn(barrier_value[i]) for i in range(self.dim)])
+        h = np.array(
+            [
+                self.gain[i] * self.class_k_fn(barrier_value[i])
+                for i in range(self.dim)
+            ]
+        )
 
         return (G, h)
 

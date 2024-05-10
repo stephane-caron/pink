@@ -21,7 +21,8 @@ try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
 except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
-        "Examples need robot_descriptions, " "try ``pip install robot_descriptions``"
+        "Examples need robot_descriptions, "
+        "try ``pip install robot_descriptions``"
     ) from exc  # noqa: E501
 
 
@@ -119,10 +120,14 @@ if __name__ == "__main__":
 
         # Update visualization frames
         viewer["left_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(left_end_effector_task.frame).np
+            configuration.get_transform_frame_to_world(
+                left_end_effector_task.frame
+            ).np
         )
         viewer["right_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(right_end_effector_task.frame).np
+            configuration.get_transform_frame_to_world(
+                right_end_effector_task.frame
+            ).np
         )
         viewer["left_end_effector_target"].set_transform(l_y_des)
         viewer["right_end_effector_target"].set_transform(r_y_des)

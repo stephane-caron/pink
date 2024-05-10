@@ -21,7 +21,8 @@ try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
 except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
-        "Examples need robot_descriptions, " "try ``pip install robot_descriptions``"
+        "Examples need robot_descriptions, "
+        "try ``pip install robot_descriptions``"
     ) from exc  # noqa: E501
 
 
@@ -87,7 +88,11 @@ if __name__ == "__main__":
 
         # Update visualization frames
         viewer["end_effector_target"].set_transform(end_effector_target.np)
-        viewer["end_effector"].set_transform(configuration.get_transform_frame_to_world(end_effector_task.frame).np)
+        viewer["end_effector"].set_transform(
+            configuration.get_transform_frame_to_world(
+                end_effector_task.frame
+            ).np
+        )
 
         # Compute velocity and integrate it into next configuration
         # Note that default position limit handle given trajectory
@@ -104,9 +109,15 @@ if __name__ == "__main__":
 
         G, h = pos_cbf.compute_qp_inequality(configuration, dt=dt)
         print(f"Task error: {end_effector_task.compute_error(configuration)}")
-        print(f"Position CBF value: {pos_cbf.compute_barrier(configuration)[0]:0.3f} >= 0")
-        print(f"Configuration CBF value: {configuration_cbf.compute_barrier(configuration)} >= 0")
-        print(f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]} <= 0.6")
+        print(
+            f"Position CBF value: {pos_cbf.compute_barrier(configuration)[0]:0.3f} >= 0"
+        )
+        print(
+            f"Configuration CBF value: {configuration_cbf.compute_barrier(configuration)} >= 0"
+        )
+        print(
+            f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]} <= 0.6"
+        )
         print("-" * 60)
         # Visualize result at fixed FPS
         viz.display(configuration.q)
