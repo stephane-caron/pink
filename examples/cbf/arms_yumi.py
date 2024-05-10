@@ -21,8 +21,7 @@ try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
 except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try ``pip install robot_descriptions``"
+        "Examples need robot_descriptions, " "try ``pip install robot_descriptions``"
     ) from exc  # noqa: E501
 
 
@@ -31,6 +30,8 @@ if __name__ == "__main__":
 
     viz = start_meshcat_visualizer(robot)
 
+    O1 = np.array([0.05, 0.05, 0])
+    O2 = np.array([-0.05, -0.05, 0])
     left_end_effector_task = FrameTask(
         "yumi_link_7_l",
         position_cost=50.0,  # [cost] / [m]
@@ -46,6 +47,8 @@ if __name__ == "__main__":
 
     pos_cbf = BodySphericalCBF(
         ("yumi_link_7_l", "yumi_link_7_r"),
+        O1=O1,
+        O2=O2,
         d_min=0.2,
         gain=100.0,
         r=1.0,
@@ -55,7 +58,7 @@ if __name__ == "__main__":
         cost=1e-3,  # [cost] / [rad]
     )
 
-    configuration_cbf = ConfigurationCBF(robot.model, gain=1, r=100.0)
+    configuration_cbf = ConfigurationCBF(robot.model, gain=1, r=400.0)
     cbf_list = [pos_cbf, configuration_cbf]
     tasks = [left_end_effector_task, right_end_effector_task, posture_task]
 
@@ -88,16 +91,18 @@ if __name__ == "__main__":
 
     viewer = viz.viewer
     meshcat_shapes.frame(viewer["left_end_effector"], opacity=1.0)
+    meshcat_shapes.sphere(viewer["left_barrier"], opacity=0.4, color=0xFF0000, radius=0.1)
+    meshcat_shapes.sphere(viewer["right_barrier"], opacity=0.4, color=0x00FF00, radius=0.1)
     meshcat_shapes.frame(viewer["right_end_effector"], opacity=1.0)
     meshcat_shapes.frame(viewer["left_end_effector_target"], opacity=1.0)
     meshcat_shapes.frame(viewer["right_end_effector_target"], opacity=1.0)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]
-    if "osqp" in qpsolvers.available_solvers:
-        solver = "osqp"
+    if "ecos" in qpsolvers.available_solvers:
+        solver = "ecos"
 
-    rate = RateLimiter(frequency=200.0)
+    rate = RateLimiter(frequency=150.0)
     dt = rate.period
     t = 0.0  # [s]
     l_y_des = np.array([0.392, 0.392, 0.6])
@@ -108,10 +113,10 @@ if __name__ == "__main__":
     while True:
         # Calculate desired trajectory
         A = 0.1
-        B = 0.1
+        B = 0.2
         # z -- 0.4 - 0.8
-        l_y_des[:] = 0.6, 0.1 + B * np.sin(t), 0.6 + A * np.sin(t)
-        r_y_des[:] = 0.6, -0.1 - B * np.sin(t), 0.6 + A * np.sin(t)
+        l_y_des[:] = 0.6, 0.1 + B * np.sin(3 * t + np.pi / 4), 0.6 + A * np.sin(t)
+        r_y_des[:] = 0.6, -0.1 - B * np.sin(t), 0.6 + A * np.sin(3 * t - np.pi / 4)
         l_dy_des[:] = 0, B * np.cos(t), A * np.cos(t)
         r_dy_des[:] = 0, -B * np.cos(t), A * np.cos(t)
 
@@ -120,17 +125,22 @@ if __name__ == "__main__":
 
         # Update visualization frames
         viewer["left_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(
-                left_end_effector_task.frame
-            ).np
+            configuration.get_transform_frame_to_world(left_end_effector_task.frame).np
         )
         viewer["right_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(
-                right_end_effector_task.frame
-            ).np
+            configuration.get_transform_frame_to_world(right_end_effector_task.frame).np
         )
-        viewer["left_end_effector_target"].set_transform(l_y_des)
-        viewer["right_end_effector_target"].set_transform(r_y_des)
+        viewer["left_end_effector_target"].set_transform(left_end_effector_task.transform_target_to_world.np)
+        viewer["right_end_effector_target"].set_transform(right_end_effector_task.transform_target_to_world.np)
+
+        lb = configuration.get_transform_frame_to_world(left_end_effector_task.frame)
+        lb.translation += O1
+
+        rb = configuration.get_transform_frame_to_world(right_end_effector_task.frame)
+        rb.translation += O2
+
+        viewer["left_barrier"].set_transform(lb.np)
+        viewer["right_barrier"].set_transform(rb.np)
 
         # Compute velocity and integrate it into next configuration
         # Note that default position limit handle given trajectory
@@ -144,9 +154,16 @@ if __name__ == "__main__":
             use_position_limit=False,
         )
         configuration.integrate_inplace(velocity, dt)
-        print(
-            f"Distance between end effectors: {np.linalg.norm(configuration.get_transform_frame_to_world('yumi_link_7_l').translation - configuration.get_transform_frame_to_world('yumi_link_7_r').translation)*100 :0.1f}cm"  # noqa: E501
+        dist = (
+            np.linalg.norm(
+                configuration.get_transform_frame_to_world("yumi_link_7_l").translation
+                - configuration.get_transform_frame_to_world("yumi_link_7_r").translation
+                + O1
+                - O2
+            )
+            * 100
         )
+        print(f"Distance between end effectors: {dist :0.1f}cm")  # noqa: E501
         # Visualize result at fixed FPS
         viz.display(configuration.q)
         rate.sleep()
