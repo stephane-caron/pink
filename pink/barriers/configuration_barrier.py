@@ -104,7 +104,7 @@ class ConfigurationBarrier(Barrier):
 
         Returns:
             Value of the barrier function
-            :math:`\boldsymbol{h}(\boldsymbol{q})`.
+                :math:`\boldsymbol{h}(\boldsymbol{q})`.
         """
         q = configuration.q
         delta_q_max = pin.difference(
@@ -129,6 +129,6 @@ class ConfigurationBarrier(Barrier):
 
         Returns:
             Jacobian matrix
-            :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+                :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
         """  # noqa: E501
         return np.vstack([self.projection_matrix, -self.projection_matrix])

@@ -120,7 +120,7 @@ class Barrier(abc.ABC):
 
         Returns:
             Safe backup joint velocities
-            :math:`\dot{\boldsymbol{q}}_{safe}(\boldsymbol{q})`.
+                :math:`\dot{\boldsymbol{q}}_{safe}(\boldsymbol{q})`.
         """
         return np.zeros(configuration.model.nq)
 
@@ -148,7 +148,7 @@ class Barrier(abc.ABC):
 
         Returns:
             Tuple containing the quadratic objective matrix (H) and linear
-            objective vector (c).
+                objective vector (c).
         """
         jac = self.compute_jacobian(configuration)
         H = np.zeros((configuration.model.nq, configuration.model.nq))
@@ -193,7 +193,7 @@ class Barrier(abc.ABC):
 
         Returns:
             Tuple containing the inequality constraint matrix (G)
-            and vector (h).
+                and vector (h).
         """
         G = -self.compute_jacobian(configuration) / dt
         barrier_value = self.compute_barrier(configuration)

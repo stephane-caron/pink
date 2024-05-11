@@ -90,7 +90,7 @@ class BodySphericalBarrier(Barrier):
 
         Returns:
             Value of the barrier function
-            :math:`\boldsymbol{h}(\boldsymbol{q})`.
+                :math:`\boldsymbol{h}(\boldsymbol{q})`.
         """
         pos1_world, pos2_world = self._get_frame_positions(configuration)
         return np.array(
@@ -118,7 +118,7 @@ class BodySphericalBarrier(Barrier):
             \end{bmatrix}
 
         where :math:`\frac{\partial \boldsymbol{p}_1}{\partial \boldsymbol{q}}(\boldsymbol{q})`
-         and :math:`\frac{\partial \boldsymbol{p}_2}{\partial \boldsymbol{q}}(\boldsymbol{q})`
+        and :math:`\frac{\partial \boldsymbol{p}_2}{\partial \boldsymbol{q}}(\boldsymbol{q})`
         are the position Jacobians of the two frames.
 
         Args:
@@ -126,7 +126,7 @@ class BodySphericalBarrier(Barrier):
 
         Returns:
             Jacobian matrix
-            :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+                :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
         """  # noqa: E501
         pos1_world, pos2_world = self._get_frame_positions(configuration)
         pos1_jac, pos2_jac = self._get_frame_jacobians(configuration)
@@ -147,7 +147,7 @@ class BodySphericalBarrier(Barrier):
 
         Returns:
             Tuple of position vectors of the two frames in the world
-            coordinate system.
+                coordinate system.
         """
         pos1_world = configuration.get_transform_frame_to_world(
             self.frames[0]
@@ -167,7 +167,7 @@ class BodySphericalBarrier(Barrier):
 
         Returns:
             Tuple of position Jacobian matrices of the two frames in the world
-            coordinate system.
+                coordinate system.
         """
         pos1_jac = configuration.get_frame_jacobian(self.frames[0])[:3]
         rotation1 = configuration.get_transform_frame_to_world(
