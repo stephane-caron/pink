@@ -20,7 +20,7 @@ def __compute_qp_objective(
     configuration: Configuration,
     tasks: Iterable[Task],
     damping: float,
-    cbfs: Iterable[Barrier] | None = None,
+    cbfs: Optional[Iterable[Barrier]] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     r"""Compute the QP objective function.
 
@@ -67,7 +67,7 @@ def __compute_qp_objective(
 def __compute_qp_inequalities(
     configuration,
     dt: float,
-    cbfs: Iterable[Barrier] | None = None,
+    cbfs: Optional[Iterable[Barrier]] = None,
     use_position_limit: bool = True,
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     r"""Compute inequality constraints for the quadratic program.
@@ -118,7 +118,7 @@ def build_ik(
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
-    cbfs: Iterable[Barrier] | None = None,
+    cbfs: Optional[Iterable[Barrier]] = None,
     use_position_limit: bool = True,
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
@@ -166,7 +166,7 @@ def solve_ik(
     dt: float,
     solver: str,
     damping: float = 1e-12,
-    cbfs: Iterable[Barrier] | None = None,
+    cbfs: Optional[Iterable[Barrier]] = None,
     use_position_limit: bool = True,
     **kwargs,
 ) -> np.ndarray:

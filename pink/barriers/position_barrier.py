@@ -6,7 +6,7 @@
 
 """Frame position barrier."""
 
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import numpy as np
 
@@ -29,14 +29,14 @@ class PositionBarrier(Barrier):
     """
 
     frame: str
-    indices: list[int]
+    indices: List[int]
     p_min: Optional[np.ndarray]
     p_max: Optional[np.ndarray]
 
     def __init__(
         self,
         frame: str,
-        indices: list[int] | None = None,
+        indices: Optional[List[int]] = None,
         p_min: Optional[np.ndarray] = None,
         p_max: Optional[np.ndarray] = None,
         gain: Union[float, np.ndarray] = 1.0,
