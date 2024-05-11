@@ -4,7 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""General description"""
+"""
+This module defines the PositionBarrier class, which is a concrete implementation
+of a position-based Control Barrier Function (CBF).
+"""
 
 from typing import Iterable, Optional, Union
 
@@ -15,10 +18,17 @@ from .barrier import CBF
 
 
 class PositionCBF(CBF):
-    r"""Abstract class description.
+    r"""A position-based barrier.
+
+    Defines a barrier function based on the position of a
+    specified frame in the world coordinate system. It allows for the
+    specification of minimum and maximum position bounds along selected axes.
 
     Attributes:
-        ...
+        frame (str): Name of the frame to monitor.
+        indices (Iterable[int]): Indices of the position components to consider.
+        p_min (Optional[np.ndarray]): Minimum position bounds.
+        p_max (Optional[np.ndarray]): Maximum position bounds.
     """
 
     frame: str
@@ -58,7 +68,18 @@ class PositionCBF(CBF):
         self.p_max = max
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
-        """..."""
+        r"""Compute the value of the barrier function.
+
+        The barrier function is computed based on the position of the specified
+        frame in the world coordinate system. It considers the minimum and
+        maximum position bounds along the selected axes.
+
+        Args:
+            configuration: Robot configuration :math:`\boldsymbol{q}`.
+
+        Returns:
+            Value of the barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`.
+        """
         pos_world = configuration.get_transform_frame_to_world(
             self.frame
         ).translation
@@ -71,7 +92,18 @@ class PositionCBF(CBF):
         return np.concatenate(cbfs)
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
-        """..."""
+        r"""Compute the Jacobian matrix of the barrier function.
+
+        The Jacobian matrix is computed based on the position Jacobian of the
+        specified frame. The Jacobian is transformed to align with the world
+        coordinate system and only the selected indices are considered.
+
+        Args:
+            configuration: Robot configuration :math:`\boldsymbol{q}`.
+
+        Returns:
+            Jacobian matrix :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+        """
         pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
         # Transform jacobian to world aligned frame
         rotation = configuration.get_transform_frame_to_world(

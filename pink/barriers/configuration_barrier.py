@@ -5,7 +5,12 @@
 # Copyright 2022 Stéphane Caron
 # Copyright 2023 Inria
 
-"""Subset of bounded joints associated with a robot model."""
+"""
+This module defines the ConfigurationCBF class, which represents a subset of
+bounded joints associated with a robot model and implements a barrier 
+based on joint configuration limits.
+"""
+
 
 from typing import List, Optional, Union
 
@@ -18,7 +23,19 @@ from .barrier import CBF
 
 
 class ConfigurationCBF(CBF):
-    """..."""
+    """Control Barrier Function (CBF) based on joint configuration limits.
+
+    The ConfigurationCBF class represents a subset of bounded joints associated
+    with a robot model. It defines a barrier function based on the joint
+    configuration limits to ensure that the joint positions remain within the
+    specified bounds.
+
+    Attributes:
+        indices (np.ndarray): Indices of the bounded joints.
+        model (pin.Model): Pinocchio model of the robot.
+        joints (list): List of bounded joints.
+        projection_matrix (Optional[np.ndarray]): Projection matrix for the bounded joints.
+    """
 
     indices: np.ndarray
     model: pin.Model
@@ -31,7 +48,14 @@ class ConfigurationCBF(CBF):
         gain: Union[float, np.ndarray] = 0.5,
         r: float = 3.0,
     ):
-        """..."""
+        """Initialize the ConfigurationCBF.
+
+        Args:
+            model (pin.Model): Pinocchio model of the robot.
+            gain (Union[float, np.ndarray]): CBF gain. Defaults to 0.5.
+            r (float): Weighting factor for the safe backup policy regularization term.
+                Defaults to 3.0.
+        """
 
         has_configuration_limit = np.logical_and(
             model.hasConfigurationLimit(),
@@ -75,7 +99,17 @@ class ConfigurationCBF(CBF):
         self.projection_matrix = projection_matrix
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
-        """..."""
+        r"""Compute the value of the barrier function.
+
+        The barrier function is computed based on the distances between the
+        current joint positions and the upper and lower joint limits.
+
+        Args:
+            configuration: Robot configuration :math:`\boldsymbol{q}`.
+
+        Returns:
+            Value of the barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`.
+        """
         q = configuration.q
         delta_q_max = pin.difference(
             self.model, q, self.model.upperPositionLimit
@@ -88,5 +122,16 @@ class ConfigurationCBF(CBF):
         )
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
-        """..."""
+        r"""Compute the Jacobian matrix of the barrier function.
+
+        The Jacobian matrix is computed based on the projection matrix for the
+        bounded joints. It maps the joint velocities to the barrier function
+        space.
+
+        Args:
+            configuration: Robot configuration :math:`\boldsymbol{q}`.
+
+        Returns:
+            Jacobian matrix :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+        """
         return np.vstack([self.projection_matrix, -self.projection_matrix])
