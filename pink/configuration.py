@@ -160,7 +160,9 @@ class Configuration:
         if not self.model.existFrame(frame):
             raise FrameNotFound(frame, self.model.frames)
         frame_id = self.model.getFrameId(frame)
-        J: np.ndarray = pin.getFrameJacobian(self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL)
+        J: np.ndarray = pin.getFrameJacobian(
+            self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL
+        )
         return J
 
     def get_transform_frame_to_world(self, frame: str) -> pin.SE3:

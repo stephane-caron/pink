@@ -4,12 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""
-This module defines the PositionBarrier class, which is a concrete implementation
-of a position-based barrier.
-"""
+"""Frame position barrier."""
 
-from typing import Iterable, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
 
@@ -32,40 +29,38 @@ class PositionBarrier(Barrier):
     """
 
     frame: str
-    indices: Iterable[int]
+    indices: list[int]
     p_min: Optional[np.ndarray]
     p_max: Optional[np.ndarray]
 
     def __init__(
         self,
         frame: str,
-        indices: Iterable[int] = [],
-        min: Optional[np.ndarray] = None,
-        max: Optional[np.ndarray] = None,
+        indices: list[int] | None = None,
+        p_min: Optional[np.ndarray] = None,
+        p_max: Optional[np.ndarray] = None,
         gain: Union[float, np.ndarray] = 1.0,
         r: float = 3.0,
     ):
         """..."""
-        indices = range(3) if indices == [] else indices
+        indices = [0, 1, 2] if indices is None else indices
 
         dim = 0
-        if min is not None:
+        if p_min is not None:
             dim += len(indices)
-        if max is not None:
+        if p_max is not None:
             dim += len(indices)
 
-        # TODO: define safe control?
         super().__init__(
             dim,
             gain=gain,
-            # class_k_fn=lambda h: h / (1 + np.linalg.norm(h)),
             r=r,
         )
 
         self.indices = indices
         self.frame = frame
-        self.p_min = min
-        self.p_max = max
+        self.p_min = p_min
+        self.p_max = p_max
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
@@ -78,9 +73,12 @@ class PositionBarrier(Barrier):
             configuration: Robot configuration :math:`\boldsymbol{q}`.
 
         Returns:
-            Value of the barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`.
+            Value of the barrier function
+            :math:`\boldsymbol{h}(\boldsymbol{q})`.
         """
-        pos_world = configuration.get_transform_frame_to_world(self.frame).translation
+        pos_world = configuration.get_transform_frame_to_world(
+            self.frame
+        ).translation
         cbfs = []
         if self.p_min is not None:
             cbfs.append(pos_world[self.indices] - self.p_min)
@@ -100,11 +98,14 @@ class PositionBarrier(Barrier):
             configuration: Robot configuration :math:`\boldsymbol{q}`.
 
         Returns:
-            Jacobian matrix :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
-        """
+            Jacobian matrix
+            :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+        """  # noqa: E501
         pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
         # Transform jacobian to world aligned frame
-        rotation = configuration.get_transform_frame_to_world(self.frame).rotation
+        rotation = configuration.get_transform_frame_to_world(
+            self.frame
+        ).rotation
         pos_jac = rotation @ pos_jac
 
         # Select only relevant indices

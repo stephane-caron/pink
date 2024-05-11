@@ -5,14 +5,10 @@
 # Copyright 2022 Stéphane Caron
 # Copyright 2023 Inria
 
-"""
-This module defines the ConfigurationBarrier class, which represents a subset of
-bounded joints associated with a robot model and implements a barrier 
-based on joint configuration limits.
-"""
+"""Joint configuration barrier."""
 
 
-from typing import List, Optional, Union
+from typing import List, Union
 
 import numpy as np
 import pinocchio as pin
@@ -25,10 +21,10 @@ from .barrier import Barrier
 class ConfigurationBarrier(Barrier):
     """Barrier based on joint configuration limits.
 
-    The ConfigurationBarrier class represents a subset of bounded joints associated
-    with a robot model. It defines a barrier function based on the joint
-    configuration limits to ensure that the joint positions remain within the
-    specified bounds.
+    The ConfigurationBarrier class represents a subset of bounded joints
+    associated with a robot model. It defines a barrier function based on the
+    joint configuration limits to ensure that the joint positions remain within
+    the specified bounds.
 
     Attributes:
         indices: Indices of the bounded joints.
@@ -40,7 +36,7 @@ class ConfigurationBarrier(Barrier):
     indices: np.ndarray
     model: pin.Model
     joints: list
-    projection_matrix: Optional[np.ndarray]
+    projection_matrix: np.ndarray
 
     def __init__(
         self,
@@ -56,7 +52,6 @@ class ConfigurationBarrier(Barrier):
             r: Weighting factor for the safe backup policy regularization term.
                 Defaults to 3.0.
         """
-
         has_configuration_limit = np.logical_and(
             model.hasConfigurationLimit(),
             np.logical_and(
@@ -89,7 +84,7 @@ class ConfigurationBarrier(Barrier):
         super().__init__(
             dim,
             gain=gain,
-            class_k_fn=lambda h: h / (1 + np.linalg.norm(h)),
+            class_k_fn=lambda h: h / (1 + np.abs(h)),
             r=r,
         )
 
@@ -108,12 +103,19 @@ class ConfigurationBarrier(Barrier):
             configuration: Robot configuration :math:`\boldsymbol{q}`.
 
         Returns:
-            Value of the barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`.
+            Value of the barrier function
+            :math:`\boldsymbol{h}(\boldsymbol{q})`.
         """
         q = configuration.q
-        delta_q_max = pin.difference(self.model, q, self.model.upperPositionLimit)
-        delta_q_min = pin.difference(self.model, q, self.model.lowerPositionLimit)
-        return np.hstack([-delta_q_min[self.indices], delta_q_max[self.indices]])
+        delta_q_max = pin.difference(
+            self.model, q, self.model.upperPositionLimit
+        )
+        delta_q_min = pin.difference(
+            self.model, q, self.model.lowerPositionLimit
+        )
+        return np.hstack(
+            [-delta_q_min[self.indices], delta_q_max[self.indices]]
+        )
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the Jacobian matrix of the barrier function.
@@ -126,6 +128,7 @@ class ConfigurationBarrier(Barrier):
             configuration: Robot configuration :math:`\boldsymbol{q}`.
 
         Returns:
-            Jacobian matrix :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
-        """
+            Jacobian matrix
+            :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+        """  # noqa: E501
         return np.vstack([self.projection_matrix, -self.projection_matrix])
