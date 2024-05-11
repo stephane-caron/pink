@@ -6,7 +6,7 @@
 
 """
 This module defines the PositionBarrier class, which is a concrete implementation
-of a position-based Control Barrier Function (CBF).
+of a position-based barrier.
 """
 
 from typing import Iterable, Optional, Union
