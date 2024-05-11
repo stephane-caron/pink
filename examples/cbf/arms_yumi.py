@@ -8,6 +8,7 @@
 
 import meshcat_shapes
 import numpy as np
+import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 
@@ -27,11 +28,38 @@ except ModuleNotFoundError as exc:
 
 if __name__ == "__main__":
     robot = load_robot_description("yumi_description", root_joint=None)
+    l_frame_placement = pin.SE3()
+    l_frame_placement.translation = np.array([0.0, 0.0, 0.05])
+    l_frame_placement.rotation = np.eye(3)
+
+    l_frame = pin.Frame(
+        "yumi_barrier_l",
+        robot.model.getJointId("yumi_joint_6_l"),
+        robot.model.getFrameId("yumi_link_7_l"),
+        l_frame_placement,
+        pin.FrameType.OP_FRAME,
+    )
+
+    robot.model.addFrame(l_frame)
+
+    r_frame_placement = pin.SE3()
+    r_frame_placement.translation = np.array([0.0, 0.0, 0.05])
+    r_frame_placement.rotation = np.eye(3)
+
+    r_frame = pin.Frame(
+        "yumi_barrier_r",
+        robot.model.getJointId("yumi_joint_6_r"),
+        robot.model.getFrameId("yumi_link_7_r"),
+        r_frame_placement,
+        pin.FrameType.OP_FRAME,
+    )
+
+    robot.model.addFrame(r_frame)
+    # TODO: how to avoid recreating the model?
+    robot.data = pin.Data(robot.model)
 
     viz = start_meshcat_visualizer(robot)
 
-    O1 = np.array([0.05, 0.05, 0])
-    O2 = np.array([-0.05, -0.05, 0])
     left_end_effector_task = FrameTask(
         "yumi_link_7_l",
         position_cost=50.0,  # [cost] / [m]
@@ -45,11 +73,16 @@ if __name__ == "__main__":
         lm_damping=100,  # tuned for this setup
     )
 
-    pos_cbf = BodySphericalCBF(
-        ("yumi_link_7_l", "yumi_link_7_r"),
-        O1=O1,
-        O2=O2,
+    ee_barrier = BodySphericalCBF(
+        ("yumi_barrier_l", "yumi_barrier_r"),
         d_min=0.2,
+        gain=100.0,
+        r=1.0,
+    )
+
+    elbow_barrier = BodySphericalCBF(
+        ("yumi_link_4_l", "yumi_link_4_r"),
+        d_min=0.4,
         gain=100.0,
         r=1.0,
     )
@@ -59,7 +92,7 @@ if __name__ == "__main__":
     )
 
     configuration_cbf = ConfigurationCBF(robot.model, gain=1, r=400.0)
-    cbf_list = [pos_cbf, configuration_cbf]
+    cbf_list = [ee_barrier, elbow_barrier, configuration_cbf]
     tasks = [left_end_effector_task, right_end_effector_task, posture_task]
 
     q_ref = np.array(
@@ -91,8 +124,30 @@ if __name__ == "__main__":
 
     viewer = viz.viewer
     meshcat_shapes.frame(viewer["left_end_effector"], opacity=1.0)
-    meshcat_shapes.sphere(viewer["left_barrier"], opacity=0.4, color=0xFF0000, radius=0.1)
-    meshcat_shapes.sphere(viewer["right_barrier"], opacity=0.4, color=0x00FF00, radius=0.1)
+    meshcat_shapes.sphere(
+        viewer["left_ee_barrier"],
+        opacity=0.4,
+        color=0xFF0000,
+        radius=0.1,
+    )
+    meshcat_shapes.sphere(
+        viewer["right_ee_barrier"],
+        opacity=0.4,
+        color=0x00FF00,
+        radius=0.1,
+    )
+    meshcat_shapes.sphere(
+        viewer["left_elbow_barrier"],
+        opacity=0.4,
+        color=0xFF0000,
+        radius=0.2,
+    )
+    meshcat_shapes.sphere(
+        viewer["right_elbow_barrier"],
+        opacity=0.4,
+        color=0x00FF00,
+        radius=0.2,
+    )
     meshcat_shapes.frame(viewer["right_end_effector"], opacity=1.0)
     meshcat_shapes.frame(viewer["left_end_effector_target"], opacity=1.0)
     meshcat_shapes.frame(viewer["right_end_effector_target"], opacity=1.0)
@@ -102,7 +157,7 @@ if __name__ == "__main__":
     if "ecos" in qpsolvers.available_solvers:
         solver = "ecos"
 
-    rate = RateLimiter(frequency=150.0)
+    rate = RateLimiter(frequency=200.0)
     dt = rate.period
     t = 0.0  # [s]
     l_y_des = np.array([0.392, 0.392, 0.6])
@@ -133,14 +188,13 @@ if __name__ == "__main__":
         viewer["left_end_effector_target"].set_transform(left_end_effector_task.transform_target_to_world.np)
         viewer["right_end_effector_target"].set_transform(right_end_effector_task.transform_target_to_world.np)
 
-        lb = configuration.get_transform_frame_to_world(left_end_effector_task.frame)
-        lb.translation += O1
+        lb = configuration.get_transform_frame_to_world("yumi_barrier_l")
+        rb = configuration.get_transform_frame_to_world("yumi_barrier_r")
 
-        rb = configuration.get_transform_frame_to_world(right_end_effector_task.frame)
-        rb.translation += O2
-
-        viewer["left_barrier"].set_transform(lb.np)
-        viewer["right_barrier"].set_transform(rb.np)
+        viewer["left_ee_barrier"].set_transform(lb.np)
+        viewer["right_ee_barrier"].set_transform(rb.np)
+        viewer["left_elbow_barrier"].set_transform(configuration.get_transform_frame_to_world("yumi_link_4_l").np)
+        viewer["right_elbow_barrier"].set_transform(configuration.get_transform_frame_to_world("yumi_link_4_r").np)
 
         # Compute velocity and integrate it into next configuration
         # Note that default position limit handle given trajectory
@@ -154,16 +208,22 @@ if __name__ == "__main__":
             use_position_limit=False,
         )
         configuration.integrate_inplace(velocity, dt)
-        dist = (
+        dist_ee = (
             np.linalg.norm(
-                configuration.get_transform_frame_to_world("yumi_link_7_l").translation
-                - configuration.get_transform_frame_to_world("yumi_link_7_r").translation
-                + O1
-                - O2
+                configuration.get_transform_frame_to_world("yumi_barrier_l").translation
+                - configuration.get_transform_frame_to_world("yumi_barrier_r").translation
             )
             * 100
         )
-        print(f"Distance between end effectors: {dist :0.1f}cm")  # noqa: E501
+        dist_elbow = (
+            np.linalg.norm(
+                configuration.get_transform_frame_to_world("yumi_link_4_l").translation
+                - configuration.get_transform_frame_to_world("yumi_link_4_r").translation
+            )
+            * 100
+        )
+        print(f"Distance between end effectors: {dist_ee :0.1f}cm")
+        print(f"Distance between elbows: {dist_elbow :0.1f}cm")
         # Visualize result at fixed FPS
         viz.display(configuration.q)
         rate.sleep()
