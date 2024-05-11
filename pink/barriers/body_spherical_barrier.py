@@ -9,7 +9,7 @@ This module defines the BodySphericalBarrier class, which is a concrete implemen
 of a barrier based on the distance between two frames.
 """
 
-from typing import Iterable, Optional, Union
+from typing import Union, Tuple
 
 import numpy as np
 
@@ -38,12 +38,12 @@ class BodySphericalBarrier(Barrier):
         d_min: Minimum distance threshold.
     """
 
-    frames: tuple[str, str]
+    frames: Tuple[str, str]
     d_min: float
 
     def __init__(
         self,
-        frames: tuple[str, str],
+        frames: Tuple[str, str],
         d_min: float = None,
         gain: Union[float, np.ndarray] = 1.0,
         r: float = 3.0,
@@ -122,7 +122,7 @@ class BodySphericalBarrier(Barrier):
         dx_dq = np.vstack([pos1_jac, pos2_jac])
         return dh_dx.T @ dx_dq
 
-    def _get_frame_positions(self, configuration: Configuration) -> tuple[np.ndarray, np.ndarray]:
+    def _get_frame_positions(self, configuration: Configuration) -> Tuple[np.ndarray, np.ndarray]:
         """Get the positions of the two frames in the world coordinate system.
 
         Args:
@@ -135,7 +135,7 @@ class BodySphericalBarrier(Barrier):
         pos2_world = configuration.get_transform_frame_to_world(self.frames[1]).translation
         return pos1_world, pos2_world
 
-    def _get_frame_jacobians(self, configuration: Configuration) -> tuple[np.ndarray, np.ndarray]:
+    def _get_frame_jacobians(self, configuration: Configuration) -> Tuple[np.ndarray, np.ndarray]:
         """Get the position Jacobians of the two frames in the world coordinate system.
 
         Args:
