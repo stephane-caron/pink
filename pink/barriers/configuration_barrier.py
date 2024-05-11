@@ -6,7 +6,7 @@
 # Copyright 2023 Inria
 
 """
-This module defines the ConfigurationCBF class, which represents a subset of
+This module defines the ConfigurationBarrier class, which represents a subset of
 bounded joints associated with a robot model and implements a barrier 
 based on joint configuration limits.
 """
@@ -23,9 +23,9 @@ from .barrier import Barrier
 
 
 class ConfigurationBarrier(Barrier):
-    """Control Barrier Function (CBF) based on joint configuration limits.
+    """Barrier based on joint configuration limits.
 
-    The ConfigurationCBF class represents a subset of bounded joints associated
+    The ConfigurationBarrier class represents a subset of bounded joints associated
     with a robot model. It defines a barrier function based on the joint
     configuration limits to ensure that the joint positions remain within the
     specified bounds.
@@ -48,11 +48,11 @@ class ConfigurationBarrier(Barrier):
         gain: Union[float, np.ndarray] = 0.5,
         r: float = 3.0,
     ):
-        """Initialize the ConfigurationCBF.
+        """Initialize the ConfigurationBarrier.
 
         Args:
             model: Pinocchio model of the robot.
-            gain: CBF gain. Defaults to 0.5.
+            gain: barrier gain. Defaults to 0.5.
             r: Weighting factor for the safe backup policy regularization term.
                 Defaults to 3.0.
         """

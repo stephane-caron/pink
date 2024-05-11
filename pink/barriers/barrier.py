@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""All barriers derive from the :class:`CBF` base class.
+"""All barriers derive from the :class:`Barrier` base class.
 
-The formalism used in this implementation is written down in examples/cbf/NOTES.md
+The formalism used in this implementation is written down in examples/barriers/NOTES.md
 """
 
 import abc
@@ -18,9 +18,9 @@ from ..configuration import Configuration
 
 
 class Barrier(abc.ABC):
-    r"""Abstract base class for Control Barrier Functions (CBFs).
+    r"""Abstract base class for barrier.
 
-    A CBF is a function :math:`\boldsymbol{h}(\boldsymbol{q})` that satisfies the following condition:
+    A barrier is a function :math:`\boldsymbol{h}(\boldsymbol{q})` that satisfies the following condition:
 
     .. math::
 
@@ -30,8 +30,8 @@ class Barrier(abc.ABC):
     :math:`\dot{\boldsymbol{q}}` is the joint velocity vector, and :math:`\alpha_j` are extended class K functions.
 
     Attributes:
-        dim: Dimension of the CBF.
-        gain: CBF gain.
+        dim: Dimension of the barrier.
+        gain: barrier gain.
         class_k_fn: Extended class K function.
         safe_policy: Safe backup control policy.
         r: Weighting factor for the safe backup policy regularization term.
@@ -49,11 +49,11 @@ class Barrier(abc.ABC):
         class_k_fn: Optional[Callable[[np.ndarray], float]] = None,
         r: float = 3.0,
     ):
-        """Initialize the CBF.
+        """Initialize the barrier.
 
         Args:
-            dim: Dimension of the CBF.
-            gain: CBF gain. Defaults to 1.0.
+            dim: Dimension of the barrier.
+            gain: barrier gain. Defaults to 1.0.
             class_k_fn: Extended class K function.
                 Defaults to the identity function.
             r: Weighting factor for the safe backup policy regularization term.
@@ -88,7 +88,7 @@ class Barrier(abc.ABC):
 
         The Jacobian matrix :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})` of the
         barrier function with respect to the configuration variables is required
-        for the computation of the CBF condition.
+        for the computation of the barrier condition.
 
         Args:
             configuration: Robot configuration :math:`\boldsymbol{q}`.
@@ -118,7 +118,7 @@ class Barrier(abc.ABC):
         configuration: Configuration,
         dt: float = 1e-3,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the quadratic objective function for the CBF-based QP.
+        r"""Compute the quadratic objective function for the barrier-based QP.
 
         The quadratic objective function includes a regularization term based on the safe backup policy:
 
@@ -155,9 +155,9 @@ class Barrier(abc.ABC):
         configuration: Configuration,
         dt: float = 1e-3,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        r"""Compute the linear inequality constraints for the CBF-based QP.
+        r"""Compute the linear inequality constraints for the barrier-based QP.
 
-        The linear inequality constraints enforce the CBF conditions:
+        The linear inequality constraints enforce the barrier conditions:
 
         .. math::
 
@@ -181,7 +181,7 @@ class Barrier(abc.ABC):
 
     def __repr__(self) -> str:
         """
-        Return a string representation of the CBF.
+        Return a string representation of the barrier.
 
         Returns:
             str: String representation.
