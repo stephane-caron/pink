@@ -31,10 +31,10 @@ class ConfigurationBarrier(Barrier):
     specified bounds.
 
     Attributes:
-        indices (np.ndarray): Indices of the bounded joints.
-        model (pin.Model): Pinocchio model of the robot.
-        joints (list): List of bounded joints.
-        projection_matrix (Optional[np.ndarray]): Projection matrix for the bounded joints.
+        indices: Indices of the bounded joints.
+        model: Pinocchio model of the robot.
+        joints: List of bounded joints.
+        projection_matrix: Projection matrix for the bounded joints.
     """
 
     indices: np.ndarray
@@ -51,9 +51,9 @@ class ConfigurationBarrier(Barrier):
         """Initialize the ConfigurationCBF.
 
         Args:
-            model (pin.Model): Pinocchio model of the robot.
-            gain (Union[float, np.ndarray]): CBF gain. Defaults to 0.5.
-            r (float): Weighting factor for the safe backup policy regularization term.
+            model: Pinocchio model of the robot.
+            gain: CBF gain. Defaults to 0.5.
+            r: Weighting factor for the safe backup policy regularization term.
                 Defaults to 3.0.
         """
 

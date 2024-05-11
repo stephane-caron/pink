@@ -25,10 +25,10 @@ class PositionBarrier(Barrier):
     specification of minimum and maximum position bounds along selected axes.
 
     Attributes:
-        frame (str): Name of the frame to monitor.
-        indices (Iterable[int]): Indices of the position components to consider.
-        p_min (Optional[np.ndarray]): Minimum position bounds.
-        p_max (Optional[np.ndarray]): Maximum position bounds.
+        frame: Name of the frame to monitor.
+        indices: Indices of the position components to consider.
+        p_min: Minimum position bounds.
+        p_max: Maximum position bounds.
     """
 
     frame: str

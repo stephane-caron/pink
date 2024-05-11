@@ -30,11 +30,11 @@ class Barrier(abc.ABC):
     :math:`\dot{\boldsymbol{q}}` is the joint velocity vector, and :math:`\alpha_j` are extended class K functions.
 
     Attributes:
-        dim (int): Dimension of the CBF.
-        gain (Union[float, np.ndarray]): CBF gain.
-        class_k_fn (Callable[[np.ndarray], float]): Extended class K function.
-        safe_policy (Optional[np.ndarray]): Safe backup control policy.
-        r (float): Weighting factor for the safe backup policy regularization term.
+        dim: Dimension of the CBF.
+        gain: CBF gain.
+        class_k_fn: Extended class K function.
+        safe_policy: Safe backup control policy.
+        r: Weighting factor for the safe backup policy regularization term.
     """
 
     gain: Union[float, np.ndarray]
@@ -52,11 +52,11 @@ class Barrier(abc.ABC):
         """Initialize the CBF.
 
         Args:
-            dim (int): Dimension of the CBF.
-            gain (Union[float, np.ndarray]): CBF gain. Defaults to 1.0.
-            class_k_fn (Optional[Callable[[np.ndarray], float]]): Extended class K function.
+            dim: Dimension of the CBF.
+            gain: CBF gain. Defaults to 1.0.
+            class_k_fn: Extended class K function.
                 Defaults to the identity function.
-            r (float): Weighting factor for the safe backup policy regularization term.
+            r: Weighting factor for the safe backup policy regularization term.
                 Defaults to 3.0.
         """
 
