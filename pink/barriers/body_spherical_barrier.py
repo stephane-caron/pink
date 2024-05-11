@@ -43,7 +43,7 @@ class BodySphericalBarrier(Barrier):
 
     def __init__(
         self,
-        frame: tuple[str, str],
+        frames: tuple[str, str],
         d_min: float = None,
         gain: Union[float, np.ndarray] = 1.0,
         r: float = 3.0,
@@ -51,7 +51,7 @@ class BodySphericalBarrier(Barrier):
         """Initialize the BodySphericalBarrier.
 
         Args:
-            frame: Tuple of two frame names.
+            frames: Tuple of two frame names.
             d_min: Minimum distance threshold.
             gain: Barrier gain. Defaults to 1.0.
             r: Weighting factor for the safe backup policy regularization term.
@@ -63,7 +63,7 @@ class BodySphericalBarrier(Barrier):
             # class_k_fn=lambda h: h / (1 + np.linalg.norm(h)),
             r=r,
         )
-        self.frame = frame
+        self.frames = frames
         self.d_min = d_min
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
@@ -131,8 +131,8 @@ class BodySphericalBarrier(Barrier):
         Returns:
             Tuple of position vectors of the two frames in the world coordinate system.
         """
-        pos1_world = configuration.get_transform_frame_to_world(self.frame[0]).translation
-        pos2_world = configuration.get_transform_frame_to_world(self.frame[1]).translation
+        pos1_world = configuration.get_transform_frame_to_world(self.frames[0]).translation
+        pos2_world = configuration.get_transform_frame_to_world(self.frames[1]).translation
         return pos1_world, pos2_world
 
     def _get_frame_jacobians(self, configuration: Configuration) -> tuple[np.ndarray, np.ndarray]:
@@ -144,12 +144,12 @@ class BodySphericalBarrier(Barrier):
         Returns:
             Tuple of position Jacobian matrices of the two frames in the world coordinate system.
         """
-        pos1_jac = configuration.get_frame_jacobian(self.frame[0])[:3]
-        rotation1 = configuration.get_transform_frame_to_world(self.frame[0]).rotation
+        pos1_jac = configuration.get_frame_jacobian(self.frames[0])[:3]
+        rotation1 = configuration.get_transform_frame_to_world(self.frames[0]).rotation
         pos1_jac = rotation1 @ pos1_jac
 
-        pos2_jac = configuration.get_frame_jacobian(self.frame[1])[:3]
-        rotation2 = configuration.get_transform_frame_to_world(self.frame[1]).rotation
+        pos2_jac = configuration.get_frame_jacobian(self.frames[1])[:3]
+        rotation2 = configuration.get_transform_frame_to_world(self.frames[1]).rotation
         pos2_jac = rotation2 @ pos2_jac
 
         return pos1_jac, pos2_jac
