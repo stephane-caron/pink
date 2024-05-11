@@ -14,7 +14,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.barriers import BodySphericalCBF, ConfigurationCBF
+from pink.barriers import BodySphericalBarrier, ConfigurationBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
 
@@ -73,14 +73,14 @@ if __name__ == "__main__":
         lm_damping=100,  # tuned for this setup
     )
 
-    ee_barrier = BodySphericalCBF(
+    ee_barrier = BodySphericalBarrier(
         ("yumi_barrier_l", "yumi_barrier_r"),
         d_min=0.2,
         gain=100.0,
         r=1.0,
     )
 
-    elbow_barrier = BodySphericalCBF(
+    elbow_barrier = BodySphericalBarrier(
         ("yumi_link_4_l", "yumi_link_4_r"),
         d_min=0.4,
         gain=100.0,
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         cost=1e-3,  # [cost] / [rad]
     )
 
-    configuration_cbf = ConfigurationCBF(robot.model, gain=1, r=400.0)
+    configuration_cbf = ConfigurationBarrier(robot.model, gain=1, r=400.0)
     cbf_list = [ee_barrier, elbow_barrier, configuration_cbf]
     tasks = [left_end_effector_task, right_end_effector_task, posture_task]
 

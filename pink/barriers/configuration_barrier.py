@@ -19,10 +19,10 @@ import pinocchio as pin
 
 from pink.configuration import Configuration
 
-from .barrier import CBF
+from .barrier import Barrier
 
 
-class ConfigurationCBF(CBF):
+class ConfigurationBarrier(Barrier):
     """Control Barrier Function (CBF) based on joint configuration limits.
 
     The ConfigurationCBF class represents a subset of bounded joints associated
@@ -111,15 +111,9 @@ class ConfigurationCBF(CBF):
             Value of the barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`.
         """
         q = configuration.q
-        delta_q_max = pin.difference(
-            self.model, q, self.model.upperPositionLimit
-        )
-        delta_q_min = pin.difference(
-            self.model, q, self.model.lowerPositionLimit
-        )
-        return np.hstack(
-            [-delta_q_min[self.indices], delta_q_max[self.indices]]
-        )
+        delta_q_max = pin.difference(self.model, q, self.model.upperPositionLimit)
+        delta_q_min = pin.difference(self.model, q, self.model.lowerPositionLimit)
+        return np.hstack([-delta_q_min[self.indices], delta_q_max[self.indices]])
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the Jacobian matrix of the barrier function.

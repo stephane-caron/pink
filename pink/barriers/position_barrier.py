@@ -14,10 +14,10 @@ from typing import Iterable, Optional, Union
 import numpy as np
 
 from ..configuration import Configuration
-from .barrier import CBF
+from .barrier import Barrier
 
 
-class PositionCBF(CBF):
+class PositionBarrier(Barrier):
     r"""A position-based barrier.
 
     Defines a barrier function based on the position of a
@@ -80,9 +80,7 @@ class PositionCBF(CBF):
         Returns:
             Value of the barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`.
         """
-        pos_world = configuration.get_transform_frame_to_world(
-            self.frame
-        ).translation
+        pos_world = configuration.get_transform_frame_to_world(self.frame).translation
         cbfs = []
         if self.p_min is not None:
             cbfs.append(pos_world[self.indices] - self.p_min)
@@ -106,9 +104,7 @@ class PositionCBF(CBF):
         """
         pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
         # Transform jacobian to world aligned frame
-        rotation = configuration.get_transform_frame_to_world(
-            self.frame
-        ).rotation
+        rotation = configuration.get_transform_frame_to_world(self.frame).rotation
         pos_jac = rotation @ pos_jac
 
         # Select only relevant indices
