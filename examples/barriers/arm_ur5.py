@@ -82,8 +82,8 @@ if __name__ == "__main__":
     while True:
         # Update task targets
         end_effector_target = end_effector_task.transform_target_to_world
-        end_effector_target.translation[1] = 0.0 + 0.7 * np.sin(t / 2)
-        end_effector_target.translation[2] = 0.3
+        end_effector_target.translation[1] = 0.0 + 0.65 * np.sin(t / 2)
+        end_effector_target.translation[2] = 0.5
 
         # Update visualization frames
         viewer["end_effector_target"].set_transform(end_effector_target.np)
