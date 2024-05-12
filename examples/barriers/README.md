@@ -11,9 +11,6 @@ Here we will have the examples of using barriers, please go over [notes](NOTES.m
 A UR5 arm tracking a moving target while stopping in front of virtual wall:
 
 
-<!-- TODO: Put your video here -->
-https://github.com/domrachev03/pink/tree/feat/cbf/assets/barriers/ur_5.mp4
-
 | Task | Cost |
 |------|------|
 | End-effector | 1 |
@@ -29,8 +26,6 @@ https://github.com/domrachev03/pink/tree/feat/cbf/assets/barriers/ur_5.mp4
 
 A dual arm YuMi randomly swinging arms while avoiding self collisions:
 
-<!-- TODO: Put your video here -->
-https://github.com/domrachev03/pink/tree/feat/cbf/assets/barriers/yumi_self_col.mp4
 
 | Task | Cost |
 |------|------|
