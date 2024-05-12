@@ -10,7 +10,9 @@ Here we will have the examples of using barriers, please go over [notes](NOTES.m
 
 A UR5 arm tracking a moving target while stopping in front of virtual wall:
 
-https://github.com/domrachev03/pink/assets/28687492/af8302b0-0ce4-4e7c-8a14-900177cb3ee1
+
+https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f99e42714c
+
 
 | Task | Cost |
 |------|------|
@@ -22,12 +24,11 @@ https://github.com/domrachev03/pink/assets/28687492/af8302b0-0ce4-4e7c-8a14-9001
 | End-effector | $10^{3}$ |
 | Configuration | $1$ |
 
-
 ## Dual Arm Yumi
 
 A dual arm YuMi randomly swinging arms while avoiding self collisions:
 
-https://github.com/domrachev03/pink/assets/28687492/d4165076-f6f4-4bb0-89bf-4452adc95a0d
+https://github.com/domrachev03/pink/assets/28687492/97397fa1-575d-4a1f-81e9-dad85a376cf6
 
 | Task | Cost |
 |------|------|
