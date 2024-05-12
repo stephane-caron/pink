@@ -13,7 +13,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.barriers import PositionBarrier, ConfigurationBarrier
+from pink.barriers import ConfigurationBarrier, PositionBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
 
@@ -34,7 +34,6 @@ if __name__ == "__main__":
         "ee_link",
         position_cost=50.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
-        lm_damping=100,  # tuned for this setup
     )
 
     posture_task = PostureTask(
@@ -84,7 +83,7 @@ if __name__ == "__main__":
         # Update task targets
         end_effector_target = end_effector_task.transform_target_to_world
         end_effector_target.translation[1] = 0.0 + 0.7 * np.sin(t / 2)
-        end_effector_target.translation[2] = 0.5
+        end_effector_target.translation[2] = 0.3
 
         # Update visualization frames
         viewer["end_effector_target"].set_transform(end_effector_target.np)
@@ -102,7 +101,7 @@ if __name__ == "__main__":
             tasks,
             dt,
             solver=solver,
-            cbfs=barriers_list,
+            barriers=barriers_list,
             use_position_limit=False,
         )
         configuration.integrate_inplace(velocity, dt)

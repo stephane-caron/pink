@@ -22,7 +22,8 @@ try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
 except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
-        "Examples need robot_descriptions, " "try ``pip install robot_descriptions``"
+        "Examples need robot_descriptions, "
+        "try ``pip install robot_descriptions``"
     ) from exc  # noqa: E501
 
 
@@ -55,7 +56,6 @@ if __name__ == "__main__":
     )
 
     robot.model.addFrame(r_frame)
-    # TODO: how to avoid recreating the model?
     robot.data = pin.Data(robot.model)
 
     viz = start_meshcat_visualizer(robot)
@@ -64,13 +64,11 @@ if __name__ == "__main__":
         "yumi_link_7_l",
         position_cost=50.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
-        lm_damping=100,  # tuned for this setup
     )
     right_end_effector_task = FrameTask(
         "yumi_link_7_r",
         position_cost=50.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
-        lm_damping=100,  # tuned for this setup
     )
 
     ee_barrier = BodySphericalBarrier(
@@ -170,8 +168,16 @@ if __name__ == "__main__":
         A = 0.1
         B = 0.2
         # z -- 0.4 - 0.8
-        l_y_des[:] = 0.6, 0.1 + B * np.sin(3 * t + np.pi / 4), 0.6 + A * np.sin(t)
-        r_y_des[:] = 0.6, -0.1 - B * np.sin(t), 0.6 + A * np.sin(3 * t - np.pi / 4)
+        l_y_des[:] = (
+            0.6,
+            0.1 + B * np.sin(3 * t + np.pi / 4),
+            0.6 + A * np.sin(t),
+        )
+        r_y_des[:] = (
+            0.6,
+            -0.1 - B * np.sin(t),
+            0.6 + A * np.sin(3 * t - np.pi / 4),
+        )
         l_dy_des[:] = 0, B * np.cos(t), A * np.cos(t)
         r_dy_des[:] = 0, -B * np.cos(t), A * np.cos(t)
 
@@ -180,21 +186,33 @@ if __name__ == "__main__":
 
         # Update visualization frames
         viewer["left_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(left_end_effector_task.frame).np
+            configuration.get_transform_frame_to_world(
+                left_end_effector_task.frame
+            ).np
         )
         viewer["right_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(right_end_effector_task.frame).np
+            configuration.get_transform_frame_to_world(
+                right_end_effector_task.frame
+            ).np
         )
-        viewer["left_end_effector_target"].set_transform(left_end_effector_task.transform_target_to_world.np)
-        viewer["right_end_effector_target"].set_transform(right_end_effector_task.transform_target_to_world.np)
+        viewer["left_end_effector_target"].set_transform(
+            left_end_effector_task.transform_target_to_world.np
+        )
+        viewer["right_end_effector_target"].set_transform(
+            right_end_effector_task.transform_target_to_world.np
+        )
 
         lb = configuration.get_transform_frame_to_world("yumi_barrier_l")
         rb = configuration.get_transform_frame_to_world("yumi_barrier_r")
 
         viewer["left_ee_barrier"].set_transform(lb.np)
         viewer["right_ee_barrier"].set_transform(rb.np)
-        viewer["left_elbow_barrier"].set_transform(configuration.get_transform_frame_to_world("yumi_link_4_l").np)
-        viewer["right_elbow_barrier"].set_transform(configuration.get_transform_frame_to_world("yumi_link_4_r").np)
+        viewer["left_elbow_barrier"].set_transform(
+            configuration.get_transform_frame_to_world("yumi_link_4_l").np
+        )
+        viewer["right_elbow_barrier"].set_transform(
+            configuration.get_transform_frame_to_world("yumi_link_4_r").np
+        )
 
         # Compute velocity and integrate it into next configuration
         # Note that default position limit handle given trajectory
@@ -204,21 +222,29 @@ if __name__ == "__main__":
             tasks,
             dt,
             solver=solver,
-            cbfs=cbf_list,
+            barriers=cbf_list,
             use_position_limit=False,
         )
         configuration.integrate_inplace(velocity, dt)
         dist_ee = (
             np.linalg.norm(
-                configuration.get_transform_frame_to_world("yumi_barrier_l").translation
-                - configuration.get_transform_frame_to_world("yumi_barrier_r").translation
+                configuration.get_transform_frame_to_world(
+                    "yumi_barrier_l"
+                ).translation
+                - configuration.get_transform_frame_to_world(
+                    "yumi_barrier_r"
+                ).translation
             )
             * 100
         )
         dist_elbow = (
             np.linalg.norm(
-                configuration.get_transform_frame_to_world("yumi_link_4_l").translation
-                - configuration.get_transform_frame_to_world("yumi_link_4_r").translation
+                configuration.get_transform_frame_to_world(
+                    "yumi_link_4_l"
+                ).translation
+                - configuration.get_transform_frame_to_world(
+                    "yumi_link_4_r"
+                ).translation
             )
             * 100
         )
