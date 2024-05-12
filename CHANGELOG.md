@@ -18,6 +18,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Changed
+
+- CICD: Update ruff to 0.4.3
+
 ### Fixed
 
 - Fix broken documentation links
