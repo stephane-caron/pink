@@ -20,7 +20,7 @@ def __compute_qp_objective(
     configuration: Configuration,
     tasks: Iterable[Task],
     damping: float,
-    cbfs: Optional[Iterable[Barrier]] = None,
+    barriers: Optional[Iterable[Barrier]] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     r"""Compute the QP objective function.
 
@@ -42,13 +42,13 @@ def __compute_qp_objective(
             velocities. Improves numerical stability, but larger values slow
             down all tasks.
         dt: Integration timestep in [s].
-        cbfs: Collection of control barrier functions.
+        barriers: Collection of barriers.
 
     Returns:
         Pair :math:`(H, c)` of Hessian matrix and linear vector of the QP
         objective.
     """
-    cbfs = cbfs if cbfs is not None else []
+    barriers = barriers if barriers is not None else []
     H = damping * configuration.tangent.eye
     c = configuration.tangent.zeros.copy()
     for task in tasks:
@@ -56,8 +56,8 @@ def __compute_qp_objective(
         H += H_task
         c += c_task
 
-    for cbf in cbfs:
-        H_cbf, c_cbf = cbf.compute_qp_objective(configuration)
+    for barrier in barriers:
+        H_cbf, c_cbf = barrier.compute_qp_objective(configuration)
         H += H_cbf
         c += c_cbf
 
@@ -67,7 +67,7 @@ def __compute_qp_objective(
 def __compute_qp_inequalities(
     configuration,
     dt: float,
-    cbfs: Optional[Iterable[Barrier]] = None,
+    barriers: Optional[Iterable[Barrier]] = None,
     use_position_limit: bool = True,
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     r"""Compute inequality constraints for the quadratic program.
@@ -75,7 +75,7 @@ def __compute_qp_inequalities(
     Args:
         configuration: Robot configuration to read kinematics from.
         dt: Integration timestep in [s].
-        cbfs: Collection of control barrier functions.
+        barriers: Collection of barriers.
         use_position_limit: if True, position limit from robot configuration
             would be used. Disabling it would allow to utilize more
             flexible CBF configuration limit.
@@ -90,7 +90,7 @@ def __compute_qp_inequalities(
         solvers don't support it. See for instance
         https://github.com/stephane-caron/pink/issues/10.
     """
-    cbfs = cbfs if cbfs is not None else []
+    barriers = barriers if barriers is not None else []
     basic_limits = []
     if use_position_limit:
         basic_limits.append(configuration.model.configuration_limit)
@@ -104,10 +104,10 @@ def __compute_qp_inequalities(
         if matvec is not None:
             G_list.append(matvec[0])
             h_list.append(matvec[1])
-    for cbf in cbfs:
-        G_cbf, h_cbf = cbf.compute_qp_inequality(configuration, dt)
-        G_list.append(G_cbf)
-        h_list.append(h_cbf)
+    for barrier in barriers:
+        G_barrier, h_barrier = barrier.compute_qp_inequality(configuration, dt)
+        G_list.append(G_barrier)
+        h_list.append(h_barrier)
     if not G_list:
         return None, None
     return np.vstack(G_list), np.hstack(h_list)
@@ -118,7 +118,7 @@ def build_ik(
     tasks: Iterable[Task],
     dt: float,
     damping: float = 1e-12,
-    cbfs: Optional[Iterable[Barrier]] = None,
+    barriers: Optional[Iterable[Barrier]] = None,
     use_position_limit: bool = True,
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
@@ -146,7 +146,7 @@ def build_ik(
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
-        cbfs: Collection of control barrier functions.
+        barriers: Collection of barriers.
         use_position_limit: if True, position limit from robot configuration
             would be used. Disabling it would allow to utilize more
             flexible CBF configuration limit.
@@ -154,8 +154,8 @@ def build_ik(
     Returns:
         Quadratic program of the inverse kinematics problem.
     """
-    P, q = __compute_qp_objective(configuration, tasks, damping, cbfs)
-    G, h = __compute_qp_inequalities(configuration, dt, cbfs)
+    P, q = __compute_qp_objective(configuration, tasks, damping, barriers)
+    G, h = __compute_qp_inequalities(configuration, dt, barriers)
     problem = qpsolvers.Problem(P, q, G, h)
     return problem
 
@@ -166,7 +166,7 @@ def solve_ik(
     dt: float,
     solver: str,
     damping: float = 1e-12,
-    cbfs: Optional[Iterable[Barrier]] = None,
+    barriers: Optional[Iterable[Barrier]] = None,
     use_position_limit: bool = True,
     **kwargs,
 ) -> np.ndarray:
@@ -185,7 +185,7 @@ def solve_ik(
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
-        cbfs: Collection of control barrier functions.
+        barriers: Collection of barriers functions.
         use_position_limit: if True, position limit from robot configuration
             would be used. Disabling it would allow to utilize more
             flexible CBF configuration limit.
@@ -209,7 +209,7 @@ def solve_ik(
         tasks,
         dt,
         damping,
-        cbfs,
+        barriers,
         use_position_limit=use_position_limit,
     )
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)

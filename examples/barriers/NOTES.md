@@ -146,25 +146,3 @@ $$h_j(\boldsymbol{q}) = \|\boldsymbol{p}_{EE}(\boldsymbol{q}) - \boldsymbol{p}_{
 $$h_j(\boldsymbol{q}) = \operatorname{sd}(\mathcal{B}_i(\boldsymbol{q}), \mathcal{B}_k(\boldsymbol{q})) - d_{safe}$$
 
 Here, $\operatorname{sd}(\cdot)$ denotes the signed distance between two geometric shapes $\mathcal{B}_i$ and $\mathcal{B}_k$ representing robot links.  
-
-### PINK Implementation 
-
-The [barrier submodule](https://github.com/domrachev03/pink/tree/feat/cbf/pink/barriers) in PINK provides an implementation of these CBF safety constraints. 
-
-Code snippets for each barrier type will be added here.
-
-**TODO:** Write $h(q)$ and CBF formulation for:
-* Joint Limits
-* Body Position Barrier
-* Self-Collisions
-
-### Implementation in PINK
-
-We have introduced CBF capabilities in PINK by creating the [barrier submodule](https://github.com/domrachev03/pink/tree/feat/cbf/pink/barriers).
-
-**TODO:**
-Add code snippets for different barriers:
-* Generic
-* Joint Limits
-* Body Position Barrier
-* Self-Collision Barrier

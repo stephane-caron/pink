@@ -79,13 +79,13 @@ class PositionBarrier(Barrier):
         pos_world = configuration.get_transform_frame_to_world(
             self.frame
         ).translation
-        cbfs = []
+        barriers = []
         if self.p_min is not None:
-            cbfs.append(pos_world[self.indices] - self.p_min)
+            barriers.append(pos_world[self.indices] - self.p_min)
         if self.p_max is not None:
-            cbfs.append(self.p_max - pos_world[self.indices])
+            barriers.append(self.p_max - pos_world[self.indices])
 
-        return np.concatenate(cbfs)
+        return np.concatenate(barriers)
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the Jacobian matrix of the barrier function.
