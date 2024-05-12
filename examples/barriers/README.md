@@ -12,7 +12,7 @@ A UR5 arm tracking a moving target while stopping in front of virtual wall:
 
 
 <!-- TODO: Put your video here -->
-https://github.com/domrachev03/pink/assets/ur_5.mp4
+https://github.com/domrachev03/pink/tree/feat/cbf/assets/barriers/ur_5.mp4
 
 | Task | Cost |
 |------|------|
@@ -30,7 +30,7 @@ https://github.com/domrachev03/pink/assets/ur_5.mp4
 A dual arm YuMi randomly swinging arms while avoiding self collisions:
 
 <!-- TODO: Put your video here -->
-https://github.com/domrachev03/pink/assets/yumi_self_col.mp4
+https://github.com/domrachev03/pink/tree/feat/cbf/assets/barriers/yumi_self_col.mp4
 
 | Task | Cost |
 |------|------|
