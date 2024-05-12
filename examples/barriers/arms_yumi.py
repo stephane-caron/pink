@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     elbow_barrier = BodySphericalBarrier(
         ("yumi_link_4_l", "yumi_link_4_r"),
-        d_min=0.4,
+        d_min=0.3,
         gain=100.0,
         r=1.0,
     )
@@ -138,13 +138,13 @@ if __name__ == "__main__":
         viewer["left_elbow_barrier"],
         opacity=0.4,
         color=0xFF0000,
-        radius=0.2,
+        radius=0.15,
     )
     meshcat_shapes.sphere(
         viewer["right_elbow_barrier"],
         opacity=0.4,
         color=0x00FF00,
-        radius=0.2,
+        radius=0.15,
     )
     meshcat_shapes.frame(viewer["right_end_effector"], opacity=1.0)
     meshcat_shapes.frame(viewer["left_end_effector_target"], opacity=1.0)
@@ -152,8 +152,8 @@ if __name__ == "__main__":
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]
-    if "ecos" in qpsolvers.available_solvers:
-        solver = "ecos"
+    if "osqp" in qpsolvers.available_solvers:
+        solver = "osqp"
 
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
