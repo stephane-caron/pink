@@ -45,7 +45,7 @@ class Barrier(abc.ABC):
 
     gain: np.ndarray
     class_k_fns: Callable[[float], float]
-    safe_policy: Optional[np.ndarray]
+    safe_policy: np.ndarray
     r: float
 
     def __init__(
@@ -72,6 +72,7 @@ class Barrier(abc.ABC):
 
         self.class_k_fn = class_k_fn if class_k_fn is not None else lambda x: x
         self.r = r
+        self.safe_policy = np.zeros(self.dim)
 
     @abc.abstractmethod
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
@@ -156,14 +157,14 @@ class Barrier(abc.ABC):
         c = np.zeros(configuration.model.nv)
 
         if self.r > 1e-6:
-            safe_policy = self.compute_safe_policy(configuration)
+            self.safe_policy = self.compute_safe_policy(configuration)
 
             H += (
                 self.r
                 / (np.linalg.norm(jac) ** 2)
                 * np.eye(configuration.model.nv)
             )
-            c += -2 * self.r / (np.linalg.norm(jac) ** 2) * safe_policy
+            c += -2 * self.r / (np.linalg.norm(jac) ** 2) * self.safe_policy
 
         return (H, c)
 
@@ -215,6 +216,6 @@ class Barrier(abc.ABC):
         return (
             f"Barrier("
             f"gain={self.gain}, "
-            f"safety_policy={'no' if self.safe_policy is None else self.safe_policy}, "  # noqa: E501
-            f"r={'no' if self.safe_policy is None else self.r})"
+            f"safety_policy={'no' if np.allclose(self.r, 0) else self.safe_policy}, "  # noqa: E501
+            f"r={'no' if np.allclose(self.r, 0) else self.r})"
         )
