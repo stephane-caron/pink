@@ -41,7 +41,7 @@ class PositionBarrier(Barrier):
         p_min: Optional[np.ndarray] = None,
         p_max: Optional[np.ndarray] = None,
         gain: Union[float, np.ndarray] = 1.0,
-        r: float = 3.0,
+        r: float = 0.0,
     ):
         """..."""
         indices = [0, 1, 2] if indices is None else indices
