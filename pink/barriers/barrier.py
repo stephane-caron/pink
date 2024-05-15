@@ -122,7 +122,7 @@ class Barrier(abc.ABC):
             Safe backup joint velocities
                 :math:`\dot{\boldsymbol{q}}_{safe}(\boldsymbol{q})`.
         """
-        return np.zeros(configuration.model.nq)
+        return np.zeros(configuration.model.nv)
 
     def compute_qp_objective(
         self,
@@ -151,9 +151,9 @@ class Barrier(abc.ABC):
                 objective vector (c).
         """
         jac = self.compute_jacobian(configuration)
-        H = np.zeros((configuration.model.nq, configuration.model.nq))
+        H = np.zeros((configuration.model.nv, configuration.model.nv))
         # c = 1e-3 * np.linalg.norm(jac, axis=0) / dt
-        c = np.zeros(configuration.model.nq)
+        c = np.zeros(configuration.model.nv)
 
         if self.r > 1e-6:
             safe_policy = self.compute_safe_policy(configuration)
@@ -161,7 +161,7 @@ class Barrier(abc.ABC):
             H += (
                 self.r
                 / (np.linalg.norm(jac) ** 2)
-                * np.eye(configuration.model.nq)
+                * np.eye(configuration.model.nv)
             )
             c += -2 * self.r / (np.linalg.norm(jac) ** 2) * safe_policy
 
