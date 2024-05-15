@@ -43,7 +43,25 @@ class PositionBarrier(Barrier):
         gain: Union[float, np.ndarray] = 1.0,
         r: float = 0.0,
     ):
-        """..."""
+        """Initialize a position barrier.
+
+        Args:
+            frame (str): name of the frame to monitor.
+            indices (Optional[List[int]], optional): indices with limits.
+                Indices from 0 to 2 stand for coordinates x to z respectively.
+                Defaults to all dimensions.
+            p_min (Optional[np.ndarray], optional): minimum position limit.
+                Defaults to None, meaning no minimum limit is applied.
+            p_max (Optional[np.ndarray], optional): maximum position limit.
+                Defaults to None, meaning no maximum limit is applied.
+            gain (Union[float, np.ndarray], optional): regularization gain.
+                Defaults to 1.0.
+            r (float, optional): penalty weighting parameter. Defaults to 0.0.
+
+        Raises:
+            NoPositionLimitProvided: neither minimum nor maximum
+                position limit is provided.
+        """
         indices = [0, 1, 2] if indices is None else indices
 
         if p_min is None and p_max is None:
@@ -61,7 +79,7 @@ class PositionBarrier(Barrier):
         # If both p_min and p_max are specified, they must have
         # the same gains repeated along the dimension
         if isinstance(gain, np.ndarray) and len(gain) != dim:
-            gain = np.tile(gain, dim)
+            gain = np.tile(gain, 2)
 
         super().__init__(
             dim,
