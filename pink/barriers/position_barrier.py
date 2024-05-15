@@ -12,6 +12,7 @@ import numpy as np
 
 from ..configuration import Configuration
 from .barrier import Barrier
+from .exceptions import NoPositionLimitProvided
 
 
 class PositionBarrier(Barrier):
@@ -44,6 +45,12 @@ class PositionBarrier(Barrier):
     ):
         """..."""
         indices = [0, 1, 2] if indices is None else indices
+
+        if p_min is None and p_max is None:
+            raise NoPositionLimitProvided(
+                f"Position barrier for frame {frame} requires either \
+                    p_min or p_max"
+            )
 
         dim = 0
         if p_min is not None:
