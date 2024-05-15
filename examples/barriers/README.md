@@ -29,7 +29,9 @@ https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f9
 
 Go2 quadruped squating with base position is constrained by z and y coordinates:
 
-https://github.com/domrachev03/pink/assets/26837717/6d9d3aef-2853-4ae7-a95a-7c317fd65625
+https://github.com/domrachev03/pink/assets/26837717/701bdfbe-0dba-4f9d-80e2-c018475f38d6
+
+
 
 | Task | Cost |
 |------|------|
