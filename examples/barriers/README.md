@@ -29,9 +29,7 @@ https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f9
 
 Go2 quadruped squating with base position is constrained by z and y coordinates:
 
-
-https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f99e42714c
-
+https://github.com/domrachev03/pink/assets/26837717/6d9d3aef-2853-4ae7-a95a-7c317fd65625
 
 | Task | Cost |
 |------|------|
@@ -62,3 +60,6 @@ https://github.com/domrachev03/pink/assets/28687492/97397fa1-575d-4a1f-81e9-dad8
 |------|------|
 | Spheres Collision  | 100 |
 | Configuration | $1$ |
+
+
+
