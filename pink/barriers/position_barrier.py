@@ -51,6 +51,11 @@ class PositionBarrier(Barrier):
         if p_max is not None:
             dim += len(indices)
 
+        # If both p_min and p_max are specified, they must have
+        # the same gains repeated along the dimension
+        if isinstance(gain, np.ndarray) and len(gain) != dim:
+            gain = np.tile(gain, dim)
+
         super().__init__(
             dim,
             gain=gain,
@@ -117,4 +122,4 @@ class PositionBarrier(Barrier):
         if self.p_max is not None:
             jacobians.append(-pos_jac.copy())
 
-        return np.hstack(jacobians)
+        return np.vstack(jacobians)
