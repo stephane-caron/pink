@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Universal Robots UR5 arm tracking a moving target."""
+"""Yumi with spherical collision barriers."""
 
 import meshcat_shapes
 import numpy as np
