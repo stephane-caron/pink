@@ -17,6 +17,7 @@ from robot_descriptions.loaders.pinocchio import load_robot_description
 from pink import Configuration, build_ik, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
 from pink.tasks import FrameTask
+from pink.barriers import PositionBarrier
 
 
 class TestSolveIK(unittest.TestCase):
@@ -69,6 +70,62 @@ class TestSolveIK(unittest.TestCase):
         )
         velocity = solve_ik(configuration, [task], dt=5e-3, solver="quadprog")
         self.assertTrue(np.allclose(velocity, 0.0))
+
+    def test_barrier_fullfilled(self):
+        """Velocity is zero when the only task is already fulfilled."""
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+        task = FrameTask(
+            "left_contact", position_cost=1.0, orientation_cost=1.0
+        )
+        barrier = PositionBarrier(
+            "left_contact",
+            p_min=configuration.get_transform_frame_to_world(
+                "left_contact"
+            ).translation
+            - 0.1 * np.ones(3),
+        )
+        task.set_target(
+            configuration.get_transform_frame_to_world("left_contact")
+        )
+        velocity = solve_ik(
+            configuration,
+            [task],
+            dt=5e-3,
+            solver="quadprog",
+            barriers=[barrier],
+        )
+        self.assertTrue(np.allclose(velocity, 0.0))
+
+    def test_barrier_violated(self):
+        """Velocity is zero when the only task is already fulfilled."""
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+        task = FrameTask(
+            "left_contact", position_cost=1.0, orientation_cost=1.0
+        )
+        barrier = PositionBarrier(
+            "left_contact",
+            p_min=configuration.get_transform_frame_to_world(
+                "left_contact"
+            ).translation
+            + 1.0 * np.ones(3),
+        )
+        task.set_target(
+            configuration.get_transform_frame_to_world("left_contact")
+        )
+        velocity = solve_ik(
+            configuration,
+            [task],
+            dt=5e-3,
+            solver="quadprog",
+            barriers=[barrier],
+        )
+        self.assertFalse(np.allclose(velocity, 0.0))
 
     def test_single_task_convergence(self):
         """Integrating velocities makes a task converge to its target."""
