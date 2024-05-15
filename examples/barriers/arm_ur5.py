@@ -13,7 +13,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.barriers import ConfigurationBarrier, PositionBarrier
+from pink.barriers import PositionBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
 
@@ -48,8 +48,7 @@ if __name__ == "__main__":
         gain=np.array([100.0]),
         r=1.0,
     )
-    configuration_barrier = ConfigurationBarrier(robot.model, gain=1, r=100.0)
-    barriers_list = [pos_barrier, configuration_barrier]
+    barriers_list = [pos_barrier]
 
     tasks = [end_effector_task, posture_task]
 
@@ -103,7 +102,6 @@ if __name__ == "__main__":
             dt,
             solver=solver,
             barriers=barriers_list,
-            use_position_limit=False,
         )
         configuration.integrate_inplace(velocity, dt)
 
@@ -111,9 +109,6 @@ if __name__ == "__main__":
         print(f"Task error: {end_effector_task.compute_error(configuration)}")
         print(
             f"Position CBF value: {pos_barrier.compute_barrier(configuration)[0]:0.3f} >= 0"
-        )
-        print(
-            f"Configuration CBF value: {configuration_barrier.compute_barrier(configuration)} >= 0"
         )
         print(
             f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]} <= 0.6"

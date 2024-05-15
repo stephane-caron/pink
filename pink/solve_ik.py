@@ -68,7 +68,6 @@ def __compute_qp_inequalities(
     configuration,
     dt: float,
     barriers: Optional[Iterable[Barrier]] = None,
-    use_position_limit: bool = True,
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
     r"""Compute inequality constraints for the quadratic program.
 
@@ -76,9 +75,6 @@ def __compute_qp_inequalities(
         configuration: Robot configuration to read kinematics from.
         dt: Integration timestep in [s].
         barriers: Collection of barriers.
-        use_position_limit: if True, position limit from robot configuration
-            would be used. Disabling it would allow to utilize more
-            flexible CBF configuration limit.
 
     Returns:
         Pair :math:`(G, h)` of inequality matrix and vector representing the
@@ -91,15 +87,13 @@ def __compute_qp_inequalities(
         https://github.com/stephane-caron/pink/issues/10.
     """
     barriers = barriers if barriers is not None else []
-    basic_limits = []
-    if use_position_limit:
-        basic_limits.append(configuration.model.configuration_limit)
-    basic_limits.append(configuration.model.velocity_limit)
+    configuration_limit = configuration.model.configuration_limit
+    velocity_limit = configuration.model.velocity_limit
     q = configuration.q
 
     G_list = []
     h_list = []
-    for limit in basic_limits:
+    for limit in (configuration_limit, velocity_limit):
         matvec = limit.compute_qp_inequalities(q, dt)
         if matvec is not None:
             G_list.append(matvec[0])
@@ -119,7 +113,6 @@ def build_ik(
     dt: float,
     damping: float = 1e-12,
     barriers: Optional[Iterable[Barrier]] = None,
-    use_position_limit: bool = True,
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
 
@@ -147,9 +140,6 @@ def build_ik(
             Improves numerical stability, but larger values slow down all
             tasks.
         barriers: Collection of barriers.
-        use_position_limit: if True, position limit from robot configuration
-            would be used. Disabling it would allow to utilize more
-            flexible CBF configuration limit.
 
     Returns:
         Quadratic program of the inverse kinematics problem.
@@ -167,7 +157,6 @@ def solve_ik(
     solver: str,
     damping: float = 1e-12,
     barriers: Optional[Iterable[Barrier]] = None,
-    use_position_limit: bool = True,
     **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
@@ -186,9 +175,6 @@ def solve_ik(
             Improves numerical stability, but larger values slow down all
             tasks.
         barriers: Collection of barriers functions.
-        use_position_limit: if True, position limit from robot configuration
-            would be used. Disabling it would allow to utilize more
-            flexible CBF configuration limit.
         kwargs: Keyword arguments to forward to the backend QP solver.
 
     Returns:
@@ -210,7 +196,6 @@ def solve_ik(
         dt,
         damping,
         barriers,
-        use_position_limit=use_position_limit,
     )
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
