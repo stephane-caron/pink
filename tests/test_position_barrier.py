@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Tests that should pass for all barriers."""
+"""Tests for position barrier limit."""
 
 import unittest
 
@@ -47,22 +47,26 @@ class TestPositionBarrier(unittest.TestCase):
 
     def test_gains(self):
         """Check gains of configuration limit projection."""
+        # One limit, scalar gain
         self.assertEqual(
             PositionBarrier("ee_link", p_min=np.zeros(3), gain=1).gain.shape,
             (3,),
         )
+        # One limit, vector gain
         self.assertEqual(
             PositionBarrier(
                 "ee_link", p_max=np.zeros(3), gain=np.array([1, 2, 3])
             ).gain.shape,
             (3,),
         )
+        # Two limits, scalar gain
         self.assertEqual(
             PositionBarrier(
                 "ee_link", p_min=np.zeros(3), p_max=np.zeros(3), gain=1
             ).gain.shape,
             (6,),
         )
+        # Two limits, vector gain
         self.assertEqual(
             PositionBarrier(
                 "ee_link",

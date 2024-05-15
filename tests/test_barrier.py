@@ -20,6 +20,8 @@ class TestBarrier(unittest.TestCase):
     """Tests that should pass for all barriers."""
 
     def setUp(self):
+        """Set up test fixtures."""
+
         self.robot = load_robot_description(
             "upkie_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -62,8 +64,8 @@ class TestBarrier(unittest.TestCase):
             self.assertEqual(J.shape[0], barrier.dim)
             self.assertEqual(J.shape[1], self.robot.nv)
 
-    def test_barrier_without_save_radius(self):
-        """Barrier without"""
+    def test_barrier_without_penalty_weight(self):
+        """Test that objective is zero if no penalty weight is provided."""
         for barrier in [
             PositionBarrier("left_hip", p_min=np.zeros(3), p_max=np.zeros(3))
         ]:
@@ -71,8 +73,8 @@ class TestBarrier(unittest.TestCase):
             self.assertTrue(np.allclose(H, 0))
             self.assertTrue(np.allclose(c, 0))
 
-    def test_barrier_save_radius(self):
-        """"""
+    def test_barrier_penalty_weight(self):
+        """Test that objective is non-zeros, if penalty weight is provided."""
         for barrier in [
             PositionBarrier(
                 "left_hip", p_min=np.zeros(3), p_max=np.zeros(3), r=1.0
