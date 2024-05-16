@@ -23,7 +23,6 @@ https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f9
 | Barrier | Gain |
 |------|------|
 | End-effector | $10^{2}$ |
-| Configuration | $1$ |
 
 ## Go2 squat
 
@@ -42,26 +41,8 @@ https://github.com/domrachev03/pink/assets/26837717/701bdfbe-0dba-4f9d-80e2-c018
 | Barrier | Gain |
 |------|------|
 | End-effector | $10^{2}$ |
-| Configuration | $50$ |
 
 
-## Dual Arm Yumi
-
-A dual arm YuMi randomly swinging arms while avoiding self collisions:
-
-https://github.com/domrachev03/pink/assets/28687492/97397fa1-575d-4a1f-81e9-dad85a376cf6
-
-| Task | Cost |
-|------|------|
-| Left end-effector | (50,1) |
-| Right end-effector | (50,1) |
-| Posture | $10^{-3}$ |
-
-
-| Barrier | Gain |
-|------|------|
-| Spheres Collision  | 100 |
-| Configuration | $1$ |
 
 
 

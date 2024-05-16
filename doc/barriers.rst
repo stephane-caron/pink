@@ -14,15 +14,3 @@ Position Barrier
 
 .. automodule:: pink.barriers.position_barrier
     :members:
-
-Configuration Barrier
-=====================
-
-.. automodule:: pink.barriers.configuration_barrier
-    :members:
-
-Spherical Collision-Avoidance Barrier
-=====================================
-
-.. automodule:: pink.barriers.body_spherical_barrier
-    :members:
