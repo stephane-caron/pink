@@ -3,24 +3,17 @@
 All notable changes to this project will be documented in this file.
 
 ## [2.2.0] - 2024-05-11
+
+## Unreleased
 ### Added
 - Control Barrier Functions, namely:
   - Abstract Barrier ``Barrier``
-  - Frame Position Barrier ``PositionBarrier```
-  - Joint Configuration Barrier ``ConfigurationBarrier``
-  - Spherical Collision-Avoidance Barrier ``BodySphericalBarrier``
-- Examples for `UR5` and `yumi` manipulators, which illustrate barriers effect.
-
+  - Frame Position Barrier ``PositionBarrier``
+- Examples for `UR5` manipulator and `go2` quadruped robot, which illustrate barriers effect.
+  
 ### Changed
-- Configuration accepts list of Control Barrier Functions
-- Configuration could optionally disable Configuration Limits (for example to use ``ConfigurationBarrier``)
-- Visualization could optionally skip opening the simulation window (for example to open it in `.ipynb`)
-
-## Unreleased
-
-### Changed
-
 - CICD: Update ruff to 0.4.3
+- Configuration accepts list of Control Barrier Functions
 
 ### Fixed
 

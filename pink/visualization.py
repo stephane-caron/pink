@@ -9,9 +9,7 @@
 import pinocchio as pin
 
 
-def start_meshcat_visualizer(
-    robot: pin.RobotWrapper,
-) -> pin.visualize.MeshcatVisualizer:
+def start_meshcat_visualizer(robot: pin.RobotWrapper) -> pin.visualize.MeshcatVisualizer:
     """Open a MeshCat visualizer in a web browser.
 
     Args:
@@ -20,9 +18,7 @@ def start_meshcat_visualizer(
     Returns:
         MeshCat visualizer.
     """
-    viz = pin.visualize.MeshcatVisualizer(
-        robot.model, robot.collision_model, robot.visual_model
-    )
+    viz = pin.visualize.MeshcatVisualizer(robot.model, robot.collision_model, robot.visual_model)
     robot.setVisualizer(viz, init=False)
     viz.initViewer(open=True)
     viz.loadViewerModel()
