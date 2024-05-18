@@ -241,6 +241,7 @@ class Barrier(abc.ABC):
         return (
             f"Barrier("
             f"gain={self.gain}, "
-            f"safety_policy={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement}, "  # noqa: E501
-            f"r={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement_gain})"  # noqa: E501
+            f"safe_displacement={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement}, "  # noqa: E501
+            f"safe_displacement_gain={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement_gain})"  # noqa: E501
+            f"dim={self.dim})"
         )
