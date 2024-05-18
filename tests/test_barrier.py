@@ -96,5 +96,6 @@ class TestBarrier(unittest.TestCase):
             )
         ]:
             self.assertTrue("gain=" in repr(limit))
-            self.assertTrue("safety_policy=" in repr(limit))
-            self.assertTrue("r=" in repr(limit))
+            self.assertTrue("safe_displacement=" in repr(limit))
+            self.assertTrue("safe_displacement_gain" in repr(limit))
+            self.assertTrue("dim" in repr(limit))
