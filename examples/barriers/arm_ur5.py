@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
+# Copyright 2024 Stéphane Caron, Ivan Domrachev, Simeon Nedelchev
 
 """Universal Robots UR5 arm tracking a moving target."""
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
         gain=np.array([100.0]),
         r=1.0,
     )
-    barriers_list = [pos_barrier]
+    barriers = [pos_barrier]
 
     tasks = [end_effector_task, posture_task]
 
@@ -101,7 +101,7 @@ if __name__ == "__main__":
             tasks,
             dt,
             solver=solver,
-            barriers=barriers_list,
+            barriers=barriers,
         )
         configuration.integrate_inplace(velocity, dt)
 

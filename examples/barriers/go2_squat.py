@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
+# Copyright 2024 Stéphane Caron, Ivan Domrachev, Simeon Nedelchev
 
 """Go2 squat with z-axis barrier."""
 
@@ -11,7 +11,7 @@ import numpy as np
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 import pinocchio as pin
-from time import perf_counter
+
 import pink
 from pink import solve_ik
 from pink.barriers import PositionBarrier
@@ -29,17 +29,35 @@ except ModuleNotFoundError as exc:
 
 if __name__ == "__main__":
     robot = load_robot_description(
-        "go2_description", root_joint=pin.JointModelFreeFlyer())
+        "go2_description", root_joint=pin.JointModelFreeFlyer()
+    )
     viz = start_meshcat_visualizer(robot)
-    
-    q_ref = np.array([-0.,  0.,  0.3,  0.,  0., 0.0,  1.,
-                      0.0,  0.8, -1.57,
-                      0.0,  0.8, -1.57,
-                      0.0,  0.8, -1.57,
-                      0.0,  0.8, -1.57])
-    
-    configuration = pink.Configuration(
-        robot.model, robot.data, q_ref)
+
+    q_ref = np.array(
+        [
+            -0.0,
+            0.0,
+            0.3,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.8,
+            -1.57,
+            0.0,
+            0.8,
+            -1.57,
+            0.0,
+            0.8,
+            -1.57,
+            0.0,
+            0.8,
+            -1.57,
+        ]
+    )
+
+    configuration = pink.Configuration(robot.model, robot.data, q_ref)
 
     base_task = FrameTask(
         "base",
@@ -53,12 +71,12 @@ if __name__ == "__main__":
 
     pos_barrier = PositionBarrier(
         "base",
-        indices=[1,2],
+        indices=[1, 2],
         p_max=np.array([0, 0.35]),
         gain=np.array([100.0, 100.0]),
         r=1.0,
     )
-    barriers_list = [pos_barrier]
+    barriers = [pos_barrier]
 
     tasks = [base_task, posture_task]
 
@@ -72,7 +90,6 @@ if __name__ == "__main__":
 
     for task in tasks:
         task.set_target_from_configuration(configuration)
-
 
     viewer = viz.viewer
     opacity = 0.5  # Set the desired opacity level (0 transparent, 1 opaque)
@@ -93,20 +110,17 @@ if __name__ == "__main__":
     while True:
         # Update task targets
         end_effector_target = base_task.transform_target_to_world
-        phase = (t//period)%2
-        Ay = 0.1*(1-phase)
-        Az = 0.2*phase
-            
-        end_effector_target.translation[1] = 0. + Ay * np.sin(omega*t)
-        end_effector_target.translation[2] = 0.3 + Az * np.sin(omega*t)
-        
-        
+        phase = (t // period) % 2
+        Ay = 0.1 * (1 - phase)
+        Az = 0.2 * phase
+
+        end_effector_target.translation[1] = 0.0 + Ay * np.sin(omega * t)
+        end_effector_target.translation[2] = 0.3 + Az * np.sin(omega * t)
+
         # Update visualization frames
         viewer["base_target"].set_transform(end_effector_target.np)
         viewer["base"].set_transform(
-            configuration.get_transform_frame_to_world(
-                base_task.frame
-            ).np
+            configuration.get_transform_frame_to_world(base_task.frame).np
         )
 
         # Compute velocity and integrate it into next configuration
@@ -118,10 +132,9 @@ if __name__ == "__main__":
             tasks,
             dt,
             solver=solver,
-            barriers=barriers_list,
+            barriers=barriers,
         )
         configuration.integrate_inplace(velocity, dt)
-
 
         viz.display(configuration.q)
         rate.sleep()
