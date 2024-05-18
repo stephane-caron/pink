@@ -37,14 +37,16 @@ class Barrier(abc.ABC):
 
     Attributes:
         dim: Dimension of the barrier.
-        gain: barrier gain.
-        class_k_fn: Extended class K function.
+        gain: linear barrier gain.
+        gain_function: Extended class K function.
+            Defines stabilization term as nonlinear function of barrier.
+            Defaults to the (linear) identity function.
         safe_policy: Safe backup control policy.
         r: Weighting factor for the safe backup policy regularization term.
     """
 
     gain: np.ndarray
-    class_k_fns: Callable[[float], float]
+    gain_function: Callable[[float], float]
     safe_policy: np.ndarray
     r: float
 
@@ -52,7 +54,7 @@ class Barrier(abc.ABC):
         self,
         dim: int,
         gain: Union[float, np.ndarray] = 1.0,
-        class_k_fn: Optional[Callable[[float], float]] = None,
+        gain_function: Optional[Callable[[float], float]] = None,
         r: float = 3.0,
     ):
         """Initialize the barrier.
@@ -70,7 +72,9 @@ class Barrier(abc.ABC):
             gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
         )
 
-        self.class_k_fn = class_k_fn if class_k_fn is not None else lambda x: x
+        self.gain_function = (
+            gain_function if gain_function is not None else lambda x: x
+        )
         self.r = r
         self.safe_policy = np.zeros(self.dim)
 
@@ -200,7 +204,7 @@ class Barrier(abc.ABC):
         barrier_value = self.compute_barrier(configuration)
         h = np.array(
             [
-                self.gain[i] * self.class_k_fn(barrier_value[i])
+                self.gain[i] * self.gain_function(barrier_value[i])
                 for i in range(self.dim)
             ]
         )
