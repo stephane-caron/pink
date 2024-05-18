@@ -33,7 +33,7 @@ class Barrier(abc.ABC):
     where :math:`\frac{\partial h_j}{\partial q}`
     are the Jacobians of the constraint functions, :math:`\dot{q}`
     is the joint velocity vector, and :math:`\alpha_j` are extended
-    class K functions.
+    `class kappa <https://en.wikipedia.org/wiki/Class_kappa_function>`__ functions.
 
     Attributes:
         dim: Dimension of the barrier.
