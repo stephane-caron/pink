@@ -132,20 +132,23 @@ class PositionBarrier(Barrier):
             Jacobian matrix
             :math:`\frac{\partial h}{\partial q}(q)`.
         """
-        pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
+        pos_jacobian_in_frame = configuration.get_frame_jacobian(self.frame)[
+            :3
+        ]
         # Transform jacobian to world aligned frame
         rotation = configuration.get_transform_frame_to_world(
             self.frame
         ).rotation
-        pos_jac = rotation @ pos_jac
-
-        # Select only relevant indices
-        pos_jac = pos_jac[self.indices]
+        # Apply rotation to trasfrom from world aligned to local frame
+        # and select only relevant indices
+        pos_jacobian_in_world = (rotation @ pos_jacobian_in_frame)[
+            self.indices
+        ]
 
         jacobians = []
         if self.p_min is not None:
-            jacobians.append(pos_jac.copy())
+            jacobians.append(pos_jacobian_in_world.copy())
         if self.p_max is not None:
-            jacobians.append(-pos_jac.copy())
+            jacobians.append(-pos_jacobian_in_world.copy())
 
         return np.vstack(jacobians)
