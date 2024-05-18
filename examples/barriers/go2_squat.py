@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""GO2 squat with z-axis barrier."""
+"""Go2 squat with z-axis barrier."""
 
 import meshcat_shapes
 import numpy as np
