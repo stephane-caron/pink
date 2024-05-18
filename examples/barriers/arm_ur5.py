@@ -46,7 +46,7 @@ if __name__ == "__main__":
         p_min=np.array([-0.4]),
         p_max=np.array([0.6]),
         gain=np.array([100.0]),
-        r=1.0,
+        safe_displacement_gain=1.0,
     )
     barriers = [pos_barrier]
 

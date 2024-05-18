@@ -41,22 +41,23 @@ class PositionBarrier(Barrier):
         p_min: Optional[np.ndarray] = None,
         p_max: Optional[np.ndarray] = None,
         gain: Union[float, np.ndarray] = 1.0,
-        r: float = 0.0,
+        safe_displacement_gain: float = 0.0,
     ):
         """Initialize a position barrier.
 
         Args:
-            frame (str): name of the frame to monitor.
-            indices (Optional[List[int]], optional): indices with limits.
+            frame: name of the frame to monitor.
+            indices: indices with limits.
                 Indices from 0 to 2 stand for coordinates x to z respectively.
                 Defaults to all dimensions.
-            p_min (Optional[np.ndarray], optional): minimum position limit.
+            p_min: minimum position limit.
                 Defaults to None, meaning no minimum limit is applied.
-            p_max (Optional[np.ndarray], optional): maximum position limit.
+            p_max: maximum position limit.
                 Defaults to None, meaning no maximum limit is applied.
-            gain (Union[float, np.ndarray], optional): regularization gain.
+            gain: regularization gain.
                 Defaults to 1.0.
-            r (float, optional): penalty weighting parameter. Defaults to 0.0.
+            safe_displacement_gain: gain for the safe backup displacement
+                cost term. Defaults to 0.0.
 
         Raises:
             NoPositionLimitProvided: neither minimum nor maximum
@@ -84,7 +85,7 @@ class PositionBarrier(Barrier):
         super().__init__(
             dim,
             gain=gain,
-            r=r,
+            safe_displacement_gain=safe_displacement_gain,
         )
 
         self.indices = indices

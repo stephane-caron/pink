@@ -33,29 +33,38 @@ class Barrier(abc.ABC):
     where :math:`\frac{\partial h_j}{\partial q}`
     are the Jacobians of the constraint functions, :math:`\dot{q}`
     is the joint velocity vector, and :math:`\alpha_j` are extended
-    `class kappa <https://en.wikipedia.org/wiki/Class_kappa_function>`__ functions.
+    `class kappa <https://en.wikipedia.org/wiki/Class_kappa_function>`__
+    functions.
+
+    On top of that, following `this article <https://arxiv.org/pdf/2404.12329>`
+    barriers utilize safe displacement term is added to the cost of the
+    optimization problem:
+    .. math::
+        \frac{r}{2\|J_h\|^{2}}\|dq-dq_{\text{safe}}(q)\|^{2},
+    where :math:`J_h` is the Jacobian of the barrier function, dq is the
+    joint displacement vector, and :math:`dq_{\text{safe}}(q)` is the safe
+    displacement vector.
 
     Attributes:
         dim: Dimension of the barrier.
         gain: linear barrier gain.
-        gain_function: Extended class K function.
-            Defines stabilization term as nonlinear function of barrier.
-            Defaults to the (linear) identity function.
-        safe_policy: Safe backup control policy.
-        r: Weighting factor for the safe backup policy regularization term.
+        gain_function: function, that defines stabilization term as nonlinear
+            function of barrier. Defaults to the (linear) identity function.
+        safe_displacement: Safe backup displacement.
+        safe_displacement_gain: positive gain for safe backup displacement.
     """
 
     gain: np.ndarray
     gain_function: Callable[[float], float]
-    safe_policy: np.ndarray
-    r: float
+    safe_displacement: np.ndarray
+    safe_displacement_gain: float
 
     def __init__(
         self,
         dim: int,
         gain: Union[float, np.ndarray] = 1.0,
         gain_function: Optional[Callable[[float], float]] = None,
-        r: float = 3.0,
+        safe_displacement_gain: float = 0.0,
     ):
         """Initialize the barrier.
 
@@ -64,8 +73,8 @@ class Barrier(abc.ABC):
             gain: barrier gain. Defaults to 1.0.
             class_k_fn: Extended class K function.
                 Defaults to the identity function.
-            r: Weighting factor for the safe backup policy regularization term.
-                Defaults to 3.0.
+            safe_displacement_gain: gain for the safe backup displacement
+                cost term. Defaults to 3.0.
         """
         self.dim = dim
         self.gain = (
@@ -75,8 +84,8 @@ class Barrier(abc.ABC):
         self.gain_function = (
             gain_function if gain_function is not None else lambda x: x
         )
-        self.r = r
-        self.safe_policy = np.zeros(self.dim)
+        self.safe_displacement = np.zeros(self.dim)
+        self.safe_displacement_gain = safe_displacement_gain
 
     @abc.abstractmethod
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
@@ -112,13 +121,16 @@ class Barrier(abc.ABC):
             :math:`\frac{\partial h}{\partial q}(q)`.
         """
 
-    def compute_safe_policy(self, configuration: Configuration) -> np.ndarray:
-        r"""Compute the safe backup control policy.
+    def compute_safe_displacement(
+        self, configuration: Configuration
+    ) -> np.ndarray:
+        r"""Compute the safe backup displacement.
 
-        The safe backup control policy
-        :math:`\dot{q}_{safe}(q)` is a joint
-        velocity vector that can be used as a regularization term in the
-        optimization problem to ensure safety.
+        The safe backup control displacement :math:`dq_{safe}(q)`
+        is a joint displacement vector that can guarantee that system
+        would stay in safety set.
+
+        By default, it is set to zero, since it could not violate safety set.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -143,9 +155,11 @@ class Barrier(abc.ABC):
             \gamma(q)\left\| \dot{q}-
             \dot{q}_{safe}(q)\right\|^{2}
 
-        where :math:`\gamma(q)` is a configuration-dependent
-        weight and :math:`\dot{q}_{safe}(q)`
-        is the safe backup policy.
+        where :math:`\gamma(q)` is a configuration-dependent weight and
+        :math:`\dot{q}_{safe}(q)` is the safe backup policy.
+
+        Note that if safe_displacement_gain is set to zero, the regularization
+        term is not included.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -157,18 +171,25 @@ class Barrier(abc.ABC):
         """
         jac = self.compute_jacobian(configuration)
         H = np.zeros((configuration.model.nv, configuration.model.nv))
-        # c = 1e-3 * np.linalg.norm(jac, axis=0) / dt
         c = np.zeros(configuration.model.nv)
 
-        if self.r > 1e-6:
-            self.safe_policy = self.compute_safe_policy(configuration)
+        if self.safe_displacement_gain > 1e-6:
+            self.safe_displacement = self.compute_safe_displacement(
+                configuration
+            )
+            jac_squared_norm = np.linalg.norm(jac) ** 2
 
             H += (
-                self.r
-                / (np.linalg.norm(jac) ** 2)
+                self.safe_displacement_gain
+                / jac_squared_norm
                 * np.eye(configuration.model.nv)
             )
-            c += -2 * self.r / (np.linalg.norm(jac) ** 2) * self.safe_policy
+            c += (
+                -2
+                * self.safe_displacement_gain
+                / jac_squared_norm
+                * self.safe_displacement
+            )
 
         return (H, c)
 
@@ -220,6 +241,6 @@ class Barrier(abc.ABC):
         return (
             f"Barrier("
             f"gain={self.gain}, "
-            f"safety_policy={'no' if np.allclose(self.r, 0) else self.safe_policy}, "  # noqa: E501
-            f"r={'no' if np.allclose(self.r, 0) else self.r})"
+            f"safety_policy={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement}, "  # noqa: E501
+            f"r={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement_gain})"  # noqa: E501
         )

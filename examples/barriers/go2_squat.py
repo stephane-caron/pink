@@ -74,7 +74,7 @@ if __name__ == "__main__":
         indices=[1, 2],
         p_max=np.array([0, 0.35]),
         gain=np.array([100.0, 100.0]),
-        r=1.0,
+        safe_displacement_gain=1.0,
     )
     barriers = [pos_barrier]
 

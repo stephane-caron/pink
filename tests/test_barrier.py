@@ -77,17 +77,24 @@ class TestBarrier(unittest.TestCase):
         """Test that objective is non-zeros, if penalty weight is provided."""
         for barrier in [
             PositionBarrier(
-                "left_hip", p_min=np.zeros(3), p_max=np.zeros(3), r=1.0
+                "left_hip",
+                p_min=np.zeros(3),
+                p_max=np.zeros(3),
+                safe_displacement_gain=1.0,
             )
         ]:
             H, c = barrier.compute_qp_objective(self.conf)
             self.assertFalse(np.allclose(H, 0))
-            if np.any(barrier.compute_safe_policy(self.conf) != 0):
+            if np.any(barrier.compute_safe_displacement(self.conf) != 0):
                 self.assertFalse(np.allclose(c, 0))
 
     def test_task_repr(self):
         """Test task string representation."""
-        for limit in [PositionBarrier("universe", r=0.0, p_min=np.zeros(3))]:
+        for limit in [
+            PositionBarrier(
+                "universe", safe_displacement_gain=0.0, p_min=np.zeros(3)
+            )
+        ]:
             self.assertTrue("gain=" in repr(limit))
             self.assertTrue("safety_policy=" in repr(limit))
             self.assertTrue("r=" in repr(limit))
