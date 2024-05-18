@@ -93,7 +93,7 @@ class Barrier(abc.ABC):
 
         Returns:
             Value of the barrier function :math:`h(q)`.
-        """  # noqa: E501
+        """
 
     @abc.abstractmethod
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
@@ -110,7 +110,7 @@ class Barrier(abc.ABC):
         Returns:
             Jacobian matrix
             :math:`\frac{\partial h}{\partial q}(q)`.
-        """  # noqa: E501
+        """
 
     def compute_safe_policy(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the safe backup control policy.

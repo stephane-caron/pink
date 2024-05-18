@@ -130,7 +130,7 @@ class PositionBarrier(Barrier):
         Returns:
             Jacobian matrix
             :math:`\frac{\partial h}{\partial q}(q)`.
-        """  # noqa: E501
+        """
         pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
         # Transform jacobian to world aligned frame
         rotation = configuration.get_transform_frame_to_world(
