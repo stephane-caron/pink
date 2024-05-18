@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
+# Copyright 2022 Stéphane Caron, Ivan Domrachev, Simeon Nedelchev
 
 """Frame position barrier."""
 
@@ -100,11 +100,11 @@ class PositionBarrier(Barrier):
         maximum position bounds along the selected axes.
 
         Args:
-            configuration: Robot configuration :math:`\boldsymbol{q}`.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
             Value of the barrier function
-            :math:`\boldsymbol{h}(\boldsymbol{q})`.
+            :math:`h(q)`.
         """
         pos_world = configuration.get_transform_frame_to_world(
             self.frame
@@ -125,11 +125,11 @@ class PositionBarrier(Barrier):
         coordinate system and only the selected indices are considered.
 
         Args:
-            configuration: Robot configuration :math:`\boldsymbol{q}`.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
             Jacobian matrix
-            :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+            :math:`\frac{\partial h}{\partial q}(q)`.
         """  # noqa: E501
         pos_jac = configuration.get_frame_jacobian(self.frame)[:3]
         # Transform jacobian to world aligned frame

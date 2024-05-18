@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
+# Copyright 2022 Stéphane Caron, Ivan Domrachev, Simeon Nedelchev
 
 """All barriers derive from the :class:`Barrier` base class.
 
@@ -21,17 +21,17 @@ from ..configuration import Configuration
 class Barrier(abc.ABC):
     r"""Abstract base class for barrier.
 
-    A barrier is a function :math:`\boldsymbol{h}(\boldsymbol{q})` that
+    A barrier is a function :math:`h(q)` that
     satisfies the following condition:
 
     .. math::
 
-        \frac{\partial \boldsymbol{h}_j}{\partial \boldsymbol{q}}
-        \dot{\boldsymbol{q}} +\alpha_j(\boldsymbol{h}_j(\boldsymbol{q}))
+        \frac{\partial h_j}{\partial q}
+        \dot{q} +\alpha_j(h_j(q))
         \geq 0, \quad \forall j
 
-    where :math:`\frac{\partial \boldsymbol{h}_j}{\partial \boldsymbol{q}}`
-    are the Jacobians of the constraint functions, :math:`\dot{\boldsymbol{q}}`
+    where :math:`\frac{\partial h_j}{\partial q}`
+    are the Jacobians of the constraint functions, :math:`\dot{q}`
     is the joint velocity vector, and :math:`\alpha_j` are extended
     class K functions.
 
@@ -78,17 +78,17 @@ class Barrier(abc.ABC):
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
 
-        The barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`
+        The barrier function :math:`h(q)`
         is a vector-valued function that represents the safety constraints.
         It should be designed such that the set
-        :math:`\{\boldsymbol{q} : \boldsymbol{h}(\boldsymbol{q}) \geq \boldsymbol{0}\}`
+        :math:`\{q : h(q) \geq 0\}`
         represents the safe region of the configuration space.
 
         Args:
-            configuration: Robot configuration :math:`\boldsymbol{q}`.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
-            Value of the barrier function :math:`\boldsymbol{h}(\boldsymbol{q})`.
+            Value of the barrier function :math:`h(q)`.
         """  # noqa: E501
 
     @abc.abstractmethod
@@ -96,32 +96,32 @@ class Barrier(abc.ABC):
         r"""Compute the Jacobian matrix of the barrier function.
 
         The Jacobian matrix
-        :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`
+        :math:`\frac{\partial h}{\partial q}(q)`
         of the barrier function with respect to the configuration variables is
         required for the computation of the barrier condition.
 
         Args:
-            configuration: Robot configuration :math:`\boldsymbol{q}`.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
             Jacobian matrix
-            :math:`\frac{\partial \boldsymbol{h}}{\partial \boldsymbol{q}}(\boldsymbol{q})`.
+            :math:`\frac{\partial h}{\partial q}(q)`.
         """  # noqa: E501
 
     def compute_safe_policy(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the safe backup control policy.
 
         The safe backup control policy
-        :math:`\dot{\boldsymbol{q}}_{safe}(\boldsymbol{q})` is a joint
+        :math:`\dot{q}_{safe}(q)` is a joint
         velocity vector that can be used as a regularization term in the
         optimization problem to ensure safety.
 
         Args:
-            configuration: Robot configuration :math:`\boldsymbol{q}`.
+            configuration: Robot configuration :math:`q`.
 
         Returns:
             Safe backup joint velocities
-                :math:`\dot{\boldsymbol{q}}_{safe}(\boldsymbol{q})`.
+                :math:`\dot{q}_{safe}(q)`.
         """
         return np.zeros(configuration.model.nv)
 
@@ -136,15 +136,15 @@ class Barrier(abc.ABC):
 
         .. math::
 
-            \gamma(\boldsymbol{q})\left\| \dot{\boldsymbol{q}}-
-            \dot{\boldsymbol{q}}_{safe}(\boldsymbol{q})\right\|^{2}
+            \gamma(q)\left\| \dot{q}-
+            \dot{q}_{safe}(q)\right\|^{2}
 
-        where :math:`\gamma(\boldsymbol{q})` is a configuration-dependent
-        weight and :math:`\dot{\boldsymbol{q}}_{safe}(\boldsymbol{q})`
+        where :math:`\gamma(q)` is a configuration-dependent
+        weight and :math:`\dot{q}_{safe}(q)`
         is the safe backup policy.
 
         Args:
-            configuration: Robot configuration :math:`\boldsymbol{q}`.
+            configuration: Robot configuration :math:`q`.
             dt: Time step for discrete-time implementation. Defaults to 1e-3.
 
         Returns:
@@ -179,17 +179,17 @@ class Barrier(abc.ABC):
 
         .. math::
 
-            \frac{\partial \boldsymbol{h}_j}
-            {\partial \boldsymbol{q}} \dot{\boldsymbol{q}} +
-            \alpha_j(\boldsymbol{h}_j(\boldsymbol{q})) \geq 0, \quad \forall j
+            \frac{\partial h_j}
+            {\partial q} \dot{q} +
+            \alpha_j(h_j(q)) \geq 0, \quad \forall j
 
-        where :math:`\frac{\partial \boldsymbol{h}_j}{\partial \boldsymbol{q}}`
+        where :math:`\frac{\partial h_j}{\partial q}`
         are the Jacobians of the constraint functions,
-        :math:`\dot{\boldsymbol{q}}` is the joint velocity vector,
+        :math:`\dot{q}` is the joint velocity vector,
         and :math:`\alpha_j` are extended class K functions.
 
         Args:
-            configuration: Robot configuration :math:`\boldsymbol{q}`.
+            configuration: Robot configuration :math:`q`.
             dt: Time step for discrete-time implementation. Defaults to 1e-3.
 
         Returns:
