@@ -93,9 +93,6 @@ if __name__ == "__main__":
             ).np
         )
 
-        # Compute velocity and integrate it into next configuration
-        # Note that default position limit handle given trajectory
-        # much worse than CBF. Hence, we disable it here.
         velocity = solve_ik(
             configuration,
             tasks,
@@ -111,7 +108,7 @@ if __name__ == "__main__":
             f"Position CBF value: {pos_barrier.compute_barrier(configuration)[0]:0.3f} >= 0"
         )
         print(
-            f"Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]} <= 0.6"
+            f"""Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]} <= 0.6"""
         )
         print("-" * 60)
         # Visualize result at fixed FPS

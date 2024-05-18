@@ -123,10 +123,6 @@ if __name__ == "__main__":
             configuration.get_transform_frame_to_world(base_task.frame).np
         )
 
-        # Compute velocity and integrate it into next configuration
-        # Note that default position limit handle given trajectory
-        # much worse than CBF. Hence, we disable it here.
-
         velocity = solve_ik(
             configuration,
             tasks,
