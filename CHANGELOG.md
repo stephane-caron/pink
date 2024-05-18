@@ -2,8 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.2.0] - 2024-05-11
-
 ## Unreleased
 ### Added
 - Control Barrier Functions, namely:
