@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     end_effector_task = FrameTask(
         "ee_link",
-        position_cost=50.0,  # [cost] / [m]
+        position_cost=10.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
     )
 
