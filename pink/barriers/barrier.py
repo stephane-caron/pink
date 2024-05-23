@@ -178,18 +178,10 @@ class Barrier(abc.ABC):
                 configuration
             )
             jac_squared_norm = np.linalg.norm(jac) ** 2
+            gain_over_jacobian = self.safe_displacement_gain / jac_squared_norm
 
-            H += (
-                self.safe_displacement_gain
-                / jac_squared_norm
-                * np.eye(configuration.model.nv)
-            )
-            c += (
-                -2
-                * self.safe_displacement_gain
-                / jac_squared_norm
-                * self.safe_displacement
-            )
+            H += gain_over_jacobian * np.eye(configuration.model.nv)
+            c += gain_over_jacobian * self.safe_displacement
 
         return (H, c)
 
