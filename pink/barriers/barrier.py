@@ -19,7 +19,7 @@ from ..configuration import Configuration
 
 
 class Barrier(abc.ABC):
-    r"""Abstract base class for barrier.
+    """Abstract base class for barrier.
 
     A barrier is a function :math:`h(q)` that
     satisfies the following condition:
