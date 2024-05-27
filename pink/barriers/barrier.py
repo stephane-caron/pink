@@ -26,9 +26,9 @@ class Barrier(abc.ABC):
 
     .. math::
 
-        \frac{\partial h_j}{\partial q}
-        \dot{q} +\alpha_j(h_j(q))
-        \geq 0, \quad \forall j
+        \\frac{\\partial h_j}{\\partial q}
+        \\dot{q} +\\alpha_j(h_j(q))
+        \\geq 0, \\quad \\forall j
 
     where :math:`\frac{\partial h_j}{\partial q}`
     are the Jacobians of the constraint functions, :math:`\dot{q}`
@@ -40,9 +40,11 @@ class Barrier(abc.ABC):
     barriers utilize safe displacement term is added to the cost of the
     optimization problem:
     .. math::
-        \frac{r}{2\|J_h\|^{2}}\|dq-dq_{\text{safe}}(q)\|^{2},
+
+        \\frac{r}{2\\|J_h\\|^{2}}\\|dq-dq_{\\text{safe}}(q)\\|^{2},
+
     where :math:`J_h` is the Jacobian of the barrier function, dq is the
-    joint displacement vector, and :math:`dq_{\text{safe}}(q)` is the safe
+    joint displacement vector, and :math:`dq_{\\text{safe}}(q)` is the safe
     displacement vector.
 
     Attributes:
