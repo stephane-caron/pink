@@ -79,9 +79,13 @@ class Barrier(abc.ABC):
                 cost term. Defaults to 3.0.
         """
         self.dim = dim
-        self.gain = gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        self.gain = (
+            gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        )
 
-        self.gain_function = gain_function if gain_function is not None else lambda x: x
+        self.gain_function = (
+            gain_function if gain_function is not None else lambda x: x
+        )
         self.safe_displacement = np.zeros(self.dim)
         self.safe_displacement_gain = safe_displacement_gain
 
@@ -119,7 +123,9 @@ class Barrier(abc.ABC):
             :math:`\frac{\partial h}{\partial q}(q)`.
         """
 
-    def compute_safe_displacement(self, configuration: Configuration) -> np.ndarray:
+    def compute_safe_displacement(
+        self, configuration: Configuration
+    ) -> np.ndarray:
         r"""Compute the safe backup displacement.
 
         The safe backup control displacement :math:`dq_{safe}(q)`
@@ -170,7 +176,9 @@ class Barrier(abc.ABC):
         c = np.zeros(configuration.model.nv)
 
         if self.safe_displacement_gain > 1e-6:
-            self.safe_displacement = self.compute_safe_displacement(configuration)
+            self.safe_displacement = self.compute_safe_displacement(
+                configuration
+            )
             jac_squared_norm = np.linalg.norm(jac) ** 2
             gain_over_jacobian = self.safe_displacement_gain / jac_squared_norm
 
@@ -209,7 +217,12 @@ class Barrier(abc.ABC):
         """
         G = -self.compute_jacobian(configuration) / dt
         barrier_value = self.compute_barrier(configuration)
-        h = np.array([self.gain[i] * self.gain_function(barrier_value[i]) for i in range(self.dim)])
+        h = np.array(
+            [
+                self.gain[i] * self.gain_function(barrier_value[i])
+                for i in range(self.dim)
+            ]
+        )
 
         return (G, h)
 
