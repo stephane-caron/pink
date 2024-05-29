@@ -12,6 +12,7 @@ import numpy as np
 
 from ..configuration import Configuration
 from .barrier import Barrier
+from .exceptions import NegativeMinimumDistance
 
 
 class BodySphericalBarrier(Barrier):
@@ -44,7 +45,7 @@ class BodySphericalBarrier(Barrier):
     def __init__(
         self,
         frames: Tuple[str, str],
-        d_min: float = -1,
+        d_min: float,
         gain: Union[float, np.ndarray] = 1.0,
         safe_displacement_gain: float = 3.0,
     ):
@@ -57,6 +58,10 @@ class BodySphericalBarrier(Barrier):
             safe_displacement_gain: gain for the safe backup displacement
                 cost term. Defaults to 3.0.
         """
+        if d_min < 0.0:
+            raise NegativeMinimumDistance(
+                "The minimum distance threshold must be non-negative."
+            )
         super().__init__(
             dim=1,
             gain=gain,
@@ -64,7 +69,7 @@ class BodySphericalBarrier(Barrier):
             safe_displacement_gain=safe_displacement_gain,
         )
         self.frames = frames
-        self.d_min = d_min if d_min > 0 else 0.0
+        self.d_min = d_min
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
@@ -127,7 +132,7 @@ class BodySphericalBarrier(Barrier):
         Returns:
             Jacobian matrix
                 :math:`\frac{\partial h}{\partial q}(q)`.
-        """  # noqa: E501
+        """
         pos1_world, pos2_world = self._get_frame_positions(configuration)
         pos1_jac, pos2_jac = self._get_frame_jacobians(configuration)
 
