@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2024 Stéphane Caron, Ivan Domrachev, Simeon Nedelchev
+# Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
 """Universal Robots UR5 arm tracking a moving target."""
 
@@ -105,10 +105,12 @@ if __name__ == "__main__":
         G, h = pos_barrier.compute_qp_inequality(configuration, dt=dt)
         print(f"Task error: {end_effector_task.compute_error(configuration)}")
         print(
-            f"Position CBF value: {pos_barrier.compute_barrier(configuration)[0]:0.3f} >= 0"
+            "Position CBF value: "
+            f"{pos_barrier.compute_barrier(configuration)[0]:0.3f} >= 0"
         )
+        distance_to_manipulator = configuration.get_transform_frame_to_world('ee_link').translation[1]
         print(
-            f"""Distance to manipulator: {configuration.get_transform_frame_to_world('ee_link').translation[1]} <= 0.6"""
+            f"Distance to manipulator: {distance_to_manipulator} <= 0.6"
         )
         print("-" * 60)
         # Visualize result at fixed FPS

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2024 Stéphane Caron, Ivan Domrachev, Simeon Nedelchev
+# Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
 """Go2 squat with z-axis barrier."""
 
