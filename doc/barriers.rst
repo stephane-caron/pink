@@ -6,7 +6,7 @@
 Barriers
 ********
 
-.. automodule:: pink.barriers
+.. automodule:: pink.barriers.barrier
     :members:
 
 Position Barrier
