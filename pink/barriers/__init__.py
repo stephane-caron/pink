@@ -9,9 +9,11 @@
 from .barrier import Barrier
 from .exceptions import NoPositionLimitProvided
 from .position_barrier import PositionBarrier
+from .body_spherical_barrier import BodySphericalBarrier
 
 __all__ = [
     "Barrier",
     "PositionBarrier",
     "NoPositionLimitProvided",
+    "BodySphericalBarrier",
 ]
