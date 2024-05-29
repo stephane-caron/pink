@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron, Ivan Domrachev, Simeon Nedelchev
+# Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
 from ..exceptions import PinkError
 

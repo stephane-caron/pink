@@ -3,13 +3,16 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
 ### Added
-- Control Barrier Functions, namely:
+
+- Control Barrier Functions, namely: (thanks to @domrachev03 and @simeon-ned)
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
 - Examples for `UR5` manipulator and `go2` quadruped robot, which illustrate barriers effect.
-  
+
 ### Changed
+
 - CICD: Update ruff to 0.4.3
 - Configuration accepts list of Control Barrier Functions
 
