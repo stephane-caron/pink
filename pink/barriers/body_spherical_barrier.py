@@ -65,7 +65,7 @@ class BodySphericalBarrier(Barrier):
         super().__init__(
             dim=1,
             gain=gain,
-            gain_function=lambda h: h / (1 + np.linalg.norm(h)),
+            gain_function=lambda h: h / (1 + np.abs(h)),
             safe_displacement_gain=safe_displacement_gain,
         )
         self.frames = frames
