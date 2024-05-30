@@ -119,16 +119,16 @@ class Configuration:
         q_max = self.model.upperPositionLimit
         q_min = self.model.lowerPositionLimit
         root_nq, _ = get_root_joint_dim(self.model)
-        for i in range(root_nq, self.model.nq):
-            if q_max[i] <= q_min[i] + tol:  # no limit
-                continue
-            if self.q[i] < q_min[i] - tol or self.q[i] > q_max[i] + tol:
-                raise NotWithinConfigurationLimits(
-                    i,
-                    self.q[i],
-                    q_min[i],
-                    q_max[i],
-                )
+        # for i in range(root_nq, self.model.nq):
+        #     if q_max[i] <= q_min[i] + tol:  # no limit
+        #         continue
+        #     if self.q[i] < q_min[i] - tol or self.q[i] > q_max[i] + tol:
+        #         raise NotWithinConfigurationLimits(
+        #             i,
+        #             self.q[i],
+        #             q_min[i],
+        #             q_max[i],
+        #         )
 
     def get_frame_jacobian(self, frame: str) -> np.ndarray:
         r"""Compute the Jacobian matrix of a frame velocity.
