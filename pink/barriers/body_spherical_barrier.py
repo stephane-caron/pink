@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
+# Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
 """Barrier based on the distance between two frames."""
 
