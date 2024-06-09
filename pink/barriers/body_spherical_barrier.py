@@ -99,7 +99,10 @@ class BodySphericalBarrier(Barrier):
         """
         pos1_world, pos2_world = self._get_frame_positions(configuration)
         return np.array(
-            [np.linalg.norm(pos1_world - pos2_world) ** 2 - self.d_min**2]
+            [
+                (pos1_world - pos2_world).dot(pos1_world - pos2_world)
+                - self.d_min**2
+            ]
         )
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
@@ -136,10 +139,8 @@ class BodySphericalBarrier(Barrier):
         pos1_world, pos2_world = self._get_frame_positions(configuration)
         pos1_jac, pos2_jac = self._get_frame_jacobians(configuration)
 
-        dh_dx = 2 * np.concatenate(
-            [pos1_world - pos2_world, pos2_world - pos1_world]
-        )
-        dx_dq = np.vstack([pos1_jac, pos2_jac])
+        dh_dx = 2 * (pos1_world - pos2_world)
+        dx_dq = pos1_jac - pos2_jac
         return dh_dx.T @ dx_dq
 
     def _get_frame_positions(
