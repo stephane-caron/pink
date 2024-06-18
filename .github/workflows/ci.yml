@@ -63,12 +63,14 @@ jobs:
                   tox -e lint
 
     test:
-        name: "Test ${{ matrix.os }} with python-${{ matrix.python-version }}"
+        name: "Test ${{ matrix.os }} with Python ${{ matrix.python-version }}"
         runs-on: ${{ matrix.os }}
 
         strategy:
             matrix:
-                os: [ubuntu-latest, macos-latest]
+                os: [ubuntu-latest]
+                # Blocker: https://github.com/stack-of-tasks/pinocchio/issues/2231
+                # os: [ubuntu-latest, macos-latest]
                 python-version: ["3.8", "3.9", "3.10"]
 
         steps:
