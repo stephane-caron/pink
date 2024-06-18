@@ -28,8 +28,8 @@ https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f9
 
 Go2 quadruped squating with base position is constrained by z and y coordinates:
 
-https://github.com/domrachev03/pink/assets/26837717/701bdfbe-0dba-4f9d-80e2-c018475f38d6
 
+https://github.com/domrachev03/pink/assets/28687492/78281f44-3676-4d4d-9619-768b951a15a2
 
 
 | Task | Cost |
@@ -43,6 +43,20 @@ https://github.com/domrachev03/pink/assets/26837717/701bdfbe-0dba-4f9d-80e2-c018
 | End-effector | $10^{2}$ |
 
 
+## Yumi self-collision avoidance
+Yumi two-armed manimpulator with constraint on minimal distance between frames, defined by end-effectors
 
 
 
+https://github.com/domrachev03/pink/assets/28687492/f8c4bc8d-63e3-4bf7-a34f-e7ede43c0438
+
+
+
+| Task | Cost |
+|------|------|
+| End-effector | (50,10) |
+| Posture | $10^{-3}$ |
+
+| Barrier | Gain |
+|------|------|
+| Body Spherical | $10^{2}$ |

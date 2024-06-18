@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 - Control Barrier Functions, namely: (thanks to @domrachev03 and @simeon-ned)
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
-- Examples for `UR5` manipulator and `go2` quadruped robot, which illustrate barriers effect.
+  - Body Spherical Barrier ``BodySphericalBarrier``
+- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect.
 
 ### Changed
 
