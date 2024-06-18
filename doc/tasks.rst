@@ -6,6 +6,9 @@
 Tasks
 *****
 
+Definition
+==========
+
 .. automodule:: pink.tasks.task
     :members:
 
