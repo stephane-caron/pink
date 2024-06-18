@@ -21,6 +21,10 @@ All notable changes to this project will be documented in this file.
 
 - Fix broken documentation links
 
+### Removed
+
+- CICD: Disable macOS checks until upstream PyPI package is fixed
+
 ## [2.1.0] - 2024-04-02
 
 ### Added
