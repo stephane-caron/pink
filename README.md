@@ -175,3 +175,4 @@ Technical notes:
 
 - [Inverse kinematics](https://scaron.info/robotics/inverse-kinematics.html): a general introduction to differential inverse kinematics.
 - [Jacobian of a kinematic task and derivatives on manifolds](https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html).
+- [Control Barrier Functions](https://simeon-ned.com/blog/2024/cbf/).
