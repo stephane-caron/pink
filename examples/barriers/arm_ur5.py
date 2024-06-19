@@ -6,11 +6,13 @@
 
 """Universal Robots UR5 arm tracking a moving target."""
 
-import meshcat_shapes
+import argparse
+
 import numpy as np
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.barriers import PositionBarrier
@@ -27,6 +29,15 @@ except ModuleNotFoundError as exc:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        help="print out task errors and CBF values during execution",
+        default=False,
+        action="store_true",
+    )
+    args = parser.parse_args()
     robot = load_robot_description("ur5_description", root_joint=None)
     viz = start_meshcat_visualizer(robot)
 
@@ -103,16 +114,20 @@ if __name__ == "__main__":
         configuration.integrate_inplace(velocity, dt)
 
         G, h = pos_barrier.compute_qp_inequality(configuration, dt=dt)
-        print(f"Task error: {end_effector_task.compute_error(configuration)}")
-        print(
-            "Position CBF value: "
-            f"{pos_barrier.compute_barrier(configuration)[0]:0.3f} >= 0"
-        )
-        distance_to_manipulator = configuration.get_transform_frame_to_world('ee_link').translation[1]
-        print(
-            f"Distance to manipulator: {distance_to_manipulator} <= 0.6"
-        )
-        print("-" * 60)
+        distance_to_manipulator = configuration.get_transform_frame_to_world(
+            "ee_link"
+        ).translation[1]
+        if args.verbose:
+            print(
+                f"Task error: {end_effector_task.compute_error(configuration)}"
+            )
+            print(
+                "Position CBF value: "
+                f"{pos_barrier.compute_barrier(configuration)[0]:0.3f} >= 0"
+            )
+            print(f"Distance to manipulator: {distance_to_manipulator} <= 0.6")
+            print("-" * 60)
+
         # Visualize result at fixed FPS
         viz.display(configuration.q)
         rate.sleep()
