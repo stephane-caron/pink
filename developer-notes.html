@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon-180x180.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer notes &mdash; pink 2.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=05680a5a" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=20623aea"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="Inverse kinematics" href="inverse-kinematics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pink
+          </a>
+              <div class="version">
+                2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limits.html">Limits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barriers.html">Barriers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-kinematics.html">Inverse kinematics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#design-guidelines">Design guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pink.exceptions">Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.exceptions.ConfigurationError"><code class="docutils literal notranslate"><span class="pre">ConfigurationError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.exceptions.FrameNotFound"><code class="docutils literal notranslate"><span class="pre">FrameNotFound</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.exceptions.NotWithinConfigurationLimits"><code class="docutils literal notranslate"><span class="pre">NotWithinConfigurationLimits</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pink.exceptions.NotWithinConfigurationLimits.joint"><code class="docutils literal notranslate"><span class="pre">NotWithinConfigurationLimits.joint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.exceptions.NotWithinConfigurationLimits.value"><code class="docutils literal notranslate"><span class="pre">NotWithinConfigurationLimits.value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.exceptions.NotWithinConfigurationLimits.lower"><code class="docutils literal notranslate"><span class="pre">NotWithinConfigurationLimits.lower</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.exceptions.NotWithinConfigurationLimits.upper"><code class="docutils literal notranslate"><span class="pre">NotWithinConfigurationLimits.upper</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.exceptions.PinkError"><code class="docutils literal notranslate"><span class="pre">PinkError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pink</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Developer notes</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/stephane-caron/pink/tree/main/doc/developer-notes.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-notes">
+<h1>Developer notes<a class="headerlink" href="#developer-notes" title="Link to this heading"></a></h1>
+<p>This section documents internal functions and other notes shared between contributors to this project.</p>
+<section id="design-guidelines">
+<h2>Design guidelines<a class="headerlink" href="#design-guidelines" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Pink is designed for clarity before performance</p></li>
+<li><p>Leaky abstractions are our enemy</p></li>
+<li><p>WIP</p></li>
+</ul>
+</section>
+<section id="module-pink.exceptions">
+<span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#module-pink.exceptions" title="Link to this heading"></a></h2>
+<p>Exceptions specific to Pink.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="pink.exceptions.ConfigurationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.exceptions.</span></span><span class="sig-name descname"><span class="pre">ConfigurationError</span></span><a class="headerlink" href="#pink.exceptions.ConfigurationError" title="Link to this definition"></a></dt>
+<dd><p>Exception raised when encountering an invalid configuration vector.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pink.exceptions.FrameNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.exceptions.</span></span><span class="sig-name descname"><span class="pre">FrameNotFound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.exceptions.FrameNotFound" title="Link to this definition"></a></dt>
+<dd><p>Exception raised when a frame is not found in the robot model.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pink.exceptions.NotWithinConfigurationLimits">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotWithinConfigurationLimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.exceptions.NotWithinConfigurationLimits" title="Link to this definition"></a></dt>
+<dd><p>Exception thrown when a robot configuration violates its limits.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.exceptions.NotWithinConfigurationLimits.joint">
+<span class="sig-name descname"><span class="pre">joint</span></span><a class="headerlink" href="#pink.exceptions.NotWithinConfigurationLimits.joint" title="Link to this definition"></a></dt>
+<dd><p>Index of the joint in the configuration vector.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.exceptions.NotWithinConfigurationLimits.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#pink.exceptions.NotWithinConfigurationLimits.value" title="Link to this definition"></a></dt>
+<dd><p>Invalid value of the joint.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.exceptions.NotWithinConfigurationLimits.lower">
+<span class="sig-name descname"><span class="pre">lower</span></span><a class="headerlink" href="#pink.exceptions.NotWithinConfigurationLimits.lower" title="Link to this definition"></a></dt>
+<dd><p>Minimum allowed value for this joint.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.exceptions.NotWithinConfigurationLimits.upper">
+<span class="sig-name descname"><span class="pre">upper</span></span><a class="headerlink" href="#pink.exceptions.NotWithinConfigurationLimits.upper" title="Link to this definition"></a></dt>
+<dd><p>Maximum allowed value for this joint.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="pink.exceptions.PinkError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.exceptions.</span></span><span class="sig-name descname"><span class="pre">PinkError</span></span><a class="headerlink" href="#pink.exceptions.PinkError" title="Link to this definition"></a></dt>
+<dd><p>Base class for Pink exceptions.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="inverse-kinematics.html" class="btn btn-neutral float-left" title="Inverse kinematics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Stéphane Caron..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
