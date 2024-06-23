@@ -55,7 +55,7 @@ if __name__ == "__main__":
     # Pink barriers
     collision_barrier = SelfCollisionBarrier(
         len(configuration.collision_model.collisionPairs),
-        gain=100.0,
+        gain=10.0,
         safe_displacement_gain=1.0,
     )
 

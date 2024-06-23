@@ -14,7 +14,7 @@
     <disable_collisions link1="first_iiwa_link_5" link2="first_iiwa_link_7" reason="Adjacent"/>
     <disable_collisions link1="first_iiwa_link_6" link2="first_iiwa_link_7" reason="Adjacent"/>
 
-    <!-- <disable_collisions link1="first_iiwa_link_1" link2="first_iiwa_link_3" reason="Never"/>
+    <disable_collisions link1="first_iiwa_link_1" link2="first_iiwa_link_3" reason="Never"/>
     <disable_collisions link1="first_iiwa_link_1" link2="first_iiwa_link_4" reason="Never"/>
     <disable_collisions link1="first_iiwa_link_1" link2="first_iiwa_link_5" reason="Never"/>
     <disable_collisions link1="first_iiwa_link_1" link2="first_iiwa_link_6" reason="Never"/>
@@ -30,7 +30,7 @@
     <disable_collisions link1="first_iiwa_link_3" link2="first_iiwa_link_7" reason="Never"/>
     
     <disable_collisions link1="first_iiwa_link_4" link2="first_iiwa_link_6" reason="Never"/>
-    <disable_collisions link1="first_iiwa_link_4" link2="first_iiwa_link_7" reason="Never"/> -->
+    <disable_collisions link1="first_iiwa_link_4" link2="first_iiwa_link_7" reason="Never"/>
 
     <disable_collisions link1="second_iiwa_link_0" link2="second_iiwa_link_1" reason="Adjacent"/>
     <disable_collisions link1="second_iiwa_link_1" link2="second_iiwa_link_2" reason="Adjacent"/>
@@ -41,7 +41,7 @@
     <disable_collisions link1="second_iiwa_link_5" link2="second_iiwa_link_7" reason="Adjacent"/>
     <disable_collisions link1="second_iiwa_link_6" link2="second_iiwa_link_7" reason="Adjacent"/>
 
-    <!-- <disable_collisions link1="second_iiwa_link_0" link2="second_iiwa_link_3" reason="Never"/>
+    <disable_collisions link1="second_iiwa_link_0" link2="second_iiwa_link_3" reason="Never"/>
     <disable_collisions link1="second_iiwa_link_0" link2="second_iiwa_link_4" reason="Never"/>
     <disable_collisions link1="second_iiwa_link_0" link2="second_iiwa_link_5" reason="Never"/>
     <disable_collisions link1="second_iiwa_link_0" link2="second_iiwa_link_6" reason="Never"/>
@@ -63,5 +63,5 @@
     <disable_collisions link1="second_iiwa_link_3" link2="second_iiwa_link_7" reason="Never"/>
     
     <disable_collisions link1="second_iiwa_link_4" link2="second_iiwa_link_6" reason="Never"/>
-    <disable_collisions link1="second_iiwa_link_4" link2="second_iiwa_link_7" reason="Never"/> -->
+    <disable_collisions link1="second_iiwa_link_4" link2="second_iiwa_link_7" reason="Never"/>
 </robot>
