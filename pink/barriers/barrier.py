@@ -167,7 +167,7 @@ class Barrier(abc.ABC):
                 objective vector (c).
         """
         jac = self.compute_jacobian(configuration)
-        H = np.xzeros((configuration.model.nv, configuration.model.nv))
+        H = np.zeros((configuration.model.nv, configuration.model.nv))
         c = np.zeros(configuration.model.nv)
 
         if self.safe_displacement_gain > 1e-6:
