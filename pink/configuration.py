@@ -60,6 +60,8 @@ class Configuration:
         q: np.ndarray,
         copy_data: bool = True,
         forward_kinematics: bool = True,
+        collision_model: pin.GeometryModel | None = None,
+        srdf_path: str = "",
     ):
         """Initialize configuration.
 
@@ -90,7 +92,20 @@ class Configuration:
         self.model = model
         self.q = q_readonly
         self.tangent = model.tangent
-        #
+
+        self.update_collision = collision_model is not None
+        self.collision_model = collision_model
+
+        if self.update_collision:
+            self.collision_model.addAllCollisionPairs()
+            if srdf_path != "":
+                print(len(self.collision_model.collisionPairs))
+                pin.removeCollisionPairs(self.model, self.collision_model, srdf_path)
+                print(len(self.collision_model.collisionPairs))
+
+            # Collision models have been modified => re-generate corresponding data.
+            self.collision_data = pin.GeometryData(self.collision_model)
+
         if forward_kinematics:
             self.update(None)
 
@@ -104,6 +119,25 @@ class Configuration:
             q_readonly = q.copy()
             q_readonly.setflags(write=False)
             self.q = q_readonly
+
+        # Compute collisions
+        if self.update_collision:
+            pin.computeCollisions(
+                self.model,
+                self.data,
+                self.collision_model,
+                self.collision_data,
+                self.q,
+                False,
+            )
+            pin.computeDistances(
+                self.model,
+                self.data,
+                self.collision_model,
+                self.collision_data,
+                self.q,
+            )
+
         pin.computeJointJacobians(self.model, self.data, self.q)
         pin.updateFramePlacements(self.model, self.data)
 
@@ -175,9 +209,7 @@ class Configuration:
         if not self.model.existFrame(frame):
             raise FrameNotFound(frame, self.model.frames)
         frame_id = self.model.getFrameId(frame)
-        J: np.ndarray = pin.getFrameJacobian(
-            self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL
-        )
+        J: np.ndarray = pin.getFrameJacobian(self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL)
         return J
 
     def get_transform_frame_to_world(self, frame: str) -> pin.SE3:
