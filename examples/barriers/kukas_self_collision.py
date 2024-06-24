@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
+# Copyright 2022 Domrachev Ivan,  Simeon Nedelchec
 
-"""Two iiwas iiw with full-body self-collision avoidance using hpp-fcl."""
+"""Two iiwa14-s with full-body self-collision avoidance using hpp-fcl."""
 
 import meshcat_shapes
 import numpy as np
@@ -29,15 +29,14 @@ if __name__ == "__main__":
     )
 
     viz = start_meshcat_visualizer(robot)
-
     q_ref = np.zeros(robot.model.nq)
 
     configuration = pink.Configuration(
         robot.model,
         robot.data,
         q_ref,
-        collision_model=robot.collision_model,
-        srdf_path=srdf_path,
+        collision_model=robot.collision_model,  # Collision model is required for self_collision_barrier
+        srdf_path=srdf_path,  # srdf might contain information about excluded collision pairs
     )
 
     # Pink tasks
