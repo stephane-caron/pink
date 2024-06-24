@@ -166,11 +166,11 @@ class Barrier(abc.ABC):
             Tuple containing the quadratic objective matrix (H) and linear
                 objective vector (c).
         """
-        jac = self.compute_jacobian(configuration)
         H = np.zeros((configuration.model.nv, configuration.model.nv))
         c = np.zeros(configuration.model.nv)
 
         if self.safe_displacement_gain > 1e-6:
+            jac = self.compute_jacobian(configuration)
             self.safe_displacement = self.compute_safe_displacement(configuration)
             jac_squared_norm = np.linalg.norm(jac) ** 2
             gain_over_jacobian = self.safe_displacement_gain / jac_squared_norm
