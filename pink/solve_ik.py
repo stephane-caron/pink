@@ -99,7 +99,6 @@ def __compute_qp_inequalities(
             G_list.append(matvec[0])
             h_list.append(matvec[1])
     for barrier in barriers:
-        # TODO: barrier is computed twice
         G_barrier, h_barrier = barrier.compute_qp_inequality(configuration, dt)
         G_list.append(G_barrier)
         h_list.append(h_barrier)
