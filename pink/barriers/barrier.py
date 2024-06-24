@@ -86,6 +86,11 @@ class Barrier(abc.ABC):
         self.safe_displacement = np.zeros(self.dim)
         self.safe_displacement_gain = safe_displacement_gain
 
+        # Cached values to avoid recomputation
+        self.__q_cache: np.ndarray | None = None
+        self.__jac_cache: np.ndarray | None = None
+        self.__barrier_cache: np.ndarray | None = None
+
     @abc.abstractmethod
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
@@ -166,13 +171,17 @@ class Barrier(abc.ABC):
             Tuple containing the quadratic objective matrix (H) and linear
                 objective vector (c).
         """
+        if self.__q_cache is None or not np.allclose(self.__q_cache, configuration.q):
+            self.__q_cache = configuration.q.copy()
+            self.__jac_cache = self.compute_jacobian(configuration).copy()
+            self.__barrier_cache = self.compute_barrier(configuration).copy()
+
         H = np.zeros((configuration.model.nv, configuration.model.nv))
         c = np.zeros(configuration.model.nv)
 
         if self.safe_displacement_gain > 1e-6:
-            jac = self.compute_jacobian(configuration)
             self.safe_displacement = self.compute_safe_displacement(configuration)
-            jac_squared_norm = np.linalg.norm(jac) ** 2
+            jac_squared_norm = np.sum(self.__jac_cache**2)
             gain_over_jacobian = self.safe_displacement_gain / jac_squared_norm
 
             H += gain_over_jacobian * np.eye(configuration.model.nv)
@@ -208,8 +217,13 @@ class Barrier(abc.ABC):
             Tuple containing the inequality constraint matrix (G)
                 and vector (h).
         """
-        G = -self.compute_jacobian(configuration) / dt
-        barrier_value = self.compute_barrier(configuration)
+        if self.__q_cache is None or not np.allclose(self.__q_cache, configuration.q):
+            self.__q_cache = configuration.q.copy()
+            self.__jac_cache = self.compute_jacobian(configuration).copy()
+            self.__barrier_cache = self.compute_barrier(configuration).copy()
+
+        G = -self.__jac_cache.copy() / dt
+        barrier_value = self.__barrier_cache.copy()
         h = np.array([self.gain[i] * self.gain_function(barrier_value[i]) for i in range(self.dim)])
 
         return (G, h)

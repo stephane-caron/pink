@@ -60,10 +60,8 @@ class SelfCollisionBarrier(Barrier):
         collision_data = configuration.collision_data
 
         J = np.zeros((self.dim, model.nq))
-        print(J.shape)
 
         for k in range(len(collision_model.collisionPairs)):
-            cr = collision_data.collisionResults[k]
             cp = collision_model.collisionPairs[k]
             dr = collision_data.distanceResults[k]
 
@@ -73,36 +71,21 @@ class SelfCollisionBarrier(Barrier):
             f1_id = go_1.parentJoint
             f2_id = go_2.parentJoint
 
-            w1 = dr.getNearestPoint1()
-            w2 = dr.getNearestPoint2()
+            w1 = np.array(dr.getNearestPoint1())
+            w2 = np.array(dr.getNearestPoint2())
 
-            r1 = w1 - data.oMi[f1_id].translation
-            r2 = w2 - data.oMi[f2_id].translation
+            r1 = np.array(w1 - data.oMi[f1_id].translation)
+            r2 = np.array(w2 - data.oMi[f2_id].translation)
             # TODO: normal for some reason it not calculated
             n = (w1 - w2) / np.linalg.norm(w1 - w2)
 
             # Approach 1: from casadi_kin_dyn
             J_1 = pin.getJointJacobian(model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
-            Jrow_v = n.T @ J_1[:3, :] + (np.cross(r1, n)).T @ J_1[3:, :]
+            Jrow_v = n.T @ J_1[:3, :] + (pin.skew(r1) @ n).T @ J_1[3:, :]
 
             J_2 = pin.getJointJacobian(model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
-            Jrow_v -= n.T @ J_2[:3, :] + (np.cross(r2, n)).T @ J_2[3:, :]
+            Jrow_v -= n.T @ J_2[:3, :] + (pin.skew(r2) @ n).T @ J_2[3:, :]
 
-            # Approach 2: mine derivations
-            # ddr_dw1 = 2 * n.reshape(1, -1)
-            # dw1_dj1 = np.block([np.eye(3), pin.skew(r1)])
-            # dj1_dq = pin.getJointJacobian(model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
-            # Jrow_v = ddr_dw1 @ dw1_dj1 @ dj1_dq
-
-            # ddr_dw2 = 2 * n.reshape(1, -1)
-            # dw2_dj2 = np.block([np.eye(3), pin.skew(r2)])
-            # dj2_dq = pin.getJointJacobian(model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
-            # Jrow_v -= ddr_dw2 @ dw2_dj2 @ dj2_dq
-
-            # if dr.min_distance < 0:
-            #     Jrow_v = np.zeros(self.model.nv)
             J[k] = Jrow_v.copy()
-
-        J = np.nan_to_num(J)
 
         return J
