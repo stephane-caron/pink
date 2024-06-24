@@ -37,6 +37,11 @@ class Configuration:
     ``pin.forwardKinematics(model, data, configuration)``.) The latter updates
     frame placements.
 
+    Additionally, if collision model is provided, it is used to evaluate distances
+    between frames using following functions:
+    - ``pin.computeCollisions(model, data, collision_model, collision_data, q)``
+    - ``pin.updateGeometryPlacements(model, data, collision_model, collision_data, q)``
+
     Notes:
         This class is meant to be used as a subclass of pin.RobotWrapper, not
         wrap it. However, right now pin.RobotWrapper does not have a shallow
@@ -45,11 +50,16 @@ class Configuration:
     Attributes:
         data: Data corresponding to :data:`Configuration.model`.
         model: Kinodynamic model.
+        update_collision: If true (default), calculate collisions in the models.
+        collision_data: Data corresponding to :data:`Configuration.collision_model`.
+        collision_model: Collision model.
         q: Configuration vector for the robot model.
     """
 
     data: pin.Data
     model: pin.Model
+    collision_model: pin.GeometryModel
+    collision_data: pin.GeometryData
     q: np.ndarray
 
     def __init__(
@@ -72,6 +82,10 @@ class Configuration:
                 data. Otherwise, work on the input data directly.
             forward_kinematics: If true (default), compute forward kinematics
                 from the q into the internal data.
+            collision_model: Collision model. Defaults to None, meaning no collisions
+                are evaluated.
+            srdf_path: Path to the SRDF file, which used to exclude collision pairs.
+                Defaults to empty string, meaning no collision pairs are excluded.
 
         Notes:
             Configurations copy data and run forward kinematics by default so
@@ -96,6 +110,7 @@ class Configuration:
         self.collision_model = collision_model
 
         if self.update_collision:
+            # Add collision pairs and exclude some of them from srdf, if provided.
             self.collision_model.addAllCollisionPairs()
             if srdf_path != "":
                 pin.removeCollisionPairs(self.model, self.collision_model, srdf_path)
@@ -108,7 +123,8 @@ class Configuration:
             self.update(None)
 
     def update(self, q: Optional[np.ndarray] = None) -> None:
-        """Update configuration to a new vector and run forward kinematics.
+        """Update configuration to a new vector and run forward kinematics and
+        collision pairs distance calculations, if specified.
 
         Args:
             q: New configuration vector.
@@ -118,7 +134,7 @@ class Configuration:
             q_readonly.setflags(write=False)
             self.q = q_readonly
 
-        # Compute collisions
+        # Compute collisions, if needed
         if self.update_collision:
             pin.computeCollisions(
                 self.model,
