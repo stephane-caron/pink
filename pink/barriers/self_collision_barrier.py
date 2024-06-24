@@ -90,8 +90,11 @@ class SelfCollisionBarrier(Barrier):
         """
         return np.array(
             [
-                configuration.collision_data.distanceResults[k].min_distance - self.d_min
-                for k in range(len(configuration.collision_model.collisionPairs))
+                configuration.collision_data.distanceResults[k].min_distance
+                - self.d_min
+                for k in range(
+                    len(configuration.collision_model.collisionPairs)
+                )
             ]
         )
 
@@ -149,12 +152,16 @@ class SelfCollisionBarrier(Barrier):
             n = (w1 - w2) / np.linalg.norm(w1 - w2)
 
             # Calculate first two terms using first frame jacobian
-            J_1 = pin.getFrameJacobian(model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
+            J_1 = pin.getFrameJacobian(
+                model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+            )
             Jrow_v = n.T @ J_1[:3, :] + (pin.skew(r1) @ n).T @ J_1[3:, :]
 
             # Calculate second two terms using second frame jacobian
             # Note that minus appears, since n_2 = -n_1
-            J_2 = pin.getFrameJacobian(model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
+            J_2 = pin.getFrameJacobian(
+                model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+            )
             Jrow_v -= n.T @ J_2[:3, :] + (pin.skew(r2) @ n).T @ J_2[3:, :]
 
             J[k] = Jrow_v.copy()

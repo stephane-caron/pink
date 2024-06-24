@@ -80,9 +80,13 @@ class Barrier(abc.ABC):
                 cost term. Defaults to 3.0.
         """
         self.dim = dim
-        self.gain = gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        self.gain = (
+            gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        )
 
-        self.gain_function = gain_function if gain_function is not None else lambda x: x
+        self.gain_function = (
+            gain_function if gain_function is not None else lambda x: x
+        )
         self.safe_displacement = np.zeros(self.dim)
         self.safe_displacement_gain = safe_displacement_gain
 
@@ -125,7 +129,9 @@ class Barrier(abc.ABC):
             :math:`\frac{\partial h}{\partial q}(q)`.
         """
 
-    def compute_safe_displacement(self, configuration: Configuration) -> np.ndarray:
+    def compute_safe_displacement(
+        self, configuration: Configuration
+    ) -> np.ndarray:
         r"""Compute the safe backup displacement.
 
         The safe backup control displacement :math:`dq_{safe}(q)`
@@ -160,8 +166,10 @@ class Barrier(abc.ABC):
         where :math:`\gamma(q)` is a configuration-dependent weight and
         :math:`\dot{q}_{safe}(q)` is the safe backup policy.
 
-        Note that if safe_displacement_gain is set to zero, the regularization
-        term is not included.
+        Note:
+            if safe_displacement_gain is set to zero, the regularization
+            term is not included. Jacobian and barrier values are cached
+              to avoid recomputation.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -171,7 +179,11 @@ class Barrier(abc.ABC):
             Tuple containing the quadratic objective matrix (H) and linear
                 objective vector (c).
         """
-        if self.__q_cache is None or not np.allclose(self.__q_cache, configuration.q):
+        if (
+            self.__q_cache is None
+            or self.__jac_cache is None
+            or self.__barrier_cache is None
+        ) or not np.allclose(self.__q_cache, configuration.q):
             self.__q_cache = configuration.q.copy()
             self.__jac_cache = self.compute_jacobian(configuration).copy()
             self.__barrier_cache = self.compute_barrier(configuration).copy()
@@ -180,7 +192,9 @@ class Barrier(abc.ABC):
         c = np.zeros(configuration.model.nv)
 
         if self.safe_displacement_gain > 1e-6:
-            self.safe_displacement = self.compute_safe_displacement(configuration)
+            self.safe_displacement = self.compute_safe_displacement(
+                configuration
+            )
             jac_squared_norm = np.sum(self.__jac_cache**2)
             gain_over_jacobian = self.safe_displacement_gain / jac_squared_norm
 
@@ -209,6 +223,9 @@ class Barrier(abc.ABC):
         :math:`\dot{q}` is the joint velocity vector,
         and :math:`\alpha_j` are extended class K functions.
 
+        Note:
+            Jacobian and barrier values are cached to avoid recomputation.
+
         Args:
             configuration: Robot configuration :math:`q`.
             dt: Time step for discrete-time implementation. Defaults to 1e-3.
@@ -217,14 +234,23 @@ class Barrier(abc.ABC):
             Tuple containing the inequality constraint matrix (G)
                 and vector (h).
         """
-        if self.__q_cache is None or not np.allclose(self.__q_cache, configuration.q):
+        if (
+            self.__q_cache is None
+            or self.__jac_cache is None
+            or self.__barrier_cache is None
+        ) or not np.allclose(self.__q_cache, configuration.q):
             self.__q_cache = configuration.q.copy()
             self.__jac_cache = self.compute_jacobian(configuration).copy()
             self.__barrier_cache = self.compute_barrier(configuration).copy()
 
         G = -self.__jac_cache.copy() / dt
         barrier_value = self.__barrier_cache.copy()
-        h = np.array([self.gain[i] * self.gain_function(barrier_value[i]) for i in range(self.dim)])
+        h = np.array(
+            [
+                self.gain[i] * self.gain_function(barrier_value[i])
+                for i in range(self.dim)
+            ]
+        )
 
         return (G, h)
 
