@@ -107,14 +107,16 @@ class Configuration:
         self.q = q_readonly
         self.tangent = model.tangent
 
-        self.update_collision = collision_model is not None
         self.collision_model = collision_model
+        self.update_collision = self.collision_model is not None
 
-        if self.update_collision:
+        if self.collision_model is not None:
             # Add collision pairs and exclude some of them from srdf, if provided.
             self.collision_model.addAllCollisionPairs()
             if srdf_path != "":
-                pin.removeCollisionPairs(self.model, self.collision_model, srdf_path)
+                pin.removeCollisionPairs(
+                    self.model, self.collision_model, srdf_path
+                )
 
             # Collision models have been modified => re-generate corresponding data.
             self.collision_data = pin.GeometryData(self.collision_model)
@@ -224,7 +226,9 @@ class Configuration:
         if not self.model.existFrame(frame):
             raise FrameNotFound(frame, self.model.frames)
         frame_id = self.model.getFrameId(frame)
-        J: np.ndarray = pin.getFrameJacobian(self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL)
+        J: np.ndarray = pin.getFrameJacobian(
+            self.model, self.data, frame_id, pin.ReferenceFrame.LOCAL
+        )
         return J
 
     def get_transform_frame_to_world(self, frame: str) -> pin.SE3:
