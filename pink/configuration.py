@@ -99,9 +99,7 @@ class Configuration:
         if self.update_collision:
             self.collision_model.addAllCollisionPairs()
             if srdf_path != "":
-                print(len(self.collision_model.collisionPairs))
                 pin.removeCollisionPairs(self.model, self.collision_model, srdf_path)
-                print(len(self.collision_model.collisionPairs))
 
             # Collision models have been modified => re-generate corresponding data.
             self.collision_data = pin.GeometryData(self.collision_model)
