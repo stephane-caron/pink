@@ -64,16 +64,10 @@
     <collision>
       <origin rpy="0 0 0" xyz="-0.015 0 0.07"/>
       <geometry>
-        <cylinder length="0.17" radius="0.139"/>
+        <sphere radius="0.15"/>
       </geometry>
       <material name="Grey"/>
     </collision>
-    <self_collision_checking>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <capsule length="0.25" radius="0.15"/>
-      </geometry>
-    </self_collision_checking>
   </link>
   <!-- joint between link_0 and link_1 -->
   <joint name="first_iiwa_joint_1" type="revolute">
@@ -551,16 +545,10 @@
     <collision>
       <origin rpy="0 0 0" xyz="-0.015 0 0.07"/>
       <geometry>
-        <cylinder length="0.17" radius="0.139"/>
+        <sphere radius="0.15"/>
       </geometry>
       <material name="Grey"/>
     </collision>
-    <self_collision_checking>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <capsule length="0.25" radius="0.15"/>
-      </geometry>
-    </self_collision_checking>
   </link>
   <!-- joint between link_0 and link_1 -->
   <joint name="second_iiwa_joint_1" type="revolute">

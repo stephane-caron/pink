@@ -105,6 +105,7 @@ class Configuration:
 
             # Collision models have been modified => re-generate corresponding data.
             self.collision_data = pin.GeometryData(self.collision_model)
+            self.collision_data.collisionRequests.enable_contact = True
 
         if forward_kinematics:
             self.update(None)

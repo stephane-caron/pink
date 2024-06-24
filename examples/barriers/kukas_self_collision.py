@@ -81,11 +81,15 @@ if __name__ == "__main__":
     if "osqp" in qpsolvers.available_solvers:
         solver = "osqp"
 
-    rate = RateLimiter(frequency=200.0)
+    rate = RateLimiter(frequency=100.0)
     dt = rate.period
     t = 0.0  # [s]
-    l_y_des = np.array([0.392, 0.392, 0.6])
+    l_y_des = np.array([0.392, -0.392, 0.6])
     r_y_des = np.array([0.392, 0.392, 0.6])
+
+    left_end_effector_task.transform_target_to_world.translation = l_y_des
+    right_end_effector_task.transform_target_to_world.translation = r_y_des
+
     l_dy_des = np.zeros(3)
     r_dy_des = np.zeros(3)
 
@@ -93,22 +97,6 @@ if __name__ == "__main__":
         # Calculate desired trajectory
         A = 0.1
         B = 0.1
-        # z -- 0.4 - 0.8
-        l_y_des[:] = (
-            0.6,
-            0.1 + B * np.sin(t),
-            0.6 + A * np.sin(t),
-        )
-        r_y_des[:] = (
-            0.6,
-            -0.1 - B * np.sin(t),
-            0.6 + A * np.sin(t),
-        )
-        l_dy_des[:] = 0, B * np.cos(t), A * np.cos(t)
-        r_dy_des[:] = 0, -B * np.cos(t), A * np.cos(t)
-
-        left_end_effector_task.transform_target_to_world.translation = l_y_des
-        right_end_effector_task.transform_target_to_world.translation = r_y_des
 
         # Update visualization frames
         viewer["left_end_effector"].set_transform(
