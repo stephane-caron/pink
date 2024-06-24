@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 - Control Barrier Functions, namely: (thanks to @domrachev03 and @simeon-ned)
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
-- Examples for `UR5` manipulator and `go2` quadruped robot, which illustrate barriers effect.
+  - Body Spherical Barrier ``BodySphericalBarrier``
+- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect.
 
 ### Changed
 
@@ -19,6 +20,10 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Fix broken documentation links
+
+### Removed
+
+- CICD: Disable macOS checks until upstream PyPI package is fixed
 
 ## [2.1.0] - 2024-04-02
 

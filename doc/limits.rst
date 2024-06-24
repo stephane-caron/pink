@@ -6,7 +6,10 @@
 Limits
 ******
 
-.. automodule:: pink.limits
+Definition
+==========
+
+.. automodule:: pink.limits.limit
     :members:
 
 Configuration limits

@@ -74,7 +74,7 @@ class Barrier(abc.ABC):
         Args:
             dim: Dimension of the barrier.
             gain: barrier gain. Defaults to 1.0.
-            class_k_fn: Extended class K function.
+            gain_function: gain function.
                 Defaults to the identity function.
             safe_displacement_gain: gain for the safe backup displacement
                 cost term. Defaults to 3.0.

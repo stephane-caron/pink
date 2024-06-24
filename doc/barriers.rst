@@ -6,11 +6,14 @@
 Barriers
 ********
 
+Definition
+==========
+
 .. automodule:: pink.barriers.barrier
     :members:
 
-Position Barrier
-=================
+Position barrier
+================
 
 .. automodule:: pink.barriers.position_barrier
     :members:
