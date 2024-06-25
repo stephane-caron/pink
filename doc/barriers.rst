@@ -27,5 +27,5 @@ Body Spherical barrier
 Whole Body Collision Avoidance
 ==============================
 
-.. automodule:: pink.barriers.whole_body_collision_avoidance
+.. automodule:: pink.barriers.self_collision_barrier
     :members:
