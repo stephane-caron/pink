@@ -53,9 +53,7 @@ if __name__ == "__main__":
 
     # Pink barriers
     collision_barrier = SelfCollisionBarrier(
-        len(configuration.collision_model.collisionPairs),
-        gain=10.0,
-        safe_displacement_gain=1.0,
+        len(configuration.collision_model.collisionPairs), gain=20.0, safe_displacement_gain=1.0, d_min=0.05
     )
 
     posture_task = PostureTask(
@@ -80,22 +78,26 @@ if __name__ == "__main__":
     if "osqp" in qpsolvers.available_solvers:
         solver = "osqp"
 
-    rate = RateLimiter(frequency=100.0)
+    rate = RateLimiter(frequency=50.0)
     dt = rate.period
     t = 0.0  # [s]
     l_y_des = np.array([0.392, -0.392, 0.6])
     r_y_des = np.array([0.392, 0.392, 0.6])
 
-    left_end_effector_task.transform_target_to_world.translation = l_y_des
-    right_end_effector_task.transform_target_to_world.translation = r_y_des
+    A = l_y_des.copy()
+    B = r_y_des.copy()
 
     l_dy_des = np.zeros(3)
     r_dy_des = np.zeros(3)
 
     while True:
-        # Calculate desired trajectory
-        A = 0.1
-        B = 0.1
+        # Make a sinusoidal trajectory between points A and B
+        mu = (1 + np.cos(t)) / 2
+        l_y_des[:] = A + (B - A + 0.2 * np.array([0, 0, np.sin(mu * np.pi) ** 2])) * mu
+        r_y_des[:] = B + (A - B + 0.2 * np.array([0, 0, -np.sin(mu * np.pi) ** 2])) * mu
+
+        left_end_effector_task.transform_target_to_world.translation = l_y_des
+        right_end_effector_task.transform_target_to_world.translation = r_y_des
 
         # Update visualization frames
         viewer["left_end_effector"].set_transform(
