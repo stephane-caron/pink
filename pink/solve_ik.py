@@ -189,7 +189,7 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-    configuration.check_limits()
+    # configuration.check_limits()
     problem = build_ik(
         configuration,
         tasks,
