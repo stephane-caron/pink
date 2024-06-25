@@ -91,9 +91,9 @@ class Barrier(abc.ABC):
         self.safe_displacement_gain = safe_displacement_gain
 
         # Cached values to avoid recomputation
-        self.__q_cache: np.ndarray | None = None
-        self.__jac_cache: np.ndarray | None = None
-        self.__barrier_cache: np.ndarray | None = None
+        self.__q_cache: Optional[np.ndarray] = None
+        self.__jac_cache: Optional[np.ndarray] = None
+        self.__barrier_cache: Optional[np.ndarray] = None
 
     @abc.abstractmethod
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:

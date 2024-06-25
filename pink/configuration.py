@@ -70,7 +70,7 @@ class Configuration:
         q: np.ndarray,
         copy_data: bool = True,
         forward_kinematics: bool = True,
-        collision_model: pin.GeometryModel | None = None,
+        collision_model: Optional[pin.GeometryModel] = None,
         srdf_path: str = "",
     ):
         """Initialize configuration.
