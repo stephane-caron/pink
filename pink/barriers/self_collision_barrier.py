@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Domrachev Ivan, Simeon Nedelchec
+# Copyright 3022 Domrachev Ivan, Simeon Nedelchec
 
 """Self Collision Avoidance Barrier with hpp-fcl"""
 
@@ -33,6 +33,10 @@ class SelfCollisionBarrier(Barrier):
     :math:`d(p^1_i, p^2_i)` is the distance between collision bodies in the pair,
     and :math:`d_{min}` is minimal distance between any collision bodies.
 
+    Note:
+        The amount of evaluated collision pairs might not be equal to number of all collision pairs.
+        If the amount is less, then only the closest collision pairs will be used.
+
     Attributes:
         d_min: Minimum distance between collision pairs.
     """
@@ -50,6 +54,9 @@ class SelfCollisionBarrier(Barrier):
 
         Args:
             n_collision_pairs: Number of collision pairs.
+                Note that the number of collision pairs don't have to be equal to
+                the total number of collision pairs in the model. If it is less,
+                than only the closest collision pairs will be used.
             gain: Barrier gain. Defaults to 1.0.
             safe_displacement_gain: gain for the safe backup displacement.
                 cost term. Defaults to 1.0.
@@ -90,11 +97,8 @@ class SelfCollisionBarrier(Barrier):
         """
         return np.array(
             [
-                configuration.collision_data.distanceResults[k].min_distance
-                - self.d_min
-                for k in range(
-                    len(configuration.collision_model.collisionPairs)
-                )
+                configuration.collision_data.distanceResults[k].min_distance - self.d_min
+                for k in range(len(configuration.collision_model.collisionPairs))
             ]
         )
 
@@ -131,7 +135,15 @@ class SelfCollisionBarrier(Barrier):
 
         J = np.zeros((self.dim, model.nq))
 
-        for k in range(len(collision_model.collisionPairs)):
+        # Calculate `dim` closest collision pairs, and evaluate them
+        N_collision = len(collision_model.collisionPairs)
+        distances = np.array([collision_data.distanceResults[i].min_distance for i in range(N_collision)])
+        closest_pairs_idxs = np.argpartition(-distances, -self.dim)[-self.dim :]
+
+        for i in range(self.dim):
+            # Index of the pair
+            k = int(closest_pairs_idxs[i])
+
             cp = collision_model.collisionPairs[k]
             dr = collision_data.distanceResults[k]
 
@@ -152,19 +164,15 @@ class SelfCollisionBarrier(Barrier):
             n = (w1 - w2) / np.linalg.norm(w1 - w2)
 
             # Calculate first two terms using first frame jacobian
-            J_1 = pin.getFrameJacobian(
-                model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
-            )
+            J_1 = pin.getFrameJacobian(model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
             Jrow_v = n.T @ J_1[:3, :] + (pin.skew(r1) @ n).T @ J_1[3:, :]
 
             # Calculate second two terms using second frame jacobian
             # Note that minus appears, since n_2 = -n_1
-            J_2 = pin.getFrameJacobian(
-                model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
-            )
+            J_2 = pin.getFrameJacobian(model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
             Jrow_v -= n.T @ J_2[:3, :] + (pin.skew(r2) @ n).T @ J_2[3:, :]
 
-            J[k] = Jrow_v.copy()
+            J[i] = Jrow_v.copy()
 
         # If collision is undefined, or during the collision, some values
         # might be nans. In this case, set them to zero.
