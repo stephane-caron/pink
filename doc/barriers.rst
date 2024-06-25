@@ -17,3 +17,15 @@ Position barrier
 
 .. automodule:: pink.barriers.position_barrier
     :members:
+
+Body Spherical barrier
+=================
+
+.. automodule:: pink.barriers.body_spherical_barrier
+    :members:
+
+Whole Body Collision Avoidance
+==============================
+
+.. automodule:: pink.barriers.whole_body_collision_avoidance
+    :members:

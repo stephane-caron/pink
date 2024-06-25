@@ -167,9 +167,9 @@ class Barrier(abc.ABC):
         :math:`\dot{q}_{safe}(q)` is the safe backup policy.
 
         Note:
-            if safe_displacement_gain is set to zero, the regularization
+            If `safe_displacement_gain` is set to zero, the regularization
             term is not included. Jacobian and barrier values are cached
-              to avoid recomputation.
+            to avoid recomputation.
 
         Args:
             configuration: Robot configuration :math:`q`.
