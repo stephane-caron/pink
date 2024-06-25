@@ -19,7 +19,7 @@ Position barrier
     :members:
 
 Body Spherical barrier
-=================
+======================
 
 .. automodule:: pink.barriers.body_spherical_barrier
     :members:
