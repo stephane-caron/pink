@@ -28,66 +28,70 @@ except ModuleNotFoundError as exc:
 
 if __name__ == "__main__":
     robot = load_robot_description(
-        "go2_description", root_joint=pin.JointModelFreeFlyer()
-    )
-    viz = start_meshcat_visualizer(robot)
-
-    q_ref = np.array(
-        [
-            -0.0,
-            0.0,
-            0.3,
-            0.0,
-            0.0,
-            0.0,
-            1.0,
-            0.0,
-            0.8,
-            -1.57,
-            0.0,
-            0.8,
-            -1.57,
-            0.0,
-            0.8,
-            -1.57,
-            0.0,
-            0.8,
-            -1.57,
-        ]
-    )
-
-    configuration = pink.Configuration(robot.model, robot.data, q_ref)
-
-    base_task = FrameTask(
-        "base",
-        position_cost=0.0,  # [cost] / [m]
-        orientation_cost=1.0,  # [cost] / [rad]
+        "g1_description", root_joint=pin.JointModelFreeFlyer()
     )
     
-    com_task = ComTask(cost = 50.0)
-
+    viz = start_meshcat_visualizer(robot)
+    # print(robot.nq)
+    q_ref = np.array(
+        [
+            0.0,
+            0.0,
+            0.72,
+            0.0,
+            0.0,
+            0.0,
+            1.0, *np.zeros(robot.nv-6)
+        ]
+    )
+    # left_ankle_roll_link
+    configuration = pink.Configuration(robot.model, robot.data, q_ref)
+    # for i in range(1000):
+    #     viz.display(configuration.q)
+    pelvis_orientation_task = FrameTask(
+        "pelvis",
+        position_cost=0.0,  # [cost] / [m]
+        orientation_cost=10.0,  # [cost] / [rad]
+    )
+    
+    com_task = ComTask(cost = 200.0)
+    com_task.set_target_from_configuration(configuration)
+    
     posture_task = PostureTask(
-        cost=1e-5,  # [cost] / [rad]
+        cost=1e-1,  # [cost] / [rad]
     )
 
-    tasks = [base_task, posture_task, com_task]
+    tasks = [pelvis_orientation_task, posture_task, com_task]
 
-    for foot in ["FL_foot", "FR_foot", "RL_foot", "RR_foot"]:
+    for foot in ["right_ankle_roll_link", "left_ankle_roll_link"]:
         task = FrameTask(
             foot,
             position_cost=200.0,  # [cost] / [m]
-            orientation_cost=0.0,  # [cost] / [rad]
+            orientation_cost=10.0,  # [cost] / [rad]
+        )
+        tasks.append(task)
+
+    for arm_points in ["right_palm_link", "left_palm_link"]:
+        task = FrameTask(
+            arm_points,
+            position_cost=4.0,  # [cost] / [m]
+            orientation_cost=0.,  # [cost] / [rad]
         )
         tasks.append(task)
 
     for task in tasks:
         task.set_target_from_configuration(configuration)
-
+        if isinstance(task, FrameTask):
+            target = task.transform_target_to_world
+            if task.frame in ["right_palm_link", "left_palm_link"]:
+                target.translation += np.array([-0.1,0.0, -0.2])
+                task.set_target(target)
+                
     viewer = viz.viewer
     opacity = 0.5  # Set the desired opacity level (0 transparent, 1 opaque)
 
     meshcat_shapes.frame(viewer["base_target"], opacity=1.0)
-    meshcat_shapes.frame(viewer["base"], opacity=1.0)
+    meshcat_shapes.frame(viewer["pelvis"], opacity=1.0)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]
@@ -97,25 +101,18 @@ if __name__ == "__main__":
     rate = RateLimiter(frequency=200.0)
     dt = rate.period
     t = 0.0  # [s]
-    period = 4
+    period = 2
     omega = 2 * np.pi / period
     while True:
         # Update task targets
-        end_effector_target = base_task.transform_target_to_world
         phase = (t // period) % 2
-        Ay = 0.1 * (1 - phase)
-        Az = 0.2 * phase
+        Ay = 0.0 #* (1 - phase)
+        Az = 0.05 #* phase
         desired_com = np.zeros(3)
         
         desired_com[1] = 0.0 + Ay * np.sin(omega * t)
-        desired_com[2] = 0.3 + Az * np.sin(omega * t)
+        desired_com[2] = 0.55 + Az * np.sin(omega * t)
         com_task.set_target(desired_com)
-
-        # Update visualization frames
-        # viewer["base_target"].set_transform(end_effector_target.np)
-        # viewer["base"].set_transform(
-        #     configuration.get_transform_frame_to_world(base_task.frame).np
-        # )
 
         velocity = solve_ik(
             configuration,
