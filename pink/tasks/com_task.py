@@ -152,6 +152,6 @@ class ComTask(Task):
         return (
             "ComTask("
             f"gain={self.gain}, "
-            f"position_cost={cost}, "
+            f"cost={cost}, "
             f"target_com={self.target_com})"
         )
