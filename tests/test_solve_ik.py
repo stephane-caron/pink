@@ -34,6 +34,19 @@ class TestSolveIK(unittest.TestCase):
         with self.assertRaises(NotWithinConfigurationLimits):
             solve_ik(configuration, [], dt=1.0, solver="quadprog")
 
+    def test_ignore_configuration_limits(self):
+        """If flag is set, do not check configuration limits."""
+        robot = load_robot_description(
+            "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        q = robot.q0
+        q[7] = 20  # above limit for Upkie's first joint
+        configuration = Configuration(robot.model, robot.data, q)
+
+        solve_ik(
+            configuration, [], dt=1.0, solver="quadprog", ignore_limits=True
+        )
+
     def test_model_with_no_joint_limit(self):
         """Model with no joint limit has no inequality constraints."""
         model = pin.Model()
