@@ -44,7 +44,7 @@ https://github.com/domrachev03/pink/assets/28687492/78281f44-3676-4d4d-9619-768b
 
 
 ## Yumi self-collision avoidance
-Yumi two-armed manimpulator with constraint on minimal distance betwee frames, defined by end-effectors
+Yumi two-armed manimpulator with constraint on minimal distance between frames, defined by end-effectors
 
 
 

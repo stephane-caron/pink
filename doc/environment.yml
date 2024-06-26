@@ -2,6 +2,7 @@ name: pink
 channels:
     - conda-forge
 dependencies:
+    - pinocchio <3
     - pink
     - pip >=21.3.1
     - pip:

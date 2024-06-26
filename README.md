@@ -1,6 +1,6 @@
 # Pink
 
-[![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/main.yml?branch=main)](https://github.com/stephane-caron/pink/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/ci.yml?branch=main)](https://github.com/stephane-caron/pink/actions)
 [![Documentation](https://img.shields.io/github/actions/workflow/status/stephane-caron/pink/docs.yml?branch=main&label=docs)](https://stephane-caron.github.io/pink/)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/pink/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/pink?branch=main)
 [![Conda version](https://anaconda.org/conda-forge/pink/badges/version.svg)](https://anaconda.org/conda-forge/pink)
@@ -175,3 +175,4 @@ Technical notes:
 
 - [Inverse kinematics](https://scaron.info/robotics/inverse-kinematics.html): a general introduction to differential inverse kinematics.
 - [Jacobian of a kinematic task and derivatives on manifolds](https://scaron.info/robotics/jacobian-of-a-kinematic-task-and-derivatives-on-manifolds.html).
+- [Control Barrier Functions](https://simeon-ned.com/blog/2024/cbf/).
