@@ -193,7 +193,7 @@ def solve_ik(
     """
     if not ignore_limits:
         configuration.check_limits()
-        
+
     problem = build_ik(
         configuration,
         tasks,
