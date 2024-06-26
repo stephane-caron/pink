@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
-"""Go2 squat with z-axis barrier."""
+"""G1 humanoid squat by regulating CoM"""
 
 import meshcat_shapes
 import numpy as np
@@ -32,22 +32,12 @@ if __name__ == "__main__":
     )
     
     viz = start_meshcat_visualizer(robot)
-    # print(robot.nq)
-    q_ref = np.array(
-        [
-            0.0,
-            0.0,
-            0.72,
-            0.0,
-            0.0,
-            0.0,
-            1.0, *np.zeros(robot.nv-6)
-        ]
-    )
-    # left_ankle_roll_link
+    
+    q_ref = np.zeros(robot.nq)
+    q_ref[2] = 0.72 
+    q_ref[6] = 1.0
+    
     configuration = pink.Configuration(robot.model, robot.data, q_ref)
-    # for i in range(1000):
-    #     viz.display(configuration.q)
     pelvis_orientation_task = FrameTask(
         "pelvis",
         position_cost=0.0,  # [cost] / [m]
@@ -88,10 +78,6 @@ if __name__ == "__main__":
                 task.set_target(target)
                 
     viewer = viz.viewer
-    opacity = 0.5  # Set the desired opacity level (0 transparent, 1 opaque)
-
-    meshcat_shapes.frame(viewer["base_target"], opacity=1.0)
-    meshcat_shapes.frame(viewer["pelvis"], opacity=1.0)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]
@@ -103,14 +89,12 @@ if __name__ == "__main__":
     t = 0.0  # [s]
     period = 2
     omega = 2 * np.pi / period
+    
     while True:
-        # Update task targets
-        phase = (t // period) % 2
-        Ay = 0.0 #* (1 - phase)
-        Az = 0.05 #* phase
+
+        # Update CoM target
+        Az = 0.05
         desired_com = np.zeros(3)
-        
-        desired_com[1] = 0.0 + Ay * np.sin(omega * t)
         desired_com[2] = 0.55 + Az * np.sin(omega * t)
         com_task.set_target(desired_com)
 
@@ -119,6 +103,8 @@ if __name__ == "__main__":
             tasks,
             dt,
             solver=solver,
+            damping=0.01,
+            ignore_limits=True,
         )
         configuration.integrate_inplace(velocity, dt)
 
