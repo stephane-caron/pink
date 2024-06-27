@@ -71,7 +71,7 @@ class Configuration:
         copy_data: bool = True,
         forward_kinematics: bool = True,
         collision_model: Optional[pin.GeometryModel] = None,
-        srdf_path: str = "",
+        collision_data: Optional[pin.GeometryData] = None,
     ):
         """Initialize configuration.
 
@@ -83,10 +83,10 @@ class Configuration:
                 data. Otherwise, work on the input data directly.
             forward_kinematics: If true (default), compute forward kinematics
                 from the q into the internal data.
-            collision_model: Collision model. Defaults to None, meaning no collisions
-                are evaluated.
-            srdf_path: Path to the SRDF file, which used to exclude collision pairs.
-                Defaults to empty string, meaning no collision pairs are excluded.
+            collision_model: collision geometry model, with already loaded collisions.
+                Default is None, meaning no collisions are processeed.
+            collision_data: collision geometry data, with already loaded collisions.
+                Default is None, which generates it from the model if possible, None otherwise.
 
         Notes:
             Configurations copy data and run forward kinematics by default so
@@ -107,16 +107,13 @@ class Configuration:
         self.q = q_readonly
         self.tangent = model.tangent
 
+        # Update collision
         self.collision_model = collision_model
-        if self.collision_model is not None:
-            # Add collision pairs and exclude some of them from srdf, if provided.
-            self.collision_model.addAllCollisionPairs()
-            if srdf_path != "":
-                pin.removeCollisionPairs(self.model, self.collision_model, srdf_path)
-
-            # Collision models have been modified => re-generate corresponding data.
-            self.collision_data = pin.GeometryData(self.collision_model)
-            self.collision_data.collisionRequests.enable_contact = True
+        self.collision_data = (
+            collision_data
+            if collision_data is not None
+            else (pin.GeometryData(collision_model) if collision_model is not None else None)
+        )
 
         if forward_kinematics:
             self.update(None)
