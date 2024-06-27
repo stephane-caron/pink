@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 3022 Domrachev Ivan, Simeon Nedelchec
+# Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
 """Self Collision Avoidance Barrier with hpp-fcl"""
 
@@ -20,7 +20,7 @@ class SelfCollisionBarrier(Barrier):
 
     This class defines a barrier function based on the smooth convex collision geometry.
     using hpp-fcl through Pinocchio. Note that for non-smooth collision geometries
-    behaviour is undefined
+    behaviour is undefined.
 
     The barrier function is defined as:
 
@@ -34,8 +34,8 @@ class SelfCollisionBarrier(Barrier):
     and :math:`d_{min}` is minimal distance between any collision bodies.
 
     Note:
-        The amount of evaluated collision pairs might not be equal to number of all collision pairs.
-        If the amount is less, then only the closest collision pairs will be used.
+        The number of evaluated collision pairs might not be equal to the number of all collision pairs.
+        If the former is lower, then only the closest collision pairs will be considered.
 
     Attributes:
         d_min: Minimum distance between collision pairs.
@@ -75,18 +75,18 @@ class SelfCollisionBarrier(Barrier):
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
 
-        The barrier function is computed as distnace between all collision pairs.
+        The barrier function is computed as the vector of lowest distances between collision pairs.
 
         The barrier function is defined as:
 
         .. math::
 
             h(q) = \begin{bmatrix} \ldots \\ d(p^1_i, p^2_i) - d_{min}^2 \\ \ldots \end{bmatrix}
-                \quad \forall i \in 0 \ldots N
+                \quad \forall i \in 1 \ldots N
 
         where :math:`N` is number of collision pairs, :math:`p^k_i` is the :math:`k-th` body in :math:`i`-th collision pair,
         :math:`d(p^1_i, p^2_i)` is the distance between collision bodies in the pair,
-        and :math:`d_{min}` is minimal distance between any collision bodies.
+        and :math:`d_{min}` is the minimal distance between any collision bodies.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -97,22 +97,19 @@ class SelfCollisionBarrier(Barrier):
         """
         return np.array(
             [
-                configuration.collision_data.distanceResults[k].min_distance
-                - self.d_min
-                for k in range(
-                    len(configuration.collision_model.collisionPairs)
-                )
+                configuration.collision_data.distanceResults[k].min_distance - self.d_min
+                for k in range(len(configuration.collision_model.collisionPairs))
             ]
         )
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the Jacobian matrix of the barrier function.
 
-        The jacobian matrix could be represented as stacked gradients of each
+        The Jacobian matrix could be represented as stacked gradients of each
         collision pair distance function w.r.t. joints. They are computed based on
-        frames jacobians and normal surface vector at nearest distance points n.
+        frames Jacobians and normal surface vector at nearest distance points n.
 
-        The gradient, a.k.a i-th row in the jacobian matrix, is given by:
+        The gradient, a.k.a i-th row in the Jacobian matrix, is given by:
 
         .. math::
 
@@ -140,15 +137,8 @@ class SelfCollisionBarrier(Barrier):
 
         # Calculate `dim` closest collision pairs, and evaluate them
         N_collision = len(collision_model.collisionPairs)
-        distances = np.array(
-            [
-                collision_data.distanceResults[i].min_distance
-                for i in range(N_collision)
-            ]
-        )
-        closest_pairs_idxs = np.argpartition(-distances, -self.dim)[
-            -self.dim :
-        ]
+        distances = np.array([collision_data.distanceResults[i].min_distance for i in range(N_collision)])
+        closest_pairs_idxs = np.argpartition(-distances, -self.dim)[-self.dim :]
 
         for i in range(self.dim):
             # Index of the pair
@@ -173,17 +163,13 @@ class SelfCollisionBarrier(Barrier):
             # Normal vector betwee nearest points (n_1 in the notation above)
             n = (w1 - w2) / np.linalg.norm(w1 - w2)
 
-            # Calculate first two terms using first frame jacobian
-            J_1 = pin.getFrameJacobian(
-                model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
-            )
+            # Calculate first two terms using first frame Jacobian
+            J_1 = pin.getFrameJacobian(model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
             Jrow_v = n.T @ J_1[:3, :] + (pin.skew(r1) @ n).T @ J_1[3:, :]
 
-            # Calculate second two terms using second frame jacobian
+            # Calculate second two terms using second frame Jacobian
             # Note that minus appears, since n_2 = -n_1
-            J_2 = pin.getFrameJacobian(
-                model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
-            )
+            J_2 = pin.getFrameJacobian(model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
             Jrow_v -= n.T @ J_2[:3, :] + (pin.skew(r2) @ n).T @ J_2[3:, :]
 
             J[i] = Jrow_v.copy()
