@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
   - Body Spherical Barrier ``BodySphericalBarrier``
+- `ComTask` for Center of Mass tracking.
 - Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect.
 
 ### Changed
