@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
   - Body Spherical Barrier ``BodySphericalBarrier``
+  - Whole-body Self-Collision Avoidance Barrier ``SelfCollisionBarrier``
 - Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect.
 
 ### Changed

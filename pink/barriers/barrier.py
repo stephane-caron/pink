@@ -90,6 +90,11 @@ class Barrier(abc.ABC):
         self.safe_displacement = np.zeros(self.dim)
         self.safe_displacement_gain = safe_displacement_gain
 
+        # Cached values to avoid recomputation
+        self.__q_cache: Optional[np.ndarray] = None
+        self.__jac_cache: Optional[np.ndarray] = None
+        self.__barrier_cache: Optional[np.ndarray] = None
+
     @abc.abstractmethod
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
@@ -161,8 +166,10 @@ class Barrier(abc.ABC):
         where :math:`\gamma(q)` is a configuration-dependent weight and
         :math:`\dot{q}_{safe}(q)` is the safe backup policy.
 
-        Note that if safe_displacement_gain is set to zero, the regularization
-        term is not included.
+        Note:
+            If `safe_displacement_gain` is set to zero, the regularization
+            term is not included. Jacobian and barrier values are cached
+            to avoid recomputation.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -172,7 +179,15 @@ class Barrier(abc.ABC):
             Tuple containing the quadratic objective matrix (H) and linear
                 objective vector (c).
         """
-        jac = self.compute_jacobian(configuration)
+        if (
+            self.__q_cache is None
+            or self.__jac_cache is None
+            or self.__barrier_cache is None
+        ) or not np.allclose(self.__q_cache, configuration.q):
+            self.__q_cache = configuration.q
+            self.__jac_cache = self.compute_jacobian(configuration)
+            self.__barrier_cache = self.compute_barrier(configuration)
+
         H = np.zeros((configuration.model.nv, configuration.model.nv))
         c = np.zeros(configuration.model.nv)
 
@@ -180,7 +195,7 @@ class Barrier(abc.ABC):
             self.safe_displacement = self.compute_safe_displacement(
                 configuration
             )
-            jac_squared_norm = np.linalg.norm(jac) ** 2
+            jac_squared_norm = np.linalg.norm(self.__jac_cache) ** 2
             gain_over_jacobian = self.safe_displacement_gain / jac_squared_norm
 
             H += gain_over_jacobian * np.eye(configuration.model.nv)
@@ -208,6 +223,9 @@ class Barrier(abc.ABC):
         :math:`\dot{q}` is the joint velocity vector,
         and :math:`\alpha_j` are extended class K functions.
 
+        Note:
+            Jacobian and barrier values are cached to avoid recomputation.
+
         Args:
             configuration: Robot configuration :math:`q`.
             dt: Time step for discrete-time implementation. Defaults to 1e-3.
@@ -216,11 +234,20 @@ class Barrier(abc.ABC):
             Tuple containing the inequality constraint matrix (G)
                 and vector (h).
         """
-        G = -self.compute_jacobian(configuration) / dt
-        barrier_value = self.compute_barrier(configuration)
+        if (
+            self.__q_cache is None
+            or self.__jac_cache is None
+            or self.__barrier_cache is None
+            or not np.allclose(self.__q_cache, configuration.q)
+        ):
+            self.__q_cache = configuration.q
+            self.__jac_cache = self.compute_jacobian(configuration)
+            self.__barrier_cache = self.compute_barrier(configuration)
+
+        G = -self.__jac_cache / dt
         h = np.array(
             [
-                self.gain[i] * self.gain_function(barrier_value[i])
+                self.gain[i] * self.gain_function(self.__barrier_cache[i])
                 for i in range(self.dim)
             ]
         )
