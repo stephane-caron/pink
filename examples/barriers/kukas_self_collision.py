@@ -14,6 +14,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
+from pink.utils import process_collision_pairs
 from pink.barriers import SelfCollisionBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
@@ -31,12 +32,16 @@ if __name__ == "__main__":
     viz = start_meshcat_visualizer(robot)
     q_ref = np.zeros(robot.model.nq)
 
+    # Collisions: processing collisions from urdf (include all) and srdf (exclude specified)
+    # and updating collision model and creating corresponding collision data
+    robot.collision_data = process_collision_pairs(robot.model, robot.collision_model, srdf_path)
+
     configuration = pink.Configuration(
         robot.model,
         robot.data,
         q_ref,
         collision_model=robot.collision_model,  # Collision model is required for self_collision_barrier
-        srdf_path=srdf_path,  # srdf might contain information about excluded collision pairs
+        collision_data=robot.collision_data,
     )
 
     # Pink tasks

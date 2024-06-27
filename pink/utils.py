@@ -31,9 +31,7 @@ def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
         joint = robot.model.joints[joint_id]
         value = np.array(value).flatten()
         if value.shape[0] != joint.nq:
-            raise ConfigurationError(
-                f"Joint '{name}' has {joint.nq=} but is set to {value.shape=}"
-            )
+            raise ConfigurationError(f"Joint '{name}' has {joint.nq=} but is set to {value.shape=}")
         q[joint.idx_q : joint.idx_q + joint.nq] = value
     return q
 
@@ -70,9 +68,7 @@ def get_joint_idx(model: pin.Model, joint_name: str) -> Tuple[int, int]:
         joint_id = model.getJointId(joint_name)
         joint = model.joints[joint_id]
         return joint.idx_q, joint.idx_v
-    raise PinkError(
-        f"cannot find the joint index corresponding to joint {joint_name}"
-    )
+    raise PinkError(f"cannot find the joint index corresponding to joint {joint_name}")
 
 
 class VectorSpace:
@@ -112,3 +108,28 @@ class VectorSpace:
     def zeros(self) -> np.ndarray:
         """Zero vector of the space."""
         return self.__zeros
+
+
+def process_collision_pairs(
+    model: pin.Model, collision_model: pin.GeometryModel, srdf_path: str = ""
+) -> pin.GeometryData:
+    """Process collision pairs.
+
+    Args:
+        model: robot model.
+        collision_model: Collision model of the robot.
+        srdf_path: Path to the SRDF file, which used to exclude collision pairs.
+            Defaults to empty string, meaning no collision pairs are excluded.
+
+    Returns:
+        collision_data: Collision data, generated after updating collision_model.
+    """
+    collision_model.addAllCollisionPairs()
+    if srdf_path != "":
+        pin.removeCollisionPairs(model, collision_model, srdf_path)
+
+    # Collision models have been modified => re-generate corresponding data.
+    collision_data = pin.GeometryData(collision_model)
+
+    # Enable contact detection for avoiding Nans at collisions
+    collision_data.collisionRequests.enable_contact = True
