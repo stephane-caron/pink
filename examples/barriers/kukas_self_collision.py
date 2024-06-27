@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2024 Domrachev Ivan, Simeon Nedelchev
+# Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
 """Two iiwa14-s with full-body self-collision avoidance using hpp-fcl."""
 
-import time
 import meshcat_shapes
 import numpy as np
 import pinocchio as pin
@@ -64,7 +63,7 @@ if __name__ == "__main__":
         cost=1e-3,  # [cost] / [rad]
     )
 
-    cbf_list = [collision_barrier]
+    barriers = [collision_barrier]
     tasks = [left_end_effector_task, right_end_effector_task, posture_task]
 
     for task in tasks:
@@ -113,16 +112,13 @@ if __name__ == "__main__":
         viewer["left_end_effector_target"].set_transform(left_end_effector_task.transform_target_to_world.np)
         viewer["right_end_effector_target"].set_transform(right_end_effector_task.transform_target_to_world.np)
 
-        t0 = time.perf_counter()
         velocity = solve_ik(
             configuration,
             tasks,
             dt,
             solver=solver,
-            barriers=cbf_list,
+            barriers=barriers,
         )
-        t1 = time.perf_counter()
-        print(f"solve_ik: {(t1 - t0)*1000:.3f} ms")
         configuration.integrate_inplace(velocity, dt)
 
         # Visualize result at fixed FPS
