@@ -80,9 +80,13 @@ class Barrier(abc.ABC):
                 cost term. Defaults to 3.0.
         """
         self.dim = dim
-        self.gain = gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        self.gain = (
+            gain if isinstance(gain, np.ndarray) else np.ones(dim) * gain
+        )
 
-        self.gain_function = gain_function if gain_function is not None else lambda x: x
+        self.gain_function = (
+            gain_function if gain_function is not None else lambda x: x
+        )
         self.safe_displacement = np.zeros(self.dim)
         self.safe_displacement_gain = safe_displacement_gain
 
@@ -125,7 +129,9 @@ class Barrier(abc.ABC):
             :math:`\frac{\partial h}{\partial q}(q)`.
         """
 
-    def compute_safe_displacement(self, configuration: Configuration) -> np.ndarray:
+    def compute_safe_displacement(
+        self, configuration: Configuration
+    ) -> np.ndarray:
         r"""Compute the safe backup displacement.
 
         The safe backup control displacement :math:`dq_{safe}(q)`
@@ -173,9 +179,11 @@ class Barrier(abc.ABC):
             Tuple containing the quadratic objective matrix (H) and linear
                 objective vector (c).
         """
-        if (self.__q_cache is None or self.__jac_cache is None or self.__barrier_cache is None) or not np.allclose(
-            self.__q_cache, configuration.q
-        ):
+        if (
+            self.__q_cache is None
+            or self.__jac_cache is None
+            or self.__barrier_cache is None
+        ) or not np.allclose(self.__q_cache, configuration.q):
             self.__q_cache = configuration.q
             self.__jac_cache = self.compute_jacobian(configuration)
             self.__barrier_cache = self.compute_barrier(configuration)
@@ -184,7 +192,9 @@ class Barrier(abc.ABC):
         c = np.zeros(configuration.model.nv)
 
         if self.safe_displacement_gain > 1e-6:
-            self.safe_displacement = self.compute_safe_displacement(configuration)
+            self.safe_displacement = self.compute_safe_displacement(
+                configuration
+            )
             jac_squared_norm = np.linalg.norm(self.__jac_cache) ** 2
             gain_over_jacobian = self.safe_displacement_gain / jac_squared_norm
 
@@ -235,7 +245,12 @@ class Barrier(abc.ABC):
             self.__barrier_cache = self.compute_barrier(configuration)
 
         G = -self.__jac_cache / dt
-        h = np.array([self.gain[i] * self.gain_function(self.__barrier_cache[i]) for i in range(self.dim)])
+        h = np.array(
+            [
+                self.gain[i] * self.gain_function(self.__barrier_cache[i])
+                for i in range(self.dim)
+            ]
+        )
 
         return (G, h)
 

@@ -31,7 +31,9 @@ def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
         joint = robot.model.joints[joint_id]
         value = np.array(value).flatten()
         if value.shape[0] != joint.nq:
-            raise ConfigurationError(f"Joint '{name}' has {joint.nq=} but is set to {value.shape=}")
+            raise ConfigurationError(
+                f"Joint '{name}' has {joint.nq=} but is set to {value.shape=}"
+            )
         q[joint.idx_q : joint.idx_q + joint.nq] = value
     return q
 
@@ -68,7 +70,9 @@ def get_joint_idx(model: pin.Model, joint_name: str) -> Tuple[int, int]:
         joint_id = model.getJointId(joint_name)
         joint = model.joints[joint_id]
         return joint.idx_q, joint.idx_v
-    raise PinkError(f"cannot find the joint index corresponding to joint {joint_name}")
+    raise PinkError(
+        f"cannot find the joint index corresponding to joint {joint_name}"
+    )
 
 
 class VectorSpace:
