@@ -61,8 +61,8 @@ https://github.com/domrachev03/pink/assets/28687492/f8c4bc8d-63e3-4bf7-a34f-e7ed
 |------|------|
 | Body Spherical | $10^{2}$ |
 
-## Iiwi whole-body collision avoidance
-Two iiwis with custom collision geometry with some barely feasible tasks for end-effectors.
+## Iiwa whole-body collision avoidance
+Two iiwas with custom collision geometry with some barely feasible tasks for end-effectors.
 
 
 https://github.com/domrachev03/pink/assets/28687492/d64163b6-399f-4bbf-ac50-1135fa69c2da
