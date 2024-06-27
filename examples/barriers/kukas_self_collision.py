@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Domrachev Ivan,  Simeon Nedelchec
+# Copyright 2024 Domrachev Ivan, Simeon Nedelchev
 
 """Two iiwa14-s with full-body self-collision avoidance using hpp-fcl."""
 
