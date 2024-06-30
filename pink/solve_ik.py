@@ -161,39 +161,36 @@ def solve_ik(
     **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
-
-    The computed velocity satisfies, at best (weighted), the set of kinematic
-    tasks provided as arguments.
-
+    The computed velocity satisfies at (weighted) best the set of kinematic
+    tasks given in argument.
     Args:
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
-        dt: Integration timestep in seconds.
+        dt: Integration timestep in [s].
         solver: Backend quadratic programming (QP) solver.
-        barriers: Collection of barrier functions.
-        damping: Weight of Tikhonov regularization. Its unit is
-            :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]`, where
-            :math:`[\mathrm{tangent}]` is the unit of robot velocities.
-            Improves numerical stability, but larger values slow down all tasks.
-        safe_break: If ``True``, stops execution if the current configuration 
-            is outside limits.
+        damping: weight of Tikhonov (everywhere) regularization. Its unit is
+            :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
+            :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
+            Improves numerical stability, but larger values slow down all
+            tasks.
+        barriers: Collection of barriers functions.
+        safe_break: If True, stop execution and raise an exception if 
+                the current configuration is outside limits. If False, print a warning 
+                and continue execution.
         kwargs: Keyword arguments to forward to the backend QP solver.
-
     Returns:
-        np.ndarray: Velocity :math:`v` in tangent space.
-
+        Velocity :math:`v` in tangent space.
     Raises:
-        NotWithinConfigurationLimits: If the current configuration is not
+        NotWithinConfigurationLimits: if the current configuration is not
             within limits.
-
     Note:
         Our Tikhonov damping is isotropic despite tangent velocities not being
-        homogeneous. If needed, we can add a tangent-space scaling to damp the
+        homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-    
-    configuration.check_limits(safe_break = safe_break)
-        
+
+    configuration.check_limits(safe_break=safe_break)
+
     problem = build_ik(
         configuration,
         tasks,
