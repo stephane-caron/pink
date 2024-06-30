@@ -11,7 +11,12 @@ All notable changes to this project will be documented in this file.
   - Frame Position Barrier ``PositionBarrier``
   - Body Spherical Barrier ``BodySphericalBarrier``
 - `ComTask` for Center of Mass tracking.
-- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect.
+- **Breaking:** Updated the logic for handling the joint limits:
+  - The `check_limits` method now includes an optional `safe_break` argument to control whether execution should stop on exception.
+  - The solve_ik function now includes the `safe_break` parameter to determine if the limit checking should break execution.
+- Example: UR5 manipulator and GO2 quadruped robot with `PositionBarrier`
+- Example: YUMI two-armed manipulator with `BodySphericalBarrier`
+- Example: G1 humanoid squatting through regulating CoM.
 
 ### Changed
 
@@ -44,7 +49,14 @@ All notable changes to this project will be documented in this file.
 
 - Add ``gain`` keyword argument to all task constructors where is makes sense
 - Damping task that minimizes joint velocities
-- Distribute package on conda-forge
+- Distribute package on conda-forge- Control Barrier Functions, namely: (thanks to @domrachev03 and @simeon-ned)
+  - Abstract Barrier ``Barrier``
+  - Frame Position Barrier ``PositionBarrier``
+  - Body Spherical Barrier ``BodySphericalBarrier``
+- `ComTask` for Center of Mass tracking.
+- Changing logic of handling the limits now..
+- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect as well as `G1` squatting through regulating CoM.
+
 - Example on how differential IK may converge to a local constrained optimum
 - Expose all tasks from the top-level `pink` module
 - Handle unbounded joints in custom configuration vectors
