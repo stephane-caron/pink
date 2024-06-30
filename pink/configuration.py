@@ -110,11 +110,13 @@ class Configuration:
         """Check that the current configuration is within limits.
 
         Args:
-            tol: Tolerance in radians.
-            break_on_exception: If True, stop execution on exception.
+            tol (float): Tolerance in radians.
+            safe_break (bool): If True, stop execution and raise an exception if 
+                the current configuration is outside limits. If False, print a warning 
+                and continue execution.
 
         Raises:
-            NotWithinConfigurationLimits: if the current configuration is
+            NotWithinConfigurationLimits: If the current configuration is
                 outside limits.
         """
         q_max = self.model.upperPositionLimit
