@@ -104,7 +104,7 @@ if __name__ == "__main__":
             dt,
             solver=solver,
             damping=0.01,
-            ignore_limits=True,
+            safe_break=False,
         )
         configuration.integrate_inplace(velocity, dt)
 

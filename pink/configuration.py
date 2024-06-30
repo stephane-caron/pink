@@ -106,15 +106,16 @@ class Configuration:
         pin.computeJointJacobians(self.model, self.data, self.q)
         pin.updateFramePlacements(self.model, self.data)
 
-    def check_limits(self, tol: float = 1e-6) -> None:
+    def check_limits(self, tol: float = 1e-6, safe_break: bool = True) -> None:
         """Check that the current configuration is within limits.
 
         Args:
             tol: Tolerance in radians.
+            break_on_exception: If True, stop execution on exception.
 
         Raises:
             NotWithinConfigurationLimits: if the current configuration is
-                within limits.
+                outside limits.
         """
         q_max = self.model.upperPositionLimit
         q_min = self.model.lowerPositionLimit
@@ -123,12 +124,16 @@ class Configuration:
             if q_max[i] <= q_min[i] + tol:  # no limit
                 continue
             if self.q[i] < q_min[i] - tol or self.q[i] > q_max[i] + tol:
-                raise NotWithinConfigurationLimits(
-                    i,
-                    self.q[i],
-                    q_min[i],
-                    q_max[i],
-                )
+                if safe_break:
+                    raise NotWithinConfigurationLimits(
+                        i,
+                        self.q[i],
+                        q_min[i],
+                        q_max[i],
+                    )
+                else:
+                    print(f"Warning: Value {self.q[i]} at index {i} is out of limits: [{q_min[i]}, {q_max[i]}]")
+
 
     def get_frame_jacobian(self, frame: str) -> np.ndarray:
         r"""Compute the Jacobian matrix of a frame velocity.

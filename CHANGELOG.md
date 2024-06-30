@@ -10,7 +10,9 @@ All notable changes to this project will be documented in this file.
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
   - Body Spherical Barrier ``BodySphericalBarrier``
-- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect.
+- Center of mass regulation task ``ComTask`` 
+- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect as well as `G1` squatting through regulating CoM.
+  
 
 ### Changed
 
