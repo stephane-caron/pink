@@ -49,14 +49,7 @@ All notable changes to this project will be documented in this file.
 
 - Add ``gain`` keyword argument to all task constructors where is makes sense
 - Damping task that minimizes joint velocities
-- Distribute package on conda-forge- Control Barrier Functions, namely: (thanks to @domrachev03 and @simeon-ned)
-  - Abstract Barrier ``Barrier``
-  - Frame Position Barrier ``PositionBarrier``
-  - Body Spherical Barrier ``BodySphericalBarrier``
-- `ComTask` for Center of Mass tracking.
-- Changing logic of handling the limits now..
-- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect as well as `G1` squatting through regulating CoM.
-
+- Distribute package on conda-forge
 - Example on how differential IK may converge to a local constrained optimum
 - Expose all tasks from the top-level `pink` module
 - Handle unbounded joints in custom configuration vectors
