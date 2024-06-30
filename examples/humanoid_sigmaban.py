@@ -14,7 +14,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.tasks import FrameTask, PostureTask, ComTask
+from pink.tasks import FrameTask, PostureTask
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description

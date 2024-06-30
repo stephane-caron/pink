@@ -16,7 +16,7 @@ from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration, build_ik, solve_ik
 from pink.exceptions import NotWithinConfigurationLimits
-from pink.tasks import FrameTask
+from pink.tasks import FrameTask, ComTask
 from pink.barriers import PositionBarrier
 
 
@@ -44,7 +44,7 @@ class TestSolveIK(unittest.TestCase):
         configuration = Configuration(robot.model, robot.data, q)
 
         solve_ik(
-            configuration, [], dt=1.0, solver="quadprog", ignore_limits=True
+            configuration, [], dt=1.0, solver="quadprog", safe_break=False,
         )
 
     def test_model_with_no_joint_limit(self):
@@ -309,6 +309,90 @@ class TestSolveIK(unittest.TestCase):
         self.assertLess(norm(velocity), 1e-10)
         self.assertLess(
             max(norm(task.compute_error(configuration)) for task in tasks),
+            0.5,
+        )
+
+    def test_com_task_fulfilled(self):
+        """No motion when all targets are reached."""
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+        left_ankle_task = FrameTask(
+            "l_ankle", position_cost=1.0, orientation_cost=3.0
+        )
+        right_ankle_task = FrameTask(
+            "r_ankle", position_cost=1.0, orientation_cost=3.0
+        )
+        com_task = ComTask(cost=2.0)
+
+        left_ankle_task.set_target(
+            configuration.get_transform_frame_to_world("l_ankle")
+        )
+        right_ankle_task.set_target(
+            configuration.get_transform_frame_to_world("r_ankle")
+        )
+        com_task.set_target_from_configuration(
+            configuration
+        )
+
+        tasks = [com_task, left_ankle_task, right_ankle_task]
+        velocity = solve_ik(configuration, tasks, dt=5e-3, solver="quadprog")
+        self.assertTrue(np.allclose(velocity, 0.0))
+
+    def test_com_task_convergence(self):
+        """Three simultaneously feasible tasks on the JVRC model converge."""
+        robot = load_robot_description(
+            "jvrc_description", root_joint=pin.JointModelFreeFlyer()
+        )
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+
+        # Define tasks
+        left_ankle_task = FrameTask(
+            "l_ankle", position_cost=1.0, orientation_cost=3.0
+        )
+        right_ankle_task = FrameTask(
+            "r_ankle", position_cost=1.0, orientation_cost=3.0
+        )
+        com_task = ComTask(cost=2.0)
+        tasks = [com_task, left_ankle_task, right_ankle_task]
+
+        # Set task targets
+        transform_l_ankle_target_to_init = pin.SE3(
+            np.eye(3), np.array([0.1, 0.0, 0.0])
+        )
+        transform_r_ankle_target_to_init = pin.SE3(
+            np.eye(3), np.array([-0.1, 0.0, 0.0])
+        )
+        left_ankle_task.set_target(
+            configuration.get_transform_frame_to_world("l_ankle")
+            * transform_l_ankle_target_to_init
+        )
+        right_ankle_task.set_target(
+            configuration.get_transform_frame_to_world("r_ankle")
+            * transform_r_ankle_target_to_init
+        )
+
+        # Set the desired CoM target 0.05 above the initial CoM position
+        initial_com = pin.centerOfMass(
+            robot.model, robot.data, configuration.q)
+        desired_com = initial_com.copy()
+        desired_com[2] += 0.05
+        com_task.set_target(desired_com)
+
+        # Run IK in closed loop
+        dt = 4e-3  # [s]
+        for nb_iter in range(42):
+            velocity = solve_ik(configuration, tasks, dt, solver="quadprog")
+            if np.linalg.norm(velocity) < 1e-10:
+                break
+            configuration.integrate_inplace(velocity, dt)
+
+        self.assertLess(nb_iter, 42)
+        self.assertLess(np.linalg.norm(velocity), 1e-10)
+        self.assertLess(
+            max(np.linalg.norm(task.compute_error(configuration))
+                for task in tasks),
             0.5,
         )
 
