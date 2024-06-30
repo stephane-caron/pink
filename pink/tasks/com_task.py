@@ -12,7 +12,7 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from .exceptions import TargetNotSet, TaskDefinitionError
+from .exceptions import TargetNotSet
 from .task import Task
 
 
@@ -33,7 +33,7 @@ class ComTask(Task):
 
     def __init__(
         self,
-        cost: Union[float, Sequence[float]],
+        cost: Union[float, Sequence[float], np.ndarray],
         lm_damping: float = 0.0,
         gain: float = 1.0,
     ) -> None:
@@ -55,7 +55,6 @@ class ComTask(Task):
             gain=gain,
             lm_damping=lm_damping,
         )
-        self.lm_damping = lm_damping
         self.target_com = None
         self.set_cost(cost)
 
@@ -70,17 +69,13 @@ class ComTask(Task):
                 the cost is anisotropic and each coordinate corresponds to an
                 axis of the frame.
         """
+
         if isinstance(cost, float):
             assert cost >= 0.0
         else:  # not isinstance(cost, float)
             assert all(cost >= 0.0 for cost in cost)
         if isinstance(self.cost, np.ndarray):
             self.cost[0:3] = cost
-        else:  # self.cost is not a vector
-            raise TaskDefinitionError(
-                "CoM task cost should be a vector, "
-                f"currently cost={self.cost}"
-            )
 
     def set_target(
         self,
@@ -103,7 +98,9 @@ class ComTask(Task):
             configuration: Robot configuration used to compute the target CoM.
         """
         q = configuration.q.copy()
-        desired_com = pin.centerOfMass(configuration.model, configuration.data, q)
+        desired_com = pin.centerOfMass(
+            configuration.model, configuration.data, q
+        )
         self.set_target(desired_com)
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
@@ -119,10 +116,12 @@ class ComTask(Task):
             CoM task error :math:`e(q)`.
         """
         if self.target_com is None:
-            raise TargetNotSet(f"no target set for CoM")
+            raise TargetNotSet("no target set for CoM")
         q = configuration.q.copy()
-        actual_com = pin.centerOfMass(configuration.model, configuration.data, q)
-        error = actual_com - self.target_com
+        actual_com = pin.centerOfMass(
+            configuration.model, configuration.data, q
+        )
+        error = self.target_com - actual_com
         return error
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
@@ -139,16 +138,16 @@ class ComTask(Task):
             Jacobian matrix :math:`J`.
         """
         if self.target_com is None:
-            raise TargetNotSet(f"no target set for CoM")
+            raise TargetNotSet("no target set for CoM")
         q = configuration.q.copy()
-        J = pin.jacobianCenterOfMass(configuration.model, configuration.data, q)
+        J = pin.jacobianCenterOfMass(
+            configuration.model, configuration.data, q
+        )
         return J
 
     def __repr__(self):
         """Human-readable representation of the task."""
-        cost = (
-            self.cost if isinstance(self.cost, float) else self.cost[0:3]
-        )
+        cost = self.cost if isinstance(self.cost, float) else self.cost[0:3]
         return (
             "ComTask("
             f"gain={self.gain}, "
