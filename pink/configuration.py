@@ -134,7 +134,7 @@ class Configuration:
                         q_max[i],
                     )
                 else:
-                    print(f"Warning: Value {self.q[i]} at index {i} is out of limits: [{q_min[i]}, {q_max[i]}]")
+                    logging.warning(f"Warning: Value %f at index %d is out of limits: [%f, %f]", self.q[i], i, q_min[i], q_max[i])
 
 
     def get_frame_jacobian(self, frame: str) -> np.ndarray:
