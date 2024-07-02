@@ -110,7 +110,7 @@ class Configuration:
         """Check that the current configuration is within limits.
 
         Args:
-            tol (float): Tolerance in radians.
+            tol: Tolerance in radians.
             safe_break (bool): If True, stop execution and raise an exception if 
                 the current configuration is outside limits. If False, print a warning 
                 and continue execution.
