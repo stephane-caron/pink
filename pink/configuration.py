@@ -106,7 +106,7 @@ class Configuration:
         pin.computeJointJacobians(self.model, self.data, self.q)
         pin.updateFramePlacements(self.model, self.data)
 
-    def check_limits(self, tol: float = 1e-6, safe_break: bool = True) -> None:
+    def check_limits(self, tol: float = 1e-6, safety_break: bool = True) -> None:
         """Check that the current configuration is within limits.
 
         Args:
