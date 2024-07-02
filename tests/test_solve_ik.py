@@ -44,7 +44,11 @@ class TestSolveIK(unittest.TestCase):
         configuration = Configuration(robot.model, robot.data, q)
 
         solve_ik(
-            configuration, [], dt=1.0, solver="quadprog", safe_break=False,
+            configuration,
+            [],
+            dt=1.0,
+            solver="quadprog",
+            safety_break=False,
         )
 
     def test_model_with_no_joint_limit(self):
@@ -332,9 +336,7 @@ class TestSolveIK(unittest.TestCase):
         right_ankle_task.set_target(
             configuration.get_transform_frame_to_world("r_ankle")
         )
-        com_task.set_target_from_configuration(
-            configuration
-        )
+        com_task.set_target_from_configuration(configuration)
 
         tasks = [com_task, left_ankle_task, right_ankle_task]
         velocity = solve_ik(configuration, tasks, dt=5e-3, solver="quadprog")
@@ -375,7 +377,8 @@ class TestSolveIK(unittest.TestCase):
 
         # Set the desired CoM target 0.05 above the initial CoM position
         initial_com = pin.centerOfMass(
-            robot.model, robot.data, configuration.q)
+            robot.model, robot.data, configuration.q
+        )
         desired_com = initial_com.copy()
         desired_com[2] += 0.05
         com_task.set_target(desired_com)
@@ -391,8 +394,10 @@ class TestSolveIK(unittest.TestCase):
         self.assertLess(nb_iter, 42)
         self.assertLess(np.linalg.norm(velocity), 1e-10)
         self.assertLess(
-            max(np.linalg.norm(task.compute_error(configuration))
-                for task in tasks),
+            max(
+                np.linalg.norm(task.compute_error(configuration))
+                for task in tasks
+            ),
             0.5,
         )
 

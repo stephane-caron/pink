@@ -20,6 +20,7 @@ import pinocchio as pin
 from .exceptions import FrameNotFound, NotWithinConfigurationLimits
 from .limits import ConfigurationLimit, VelocityLimit
 from .utils import VectorSpace, get_root_joint_dim
+import logging
 
 
 class Configuration:
@@ -106,13 +107,15 @@ class Configuration:
         pin.computeJointJacobians(self.model, self.data, self.q)
         pin.updateFramePlacements(self.model, self.data)
 
-    def check_limits(self, tol: float = 1e-6, safety_break: bool = True) -> None:
+    def check_limits(
+        self, tol: float = 1e-6, safety_break: bool = True
+    ) -> None:
         """Check that the current configuration is within limits.
 
         Args:
             tol: Tolerance in radians.
-            safe_break (bool): If True, stop execution and raise an exception if 
-                the current configuration is outside limits. If False, print a warning 
+            safe_break (bool): If True, stop execution and raise an exception if
+                the current configuration is outside limits. If False, print a warning
                 and continue execution.
 
         Raises:
@@ -126,7 +129,7 @@ class Configuration:
             if q_max[i] <= q_min[i] + tol:  # no limit
                 continue
             if self.q[i] < q_min[i] - tol or self.q[i] > q_max[i] + tol:
-                if safe_break:
+                if safety_break:
                     raise NotWithinConfigurationLimits(
                         i,
                         self.q[i],
@@ -134,8 +137,13 @@ class Configuration:
                         q_max[i],
                     )
                 else:
-                    logging.warning(f"Warning: Value %f at index %d is out of limits: [%f, %f]", self.q[i], i, q_min[i], q_max[i])
-
+                    logging.warning(
+                        "Value %f at index %d is out of limits: [%f, %f]",
+                        self.q[i],
+                        i,
+                        q_min[i],
+                        q_max[i],
+                    )
 
     def get_frame_jacobian(self, frame: str) -> np.ndarray:
         r"""Compute the Jacobian matrix of a frame velocity.

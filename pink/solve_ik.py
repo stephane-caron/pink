@@ -161,8 +161,10 @@ def solve_ik(
     **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
+
     The computed velocity satisfies at (weighted) best the set of kinematic
     tasks given in argument.
+
     Args:
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks.
@@ -174,22 +176,25 @@ def solve_ik(
             Improves numerical stability, but larger values slow down all
             tasks.
         barriers: Collection of barriers functions.
-        safe_break: If True, stop execution and raise an exception if 
-                the current configuration is outside limits. If False, print a warning 
+        safety_break: If True, stop execution and raise an exception if
+                the current configuration is outside limits. If False, print a warning
                 and continue execution.
         kwargs: Keyword arguments to forward to the backend QP solver.
+
     Returns:
         Velocity :math:`v` in tangent space.
+
     Raises:
         NotWithinConfigurationLimits: if the current configuration is not
             within limits.
+
     Note:
         Our Tikhonov damping is isotropic despite tangent velocities not being
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
 
-    configuration.check_limits(safe_break=safe_break)
+    configuration.check_limits(safety_break=safety_break)
 
     problem = build_ik(
         configuration,

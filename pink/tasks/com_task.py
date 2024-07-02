@@ -103,7 +103,9 @@ class ComTask(Task):
             configuration: Robot configuration used to compute the target CoM.
         """
         q = configuration.q
-        desired_com = pin.centerOfMass(configuration.model, configuration.data, q)
+        desired_com = pin.centerOfMass(
+            configuration.model, configuration.data, q
+        )
         self.set_target(desired_com)
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
@@ -119,9 +121,11 @@ class ComTask(Task):
             CoM task error :math:`e(q)`.
         """
         if self.target_com is None:
-            raise TargetNotSet(f"no target set for CoM")
+            raise TargetNotSet("no target set for CoM")
         q = configuration.q
-        actual_com = pin.centerOfMass(configuration.model, configuration.data, q)
+        actual_com = pin.centerOfMass(
+            configuration.model, configuration.data, q
+        )
         error = actual_com - self.target_com
         return error
 
@@ -139,16 +143,16 @@ class ComTask(Task):
             Jacobian matrix :math:`J`.
         """
         if self.target_com is None:
-            raise TargetNotSet(f"no target set for CoM")
+            raise TargetNotSet("no target set for CoM")
         q = configuration.q
-        J = pin.jacobianCenterOfMass(configuration.model, configuration.data, q)
+        J = pin.jacobianCenterOfMass(
+            configuration.model, configuration.data, q
+        )
         return J
 
     def __repr__(self):
         """Human-readable representation of the task."""
-        cost = (
-            self.cost if isinstance(self.cost, float) else self.cost[0:3]
-        )
+        cost = self.cost if isinstance(self.cost, float) else self.cost[0:3]
         return (
             "ComTask("
             f"gain={self.gain}, "
