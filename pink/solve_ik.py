@@ -157,7 +157,7 @@ def solve_ik(
     solver: str,
     barriers: Optional[Iterable[Barrier]] = None,
     damping: float = 1e-12,
-    safe_break: bool = True,
+    safety_break: bool = True,
     **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
