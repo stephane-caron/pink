@@ -10,7 +10,13 @@ All notable changes to this project will be documented in this file.
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
   - Body Spherical Barrier ``BodySphericalBarrier``
-- Examples for `UR5` manipulator and `go2` quadruped robot, and `yumi` two-armed manipulator which illustrate barriers effect.
+- `ComTask` for Center of Mass tracking.
+- **Breaking:** Updated the logic for handling the joint limits:
+  - The `check_limits` method now includes an optional `safety_break` argument to control whether execution should stop on exception.
+  - The solve_ik function now includes the `safety_break` that is forwarded to `check_limits`.
+- Example: UR5 manipulator and GO2 quadruped robot with `PositionBarrier`
+- Example: YUMI two-armed manipulator with `BodySphericalBarrier`
+- Example: G1 humanoid squatting through regulating CoM.
 
 ### Changed
 

@@ -155,8 +155,9 @@ def solve_ik(
     tasks: Iterable[Task],
     dt: float,
     solver: str,
-    damping: float = 1e-12,
     barriers: Optional[Iterable[Barrier]] = None,
+    damping: float = 1e-12,
+    safety_break: bool = True,
     **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
@@ -175,6 +176,9 @@ def solve_ik(
             Improves numerical stability, but larger values slow down all
             tasks.
         barriers: Collection of barriers functions.
+        safety_break: If True, stop execution and raise an exception if
+                the current configuration is outside limits. If False, print a warning
+                and continue execution.
         kwargs: Keyword arguments to forward to the backend QP solver.
 
     Returns:
@@ -189,7 +193,9 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-    configuration.check_limits()
+
+    configuration.check_limits(safety_break=safety_break)
+
     problem = build_ik(
         configuration,
         tasks,

@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Yumi two-armed manipulator with definition of custom frame and 
+"""Yumi two-armed manipulator with definition of custom frame and
 collision avoidance w.r.t. those frames."""
 
 import meshcat_shapes

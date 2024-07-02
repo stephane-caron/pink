@@ -13,6 +13,7 @@ from .joint_coupling_task import JointCouplingTask
 from .linear_holonomic_task import LinearHolonomicTask
 from .posture_task import PostureTask
 from .relative_frame_task import RelativeFrameTask
+from .com_task import ComTask
 from .task import Task
 
 __all__ = [
@@ -24,5 +25,6 @@ __all__ = [
     "JointCouplingTask",
     "LinearHolonomicTask",
     "PostureTask",
+    "ComTask",
     "Task",
 ]
