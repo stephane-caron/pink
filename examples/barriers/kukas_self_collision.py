@@ -6,11 +6,14 @@
 
 """Two iiwa14-s with full-body self-collision avoidance using hpp-fcl."""
 
+import os
 import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
+
+from robot_descriptions.iiwa14_description import PACKAGE_PATH, REPOSITORY_PATH
 
 import pink
 from pink import solve_ik
@@ -19,16 +22,90 @@ from pink.barriers import SelfCollisionBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
 
+
+def prefix_frames(
+    model: pin.Model, visual_model: pin.GeometryModel, geometry_model: pin.GeometryModel, prefix: str
+) -> None:
+    for frame in model.frames:
+        frame.name = f"{prefix}_{frame.name}"
+    for i, name in enumerate(model.names):
+        model.names[i] = f"{prefix}_{name}"
+    for geom in visual_model.geometryObjects:
+        geom.name = f"{prefix}_{geom.name}"
+    for geom in collision_model.geometryObjects:
+        geom.name = f"{prefix}_{geom.name}"
+
+
 if __name__ == "__main__":
-    # Load the robot and define the custom frames
-    urdf_path = "examples/barriers/models/iiwa14_spheres_collision.urdf"
-    srdf_path = "examples/barriers/models/iiwa14_spheres_collision.srdf"
-    robot = pin.RobotWrapper.BuildFromURDF(
-        filename=urdf_path,
-        package_dirs=["."],
-        root_joint=None,
+    # Empty model
+    model, visual_model, collision_model = pin.Model(), pin.GeometryModel(), pin.GeometryModel()
+    urdf_path = os.path.join(PACKAGE_PATH, "urdf", "iiwa14_spheres_collision.urdf")
+
+    # === Left arm ====
+    left_arm = pin.RobotWrapper.BuildFromURDF(urdf_path, package_dirs=[os.path.dirname(REPOSITORY_PATH)])
+
+    # Add prefix to frames, links and geons of the arm
+    prefix_frames(left_arm.model, left_arm.visual_model, left_arm.collision_model, "left")
+
+    # Place left arm on the left to the origin
+    left_arm_placement = pin.SE3.Identity()
+    left_arm_placement.translation = np.array([0.0, 0.2, 0.0])
+
+    # Add left arm's model, visual model and collision model to the main model
+    _, visual_model = pin.appendModel(
+        model,
+        left_arm.model,
+        visual_model,
+        left_arm.visual_model,
+        0,
+        left_arm_placement,
+    )
+    model, collision_model = pin.appendModel(
+        model,
+        left_arm.model,
+        collision_model,
+        left_arm.collision_model,
+        0,
+        left_arm_placement,
     )
 
+    # === Right arm ====
+    right_arm = pin.RobotWrapper.BuildFromURDF(urdf_path, package_dirs=[os.path.dirname(REPOSITORY_PATH)])
+
+    # Add prefix to frames, links and geons of the arm
+    prefix_frames(right_arm.model, right_arm.visual_model, right_arm.collision_model, "right")
+
+    # Place left arm on the left to the origin
+    right_arm_placement = pin.SE3.Identity()
+    right_arm_placement.translation = np.array([0.0, -0.2, 0.0])
+
+    # Add left arm's model, visual model and collision model to the main model
+    _, visual_model = pin.appendModel(
+        model,
+        right_arm.model,
+        visual_model,
+        right_arm.visual_model,
+        0,
+        right_arm_placement,
+    )
+    model, collision_model = pin.appendModel(
+        model,
+        right_arm.model,
+        collision_model,
+        right_arm.collision_model,
+        0,
+        right_arm_placement,
+    )
+
+    # Assemble to the robot
+    robot = pin.RobotWrapper(
+        model,
+        collision_model=collision_model,
+        visual_model=visual_model,
+    )
+
+    srdf_path = os.path.dirname(os.path.realpath(__file__)) + "/iiwa14_spheres_collision.srdf"
+    print(srdf_path)
     viz = start_meshcat_visualizer(robot)
     q_ref = np.zeros(robot.model.nq)
 
@@ -46,12 +123,12 @@ if __name__ == "__main__":
 
     # Pink tasks
     left_end_effector_task = FrameTask(
-        "first_iiwa_link_7",
+        "left_iiwa_link_7",
         position_cost=50.0,  # [cost] / [m]
         orientation_cost=10.0,  # [cost] / [rad]
     )
     right_end_effector_task = FrameTask(
-        "second_iiwa_link_7",
+        "right_iiwa_link_7",
         position_cost=50.0,  # [cost] / [m]
         orientation_cost=10.0,  # [cost] / [rad]
     )
@@ -123,6 +200,7 @@ if __name__ == "__main__":
             dt,
             solver=solver,
             barriers=barriers,
+            safety_break=False,
         )
         configuration.integrate_inplace(velocity, dt)
 
