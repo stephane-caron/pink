@@ -136,4 +136,6 @@ def process_collision_pairs(
     collision_data = pin.GeometryData(collision_model)
 
     # Enable contact detection for avoiding Nans at collisions
-    collision_data.collisionRequests.enable_contact = True
+    collision_data.enable_contact = True
+
+    return collision_data

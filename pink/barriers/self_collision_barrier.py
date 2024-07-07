@@ -13,6 +13,7 @@ import pinocchio as pin
 
 from ..configuration import Configuration
 from .barrier import Barrier
+from .exceptions import NegativeMinimumDistance, InvalidCollisionPairs
 
 
 class SelfCollisionBarrier(Barrier):
@@ -63,6 +64,15 @@ class SelfCollisionBarrier(Barrier):
             d_min: Minimum distance between any collision pairs.
                 Defaults to 0.02.
         """
+        if d_min < 0.0:
+            raise NegativeMinimumDistance(
+                "The minimum distance threshold must be non-negative."
+            )
+        if n_collision_pairs < 0:
+            raise InvalidCollisionPairs(
+                "The number of collision pairs must be non-negative."
+            )
+
         super().__init__(
             dim=n_collision_pairs,
             gain=gain,
@@ -95,7 +105,12 @@ class SelfCollisionBarrier(Barrier):
             Value of the barrier function
                  :math:`h(q)`.
         """
-        return np.array(
+        if len(configuration.collision_model.collisionPairs) < self.dim:
+            raise InvalidCollisionPairs(
+                f"The number of collision pairs ({len(configuration.collision_model.collisionPairs)}) is less "
+                f"than the barrier dimension ({self.dim})."
+            )
+        distances = np.array(
             [
                 configuration.collision_data.distanceResults[k].min_distance
                 - self.d_min
@@ -104,6 +119,11 @@ class SelfCollisionBarrier(Barrier):
                 )
             ]
         )
+        closest_pairs_idxs = np.argpartition(-distances, -self.dim)[
+            -self.dim :
+        ]
+
+        return distances[closest_pairs_idxs]
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the Jacobian matrix of the barrier function.
@@ -165,10 +185,14 @@ class SelfCollisionBarrier(Barrier):
 
             w1 = np.array(dr.getNearestPoint1())
             w2 = np.array(dr.getNearestPoint2())
-
             # Vectors from frame origin to nearest points
             r1 = np.array(w1 - data.oMf[f1_id].translation)
             r2 = np.array(w2 - data.oMf[f2_id].translation)
+
+            # If division by zero is possible, then the points are practically
+            # collisind, jacobian is undefined. Set it to zero.
+            if np.allclose(w1, w2):
+                continue
 
             # Normal vector betwee nearest points (n_1 in the notation above)
             n = (w1 - w2) / np.linalg.norm(w1 - w2)
