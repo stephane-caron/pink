@@ -55,7 +55,7 @@ class SelfCollisionBarrier(Barrier):
 
         Args:
             n_collision_pairs: Number of collision pairs.
-                Note that the number of collision pairs don't have to be equal to
+                Note that the number of collision pairs doesn't have to be equal to
                 the total number of collision pairs in the model. If it is less,
                 than only the closest collision pairs will be used.
             gain: Barrier gain. Defaults to 1.0.
