@@ -76,5 +76,5 @@ https://github.com/domrachev03/pink/assets/28687492/d64163b6-399f-4bbf-ac50-1135
 
 | Barrier | Gain |
 |------|------|
-| Self Collision Avoidance | $10$ 
+| Self Collision Avoidance | $10$ |
 
