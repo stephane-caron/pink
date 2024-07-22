@@ -51,7 +51,6 @@ class Configuration:
     Attributes:
         data: Data corresponding to :data:`Configuration.model`.
         model: Kinodynamic model.
-        update_collision: If true (default), calculate collisions in the models.
         collision_data: Data corresponding to :data:`Configuration.collision_model`.
         collision_model: Collision model.
         q: Configuration vector for the robot model.
