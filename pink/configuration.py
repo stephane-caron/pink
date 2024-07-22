@@ -38,6 +38,11 @@ class Configuration:
     ``pin.forwardKinematics(model, data, configuration)``.) The latter updates
     frame placements.
 
+    Additionally, if collision model is provided, it is used to evaluate distances
+    between frames using following functions:
+    - ``pin.computeCollisions(model, data, collision_model, collision_data, q)``
+    - ``pin.updateGeometryPlacements(model, data, collision_model, collision_data, q)``
+
     Notes:
         This class is meant to be used as a subclass of pin.RobotWrapper, not
         wrap it. However, right now pin.RobotWrapper does not have a shallow
@@ -46,11 +51,15 @@ class Configuration:
     Attributes:
         data: Data corresponding to :data:`Configuration.model`.
         model: Kinodynamic model.
+        collision_data: Data corresponding to :data:`Configuration.collision_model`.
+        collision_model: Collision model.
         q: Configuration vector for the robot model.
     """
 
     data: pin.Data
     model: pin.Model
+    collision_model: pin.GeometryModel
+    collision_data: pin.GeometryData
     q: np.ndarray
 
     def __init__(
@@ -60,6 +69,8 @@ class Configuration:
         q: np.ndarray,
         copy_data: bool = True,
         forward_kinematics: bool = True,
+        collision_model: Optional[pin.GeometryModel] = None,
+        collision_data: Optional[pin.GeometryData] = None,
     ):
         """Initialize configuration.
 
@@ -71,6 +82,10 @@ class Configuration:
                 data. Otherwise, work on the input data directly.
             forward_kinematics: If true (default), compute forward kinematics
                 from the q into the internal data.
+            collision_model: collision geometry model, with already loaded collisions.
+                Default is None, meaning no collisions are processeed.
+            collision_data: collision geometry data, with already loaded collisions.
+                Default is None, which generates it from the model if possible, None otherwise.
 
         Notes:
             Configurations copy data and run forward kinematics by default so
@@ -90,12 +105,25 @@ class Configuration:
         self.model = model
         self.q = q_readonly
         self.tangent = model.tangent
-        #
+
+        # Update collision
+        self.collision_model = collision_model
+        self.collision_data = (
+            collision_data
+            if collision_data is not None
+            else (
+                pin.GeometryData(collision_model)
+                if collision_model is not None
+                else None
+            )
+        )
+
         if forward_kinematics:
             self.update(None)
 
     def update(self, q: Optional[np.ndarray] = None) -> None:
-        """Update configuration to a new vector and run forward kinematics.
+        """Update configuration to a new vector and run forward kinematics and
+        collision pairs distance calculations, if specified.
 
         Args:
             q: New configuration vector.
@@ -104,6 +132,25 @@ class Configuration:
             q_readonly = q.copy()
             q_readonly.setflags(write=False)
             self.q = q_readonly
+
+        # Compute collisions, if needed
+        if self.collision_model is not None:
+            pin.computeCollisions(
+                self.model,
+                self.data,
+                self.collision_model,
+                self.collision_data,
+                self.q,
+                False,
+            )
+            pin.computeDistances(
+                self.model,
+                self.data,
+                self.collision_model,
+                self.collision_data,
+                self.q,
+            )
+
         pin.computeJointJacobians(self.model, self.data, self.q)
         pin.updateFramePlacements(self.model, self.data)
 

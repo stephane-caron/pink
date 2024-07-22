@@ -13,3 +13,7 @@ class NoPositionLimitProvided(PinkError):
 
 class NegativeMinimumDistance(PinkError):
     """If the minimum distance in body spherical barrier is negative."""
+
+
+class InvalidCollisionPairs(PinkError):
+    """IF the number of collision pairs is invalid."""

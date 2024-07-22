@@ -43,7 +43,7 @@ https://github.com/domrachev03/pink/assets/28687492/78281f44-3676-4d4d-9619-768b
 | End-effector | $10^{2}$ |
 
 
-## Yumi self-collision avoidance
+## Yumi end-effector self-collision avoidance
 Yumi two-armed manimpulator with constraint on minimal distance between frames, defined by end-effectors
 
 
@@ -60,3 +60,21 @@ https://github.com/domrachev03/pink/assets/28687492/f8c4bc8d-63e3-4bf7-a34f-e7ed
 | Barrier | Gain |
 |------|------|
 | Body Spherical | $10^{2}$ |
+
+## Iiwa whole-body collision avoidance
+Two iiwas with custom collision geometry with some barely feasible tasks for end-effectors.
+
+
+https://github.com/domrachev03/pink/assets/28687492/d64163b6-399f-4bbf-ac50-1135fa69c2da
+
+
+
+| Task | Cost |
+|------|------|
+| End-effector | (50,10) |
+| Posture | $10^{-3}$ |
+
+| Barrier | Gain |
+|------|------|
+| Self Collision Avoidance | $10$ |
+

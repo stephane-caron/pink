@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   - Abstract Barrier ``Barrier``
   - Frame Position Barrier ``PositionBarrier``
   - Body Spherical Barrier ``BodySphericalBarrier``
+  - Whole-body Self-Collision Avoidance Barrier ``SelfCollisionBarrier``
 - `ComTask` for Center of Mass tracking.
 - **Breaking:** Updated the logic for handling the joint limits:
   - The `check_limits` method now includes an optional `safety_break` argument to control whether execution should stop on exception.
