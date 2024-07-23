@@ -7,11 +7,12 @@
 """Visualization helpers."""
 
 import pinocchio as pin
+from pinocchio import visualize
 
 
 def start_meshcat_visualizer(
     robot: pin.RobotWrapper,
-) -> pin.visualize.MeshcatVisualizer:
+) -> visualize.MeshcatVisualizer:
     """Open a MeshCat visualizer in a web browser.
 
     Args:
@@ -20,7 +21,7 @@ def start_meshcat_visualizer(
     Returns:
         MeshCat visualizer.
     """
-    viz = pin.visualize.MeshcatVisualizer(
+    viz = visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )
     robot.setVisualizer(viz, init=False)
