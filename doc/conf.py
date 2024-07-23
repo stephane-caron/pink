@@ -39,7 +39,7 @@ templates_path = []
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = ".rst"
+source_suffix = {'.rst': 'restructuredtext'}
 
 # The encoding of source files.
 #
@@ -341,7 +341,7 @@ intersphinx_mapping = {
 nitpicky = True
 
 nitpick_ignore = [
-    ("py:class", "pinocchio.pinocchio_pywrap.SE3"),
+    ("py:class", "pinocchio.pinocchio_pywrap_default.SE3"),
     ("py:data", "typing.Optional"),
     ("py:data", "typing.Tuple"),
     ("py:data", "typing.Union"),

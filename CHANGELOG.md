@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 - CICD: Update ruff to 0.4.3
 - Configuration accepts list of Control Barrier Functions
+- Update to Pinocchio 3 with 2.7 backward compatibility
 
 ### Fixed
 
