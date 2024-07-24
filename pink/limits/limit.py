@@ -20,6 +20,7 @@ class Limit(abc.ABC):
         self,
         q: np.ndarray,
         dt: float,
+        v_prev: Optional[np.ndarray] = None,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute limit as linearized QP inequalities.
 
@@ -36,6 +37,7 @@ class Limit(abc.ABC):
         Args:
             q: Robot configuration.
             dt: Integration timestep in [s].
+            v_prev: Most recent robot velocity.
 
         Returns:
             Pair :math:`(G, h)` representing the inequality constraint as

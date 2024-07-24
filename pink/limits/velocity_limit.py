@@ -69,6 +69,7 @@ class VelocityLimit(Limit):
         self,
         q: np.ndarray,
         dt: float,
+        v_prev: Optional[np.ndarray] = None,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute the configuration-dependent velocity limits.
 
@@ -85,6 +86,7 @@ class VelocityLimit(Limit):
         Args:
             q: Robot configuration.
             dt: Integration timestep in [s].
+            v_prev: Most recent robot velocity (not used).
 
         Returns:
             Pair :math:`(G, h)` representing the inequality constraint as
