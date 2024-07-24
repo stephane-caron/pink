@@ -114,9 +114,9 @@ def build_ik(
     configuration: Configuration,
     tasks: Iterable[Task],
     dt: float,
+    damping: float = 1e-12,
     limits: Optional[Iterable[Limit]] = None,
     barriers: Optional[Iterable[Barrier]] = None,
-    damping: float = 1e-12,
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
 
@@ -143,6 +143,9 @@ def build_ik(
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
+        limits: Collection of limits to enforce. By default, consists of
+            configuration and velocity limits (set to the empty list ``[]`` to
+            disable limits).
         barriers: Collection of barriers.
 
     Returns:
@@ -159,9 +162,9 @@ def solve_ik(
     tasks: Iterable[Task],
     dt: float,
     solver: str,
+    damping: float = 1e-12,
     limits: Optional[Iterable[Limit]] = None,
     barriers: Optional[Iterable[Barrier]] = None,
-    damping: float = 1e-12,
     safety_break: bool = True,
     **kwargs,
 ) -> np.ndarray:
@@ -175,15 +178,15 @@ def solve_ik(
         tasks: List of kinematic tasks.
         dt: Integration timestep in [s].
         solver: Backend quadratic programming (QP) solver.
-        limits: Collection of limits to enforce. By default, consists of
-            configuration and velocity limits (set to the empty list ``[]`` to
-            disable limits).
-        barriers: Collection of barriers functions.
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
             :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
+        limits: Collection of limits to enforce. By default, consists of
+            configuration and velocity limits (set to the empty list ``[]`` to
+            disable limits).
+        barriers: Collection of barriers functions.
         safety_break: If True, stop execution and raise an exception if
             the current configuration is outside limits. If False, print a
             warning and continue execution.
@@ -206,9 +209,9 @@ def solve_ik(
         configuration,
         tasks,
         dt,
+        damping,
         limits,
         barriers,
-        damping,
     )
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
