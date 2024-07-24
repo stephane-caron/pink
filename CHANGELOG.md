@@ -13,8 +13,9 @@ All notable changes to this project will be documented in this file.
   - Whole-body Self-Collision Avoidance Barrier ``SelfCollisionBarrier``
 - `ComTask` for Center of Mass tracking.
 - **Breaking:** Updated the logic for handling the joint limits:
+  - Add a ``limits`` argument to ``build_ik`` and ``solve_ik``
   - The `check_limits` method now includes an optional `safety_break` argument to control whether execution should stop on exception.
-  - The solve_ik function now includes the `safety_break` that is forwarded to `check_limits`.
+  - The ``solve_ik`` function now includes the `safety_break` that is forwarded to `check_limits`.
 - Example: UR5 manipulator and GO2 quadruped robot with `PositionBarrier`
 - Example: YUMI two-armed manipulator with `BodySphericalBarrier`
 - Example: G1 humanoid squatting through regulating CoM.
