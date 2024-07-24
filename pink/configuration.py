@@ -12,6 +12,7 @@ data where forward kinematics have been run, indicating that frame transforms
 and frame Jacobians used for IK can be queried.
 """
 
+import logging
 from typing import Optional
 
 import numpy as np
@@ -20,7 +21,6 @@ import pinocchio as pin
 from .exceptions import FrameNotFound, NotWithinConfigurationLimits
 from .limits import ConfigurationLimit, VelocityLimit
 from .utils import VectorSpace, get_root_joint_dim
-import logging
 
 
 class Configuration:
@@ -38,10 +38,11 @@ class Configuration:
     ``pin.forwardKinematics(model, data, configuration)``.) The latter updates
     frame placements.
 
-    Additionally, if collision model is provided, it is used to evaluate distances
-    between frames using following functions:
-    - ``pin.computeCollisions(model, data, collision_model, collision_data, q)``
-    - ``pin.updateGeometryPlacements(model, data, collision_model, collision_data, q)``
+    Additionally, if collision model is provided, it is used to evaluate
+    distances between frames using following functions:
+
+    - ``pin.computeCollisions(model, data, collision_model, collision_data, q)`` # noqa: E501
+    - ``pin.updateGeometryPlacements(model, data, collision_model, collision_data, q)``  # noqa: E501
 
     Notes:
         This class is meant to be used as a subclass of pin.RobotWrapper, not
@@ -56,10 +57,10 @@ class Configuration:
         q: Configuration vector for the robot model.
     """
 
+    collision_data: pin.GeometryData
+    collision_model: pin.GeometryModel
     data: pin.Data
     model: pin.Model
-    collision_model: pin.GeometryModel
-    collision_data: pin.GeometryData
     q: np.ndarray
 
     def __init__(
@@ -82,10 +83,12 @@ class Configuration:
                 data. Otherwise, work on the input data directly.
             forward_kinematics: If true (default), compute forward kinematics
                 from the q into the internal data.
-            collision_model: collision geometry model, with already loaded collisions.
-                Default is None, meaning no collisions are processeed.
-            collision_data: collision geometry data, with already loaded collisions.
-                Default is None, which generates it from the model if possible, None otherwise.
+            collision_model: collision geometry model, with already loaded
+                collisions. Default is None, meaning no collisions are
+                processeed.
+            collision_data: collision geometry data, with already loaded
+                collisions. Default is None, which generates it from the model
+                if possible, None otherwise.
 
         Notes:
             Configurations copy data and run forward kinematics by default so
@@ -161,9 +164,9 @@ class Configuration:
 
         Args:
             tol: Tolerance in radians.
-            safe_break (bool): If True, stop execution and raise an exception if
-                the current configuration is outside limits. If False, print a warning
-                and continue execution.
+            safe_break (bool): If True, stop execution and raise an exception
+                if the current configuration is outside limits. If False, print
+                a warning and continue execution.
 
         Raises:
             NotWithinConfigurationLimits: If the current configuration is
