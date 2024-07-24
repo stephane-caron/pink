@@ -139,6 +139,12 @@ Pink works with all kinds of robot morphologies:
 
 Check out the examples directory for more code.
 
+## Frequently Asked Questions
+
+- [Can I solve **global** inverse kinematics?](https://github.com/stephane-caron/pink/discussions/66#discussioncomment-8224315)
+- [Can I make velocities smoother?](https://github.com/stephane-caron/pink/discussions/103)
+- [My configuration gets stuck somewhere and does not solve the task, what is going on?](https://github.com/stephane-caron/pink/discussions/66#discussioncomment-8224315)
+
 ## Global inverse kinematics
 
 Pink implements differential inverse kinematics, a first-order algorithm that converges to the closest optimum of its cost function. It is a **local** method that does not solve the more difficult problem of [global inverse kinematics](https://github.com/stephane-caron/pink/discussions/66). That is, it may converge to a global optimum, or to a local one stuck to some configuration limits. This behavior is illustrated in the [simple pendulum with configuration limit](https://github.com/stephane-caron/pink/blob/main/examples/simple_pendulum_configuration_limit.py) example.
