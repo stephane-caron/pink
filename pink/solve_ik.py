@@ -13,6 +13,7 @@ import qpsolvers
 
 from .barriers import Barrier
 from .configuration import Configuration
+from .limits import Limit
 from .tasks import Task
 
 
@@ -66,6 +67,7 @@ def __compute_qp_objective(
 
 def __compute_qp_inequalities(
     configuration,
+    limits: Optional[Iterable[Limit]],
     dt: float,
     barriers: Optional[Iterable[Barrier]] = None,
 ) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
@@ -73,6 +75,7 @@ def __compute_qp_inequalities(
 
     Args:
         configuration: Robot configuration to read kinematics from.
+        limits: Collection of limits.
         dt: Integration timestep in [s].
         barriers: Collection of barriers.
 
@@ -86,15 +89,15 @@ def __compute_qp_inequalities(
         solvers don't support it. See for instance
         https://github.com/stephane-caron/pink/issues/10.
     """
+    if limits is None:
+        configuration_limit = configuration.model.configuration_limit
+        velocity_limit = configuration.model.velocity_limit
+        limits = (configuration_limit, velocity_limit)
     barriers = barriers if barriers is not None else []
-    configuration_limit = configuration.model.configuration_limit
-    velocity_limit = configuration.model.velocity_limit
-    q = configuration.q
-
     G_list = []
     h_list = []
-    for limit in (configuration_limit, velocity_limit):
-        matvec = limit.compute_qp_inequalities(q, dt)
+    for limit in limits:
+        matvec = limit.compute_qp_inequalities(configuration.q, dt)
         if matvec is not None:
             G_list.append(matvec[0])
             h_list.append(matvec[1])
@@ -111,8 +114,9 @@ def build_ik(
     configuration: Configuration,
     tasks: Iterable[Task],
     dt: float,
-    damping: float = 1e-12,
+    limits: Optional[Iterable[Limit]] = None,
     barriers: Optional[Iterable[Barrier]] = None,
+    damping: float = 1e-12,
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
 
@@ -145,7 +149,7 @@ def build_ik(
         Quadratic program of the inverse kinematics problem.
     """
     P, q = __compute_qp_objective(configuration, tasks, damping, barriers)
-    G, h = __compute_qp_inequalities(configuration, dt, barriers)
+    G, h = __compute_qp_inequalities(configuration, limits, dt, barriers)
     problem = qpsolvers.Problem(P, q, G, h)
     return problem
 
@@ -155,6 +159,7 @@ def solve_ik(
     tasks: Iterable[Task],
     dt: float,
     solver: str,
+    limits: Optional[Iterable[Limit]] = None,
     barriers: Optional[Iterable[Barrier]] = None,
     damping: float = 1e-12,
     safety_break: bool = True,
@@ -170,15 +175,18 @@ def solve_ik(
         tasks: List of kinematic tasks.
         dt: Integration timestep in [s].
         solver: Backend quadratic programming (QP) solver.
+        limits: Collection of limits to enforce. By default, consists of
+            configuration and velocity limits (set to the empty list ``[]`` to
+            disable limits).
+        barriers: Collection of barriers functions.
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
             :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
             tasks.
-        barriers: Collection of barriers functions.
         safety_break: If True, stop execution and raise an exception if
-                the current configuration is outside limits. If False, print a warning
-                and continue execution.
+            the current configuration is outside limits. If False, print a
+            warning and continue execution.
         kwargs: Keyword arguments to forward to the backend QP solver.
 
     Returns:
@@ -193,15 +201,14 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
-
     configuration.check_limits(safety_break=safety_break)
-
     problem = build_ik(
         configuration,
         tasks,
         dt,
-        damping,
+        limits,
         barriers,
+        damping,
     )
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
