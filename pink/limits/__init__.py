@@ -6,10 +6,12 @@
 
 """Limits implemented as inequality constraints in the IK problem."""
 
+from .limit import Limit
 from .configuration_limit import ConfigurationLimit
 from .velocity_limit import VelocityLimit
 
 __all__ = [
     "ConfigurationLimit",
+    "Limit",
     "VelocityLimit",
 ]
