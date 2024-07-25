@@ -166,6 +166,7 @@ If you use Pink in your scientific works, please cite it *e.g.* as follows:
 
 Software:
 
+- [mink](https://github.com/kevinzakka/mink): differential inverse kinematics in Python, based on the MuJoCo physics engine.
 - [Jink.jl](https://github.com/adubredu/Jink.jl): Julia package for differential multi-task inverse kinematics.
 - [PlaCo](https://github.com/rhoban/placo): C++ inverse kinematics based on Pinocchio.
 - [pymanoid](https://github.com/stephane-caron/pymanoid): precursor to Pink based on OpenRAVE.
