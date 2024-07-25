@@ -203,7 +203,7 @@ class Barrier(abc.ABC):
 
         return (H, c)
 
-    def compute_qp_inequality(
+    def compute_qp_inequalities(
         self,
         configuration: Configuration,
         dt: float = 1e-3,
