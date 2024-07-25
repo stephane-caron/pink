@@ -113,7 +113,7 @@ if __name__ == "__main__":
         )
         configuration.integrate_inplace(velocity, dt)
 
-        G, h = pos_barrier.compute_qp_inequality(configuration, dt=dt)
+        G, h = pos_barrier.compute_qp_inequalities(configuration, dt=dt)
         distance_to_manipulator = configuration.get_transform_frame_to_world(
             "ee_link"
         ).translation[1]
