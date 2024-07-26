@@ -22,6 +22,10 @@ class LowAccelerationTask(PostureTask):
 
     Attributes:
         Delta_q_prev: Latest displacement of the robot.
+
+    Note:
+        This task does not dissipate energy and will thus tend to yield
+        oscillations. Considering coupling it with a :class:`DampingTask`.
     """
 
     Delta_q_prev: Optional[np.ndarray]
