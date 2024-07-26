@@ -61,7 +61,11 @@ class LowAccelerationTask(PostureTask):
         Returns:
             Posture task error :math:`e(q)`.
         """
-        v_prev: np.ndarray = self.v_prev if self.v_prev is not None else np.zeros(configuration.model.nv)
+        v_prev: np.ndarray = (
+            self.v_prev
+            if self.v_prev is not None
+            else np.zeros(configuration.model.nv)
+        )
         return -v_prev
 
     def __repr__(self):
