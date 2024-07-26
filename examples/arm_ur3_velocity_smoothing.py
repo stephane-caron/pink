@@ -93,7 +93,7 @@ if __name__ == "__main__":
         )
         velocity = solve_ik(configuration, tasks, dt, solver=solver)
         configuration.integrate_inplace(velocity, dt)
-        low_acceleration_task.set_previous_velocity(velocity)
+        low_acceleration_task.set_last_integration(velocity, dt)
 
         # Append plotting data to lists
         configurations.append(configuration.q)

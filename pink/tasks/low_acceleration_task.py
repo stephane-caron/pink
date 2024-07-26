@@ -18,15 +18,13 @@ class LowAccelerationTask(PostureTask):
     r"""Minimize joint accelerations.
 
     The task is to minimize :math:`\| v \ominus v_{\mathrm{prev}} \|` where
-    :math:`v_{\mathrm{prev}}` is the latest integrated velocity. The Jacobian
-    matrix is thus the identity, and the error opposite to
-    :math:`v_{\mathrm{prev}}`.
+    :math:`v_{\mathrm{prev}}` is the latest integrated velocity.
 
     Attributes:
-        v_prev: Latest integrated velocity.
+        Delta_q_prev: Latest displacement of the robot.
     """
 
-    v_prev: Optional[np.ndarray]
+    Delta_q_prev: Optional[np.ndarray]
 
     def __init__(self, cost: float) -> None:
         r"""Initialize task.
@@ -35,19 +33,20 @@ class LowAccelerationTask(PostureTask):
             cost: joint angular acceleration cost, in
                 :math:`[\mathrm{cost}] [\mathrm{s}]^2 / [\mathrm{rad}]`.
         """
-        super().__init__(cost=cost, gain=0.0, lm_damping=0.0)
-        self.v_prev = None
+        super().__init__(cost=cost, gain=1.0, lm_damping=0.0)
+        self.Delta_q_prev = None
 
-    def set_previous_velocity(self, v_prev: np.ndarray) -> None:
-        """Set the latest integrated velocity.
+    def set_last_integration(self, v_prev: np.ndarray, dt) -> None:
+        """Set the latest velocity and the duration it was applied for.
 
         The goal of the low-acceleration task is to minimize the difference
         between the new velocity and the previous one.
 
         Args:
             v_prev: Latest integrated velocity.
+            dt: Integration timestep in [s].
         """
-        self.v_prev = v_prev.copy()
+        self.Delta_q_prev = v_prev * dt
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the low-acceleration task error.
@@ -59,14 +58,19 @@ class LowAccelerationTask(PostureTask):
             configuration: Robot configuration :math:`q`.
 
         Returns:
-            Posture task error :math:`e(q)`.
+            Low-acceleration task error :math:`e(q) = -\mathrm{d}t *
+            v_{\mathrm{prev}}`. This choice, along with :math:`\alpha = 1` and
+            the Jacobian :math:`J` being the identity, ensures that :math:`J(q)
+            \Delta q = -\alpha e(q) \Leftrightarrow v = \Delta q / \mathrm{d}t
+            = v_{\mathrm{prev}}`.
+
         """
-        v_prev: np.ndarray = (
-            self.v_prev
-            if self.v_prev is not None
+        Delta_q_prev: np.ndarray = (
+            self.Delta_q_prev
+            if self.Delta_q_prev is not None
             else np.zeros(configuration.model.nv)
         )
-        return -v_prev
+        return -Delta_q_prev
 
     def __repr__(self):
         """Human-readable representation of the task."""
