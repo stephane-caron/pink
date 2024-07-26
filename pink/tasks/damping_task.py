@@ -15,9 +15,10 @@ from .posture_task import PostureTask
 class DampingTask(PostureTask):
     r"""Minimize joint velocities.
 
-    The damping task minimizes :math:`\| v \|`. The word "damping" is used here
-    by analogy with forces that fight against motion, and bring the robot to a
-    rest if nothing else drives it.
+    The damping task minimizes :math:`\| v \|` with :math:`v` the velocity
+    output of the differential IK. The word "damping" is used here by analogy
+    with forces that fight against motion, and bring the robot to a rest if
+    nothing else drives it.
 
     Note:
         The damping task is implemented as a special case of the posture task
