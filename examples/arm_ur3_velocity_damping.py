@@ -14,7 +14,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
-from pink.tasks import DampingTask, FrameTask, LowAccelerationTask, PostureTask
+from pink.tasks import DampingTask, FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
 
@@ -43,9 +43,6 @@ if __name__ == "__main__":
     )
     damping_task = DampingTask(
         cost=1e-1,  # [cost] * [s] / [rad]
-    )
-    low_acceleration_task = LowAccelerationTask(
-        cost=1e-1,  # [cost] * [s]^2 / [rad]
     )
 
     # Initial configuration and task setup
@@ -92,11 +89,10 @@ if __name__ == "__main__":
         tasks = (
             (end_effector_task, posture_task)
             if step < nb_steps // 2
-            else (end_effector_task, damping_task, low_acceleration_task)
+            else (end_effector_task, damping_task)
         )
         velocity = solve_ik(configuration, tasks, dt, solver=solver)
         configuration.integrate_inplace(velocity, dt)
-        low_acceleration_task.set_last_integration(velocity, dt)
 
         # Append plotting data to lists
         configurations.append(configuration.q)
@@ -118,7 +114,7 @@ if __name__ == "__main__":
         [velocities.min(), velocities.max()],
         "k--",
     )
-    plt.title("Joint velocities (posture then low-accel task)")
+    plt.title("Joint velocities (posture then damping task)")
     plt.xlabel("Time [s]")
     plt.ylabel("Joint velocity [rad/s]")
     plt.figure()
@@ -128,7 +124,7 @@ if __name__ == "__main__":
         [configurations.min(), configurations.max()],
         "k--",
     )
-    plt.title("Configuration data")
+    plt.title("Configuration (posture then damping task)")
     plt.xlabel("Time [s]")
     plt.ylabel("Joint position [rad]")
     plt.show()
