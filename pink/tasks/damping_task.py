@@ -20,8 +20,9 @@ class DampingTask(PostureTask):
     The word "damping" is used here by analogy with forces that fight against
     motion, and bring the robot to a rest if nothing else drives it.
 
-    The damping task is implemented as a special case of the posture task where
-    the gain $\alpha$ is zero.
+    Note:
+        The damping task is implemented as a special case of the posture task
+        where the gain $\alpha$ is zero.
     """
 
     def __init__(self, cost: float, lm_damping: float = 0.0) -> None:
