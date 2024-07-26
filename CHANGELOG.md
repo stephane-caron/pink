@@ -22,8 +22,10 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- **Breaking:** remove ``lm_damping`` parameter from DampingTask where it wasn't used
 - CICD: Update ruff to 0.4.3
 - Configuration accepts list of Control Barrier Functions
+- DampingTask: Simplify implementation
 - Update to Pinocchio 3 with 2.7 backward compatibility
 
 ### Fixed
