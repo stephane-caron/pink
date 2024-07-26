@@ -28,6 +28,7 @@ class TestDampingTask(unittest.TestCase):
         task = DampingTask(cost=1.0)
         self.assertTrue("cost=" in repr(task))
         self.assertFalse("gain=" in repr(task))
+        self.assertFalse("lm_damping=" in repr(task))
 
     def test_qp_objective(self):
         task = DampingTask(cost=1.0)

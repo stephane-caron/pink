@@ -28,12 +28,14 @@ class TestLowAccelerationTask(unittest.TestCase):
         task = LowAccelerationTask(cost=1.0)
         self.assertTrue("cost=" in repr(task))
         self.assertFalse("gain=" in repr(task))
+        self.assertFalse("lm_damping=" in repr(task))
 
     def test_qp_objective(self):
         task = LowAccelerationTask(cost=1.0)
         nv = self.configuration.model.nv
         v_prev = np.array([1.0, 2.0, 3.0, 4.0, -3.0, -2.0])
-        task.set_previous_velocity(v_prev)
+        dt = 1.234e-2  # [s]
+        task.set_last_integration(v_prev, dt)
         H, c = task.compute_qp_objective(self.configuration)
         self.assertLess(np.linalg.norm(H - np.eye(nv)), 1e-10)
-        self.assertLess(np.linalg.norm(c - v_prev), 1e-10)
+        self.assertLess(np.linalg.norm(c + v_prev * dt), 1e-10)
