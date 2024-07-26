@@ -98,8 +98,8 @@ class PostureTask(Task):
         _, nv = get_root_joint_dim(configuration.model)
         return pin.difference(
             configuration.model,
-            configuration.q,
             self.target_q,
+            configuration.q,
         )[nv:]
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
@@ -122,7 +122,7 @@ class PostureTask(Task):
             Posture task Jacobian :math:`J(q)`.
         """
         _, nv = get_root_joint_dim(configuration.model)
-        return -configuration.tangent.eye[nv:, :]
+        return configuration.tangent.eye[nv:, :]
 
     def __repr__(self):
         """Human-readable representation of the task."""

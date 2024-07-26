@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- PostureTask: Match implementation and documentation formula
 - Fix broken documentation links
 
 ### Removed
