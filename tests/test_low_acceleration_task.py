@@ -36,4 +36,4 @@ class TestLowAccelerationTask(unittest.TestCase):
         task.set_previous_velocity(v_prev)
         H, c = task.compute_qp_objective(self.configuration)
         self.assertLess(np.linalg.norm(H - np.eye(nv)), 1e-10)
-        self.assertLess(np.linalg.norm(c - v_prev) + 1.12, 1e-10)
+        self.assertLess(np.linalg.norm(c - v_prev), 1e-10)
