@@ -130,10 +130,10 @@ class AccelerationLimit(Limit):
             return None
 
         Delta_q_max = pin.difference(
-            self.model, self.model.upperPositionLimit, q
+            self.model, q, self.model.upperPositionLimit
         )[self.indices]
         Delta_q_min = pin.difference(
-            self.model, q, self.model.lowerPositionLimit
+            self.model, self.model.lowerPositionLimit, q
         )[self.indices]
         dt_sq = dt * dt
         G = np.vstack([self.projection_matrix, -self.projection_matrix])
@@ -146,7 +146,7 @@ class AccelerationLimit(Limit):
                 np.minimum(
                     self.a_max * dt_sq - self.Delta_q_prev,
                     np.sqrt(2 * self.a_max * Delta_q_min),
-                )
+                ),
             ]
         )
         return G, h
