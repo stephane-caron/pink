@@ -5,7 +5,8 @@ Here we will have the examples of using barriers, please go over [notes](https:/
 
 - [Arm: UR5](#arm-ur5): with joints and end effector limits
 - [Quadruped: Go2](#go2-squat): Go 2 squatting with floating base position limits
-- [Dual Arms: Yumi](#dual-arm-yumi): self collisions with spheres
+- [Dual Arms: Yumi](#yumi-end-effector-self-collision-avoidance): self-collision avoidance with spheres
+- [Dual Arms: Iiwa](#iiwa-whole-body-collision-avoidance): whole-body self-collision avoidance
 
 ## Arm UR5
 
