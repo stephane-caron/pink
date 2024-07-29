@@ -14,6 +14,7 @@ from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
+from pink.limits import AccelerationLimit
 from pink.tasks import DampingTask, FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
@@ -31,7 +32,7 @@ if __name__ == "__main__":
     robot = load_robot_description("ur3_description", root_joint=None)
     viz = start_meshcat_visualizer(robot)
 
-    # Define inverse kinematics tasks
+    # Define inverse kinematics tasks and limits
     end_effector_task = FrameTask(
         "ee_link",
         position_cost=1.0,  # [cost] / [m]
@@ -43,6 +44,10 @@ if __name__ == "__main__":
     )
     damping_task = DampingTask(
         cost=1e-1,  # [cost] * [s] / [rad]
+    )
+    acceleration_limit = AccelerationLimit(
+        robot.model,
+        np.full(robot.model.nv, 1e8),
     )
 
     # Initial configuration and task setup
@@ -71,6 +76,7 @@ if __name__ == "__main__":
     configurations, velocities, times = [], [], []
     nb_steps = 3000
     t = 0.0  # [s]
+    max_ever = -1.0
     for step in range(nb_steps):
         # Update task targets
         end_effector_target = end_effector_task.transform_target_to_world
@@ -86,13 +92,25 @@ if __name__ == "__main__":
         )
 
         # Compute velocity and integrate it into next configuration
-        tasks = (
-            (end_effector_task, posture_task)
-            if step < nb_steps // 2
-            else (end_effector_task, damping_task)
+        if step < nb_steps // 2:
+            tasks = (end_effector_task, posture_task)
+            limits = (
+                configuration.model.configuration_limit,
+                configuration.model.velocity_limit,
+            )
+        else:  # step >= nb_steps // 2
+            tasks = (end_effector_task, damping_task)
+            limits = (
+                configuration.model.configuration_limit,
+                configuration.model.velocity_limit,
+                acceleration_limit,
+            )
+        velocity = solve_ik(
+            configuration, tasks, dt, solver=solver, limits=limits
         )
-        velocity = solve_ik(configuration, tasks, dt, solver=solver)
+        Delta_q = velocity * dt
         configuration.integrate_inplace(velocity, dt)
+        acceleration_limit.set_last_integration(velocity, dt)
 
         # Append plotting data to lists
         configurations.append(configuration.q)
