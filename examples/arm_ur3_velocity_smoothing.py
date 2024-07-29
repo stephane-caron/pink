@@ -47,7 +47,10 @@ if __name__ == "__main__":
     )
     acceleration_limit = AccelerationLimit(
         robot.model,
-        np.full(robot.model.nv, 1e4),
+        np.full(
+            robot.model.nv,
+            20.0,  # [rad] / [s]^2
+        ),
     )
 
     # Initial configuration and task setup
@@ -91,20 +94,28 @@ if __name__ == "__main__":
             ).np
         )
 
-        # Compute velocity and integrate it into next configuration
         if step < nb_steps // 2:
+            # First half: no velocity smoothing
+            end_effector_task.gain = 1.0
             tasks = (end_effector_task, posture_task)
             limits = (
                 configuration.model.configuration_limit,
                 configuration.model.velocity_limit,
             )
         else:  # step >= nb_steps // 2
+            # Second half: velocity smoothing by:
+            # 1. Reducing the task gain
+            # 2. Switching from a posture to a damping task
+            # 3. Adding an acceleration limit
+            end_effector_task.gain = 0.4
             tasks = (end_effector_task, damping_task)
             limits = (
                 configuration.model.configuration_limit,
                 configuration.model.velocity_limit,
                 acceleration_limit,
             )
+
+        # Compute velocity and integrate it into next configuration
         velocity = solve_ik(
             configuration, tasks, dt, solver=solver, limits=limits
         )
