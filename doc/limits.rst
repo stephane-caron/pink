@@ -12,14 +12,20 @@ Definition
 .. automodule:: pink.limits.limit
     :members:
 
-Configuration limits
-====================
+Configuration limit
+===================
 
 .. automodule:: pink.limits.configuration_limit
    :members:
 
-Velocity limits
-===============
+Velocity limit
+==============
 
 .. automodule:: pink.limits.velocity_limit
+   :members:
+
+Acceleration limit
+==================
+
+.. automodule:: pink.limits.acceleration_limit
    :members:
