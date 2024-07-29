@@ -160,10 +160,10 @@ If you use Pink in your scientific works, please cite it *e.g.* as follows:
 ```bibtex
 @software{pink2024,
   title = {{Pink: Python inverse kinematics based on Pinocchio}},
-  author = {Caron, Stéphane and De Mont-Marin, Yann and Budhiraja, Rohan and Bang, Seung Hyeon},
+  author = {Caron, Stéphane and De Mont-Marin, Yann and Budhiraja, Rohan and Bang, Seung Hyeon and Domrachev, Ivan and Nedelchev, Simeon},
   license = {Apache-2.0},
   url = {https://github.com/stephane-caron/pink},
-  version = {2.1.0},
+  version = {3.0.0},
   year = {2024}
 }
 ```
