@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
-# Copyright 2023 Inria
+# Copyright 2024 Inria
 
 """Subset of acceleration-limited joints in a robot model."""
 
@@ -12,6 +11,7 @@ from typing import List, Optional, Tuple
 import numpy as np
 import pinocchio as pin
 
+from ..exceptions import PinkError
 from .limit import Limit
 
 
@@ -32,11 +32,11 @@ class AccelerationLimit(Limit):
 
     Attributes:
         Delta_q_prev: Latest displacement of the robot.
-        a_max: Maximum acceleration vector (for acceleration-limited joints).
-        indices: Tangent indices corresponding to velocity-limited joints.
+        a_max: Maximum acceleration vector for acceleration-limited joints.
+        indices: Tangent indices corresponding to acceleration-limited joints.
         model: Robot model.
         projection_matrix: Projection from tangent space to subspace with
-            velocity-limited joints.
+            acceleration-limited joints.
     """
 
     Delta_q_prev: np.ndarray
@@ -54,7 +54,8 @@ class AccelerationLimit(Limit):
                 ``model.nv``.
         """
         acceleration_limit = acceleration_limit.flatten()
-        assert acceleration_limit.shape[0] == model.nv
+        if model.nv > 0 and acceleration_limit.shape[0] != model.nv:
+            raise PinkError(f"{acceleration_limit.shape=} but {model.nv=}")
 
         has_acceleration_limit = np.logical_and(
             acceleration_limit < 1e20,
@@ -78,9 +79,10 @@ class AccelerationLimit(Limit):
 
         dim = len(indices)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
+        a_max = acceleration_limit[indices] if dim > 0 else np.empty(0)
 
-        self.Delta_q_prev = np.zeros(projection_matrix.shape[0])
-        self.a_max = acceleration_limit[indices]
+        self.Delta_q_prev = np.zeros(dim)
+        self.a_max = a_max
         self.indices = indices
         self.model = model
         self.projection_matrix = projection_matrix

@@ -27,7 +27,7 @@ class TestVelocityLimit(unittest.TestCase):
         self.model = model
 
     def test_dimensions(self):
-        """Check dimensions of configuration limit projection."""
+        """Check dimensions of velocity limit projection."""
         for joint in self.limit.joints:
             self.assertGreaterEqual(joint.idx_q, 0)
             self.assertGreaterEqual(joint.idx_v, 0)
