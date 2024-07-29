@@ -39,7 +39,7 @@ class AccelerationLimit(Limit):
             velocity-limited joints.
     """
 
-    Delta_q_prev: Optional[np.ndarray]
+    Delta_q_prev: np.ndarray
     a_max: np.ndarray
     indices: np.ndarray
     model: pin.Model
@@ -79,7 +79,7 @@ class AccelerationLimit(Limit):
         dim = len(indices)
         projection_matrix = np.eye(model.nv)[indices] if dim > 0 else None
 
-        self.Delta_q_prev = None
+        self.Delta_q_prev = np.zeros(projection_matrix.shape[0])
         self.a_max = acceleration_limit[indices]
         self.indices = indices
         self.model = model

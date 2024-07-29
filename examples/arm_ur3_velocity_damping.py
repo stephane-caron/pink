@@ -47,7 +47,7 @@ if __name__ == "__main__":
     )
     acceleration_limit = AccelerationLimit(
         robot.model,
-        np.full(robot.model.nv, 1e8),
+        np.full(robot.model.nv, 1e4),
     )
 
     # Initial configuration and task setup
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     if "quadprog" in qpsolvers.available_solvers:
         solver = "quadprog"
 
-    rate = RateLimiter(frequency=200.0)
+    rate = RateLimiter(frequency=200.0, warn=False)
     dt = rate.period
     configurations, velocities, times = [], [], []
     nb_steps = 3000
