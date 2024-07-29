@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Example: UR5 manipulator and GO2 quadruped robot with `PositionBarrier`
 - Example: YUMI two-armed manipulator with `BodySphericalBarrier`
 - Example: G1 humanoid squatting through regulating CoM.
+- Limit: Acceleration limit
 - Task: `ComTask` for center-of-mass tracking.
 - Task: `LowAccelerationTask` for smoother velocities.
 
