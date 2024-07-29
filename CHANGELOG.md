@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [3.0.0] - 2024-07-29
+
 ### Added
 
 - **Breaking:** Updated the logic for handling the joint limits:
@@ -19,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - Example: YUMI two-armed manipulator with `BodySphericalBarrier`
 - Example: G1 humanoid squatting through regulating CoM.
 - Limit: Acceleration limit
-- Task: `ComTask` for center-of-mass tracking.
+- Task: `ComTask` for center-of-mass tracking (thanks to @simeon-ned)
 - Task: `LowAccelerationTask` for smoother velocities.
 
 ### Changed
@@ -307,7 +309,8 @@ All notable changes to this project will be documented in this file.
 
 Python package infrastructure.
 
-[unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v1.0.0...v1.1.0
