@@ -70,7 +70,7 @@ class VelocityLimit(Limit):
         q: np.ndarray,
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
-        r"""Compute the configuration-dependent velocity limits.
+        r"""Compute inequalities for velocity limits.
 
         Those limits are defined by:
 
