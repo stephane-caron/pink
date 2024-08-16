@@ -8,7 +8,7 @@ on:
 
 defaults:
     run:
-        # See https://github.com/mamba-org/provision-with-micromamba#important
+        # See https://github.com/mamba-org/setup-micromamba#about-login-shells
         shell: bash -l {0}
 
 jobs:
@@ -22,11 +22,10 @@ jobs:
               uses: actions/checkout@v3
 
             - name: "Install Conda environment with Micromamba"
-              uses: mamba-org/provision-with-micromamba@main
+              uses: mamba-org/setup-micromamba@v1
               with:
                   cache-downloads: true
-                  cache-env: true
-                  environment-file: doc/environment.yml
+                  environment-file: docs/environment.yml
                   environment-name: pink
 
             - name: "Build documentation"
