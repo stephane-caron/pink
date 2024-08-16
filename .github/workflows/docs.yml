@@ -25,7 +25,7 @@ jobs:
               uses: mamba-org/setup-micromamba@v1
               with:
                   cache-downloads: true
-                  environment-file: docs/environment.yml
+                  environment-file: doc/environment.yml
                   environment-name: pink
 
             - name: "Build documentation"
