@@ -22,7 +22,7 @@ try:
 except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
         "Examples need robot_descriptions, "
-        "try ``pip install robot_descriptions``"
+        "try `[conda|pip] install robot_descriptions`"
     ) from exc
 
 

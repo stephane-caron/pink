@@ -6,15 +6,14 @@
 
 """G1 humanoid squat by regulating CoM"""
 
-import meshcat_shapes
 import numpy as np
+import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
-import pinocchio as pin
 
 import pink
 from pink import solve_ik
-from pink.tasks import FrameTask, PostureTask, ComTask
+from pink.tasks import ComTask, FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
 
 try:
@@ -22,7 +21,7 @@ try:
 except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
         "Examples need robot_descriptions, "
-        "try ``pip install robot_descriptions``"
+        "try `[conda|pip] install robot_descriptions`"
     ) from exc  # noqa: E501
 
 

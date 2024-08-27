@@ -23,7 +23,7 @@ try:
 except ModuleNotFoundError:
     raise ModuleNotFoundError(
         "Examples need robot_descriptions, "
-        "try ``pip install robot_descriptions``"
+        "try `[conda|pip] install robot_descriptions`"
     )
 
 # Trajectory parameters to play with ;)
