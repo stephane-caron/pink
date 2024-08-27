@@ -13,7 +13,7 @@ import pinocchio as pin
 
 from ..configuration import Configuration
 from .barrier import Barrier
-from .exceptions import NegativeMinimumDistance, InvalidCollisionPairs
+from .exceptions import InvalidCollisionPairs, NegativeMinimumDistance
 
 
 class SelfCollisionBarrier(Barrier):
@@ -149,7 +149,6 @@ class SelfCollisionBarrier(Barrier):
             Jacobian matrix
                 :math:`\frac{\partial h}{\partial q}(q)`.
         """
-
         # Get robot and collision models and datas
         model = configuration.model
         data = configuration.data

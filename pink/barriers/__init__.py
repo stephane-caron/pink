@@ -7,13 +7,13 @@
 """Control Barrier Functions."""
 
 from .barrier import Barrier
+from .body_spherical_barrier import BodySphericalBarrier
 from .exceptions import (
-    NoPositionLimitProvided,
-    NegativeMinimumDistance,
     InvalidCollisionPairs,
+    NegativeMinimumDistance,
+    NoPositionLimitProvided,
 )
 from .position_barrier import PositionBarrier
-from .body_spherical_barrier import BodySphericalBarrier
 from .self_collision_barrier import SelfCollisionBarrier
 
 __all__ = [

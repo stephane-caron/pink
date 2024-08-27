@@ -7,8 +7,8 @@
 """Limits implemented as inequality constraints in the IK problem."""
 
 from .acceleration_limit import AccelerationLimit
-from .limit import Limit
 from .configuration_limit import ConfigurationLimit
+from .limit import Limit
 from .velocity_limit import VelocityLimit
 
 __all__ = [
