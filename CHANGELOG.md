@@ -9,14 +9,14 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - **Breaking:** Updated the logic for handling the joint limits:
-  - Add a ``limits`` argument to ``build_ik`` and ``solve_ik``
+  - Add a `limits` argument to `build_ik` and `solve_ik`
   - The `check_limits` method now includes an optional `safety_break` argument to control whether execution should stop on exception.
-  - The ``solve_ik`` function now includes the `safety_break` that is forwarded to `check_limits`.
+  - The `solve_ik` function now includes the `safety_break` that is forwarded to `check_limits`.
 - Control Barrier Functions, namely: (thanks to @domrachev03 and @simeon-ned)
-  - Abstract Barrier ``Barrier``
-  - Frame Position Barrier ``PositionBarrier``
-  - Body Spherical Barrier ``BodySphericalBarrier``
-  - Whole-body Self-Collision Avoidance Barrier ``SelfCollisionBarrier``
+  - Abstract Barrier `Barrier`
+  - Frame Position Barrier `PositionBarrier`
+  - Body Spherical Barrier `BodySphericalBarrier`
+  - Whole-body Self-Collision Avoidance Barrier `SelfCollisionBarrier`
 - Example: UR5 manipulator and GO2 quadruped robot with `PositionBarrier`
 - Example: YUMI two-armed manipulator with `BodySphericalBarrier`
 - Example: G1 humanoid squatting through regulating CoM.
@@ -26,7 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- **Breaking:** remove ``lm_damping`` parameter from DampingTask where it wasn't used
+- **Breaking:** remove `lm_damping` parameter from DampingTask where it wasn't used
 - CICD: Update ruff to 0.4.3
 - Configuration accepts list of Control Barrier Functions
 - DampingTask: Simplify implementation
@@ -45,7 +45,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Function ``get_transform`` in the Configuration class
+- Function `get_transform` in the Configuration class
 - Task: relative frame task, where target is w.r.t another robot frame
 
 ### Changed
@@ -57,7 +57,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Add ``gain`` keyword argument to all task constructors where is makes sense
+- Add `gain` keyword argument to all task constructors where is makes sense
 - Damping task that minimizes joint velocities
 - Distribute package on conda-forge
 - Example on how differential IK may converge to a local constrained optimum
@@ -68,8 +68,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - **Breaking:** Define task Jacobian as derivative of the task error
-- **Breaking:** Rename ``BodyNotFound`` exception to ``FrameNotFound``
-- **Breaking:** Rename ``FrameTask.body`` to ``FrameTask.frame``
+- **Breaking:** Rename `BodyNotFound` exception to `FrameNotFound`
+- **Breaking:** Rename `FrameTask.body` to `FrameTask.frame`
 
 ### Removed
 
@@ -114,23 +114,23 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Handle all frames, including non-body frames (thanks to @proyan)
-- Rename ``BodyTask`` to ``FrameTask``
+- Rename `BodyTask` to `FrameTask`
 
 ## [0.10.0] - 2023-03-30
 
 ### Added
 
-- Base class ``Limit`` for configuration and velocity limits
+- Base class `Limit` for configuration and velocity limits
 - In-place integration of a velocity from a configuration
 - Unit tests for configuration limits
 - Unit tests for velocity limits
 
 ### Changed
 
-- Add ``pink.limits`` submodule
+- Add `pink.limits` submodule
 - Configuration and velocity limits are now stacked rather than pre-reduced
-- Move configuration limit to ``ConfigurationLimit`` class
-- Move velocity limit to ``VelocityLimit`` class
+- Move configuration limit to `ConfigurationLimit` class
+- Move velocity limit to `VelocityLimit` class
 
 ## [0.9.0] - 2023-03-15
 
@@ -143,9 +143,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Refactor ``apply_configuration`` into ``Configuration`` constructor
-- Refactor ``assume_configuration`` into ``Configuration`` constructor
-- Refactor task dynamics into ``compute_error`` and ``compute_jacobian``
+- Refactor `apply_configuration` into `Configuration` constructor
+- Refactor `assume_configuration` into `Configuration` constructor
+- Refactor task dynamics into `compute_error` and `compute_jacobian`
 
 ## [0.8.0] - 2023-02-09
 
@@ -154,11 +154,11 @@ All notable changes to this project will be documented in this file.
 - BodyNotFound exception
 - Document spatial and body minus between transforms
 - Example: SigmaBan humanoid
-- Forward keyword arguments of ``solve_ik`` to the backend QP solver
+- Forward keyword arguments of `solve_ik` to the backend QP solver
 
 ### Changed
 
-- Return type of ``compute_velocity_limits`` now includes optionals
+- Return type of `compute_velocity_limits` now includes optionals
 - VectorSpace type is now immutable
 
 ### Fixed
@@ -176,7 +176,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Example: UR3 arm
-- Expose ``pink.Task`` from top-level module
+- Expose `pink.Task` from top-level module
 - Improve joint limit computations
 
 ### Fixed
@@ -210,12 +210,12 @@ All notable changes to this project will be documented in this file.
 - Handle general root joint in posture task
 - Handle unbounded velocity limits in QP formulation
 - Posture task targets can be read directly from a configuration
-- Simple rate limiter in ``pink.utils``
+- Simple rate limiter in `pink.utils`
 
 ### Changed
 
 - Raise an error when querying a body that doesn't exist
-- Transition from ``pink.models`` to ``robot_descriptions``
+- Transition from `pink.models` to `robot_descriptions`
 - Update reference posture in Upkie wheeled biped example
 - Warn when the backend QP solver is not explicitly selected
 
@@ -233,9 +233,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- Argument to ``build_from_urdf`` functions is now the path to the URDF file
+- Argument to `build_from_urdf` functions is now the path to the URDF file
 - Bumped status to beta
-- Examples use the ``jvrc_description`` and ``upkie_description`` packages
+- Examples use the `jvrc_description` and `upkie_description` packages
 - Use jvrc\_description and upkie\_description packages from PyPI
 - Task is now an abstract base class
 
@@ -268,7 +268,7 @@ All notable changes to this project will be documented in this file.
 
 - Specify path when loading a model description
 - Switch to the Apache 2.0 license
-- ``build_jvrc_model`` is now ``build_from_urdf``
+- `build_jvrc_model` is now `build_from_urdf`
 
 ### Fixed
 
