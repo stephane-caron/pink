@@ -30,29 +30,31 @@ class Configuration:
     We rely on typing to make sure the proper forward kinematics functions have
     been called beforehand. In Pinocchio, these functions are:
 
-    - ``pin.computeJointJacobians(model, data, configuration)``
-    - ``pin.updateFramePlacements(model, data)``
+    .. code:: python
+
+        pin.computeJointJacobians(model, data, configuration)
+        pin.updateFramePlacements(model, data)
 
     The former computes the full model Jacobian into ``data.J``. (It also
     computes forward kinematics, so there is no need to further call
     ``pin.forwardKinematics(model, data, configuration)``.) The latter updates
     frame placements.
 
-    Additionally, if collision model is provided, it is used to evaluate
-    distances between frames using following functions:
+    Additionally, if a collision model is provided, it is used to evaluate
+    distances between frames by calling the following two functions:
 
-    - ``pin.computeCollisions(model, data, collision_model, collision_data, q)`` # noqa: E501
-    - ``pin.updateGeometryPlacements(model, data, collision_model, collision_data, q)``  # noqa: E501
+    .. code:: python
 
-    Notes:
-        This class is meant to be used as a subclass of pin.RobotWrapper, not
-        wrap it. However, right now pin.RobotWrapper does not have a shallow
-        copy constructor. TODO(scaron): bring it up upstream.
+        pin.computeCollisions(
+            model, data, collision_model, collision_data, q)
+        pin.updateGeometryPlacements(
+            model, data, collision_model, collision_data, q)
 
     Attributes:
         data: Data corresponding to :data:`Configuration.model`.
         model: Kinodynamic model.
-        collision_data: Data corresponding to :data:`Configuration.collision_model`.
+        collision_data: Data corresponding to
+            :data:`Configuration.collision_model`.
         collision_model: Collision model.
         q: Configuration vector for the robot model.
     """
@@ -125,8 +127,10 @@ class Configuration:
             self.update(None)
 
     def update(self, q: Optional[np.ndarray] = None) -> None:
-        """Update configuration to a new vector and run forward kinematics and
-        collision pairs distance calculations, if specified.
+        """Update configuration to a new vector.
+
+        Calling this function runs forward kinematics and computes
+        collision-pair distances, if applicable.
 
         Args:
             q: New configuration vector.
@@ -164,9 +168,9 @@ class Configuration:
 
         Args:
             tol: Tolerance in radians.
-            safe_break (bool): If True, stop execution and raise an exception
-                if the current configuration is outside limits. If False, print
-                a warning and continue execution.
+            safety_break: If True, stop execution and raise an exception if the
+                current configuration is outside limits. If False, print a
+                warning and continue execution.
 
         Raises:
             NotWithinConfigurationLimits: If the current configuration is

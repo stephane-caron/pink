@@ -49,7 +49,7 @@ class LinearHolonomicTask(Task):
 
         where :math:`\mathfrak{g}^\ell_{q_0}` is the Lie algebra associated
         with the Lie group :math:`\mathcal{C}` (our configuration space), taken
-        in the local frame (:math:`\ell`, *a.k.a* body frame) at the reference
+        in the local frame (:math:`\ell`, *a.k.a.* body frame) at the reference
         configuration :math:`q_0`.
 
         We take the *local* difference :math:`q \ominus^\ell q_0` between our
