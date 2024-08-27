@@ -1,10 +1,10 @@
 a, a:visited, a:focus {
-  color: rgb(176, 46, 118);
+  color: rgb(240, 110, 163);
   text-decoration: none;
 }
 
 a:hover, a:active {
-  color: rgb(72, 0, 32);
+  color: rgb(204, 94, 139);
   text-decoration: none;
 }
 
@@ -18,7 +18,7 @@ a:hover, a:active {
 }
 
 .wy-menu-vertical a:hover {
-    background: rgb(176, 46, 118);
+    background: rgb(240, 110, 163);
     color: white;
 }
 
@@ -35,7 +35,7 @@ a:hover, a:active {
 }
 
 .wy-nav-side {
-    background: rgb(250, 231, 242);
+    background: rgb(255, 200, 225);
 }
 
 .wy-nav-top {
@@ -51,13 +51,36 @@ a:hover, a:active {
 }
 
 .wy-side-nav-search {
-    background: rgb(255, 183, 255);
+    background: rgb(240, 110, 163);
 }
 
 .wy-side-nav-search > div.version {
-    color: black;
+    color: white;
 }
 
-.wy-side-nav-search > a{
-    color: black;
+.wy-side-nav-search > a {
+    color: white;
+}
+
+pre {
+    background: rgb(255, 230, 240);
+}
+
+html.writer-html4 .rst-content dl:not(.docutils) > dt,
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt {
+    background: rgb(255, 230, 240);
+    border-top: 3px solid #de6a98;
+    color: rgb(240, 110, 163);
+}
+
+.rst-content .note {
+    background: rgb(255, 230, 240);
+}
+
+.rst-content .note .admonition-title {
+    background: rgb(240, 110, 163);
+}
+
+.rst-content code.literal {
+    color: rgb(220, 40, 115);
 }
