@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
+"""Exceptions raised by barriers."""
+
 from ..exceptions import PinkError
 
 

@@ -122,11 +122,13 @@ def process_collision_pairs(
     Args:
         model: robot model.
         collision_model: Collision model of the robot.
-        srdf_path: Path to the SRDF file, which used to exclude collision pairs.
-            Defaults to empty string, meaning no collision pairs are excluded.
+        srdf_path: Path to the SRDF file, which used to exclude collision
+            pairs. Defaults to empty string, meaning no collision pairs are
+            excluded.
 
     Returns:
-        collision_data: Collision data, generated after updating collision_model.
+        collision_data: Collision data, generated after updating
+            collision_model.
     """
     collision_model.addAllCollisionPairs()
     if srdf_path != "":

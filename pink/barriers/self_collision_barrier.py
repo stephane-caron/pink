@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 
-"""Self Collision Avoidance Barrier with hpp-fcl"""
+"""Self Collision Avoidance Barrier with hpp-fcl."""
 
 from typing import Union
 
@@ -19,24 +19,26 @@ from .exceptions import InvalidCollisionPairs, NegativeMinimumDistance
 class SelfCollisionBarrier(Barrier):
     r"""Self Collision Avoidance Barrier.
 
-    This class defines a barrier function based on the smooth convex collision geometry.
-    using hpp-fcl through Pinocchio. Note that for non-smooth collision geometries
-    behaviour is undefined.
+    This class defines a barrier function based on the smooth convex collision
+    geometry. using hpp-fcl through Pinocchio. Note that for non-smooth
+    collision geometries behaviour is undefined.
 
     The barrier function is defined as:
 
     .. math::
 
-        h(q) = \begin{bmatrix} \ldots \\ d(p^1_i, p^2_i) - d_{min}^2 \\ \ldots \end{bmatrix}
-            \quad \forall i \in 0 \ldots N
+        h(q) = \begin{bmatrix} \ldots \\ d(p^1_i, p^2_i) - d_{min}^2 \\
+            \ldots \end{bmatrix} \quad \forall i \in 0 \ldots N
 
-    where :math:`N` is number of collision pairs, :math:`p^k_i` is the :math:`k-th` body in :math:`i`-th collision pair,
-    :math:`d(p^1_i, p^2_i)` is the distance between collision bodies in the pair,
-    and :math:`d_{min}` is minimal distance between any collision bodies.
+    where :math:`N` is number of collision pairs, :math:`p^k_i` is the
+    :math:`k-th` body in :math:`i`-th collision pair, :math:`d(p^1_i, p^2_i)`
+    is the distance between collision bodies in the pair, and :math:`d_{min}`
+    is minimal distance between any collision bodies.
 
     Note:
-        The number of evaluated collision pairs might not be equal to the number of all collision pairs.
-        If the former is lower, then only the closest collision pairs will be considered.
+        The number of evaluated collision pairs might not be equal to the
+        number of all collision pairs. If the former is lower, then only the
+        closest collision pairs will be considered.
 
     Attributes:
         d_min: Minimum distance between collision pairs.
@@ -55,9 +57,9 @@ class SelfCollisionBarrier(Barrier):
 
         Args:
             n_collision_pairs: Number of collision pairs.
-                Note that the number of collision pairs doesn't have to be equal to
-                the total number of collision pairs in the model. If it is less,
-                than only the closest collision pairs will be used.
+                Note that the number of collision pairs doesn't have to be
+                equal to the total number of collision pairs in the model. If
+                it is less, than only the closest collision pairs will be used.
             gain: Barrier gain. Defaults to 1.0.
             safe_displacement_gain: gain for the safe backup displacement.
                 cost term. Defaults to 1.0.
@@ -85,18 +87,18 @@ class SelfCollisionBarrier(Barrier):
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
 
-        The barrier function is computed as the vector of lowest distances between collision pairs.
-
-        The barrier function is defined as:
+        The barrier function is computed as the vector of lowest distances
+        between collision pairs. It is defined as:
 
         .. math::
 
-            h(q) = \begin{bmatrix} \ldots \\ d(p^1_i, p^2_i) - d_{min}^2 \\ \ldots \end{bmatrix}
-                \quad \forall i \in 1 \ldots N
+            h(q) = \begin{bmatrix} \ldots \\ d(p^1_i, p^2_i) - d_{min}^2 \\
+                \ldots \end{bmatrix} \quad \forall i \in 1 \ldots N
 
-        where :math:`N` is number of collision pairs, :math:`p^k_i` is the :math:`k-th` body in :math:`i`-th collision pair,
-        :math:`d(p^1_i, p^2_i)` is the distance between collision bodies in the pair,
-        and :math:`d_{min}` is the minimal distance between any collision bodies.
+        where :math:`N` is number of collision pairs, :math:`p^k_i` is the
+        :math:`k-th` body in :math:`i`-th collision pair, :math:`d(p^1_i,
+        p^2_i)` is the distance between collision bodies in the pair, and
+        :math:`d_{min}` is the minimal distance between any collision bodies.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -107,8 +109,9 @@ class SelfCollisionBarrier(Barrier):
         """
         if len(configuration.collision_model.collisionPairs) < self.dim:
             raise InvalidCollisionPairs(
-                f"The number of collision pairs ({len(configuration.collision_model.collisionPairs)}) is less "
-                f"than the barrier dimension ({self.dim})."
+                "The number of collision pairs "
+                f"({len(configuration.collision_model.collisionPairs)}) "
+                f"is less than the barrier dimension ({self.dim})."
             )
         distances = np.array(
             [
@@ -129,17 +132,21 @@ class SelfCollisionBarrier(Barrier):
         r"""Compute the Jacobian matrix of the barrier function.
 
         The Jacobian matrix could be represented as stacked gradients of each
-        collision pair distance function w.r.t. joints. They are computed based on
-        frames Jacobians and normal surface vector at nearest distance points n.
+        collision pair distance function w.r.t. joints. They are computed based
+        on frames Jacobians and normal surface vector at nearest distance
+        points n.
 
-        The gradient, a.k.a i-th row in the Jacobian matrix, is given by:
+        The gradient, *a.k.a.* the i-th row in the Jacobian matrix, is given
+        by:
 
         .. math::
 
-            J_i = n_1^T J^1_p + (r_1 \times n_1)^T J^1_w + n_2^T J^2_p + (r_2 \times n_2)^T J^2_w,
+            J_i = n_1^T J^1_p + (r_1 \times n_1)^T J^1_w +
+                n_2^T J^2_p + (r_2 \times n_2)^T J^2_w,
 
-        where :math:`n_{1,2}` are normal vectors (note that :math:`n_1 = -n_2`), :math:`r_{1, 2}` are vectors from
-        frame origin and nearest point, :math:`J^{1, 2}_{p, w}` are position/orientation Jacobians of
+        where :math:`n_{1,2}` are normal vectors (note that :math:`n_1 =
+        -n_2`), :math:`r_{1, 2}` are vectors from frame origin and nearest
+        point, :math:`J^{1, 2}_{p, w}` are position/orientation Jacobians of
         respective frame.
 
         Args:
@@ -212,8 +219,8 @@ class SelfCollisionBarrier(Barrier):
             J[i] = Jrow_v.copy()
 
         # If collision is undefined, or during the collision, some values
-        # might be nans. In this case, set them to zero.
-        # Note that for non-colliding smooth convex functions no nans are present.
+        # might be nans. In this case, set them to zero. Note that for
+        # non-colliding smooth convex functions no nans are present.
         J = np.nan_to_num(J)
 
         return J
