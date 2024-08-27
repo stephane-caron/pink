@@ -7,8 +7,8 @@ This project's goal is to make it easy to do inverse kinematics on all kinds of 
 - Pick something you want to do with one of the many [robot descriptions](https://github.com/robot-descriptions/robot_descriptions.py) and write a new example
 - Find a use case that is not covered and write a unit test for it
 - Benchmark the performance of the following design choice depending on the number and types of tasks:
-    - The current ``Configuration`` interface, which does ``pin.computeJointJacobians`` + ``pin.getFrameJacobian``
-    - The alternative using only ``pin.computeFrameJacobian``
+    - The current `Configuration` interface, which does `pin.computeJointJacobians` + `pin.getFrameJacobian`
+    - The alternative using only `pin.computeFrameJacobian`
 
 There are also a number of tasks from Pymanoid that are not in Pink yet. If you happen to need one of them for your application, check out the reference implementation and add it to Pink:
 
