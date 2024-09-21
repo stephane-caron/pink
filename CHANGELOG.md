@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Fixed
+- `SelfCollisionBarrier` jacobian computation is fixed for floating body robots.
 
 ## [3.0.0] - 2024-07-29
 
