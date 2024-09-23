@@ -3,7 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
 ### Fixed
+
+- Update documentation Sphinx and theme versions
 - `SelfCollisionBarrier` jacobian computation is fixed for floating body robots.
 
 ## [3.0.0] - 2024-07-29
