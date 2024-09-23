@@ -5,9 +5,9 @@ dependencies:
     - pinocchio >= 3.0.0
     - pink
     - pip >= 21.3.1
+    - sphinx >= 7.2.2
+    - sphinx-rtd-theme
+    - sphinx-favicon
+    - sphinx-autodoc-typehints
     - pip:
-        - sphinx >= 7.2.2
-        - sphinx-autodoc-typehints
-        - sphinx-favicon
         - sphinx-mathjax-offline
-        - sphinx_rtd_theme
