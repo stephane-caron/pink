@@ -133,7 +133,7 @@ class SelfCollisionBarrier(Barrier):
 
         The Jacobian matrix could be represented as stacked gradients of each
         collision pair distance function w.r.t. joints. They are computed based
-        on frames Jacobians and normal surface vector at nearest distance
+        on joints Jacobians and normal surface vector at nearest distance
         points n.
 
         The gradient, *a.k.a.* the i-th row in the Jacobian matrix, is given
@@ -145,9 +145,9 @@ class SelfCollisionBarrier(Barrier):
                 n_2^T J^2_p + (r_2 \times n_2)^T J^2_w,
 
         where :math:`n_{1,2}` are normal vectors (note that :math:`n_1 =
-        -n_2`), :math:`r_{1, 2}` are vectors from frame origin and nearest
+        -n_2`), :math:`r_{1, 2}` are vectors from joint origin and nearest
         point, :math:`J^{1, 2}_{p, w}` are position/orientation Jacobians of
-        respective frame.
+        respective joint.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -162,7 +162,7 @@ class SelfCollisionBarrier(Barrier):
         collision_model = configuration.collision_model
         collision_data = configuration.collision_data
 
-        J = np.zeros((self.dim, model.nq))
+        J = np.zeros((self.dim, model.nv))
 
         # Calculate `dim` closest collision pairs, and evaluate them
         N_collision = len(collision_model.collisionPairs)
@@ -186,14 +186,14 @@ class SelfCollisionBarrier(Barrier):
             go_1 = collision_model.geometryObjects[cp.first]
             go_2 = collision_model.geometryObjects[cp.second]
 
-            f1_id = go_1.parentFrame
-            f2_id = go_2.parentFrame
+            j1_id = go_1.parentJoint
+            j2_id = go_2.parentJoint
 
             w1 = np.array(dr.getNearestPoint1())
             w2 = np.array(dr.getNearestPoint2())
             # Vectors from frame origin to nearest points
-            r1 = np.array(w1 - data.oMf[f1_id].translation)
-            r2 = np.array(w2 - data.oMf[f2_id].translation)
+            r1 = np.array(w1 - data.oMi[j1_id].translation)
+            r2 = np.array(w2 - data.oMi[j2_id].translation)
 
             # If division by zero is possible, then the points are practically
             # collisind, jacobian is undefined. Set it to zero.
@@ -204,15 +204,15 @@ class SelfCollisionBarrier(Barrier):
             n = (w1 - w2) / np.linalg.norm(w1 - w2)
 
             # Calculate first two terms using first frame Jacobian
-            J_1 = pin.getFrameJacobian(
-                model, data, f1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+            J_1 = pin.getJointJacobian(
+                model, data, j1_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
             )
             Jrow_v = n.T @ J_1[:3, :] + (pin.skew(r1) @ n).T @ J_1[3:, :]
 
             # Calculate second two terms using second frame Jacobian
             # Note that minus appears, since n_2 = -n_1
-            J_2 = pin.getFrameJacobian(
-                model, data, f2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
+            J_2 = pin.getJointJacobian(
+                model, data, j2_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED
             )
             Jrow_v -= n.T @ J_2[:3, :] + (pin.skew(r2) @ n).T @ J_2[3:, :]
 
