@@ -6,15 +6,16 @@
 
 """DRACO 3 humanoid standing on two feet and reaching with a hand."""
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, JointCouplingTask, PostureTask
+from pink.visualization import start_meshcat_visualizer
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -58,13 +59,7 @@ if __name__ == "__main__":
         "draco3_description", root_joint=pin.JointModelFreeFlyer()
     )
 
-    # Initialize meschcat visualizer
-    viz = pin.visualize.MeshcatVisualizer(
-        robot.model, robot.collision_model, robot.visual_model
-    )
-    robot.setVisualizer(viz, init=False)
-    viz.initViewer(open=True)
-    viz.loadViewerModel()
+    viz = start_meshcat_visualizer(robot)
 
     # Set initial robot configuration
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
