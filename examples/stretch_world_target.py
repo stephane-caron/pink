@@ -70,7 +70,7 @@ if __name__ == "__main__":
     if "quadprog" in qpsolvers.available_solvers:
         solver = "quadprog"
 
-    rate = RateLimiter(frequency=100.0)
+    rate = RateLimiter(frequency=100.0, warn=False)
     dt = rate.period
     t = 0.0  # [s]
     while True:

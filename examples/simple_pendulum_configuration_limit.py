@@ -83,7 +83,7 @@ if __name__ == "__main__":
     visualizer.display(configuration.q)
 
     # Run closed-loop inverse kinematics
-    rate = RateLimiter(frequency=100.0)
+    rate = RateLimiter(frequency=100.0, warn=False)
     dt = rate.period
     while True:
         velocity = solve_ik(configuration, tasks, dt, solver=qp_solver)

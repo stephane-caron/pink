@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     animation_time = 0.0  # [s]
     visualizer_fps = 100  # [Hz]
-    rate = RateLimiter(frequency=visualizer_fps)
+    rate = RateLimiter(frequency=visualizer_fps, warn=False)
 
     def callback(scene, dz=0.05):
         """Callback function for the visualizer."""
