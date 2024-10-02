@@ -31,7 +31,14 @@ if __name__ == "__main__":
     robot = full_robot.buildReducedRobot(
         list_of_joints_to_lock=["left_wheel", "right_wheel"]
     )
+
+    # Initialize visualization
     viz = start_meshcat_visualizer(robot)
+    viewer = viz.viewer
+    meshcat_shapes.frame(viewer["left_contact_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["right_contact_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["left_contact"], opacity=1.0)
+    meshcat_shapes.frame(viewer["right_contact"], opacity=1.0)
 
     tasks = {
         "left_contact": FrameTask(
@@ -61,12 +68,6 @@ if __name__ == "__main__":
 
     left_contact_target = tasks["left_contact"].transform_target_to_world
     right_contact_target = tasks["right_contact"].transform_target_to_world
-
-    viewer = viz.viewer
-    meshcat_shapes.frame(viewer["left_contact_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["right_contact_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["left_contact"], opacity=1.0)
-    meshcat_shapes.frame(viewer["right_contact"], opacity=1.0)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]

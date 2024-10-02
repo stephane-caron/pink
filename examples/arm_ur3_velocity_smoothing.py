@@ -30,7 +30,11 @@ except ModuleNotFoundError:
 
 if __name__ == "__main__":
     robot = load_robot_description("ur3_description", root_joint=None)
+
     viz = start_meshcat_visualizer(robot)
+    viewer = viz.viewer
+    meshcat_shapes.frame(viewer["end_effector_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["end_effector"], opacity=1.0)
 
     # Define inverse kinematics tasks and limits
     end_effector_task = FrameTask(
@@ -64,10 +68,6 @@ if __name__ == "__main__":
     end_effector_task.set_target_from_configuration(configuration)
     posture_task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
-
-    viewer = viz.viewer
-    meshcat_shapes.frame(viewer["end_effector_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["end_effector"], opacity=1.0)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]

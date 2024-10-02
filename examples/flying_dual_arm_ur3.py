@@ -117,7 +117,17 @@ if __name__ == "__main__":
         collision_model=visual_model,  # well...
         visual_model=visual_model,
     )
+
+    # Initialize visualization
     viz = start_meshcat_visualizer(robot)
+    viewer = viz.viewer
+    meshcat_shapes.frame(viewer["base"], opacity=1.0)
+    meshcat_shapes.frame(viewer["base_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["left_ee"], opacity=1.0)
+    meshcat_shapes.frame(viewer["left_ee_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["right_ee"], opacity=1.0)
+    meshcat_shapes.frame(viewer["right_ee_target"], opacity=0.5)
+
 
     base_task = FrameTask(
         "base",
@@ -156,14 +166,6 @@ if __name__ == "__main__":
     for task in tasks:
         task.set_target_from_configuration(configuration)
     viz.display(configuration.q)
-
-    viewer = viz.viewer
-    meshcat_shapes.frame(viewer["base"], opacity=1.0)
-    meshcat_shapes.frame(viewer["base_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["left_ee"], opacity=1.0)
-    meshcat_shapes.frame(viewer["left_ee_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["right_ee"], opacity=1.0)
-    meshcat_shapes.frame(viewer["right_ee_target"], opacity=0.5)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]

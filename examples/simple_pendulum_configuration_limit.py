@@ -54,9 +54,12 @@ if __name__ == "__main__":
         root_joint=None,
     )
 
-    # Initialize visualizer and frame task
+    # Initialize visualization
     visualizer = start_meshcat_visualizer(robot)
     viewer = visualizer.viewer
+    meshcat_shapes.frame(viewer["goal"], opacity=0.5)
+    meshcat_shapes.frame(viewer["tip"], opacity=1.0)
+
     model = robot.model
     data = robot.data
     task = FrameTask(
@@ -70,7 +73,6 @@ if __name__ == "__main__":
     q_goal = np.array([5.5])
     goal_configuration = pink.configuration.Configuration(model, data, q_goal)
     goal_pose = goal_configuration.get_transform_frame_to_world("tip")
-    meshcat_shapes.frame(viewer["goal"], opacity=0.5)
     viewer["goal"].set_transform(goal_pose.np)
     task.set_target_from_configuration(goal_configuration)  # <= task target
 
@@ -78,7 +80,6 @@ if __name__ == "__main__":
     q_init = np.array([0.5])
     configuration = pink.configuration.Configuration(model, data, q_init)
     init_pose = configuration.get_transform_frame_to_world("tip")
-    meshcat_shapes.frame(viewer["tip"], opacity=1.0)
     viewer["tip"].set_transform(init_pose.np)
     visualizer.display(configuration.q)
 

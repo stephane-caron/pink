@@ -15,6 +15,7 @@ from loop_rate_limiters import RateLimiter
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
+from pink.visualization import start_meshcat_visualizer
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -29,16 +30,16 @@ if __name__ == "__main__":
     robot = load_robot_description(
         "sigmaban_description", root_joint=pin.JointModelFreeFlyer()
     )
-    viz = pin.visualize.MeshcatVisualizer(
-        robot.model, robot.collision_model, robot.visual_model
-    )
-    robot.setVisualizer(viz, init=False)
-    viz.initViewer(open=True)
-    viz.loadViewerModel()
+
+    # Initialize visualization
+    viz = start_meshcat_visualizer(robot)
+    viewer = viz.viewer
+    meshcat_shapes.frame(viewer["left_foot_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["right_foot_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["torso_target"], opacity=0.5)
 
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     viz.display(configuration.q)
-    viewer = viz.viewer
 
     left_foot_task = FrameTask(
         "left_foot_tip",
@@ -83,9 +84,6 @@ if __name__ == "__main__":
     torso_task.set_target(configuration.get_transform_frame_to_world("torso"))
 
     # Display targets
-    meshcat_shapes.frame(viewer["left_foot_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["right_foot_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["torso_target"], opacity=0.5)
     viewer["left_foot_target"].set_transform(
         left_foot_task.transform_target_to_world.np
     )

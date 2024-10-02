@@ -30,6 +30,7 @@ if __name__ == "__main__":
         "g1_description", root_joint=pin.JointModelFreeFlyer()
     )
 
+    # Initialize visualization
     viz = start_meshcat_visualizer(robot)
 
     q_ref = np.zeros(robot.nq)
@@ -75,8 +76,6 @@ if __name__ == "__main__":
             if task.frame in ["right_palm_link", "left_palm_link"]:
                 target.translation += np.array([-0.1, 0.0, -0.2])
                 task.set_target(target)
-
-    viewer = viz.viewer
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]

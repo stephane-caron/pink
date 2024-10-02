@@ -6,12 +6,12 @@
 
 """Upkie wheeled biped bending its knees."""
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
@@ -29,9 +29,17 @@ except ModuleNotFoundError:
 
 if __name__ == "__main__":
     robot = load_robot_description(
-        "upkie_description", root_joint=pin.JointModelFreeFlyer()
+        "upkie_description",
+        root_joint=pin.JointModelFreeFlyer(),
     )
+
+    # Initialize visualization
     viz = start_meshcat_visualizer(robot)
+    viewer = viz.viewer
+    meshcat_shapes.frame(viewer["left_contact_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["right_contact_target"], opacity=0.5)
+    meshcat_shapes.frame(viewer["left_contact"], opacity=1.0)
+    meshcat_shapes.frame(viewer["right_contact"], opacity=1.0)
 
     tasks = {
         "base": FrameTask(
@@ -53,7 +61,6 @@ if __name__ == "__main__":
             cost=1e-3,  # [cost] / [rad]
         ),
     }
-
     tasks["posture"].set_target(
         custom_configuration_vector(robot, left_knee=0.2, right_knee=-0.2)
     )
@@ -67,11 +74,6 @@ if __name__ == "__main__":
     left_contact_target = tasks["left_contact"].transform_target_to_world
     right_contact_target = tasks["right_contact"].transform_target_to_world
 
-    viewer = viz.viewer
-    meshcat_shapes.frame(viewer["left_contact_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["right_contact_target"], opacity=0.5)
-    meshcat_shapes.frame(viewer["left_contact"], opacity=1.0)
-    meshcat_shapes.frame(viewer["right_contact"], opacity=1.0)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]

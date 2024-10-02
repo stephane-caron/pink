@@ -34,9 +34,8 @@ if __name__ == "__main__":
     robot = load_robot_description(
         "stretch_description", root_joint=pin.JointModelPlanar()
     )
-    # __import__("IPython").embed()
 
-    # Initialize visualizer
+    # Initialize visualization
     viz = start_meshcat_visualizer(robot)
     viewer = viz.viewer
     meshcat_shapes.frame(viewer["base_target_frame"], opacity=0.5)

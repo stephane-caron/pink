@@ -15,6 +15,7 @@ from loop_rate_limiters import RateLimiter
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask
+from pink.visualization import start_meshcat_visualizer
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -57,12 +58,13 @@ if __name__ == "__main__":
     robot = load_robot_description(
         "jvrc_description", root_joint=pin.JointModelFreeFlyer()
     )
-    viz = pin.visualize.MeshcatVisualizer(
-        robot.model, robot.collision_model, robot.visual_model
-    )
-    robot.setVisualizer(viz, init=False)
-    viz.initViewer(open=True)
-    viz.loadViewerModel()
+
+    # Initialize visualization
+    viz = start_meshcat_visualizer(robot)
+    viewer = viz.viewer
+    wrist_frame = viewer["right_wrist_pose"]
+    meshcat_shapes.frame(viewer["pelvis_pose"])
+    meshcat_shapes.frame(wrist_frame)
 
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
     viz.display(configuration.q)
@@ -83,8 +85,7 @@ if __name__ == "__main__":
 
     pelvis_pose = configuration.get_transform_frame_to_world("PELVIS_S").copy()
     pelvis_pose.translation[0] += 0.05
-    meshcat_shapes.frame(viz.viewer["pelvis_pose"])
-    viz.viewer["pelvis_pose"].set_transform(pelvis_pose.np)
+    viewer["pelvis_pose"].set_transform(pelvis_pose.np)
     pelvis_task.set_target(pelvis_pose)
 
     transform_l_ankle_target_to_init = pin.SE3(
@@ -109,9 +110,6 @@ if __name__ == "__main__":
     right_wrist_pose = WavingPose(
         configuration.get_transform_frame_to_world("r_wrist")
     )
-
-    wrist_frame = viz.viewer["right_wrist_pose"]
-    meshcat_shapes.frame(wrist_frame)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]

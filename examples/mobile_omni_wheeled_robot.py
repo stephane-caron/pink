@@ -35,7 +35,7 @@ if __name__ == "__main__":
         root_joint=pin.JointModelPlanar(),
     )
 
-    # Initialize visualizer
+    # Initialize visualization
     viz = start_meshcat_visualizer(robot)
     viewer = viz.viewer
     meshcat_shapes.frame(viewer["target_frame"], opacity=0.5)

@@ -59,7 +59,11 @@ if __name__ == "__main__":
         "draco3_description", root_joint=pin.JointModelFreeFlyer()
     )
 
+    # Initialize visualization
     viz = start_meshcat_visualizer(robot)
+    wrist_frame = viz.viewer["right_wrist_pose"]
+    meshcat_shapes.frame(wrist_frame)
+
 
     # Set initial robot configuration
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
@@ -148,9 +152,6 @@ if __name__ == "__main__":
     right_wrist_pose = WavingPose(
         configuration.get_transform_frame_to_world("r_hand_contact")
     )
-
-    wrist_frame = viz.viewer["right_wrist_pose"]
-    meshcat_shapes.frame(wrist_frame)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]
