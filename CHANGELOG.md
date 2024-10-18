@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Example: Upkie rolling without slipping on a horizontal floor
 - Task: `RollingTask` for rolling without slipping on a plane
 
+### Changed
+
+- Rename "end-effector to target" example to "inverse kinematics UR10"
+
 ### Fixed
 
 - Update documentation Sphinx and theme versions
