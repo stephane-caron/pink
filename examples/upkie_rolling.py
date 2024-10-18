@@ -4,7 +4,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2024 Inria
 
-import matplotlive
 import meshcat_shapes
 import numpy as np
 import pinocchio as pin
@@ -94,12 +93,6 @@ if __name__ == "__main__":
     dt = rate.period
     t = 0.0  # [s]
 
-    plot = matplotlive.LivePlot(
-        timestep=rate.period,  # seconds
-        duration=1.0,  # seconds
-        ylim=(0.0, 2.0),
-    )
-
     for _ in range(10_000):
         # Update base task target
         base_x = 0.1 * t
@@ -124,20 +117,6 @@ if __name__ == "__main__":
             damping=1e-3,
         )
         configuration.integrate_inplace(velocity, dt)
-
-        plot.send(
-            "left_x",
-            configuration.get_transform_frame_to_world(
-                "left_wheel"
-            ).translation[0],
-        )
-        plot.send(
-            "right_x",
-            configuration.get_transform_frame_to_world(
-                "right_wheel"
-            ).translation[0],
-        )
-        plot.update()
 
         # Visualize result at fixed FPS
         visualizer.display(configuration.q)
