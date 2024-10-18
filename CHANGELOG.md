@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## Unreleased
 
 ### Added
@@ -12,7 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Update documentation Sphinx and theme versions
-- `SelfCollisionBarrier` jacobian computation is fixed for floating body robots.
+- Fix Jacobian of `SelfCollisionBarrier` for floating-base robots
 
 ## [3.0.0] - 2024-07-29
 
@@ -20,8 +23,8 @@ All notable changes to this project will be documented in this file.
 
 - **Breaking:** Updated the logic for handling the joint limits:
   - Add a `limits` argument to `build_ik` and `solve_ik`
-  - The `check_limits` method now includes an optional `safety_break` argument to control whether execution should stop on exception.
-  - The `solve_ik` function now includes the `safety_break` that is forwarded to `check_limits`.
+  - The `check_limits` method now includes an optional `safety_break` argument to control whether execution should stop on exception
+  - The `solve_ik` function now includes the `safety_break` that is forwarded to `check_limits`
 - Control Barrier Functions, namely: (thanks to @domrachev03 and @simeon-ned)
   - Abstract Barrier `Barrier`
   - Frame Position Barrier `PositionBarrier`
@@ -29,10 +32,10 @@ All notable changes to this project will be documented in this file.
   - Whole-body Self-Collision Avoidance Barrier `SelfCollisionBarrier`
 - Example: UR5 manipulator and GO2 quadruped robot with `PositionBarrier`
 - Example: YUMI two-armed manipulator with `BodySphericalBarrier`
-- Example: G1 humanoid squatting through regulating CoM.
+- Example: G1 humanoid squatting through regulating CoM
 - Limit: `AccelerationLimit`
 - Task: `ComTask` for center-of-mass tracking (thanks to @simeon-ned)
-- Task: `LowAccelerationTask` for smoother velocities.
+- Task: `LowAccelerationTask` for smoother velocities
 
 ### Changed
 
@@ -317,7 +320,9 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1] - 2022-02-06
 
-Python package infrastructure.
+## Added
+
+- Python package infrastructure
 
 [unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v3.0.0...HEAD
 [3.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.1.0...v3.0.0
