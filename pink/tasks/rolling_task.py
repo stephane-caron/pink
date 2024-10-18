@@ -12,6 +12,24 @@ from pink import Configuration, Task
 
 
 class RollingTask(Task):
+    r"""Roll without slipping on a plane.
+
+    Frames used in this task are:
+
+    - Floor: inertial frame defining the contact plane the wheel rolls on.
+    - Hub: frame attached to the hub of the wheel in the robot model.
+    - Rim: its origin is the projection of the hub origin onto the floor
+      plane. Its orientation is the same as the floor frame.
+
+    Attributes:
+        hub_frame: Name of a frame attached to the hub of the wheel in the
+            robot model.
+        floor_frame: Name of the inertial frame whose xy-plane defines the
+            contact surface the wheel is rolling onto.
+        wheel_radius: Radius of the wheel, i.e. distance in meters from the hub
+            to the nearest point on the rim.
+    """
+
     hub_frame: str
     floor_frame: str
     wheel_radius: float
@@ -35,6 +53,31 @@ class RollingTask(Task):
         self.wheel_radius = wheel_radius
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
+        r"""Compute the rolling task error.
+
+        The error is a vector :math:`{}_R e(q)` of the rim frame :math:`R`:
+
+        .. math::
+
+            {}_R e(q) := \begin{bmatrix}
+                0 \\
+                0 \\
+                z_{\mathit{hub}} - \rho
+                \end{bmatrix}
+
+        The error is zero along the x- and y-axis of the rim frame to roll
+        without slipping (*i.e.*, the velocity of the contact point is zero in
+        the floor plane). The error along the z-axis of the rim frame is chosen
+        so that the task keeps the wheel hub at distance :math:`\rho` (wheel
+        radius) from the floor plane.
+
+        Args:
+            configuration: Robot configuration :math:`q`.
+
+        Returns:
+            Task error :math:`{}_R e(q) \in \mathbb{R}^3`, a translation
+            expressed in the rim frame :math:`R`.
+        """
         transform_hub_to_floor = configuration.get_transform(
             source=self.hub_frame, dest=self.floor_frame
         )
@@ -44,6 +87,15 @@ class RollingTask(Task):
         return error_in_rim
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
+        r"""Compute the rolling task Jacobian.
+
+        Args:
+            configuration: Robot configuration :math:`q`.
+
+        Returns:
+            Translation Jacobian matrix :math:`{}_R J_{WR}`, expressed locally
+            in the rim frame :math:`R`.
+        """
         transform_hub_to_floor = configuration.get_transform(
             source=self.hub_frame, dest=self.floor_frame
         )
