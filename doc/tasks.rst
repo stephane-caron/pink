@@ -41,3 +41,9 @@ Posture task
 
 .. automodule:: pink.tasks.posture_task
     :members:
+
+Rolling task
+============
+
+.. automodule:: pink.tasks.rolling_task
+    :members:
