@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2024 Inria
 
-"""UR3 arm tracking a moving target with velocity smoothing."""
+"""UR3 arm tracking a target, first without then with velocity smoothing."""
 
 import matplotlib.pyplot as plt
 import meshcat_shapes
@@ -27,6 +27,7 @@ except ModuleNotFoundError:
         "(available from conda-forge or PyPI)"
     )
 
+NB_STEPS = 3000  # number of steps to run the example for
 
 if __name__ == "__main__":
     robot = load_robot_description("ur3_description", root_joint=None)
@@ -77,10 +78,9 @@ if __name__ == "__main__":
     rate = RateLimiter(frequency=200.0, warn=False)
     dt = rate.period
     configurations, velocities, times = [], [], []
-    nb_steps = 3000
     t = 0.0  # [s]
     max_ever = -1.0
-    for step in range(nb_steps):
+    for step in range(NB_STEPS):
         # Update task targets
         end_effector_target = end_effector_task.transform_target_to_world
         end_effector_target.translation[1] = 0.5 + 0.1 * np.sin(2.0 * t)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
             ).np
         )
 
-        if step < nb_steps // 2:
+        if step < NB_STEPS // 2:
             # First half: no velocity smoothing
             end_effector_task.gain = 1.0
             tasks = (end_effector_task, posture_task)
@@ -102,7 +102,7 @@ if __name__ == "__main__":
                 configuration.model.configuration_limit,
                 configuration.model.velocity_limit,
             )
-        else:  # step >= nb_steps // 2
+        else:  # step >= NB_STEPS // 2
             # Second half: velocity smoothing by:
             # 1. Reducing the task gain
             # 2. Switching from a posture to a damping task
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     plt.figure()
     plt.plot(times, velocities)
     plt.plot(
-        [times[nb_steps // 2]] * 2,
+        [times[NB_STEPS // 2]] * 2,
         [velocities.min(), velocities.max()],
         "k--",
     )
@@ -149,7 +149,7 @@ if __name__ == "__main__":
     plt.figure()
     plt.plot(times, configurations)
     plt.plot(
-        [times[nb_steps // 2]] * 2,
+        [times[NB_STEPS // 2]] * 2,
         [configurations.min(), configurations.max()],
         "k--",
     )
