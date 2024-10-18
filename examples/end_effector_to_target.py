@@ -10,65 +10,67 @@ import pinocchio
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
+from pink.tasks import FrameTask
 
-robot = load_robot_description("ur10_description")
-
-# Frame details
-FRAME_NAME = "ee_frame"
-joint_name = robot.model.names[-1]
-parent_joint = robot.model.getJointId(joint_name)
-parent_frame = robot.model.getFrameId(joint_name)
-placement = pinocchio.SE3.Identity()
-
-ee_frame = robot.model.addFrame(
-    pinocchio.Frame(
-        FRAME_NAME,
-        parent_joint,
-        parent_frame,
-        placement,
-        pinocchio.FrameType.OP_FRAME,
-    )
-)
-robot.data = pinocchio.Data(robot.model)
-low = robot.model.lowerPositionLimit
-high = robot.model.upperPositionLimit
-robot.q0 = pinocchio.neutral(robot.model)
-
-# Task details
-np.random.seed(0)
-q_final = np.array(
-    [
-        np.random.uniform(low=low[i], high=high[i], size=(1,))[0]
-        for i in range(6)
-    ]
-)
-pinocchio.forwardKinematics(robot.model, robot.data, q_final)
-
-target_pose = robot.data.oMi[parent_joint]
-ee_task = pink.tasks.FrameTask(FRAME_NAME, [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
-ee_task.set_target(target_pose)
-tasks = [ee_task]
-
-# Inverse kinematics parameters
+# IK parameters
 dt = 1e-2
-damping = 1e-8
-n_iter = 10000
-solver = "quadprog"
+stop_thres = 1e-8
 
-configuration = pink.Configuration(robot.model, robot.data, robot.q0)
+if __name__ == "__main__":
+    robot = load_robot_description("ur10_description")
 
-for i in range(n_iter):
-    dv = pink.solve_ik(
-        configuration,
-        [ee_task],
-        dt=dt,
-        damping=damping,
-        solver=solver,
+    # Frame details
+    joint_name = robot.model.names[-1]
+    parent_joint = robot.model.getJointId(joint_name)
+    parent_frame = robot.model.getFrameId(joint_name)
+    placement = pinocchio.SE3.Identity()
+
+    FRAME_NAME = "ee_frame"
+    ee_frame = robot.model.addFrame(
+        pinocchio.Frame(
+            FRAME_NAME,
+            parent_joint,
+            parent_frame,
+            placement,
+            pinocchio.FrameType.OP_FRAME,
+        )
     )
-    q_out = pinocchio.integrate(robot.model, configuration.q, dv * dt)
-    configuration = pink.Configuration(robot.model, robot.data, q_out)
-    pinocchio.updateFramePlacements(robot.model, robot.data)
-    err = ee_task.compute_error(configuration)
-    print(i, err)
-    if np.linalg.norm(ee_task.compute_error(configuration)) < 1e-8:
-        break
+    robot.data = pinocchio.Data(robot.model)
+    low = robot.model.lowerPositionLimit
+    high = robot.model.upperPositionLimit
+    robot.q0 = pinocchio.neutral(robot.model)
+
+    # Task details
+    np.random.seed(0)
+    q_final = np.array(
+        [
+            np.random.uniform(low=low[i], high=high[i], size=(1,))[0]
+            for i in range(6)
+        ]
+    )
+    pinocchio.forwardKinematics(robot.model, robot.data, q_final)
+    target_pose = robot.data.oMi[parent_joint]
+    ee_task = FrameTask(FRAME_NAME, [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
+    ee_task.set_target(target_pose)
+
+    configuration = pink.Configuration(robot.model, robot.data, robot.q0)
+    error_norm = np.linalg.norm(ee_task.compute_error(configuration))
+    print(f"Starting from {error_norm = :.2}")
+    print(f"Desired precision is error_norm < {stop_thres}")
+
+    nb_steps = 0
+    while error_norm > stop_thres:
+        dv = pink.solve_ik(
+            configuration,
+            tasks=[ee_task],
+            dt=dt,
+            damping=1e-8,
+            solver="quadprog",
+        )
+        q_out = pinocchio.integrate(robot.model, configuration.q, dv * dt)
+        configuration = pink.Configuration(robot.model, robot.data, q_out)
+        pinocchio.updateFramePlacements(robot.model, robot.data)
+        error_norm = np.linalg.norm(ee_task.compute_error(configuration))
+        nb_steps += 1
+
+    print(f"Terminated after {nb_steps} steps with {error_norm = :.2}")
