@@ -93,7 +93,7 @@ if __name__ == "__main__":
     dt = rate.period
     t = 0.0  # [s]
 
-    for _ in range(10_000):
+    while True:
         # Update base task target
         base_x = 0.1 * t
         base_target.translation[0] = base_x
