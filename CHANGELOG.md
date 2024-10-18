@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Example: Upkie rolling without slipping on a horizontal floor
+- Task: `RollingTask` for rolling without slipping on a plane
+
 ### Fixed
 
 - Update documentation Sphinx and theme versions
