@@ -15,6 +15,7 @@ from .linear_holonomic_task import LinearHolonomicTask
 from .low_acceleration_task import LowAccelerationTask
 from .posture_task import PostureTask
 from .relative_frame_task import RelativeFrameTask
+from .rolling_task import RollingTask
 from .task import Task
 
 __all__ = [
@@ -26,6 +27,7 @@ __all__ = [
     "LowAccelerationTask",
     "PostureTask",
     "RelativeFrameTask",
+    "RollingTask",
     "TargetNotSet",
     "Task",
     "TaskJacobianNotSet",
