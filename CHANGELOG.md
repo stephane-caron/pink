@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Rename "end-effector to target" example to "inverse kinematics UR10"
+- Update icon of documentation website
 
 ### Fixed
 
