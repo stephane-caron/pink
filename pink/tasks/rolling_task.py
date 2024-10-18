@@ -8,7 +8,9 @@
 
 import numpy as np
 import pinocchio as pin
-from pink import Configuration, Task
+
+from ..configuration import Configuration
+from .task import Task
 
 
 class RollingTask(Task):
