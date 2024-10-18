@@ -28,6 +28,11 @@ class RollingTask(Task):
             contact surface the wheel is rolling onto.
         wheel_radius: Radius of the wheel, i.e. distance in meters from the hub
             to the nearest point on the rim.
+
+    Note:
+        See also the similar `wheel task in the PlaCo C++ library
+        <https://github.com/Rhoban/placo/blob/9e65abadff45071ab11274eb74770d71e10b7ca8/docs/kinematics/wheel_task.rst>`__.
+        It additionally handles omniwheels.
     """
 
     hub_frame: str
