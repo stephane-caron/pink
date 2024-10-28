@@ -66,8 +66,10 @@ if __name__ == "__main__":
         right_wheel_rolling,
     ]
 
+    init_x = -2.0  # in [m]
     q_init = robot.q0.copy()
-    q_init[2] = 0.56
+    q_init[0] = init_x  # world x-axis
+    q_init[2] = 0.56  # world z-axis
     configuration = pink.Configuration(robot.model, robot.data, q_init)
     base_task.set_target_from_configuration(configuration)
     left_wheel_position.set_target_from_configuration(configuration)
@@ -95,7 +97,7 @@ if __name__ == "__main__":
 
     while True:
         # Update base task target
-        base_x = 0.1 * t
+        base_x = 0.1 * t + init_x
         base_target.translation[0] = base_x
         left_wheel_target.translation[0] = base_x + 0.1 * np.sin(t)
         right_wheel_target.translation[0] = base_x - 0.1 * np.sin(t)
