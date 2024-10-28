@@ -1,9 +1,14 @@
 # Examples
 
+The following examples include *tasks* and *limits*:
+
 - [Arm: UR5](#arm-ur5)
 - [Flying dual-arm UR3](#flying-dual-arm-ur3)
 - [Humanoid: Draco 3](#humanoid-draco-3)
 - [Mobile: Stretch](#mobile-stretch)
+- [Wheeled biped: Upkie](#wheeled-biped-upkie)
+
+Check out the [barriers](barriers/) sub-directory for more examples including *control barrier functions*.
 
 ## Arm: UR5
 
@@ -55,3 +60,17 @@ https://github.com/stephane-caron/pink/assets/1189580/711c4b92-6234-41bd-945b-e6
 |------|---------------|------------------|
 | Mobile base | $0.1$ | 1 |
 | Fingertip | 1 | $10^{-4}$ |
+
+## Wheeled biped: Upkie
+
+An Upkie wheeled biped rolling without slipping:
+
+...
+
+| Task | Position cost | Orientation cost |
+|------|---------------|------------------|
+| Floating base | $1$ | $1$ |
+| Left wheel rolling | $10$ | - |
+| Right wheel rolling | $10$ | - |
+| Left wheel position | $1$ | $0$ |
+| Right wheel position | $1$ | $0$ |
