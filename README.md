@@ -123,21 +123,25 @@ If task targets are continuously updated, there will be no stationary solution t
 
 ## Examples
 
-Basic examples to get started:
+Illustrated examples showcase how Pink performs on various robot morphologies:
 
-* [Double pendulum](https://github.com/stephane-caron/pink/blob/main/examples/double_pendulum.py)
-* [Loading a custom URDF](https://github.com/stephane-caron/pink/blob/main/examples/load_custom_urdf.py)
-* [Visualization in MeshCat](https://github.com/stephane-caron/pink/blob/main/examples/visualize_in_meshcat.py)
-* [Visualization in yourdfpy](https://github.com/stephane-caron/pink/blob/main/examples/visualize_in_yourdfpy.py)
+- Arm: [UR5](https://github.com/stephane-caron/pink/tree/main/examples#arm-ur5) and [UR5 with end-effector limits](https://github.com/stephane-caron/pink/tree/main/examples/barriers#arm-ur5)
+- Dual arms: [Flying dual-arm UR3](https://github.com/stephane-caron/pink/tree/main/examples#flying-dual-arm-ur3)
+- Dual arms: [Yumi with spherical self-collision avoidance](https://github.com/stephane-caron/pink/tree/main/examples/barriers#yumi-end-effector-self-collision-avoidance)
+- Dual arms: [Iiwa with whole-body self-collision avoidance](https://github.com/stephane-caron/pink/tree/main/examples/barriers#iiwa-whole-body-collision-avoidance)
+- Humanoid: [Draco 3](https://github.com/stephane-caron/pink/tree/main/examples#humanoid-draco-3)
+- Mobile base: [Stretch R1](https://github.com/stephane-caron/pink/tree/main/examples#mobile-stretch)
+- Quadruped: [Go2 squatting with floating-base limits](https://github.com/stephane-caron/pink/tree/main/examples/barriers#go2-squat)
+- Wheeled biped: [Upkie rolling without slipping](https://github.com/stephane-caron/pink/blob/main/examples/wheeled_biped_upkie.py)
 
-Pink works with all kinds of robot morphologies:
+There are also more basic examples to get started:
 
-* Arms: [Kinova Gen2](https://github.com/stephane-caron/pink/blob/main/examples/arm_kinova_gen2.py), [UR3](https://github.com/stephane-caron/pink/blob/main/examples/arm_ur3.py)
-* Humanoids: [JVRC-1](https://github.com/stephane-caron/pink/blob/main/examples/humanoid_jvrc.py), [SigmaBan](https://github.com/stephane-caron/pink/blob/main/examples/humanoid_sigmaban.py)
-* Mobile base: [Omnidirectional robot](https://github.com/stephane-caron/pink/blob/main/examples/mobile_omni_wheeled_robot.py), [Stretch R1](https://github.com/stephane-caron/pink/blob/main/examples/mobile_stretch.py)
-* Wheeled biped: [Upkie](https://github.com/stephane-caron/pink/blob/main/examples/wheeled_biped_upkie.py)
+- [Double pendulum](https://github.com/stephane-caron/pink/blob/main/examples/double_pendulum.py)
+- [Loading a custom URDF](https://github.com/stephane-caron/pink/blob/main/examples/load_custom_urdf.py)
+- [Visualization in MeshCat](https://github.com/stephane-caron/pink/blob/main/examples/visualize_in_meshcat.py)
+- [Visualization in yourdfpy](https://github.com/stephane-caron/pink/blob/main/examples/visualize_in_yourdfpy.py)
 
-Check out the examples directory for more code.
+Check out the [examples](https://github.com/stephane-caron/pink/tree/main/examples) directory for more.
 
 ## Frequently Asked Questions
 
