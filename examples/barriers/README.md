@@ -1,7 +1,6 @@
-Here we will have the examples of using barriers, please go over [notes](https://simeon-ned.com/blog/2024/cbf/) for more info. 
+Here we will have the examples of using barriers, please go over [this note](https://simeon-ned.com/blog/2024/cbf/) for more info.
 
 # Barrier Examples
-
 
 - [Arm: UR5](#arm-ur5): with joints and end effector limits
 - [Quadruped: Go2](#go2-squat): Go 2 squatting with floating base position limits
@@ -12,9 +11,7 @@ Here we will have the examples of using barriers, please go over [notes](https:/
 
 A UR5 arm tracking a moving target while stopping in front of virtual wall:
 
-
 https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f99e42714c
-
 
 | Task | Cost |
 |------|------|
@@ -29,9 +26,7 @@ https://github.com/domrachev03/pink/assets/28687492/f30ba7a1-98a3-44cb-ab52-23f9
 
 Go2 quadruped squating with base position is constrained by z and y coordinates:
 
-
 https://github.com/domrachev03/pink/assets/28687492/78281f44-3676-4d4d-9619-768b951a15a2
-
 
 | Task | Cost |
 |------|------|
@@ -43,15 +38,11 @@ https://github.com/domrachev03/pink/assets/28687492/78281f44-3676-4d4d-9619-768b
 |------|------|
 | End-effector | $10^{2}$ |
 
-
 ## Yumi end-effector self-collision avoidance
+
 Yumi two-armed manimpulator with constraint on minimal distance between frames, defined by end-effectors
 
-
-
 https://github.com/domrachev03/pink/assets/28687492/f8c4bc8d-63e3-4bf7-a34f-e7ede43c0438
-
-
 
 | Task | Cost |
 |------|------|
@@ -63,12 +54,10 @@ https://github.com/domrachev03/pink/assets/28687492/f8c4bc8d-63e3-4bf7-a34f-e7ed
 | Body Spherical | $10^{2}$ |
 
 ## Iiwa whole-body collision avoidance
+
 Two iiwas with custom collision geometry with some barely feasible tasks for end-effectors.
 
-
 https://github.com/domrachev03/pink/assets/28687492/d64163b6-399f-4bbf-ac50-1135fa69c2da
-
-
 
 | Task | Cost |
 |------|------|
@@ -78,4 +67,3 @@ https://github.com/domrachev03/pink/assets/28687492/d64163b6-399f-4bbf-ac50-1135
 | Barrier | Gain |
 |------|------|
 | Self Collision Avoidance | $10$ |
-
