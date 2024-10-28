@@ -65,7 +65,7 @@ https://github.com/stephane-caron/pink/assets/1189580/711c4b92-6234-41bd-945b-e6
 
 An Upkie wheeled biped rolling without slipping:
 
-...
+https://github.com/user-attachments/assets/18ae0b68-21a2-44ec-af48-1d8ab4a7e658
 
 | Task | Position cost | Orientation cost |
 |------|---------------|------------------|
