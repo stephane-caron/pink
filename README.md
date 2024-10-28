@@ -132,7 +132,7 @@ Illustrated examples showcase how Pink performs on various robot morphologies:
 - Humanoid: [Draco 3](https://github.com/stephane-caron/pink/tree/main/examples#humanoid-draco-3)
 - Mobile base: [Stretch R1](https://github.com/stephane-caron/pink/tree/main/examples#mobile-stretch)
 - Quadruped: [Go2 squatting with floating-base limits](https://github.com/stephane-caron/pink/tree/main/examples/barriers#go2-squat)
-- Wheeled biped: [Upkie rolling without slipping](https://github.com/stephane-caron/pink/blob/main/examples/wheeled_biped_upkie.py)
+- Wheeled biped: [Upkie rolling without slipping](https://github.com/stephane-caron/pink/tree/main/examples#wheeled-biped-upkie)
 
 There are also more basic examples to get started:
 
