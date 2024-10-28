@@ -50,6 +50,23 @@ class RollingTask(Task):
         gain: float = 1.0,
         lm_damping: float = 0.0,
     ):
+        r"""Define a new rolling task.
+
+        Args:
+            hub_frame: Name of a frame attached to the hub of the wheel in the
+                robot model.
+            floor_frame: Name of the inertial frame whose xy-plane defines the
+                contact surface the wheel is rolling onto.
+            wheel_radius: Radius of the wheel, i.e. distance in meters from the
+                hub to the nearest point on the rim.
+            cost: scalar or 3D cost vector,
+                in :math:`[\mathrm{cost}] / [\mathrm{m}]`.
+            lm_damping: Levenberg-Marquardt damping (see class attributes). The
+                default value is conservatively low.
+            gain: Task gain :math:`\alpha \in [0, 1]` for additional low-pass
+                filtering. Defaults to 1.0 (no filtering) for dead-beat
+                control.
+        """
         super().__init__(
             cost=cost,
             gain=gain,
@@ -62,7 +79,7 @@ class RollingTask(Task):
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the rolling task error.
 
-        The error is a vector :math:`{}_R e(q)` of the rim frame :math:`R`:
+        The error is a 3D vector :math:`{}_R e(q)` of the rim frame :math:`R`:
 
         .. math::
 
