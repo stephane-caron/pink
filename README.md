@@ -163,7 +163,7 @@ If you use Pink in your scientific works, please cite it *e.g.* as follows:
   author = {Caron, Stéphane and De Mont-Marin, Yann and Budhiraja, Rohan and Bang, Seung Hyeon and Domrachev, Ivan and Nedelchev, Simeon},
   license = {Apache-2.0},
   url = {https://github.com/stephane-caron/pink},
-  version = {3.0.0},
+  version = {3.1.0},
   year = {2024}
 }
 ```

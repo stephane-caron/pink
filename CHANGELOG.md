@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [3.1.0] - 2024-10-28
+
 ### Added
 
 - Example: Upkie rolling without slipping on a horizontal floor
@@ -329,7 +331,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Python package infrastructure
 
-[unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v3.0.0...HEAD
+[unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v1.1.0...v2.0.0
