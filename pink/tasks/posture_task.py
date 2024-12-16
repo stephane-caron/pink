@@ -24,11 +24,13 @@ class PostureTask(Task):
     are not affected by this task.
 
     Attributes:
-        target_q: Target vector in the configuration space.
+        target_q: Target vector in the configuration space. If the model has a
+            floating base, then this vector should include floating-base
+            coordinates (although they have no effect on the posture task).
 
     A posture task is typically used for regularization as it has a steady
     rank. For instance, when Upkie's legs are stretched and the Jacobian of its
-    contact frames become singular, the posture task will drive the knees
+    contact frames becomes singular, the posture task will drive the knees
     toward a preferred orientation.
     """
 
@@ -62,7 +64,10 @@ class PostureTask(Task):
         """Set target posture.
 
         Args:
-            target_q: Target vector in the configuration space.
+            target_q: Target vector in the configuration space. If the model
+                has a floating base, then this vector should include
+                floating-base coordinates (although they have no effect on the
+                posture task).
         """
         self.target_q = target_q.copy()
 
