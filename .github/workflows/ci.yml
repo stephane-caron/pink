@@ -21,7 +21,7 @@ jobs:
             - name: "Set up Python"
               uses: actions/setup-python@v4
               with:
-                  python-version: "3.8"
+                  python-version: "3.9"
 
             - name: "Install dependencies"
               run: |
@@ -50,7 +50,7 @@ jobs:
             - name: "Set up Python"
               uses: actions/setup-python@v4
               with:
-                  python-version: "3.8"
+                  python-version: "3.9"
 
             - name: "Install dependencies"
               run: |
@@ -71,7 +71,7 @@ jobs:
                 os: [ubuntu-latest]
                 # Blocker: https://github.com/stack-of-tasks/pinocchio/issues/2231
                 # os: [ubuntu-latest, macos-latest]
-                python-version: ["3.8", "3.9", "3.10"]
+                python-version: ["3.9", "3.10", "3.11", "3.12"]
 
         steps:
             - name: "Checkout sources"
