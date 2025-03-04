@@ -18,8 +18,28 @@ from .linear_holonomic_task import LinearHolonomicTask
 class JointCouplingTask(LinearHolonomicTask):
     r"""Coupling between two revolute joints.
 
-    Note:
-        This task only considers a 1-Dimensional task.
+    This task enforces a one-dimensional relationship:
+
+    .. math::
+
+        \sum_{j \in J} r_j q_j
+
+    where :math:`J` is a given set of joints the task is configured for,
+    :math:`r_j` is the "ratio" associated with a joint :math:`j \in J` and
+    :math:`q_j` is the current joint angle (in the configuration vector
+    :math:`q`).
+
+    A simple use case of this task is:
+
+    .. math::
+
+        q_1 - q_2 = 0
+
+    where the two joints in :math:`J = {1, 2}` are coupled to rotate in
+    opposite directions.
+
+    This task is a particular case of the more general
+    :class:`pink.tasks.linear_holonomic_task.LinearHolonomicTask`.
     """
 
     joint_names: Sequence[str]

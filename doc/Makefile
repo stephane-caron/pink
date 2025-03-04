@@ -14,5 +14,5 @@ clean:  ## remove all output files
 	rm -rf $(OUTPUTDIR)
 
 .PHONY: open
-open:  ## open the locally built documentation in Firefox
-	firefox $(OUTPUTDIR)/index.html
+open:  ## open the locally built documentation in the default Web browser
+	xdg-open $(OUTPUTDIR)/index.html
