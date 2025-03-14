@@ -118,17 +118,16 @@ class TestSelfCollisionBarrier(unittest.TestCase):
             d_min=0.02,
         )
         h = barrier.compute_barrier(self.configuration)
-        self.assertTrue(h[self.non_colliding_objects_pair_id] > 0)
+        self.assertTrue(np.all(h[self.non_colliding_objects_pair_id] > 0))
 
     def test_negative_when_out_of_safety_zone(self):
         """Test that the barrier is negative when out of the safety zone."""
-
         barrier = SelfCollisionBarrier(
             n_collision_pairs=len(self.robot.collision_model.collisionPairs),
             d_min=0.02,
         )
         h = barrier.compute_barrier(self.configuration)
-        self.assertTrue(h[self.colliding_objects_pair_id] < 0)
+        self.assertTrue(np.all(h[self.colliding_objects_pair_id] < 0))
 
     def test_closest_collision_pairs(self):
         """Test that the closest collision pairs are considered if number of
