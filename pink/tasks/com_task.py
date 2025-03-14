@@ -78,8 +78,7 @@ class ComTask(Task):
             self.cost[0:3] = cost
         else:  # self.cost is not a vector
             raise TaskDefinitionError(
-                "CoM task cost should be a vector, "
-                f"currently cost={self.cost}"
+                f"CoM task cost should be a vector, currently cost={self.cost}"
             )
 
     def set_target(
