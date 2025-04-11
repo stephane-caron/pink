@@ -120,7 +120,7 @@ jobs:
                   micromamba-version: '1.5.8-0'
                   environment-name: coverage
                   create-args: >-
-                      python={{ matrix.python-version }}
+                      python=${{ matrix.python-version }}
                       pinocchio>=2.6.4
                       qpsolvers>=2.7.2
                       quadprog>=0.1.11
