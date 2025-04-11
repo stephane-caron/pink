@@ -13,18 +13,18 @@ from pinocchio import visualize
 def start_meshcat_visualizer(
     robot: pin.RobotWrapper,
 ) -> visualize.MeshcatVisualizer:
-    """Open a MeshCat visualizer in a web browser.
+    """Open a MeshCat visualizer in a Web browser.
 
     Args:
-        robot: Robot wrapper with its initial data.
+        robot: Pinocchio robot wrapper with its model and data.
 
     Returns:
         MeshCat visualizer.
     """
-    viz = visualize.MeshcatVisualizer(
+    visualizer = visualize.MeshcatVisualizer(
         robot.model, robot.collision_model, robot.visual_model
     )
-    robot.setVisualizer(viz, init=False)
-    viz.initViewer(open=True)
-    viz.loadViewerModel()
-    return viz
+    robot.setVisualizer(visualizer, init=False)
+    visualizer.initViewer(open=True)
+    visualizer.loadViewerModel()
+    return visualizer
