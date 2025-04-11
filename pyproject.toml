@@ -44,6 +44,23 @@ Changelog = "https://github.com/stephane-caron/pink/blob/main/CHANGELOG.md"
 [tool.black]
 line-length = 79
 
+[tool.pylint]
+disable = ["C0103", "E1130", "import-error"]
+generated-members = [
+    "pin.Data",
+    "pin.JointModelFreeFlyer",
+    "pin.Model",
+    "pin.ReferenceFrame",
+    "pin.SE3",
+    "pin.computeJointJacobians",
+    "pin.difference",
+    "pin.getFrameJacobian",
+    "pin.integrate",
+    "pin.neutral",
+    "pin.updateFramePlacements",
+    "pin.Jlog6"
+]
+
 [tool.flit.module]
 name = "pink"
 
