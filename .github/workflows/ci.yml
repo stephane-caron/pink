@@ -59,24 +59,40 @@ jobs:
         name: "Code style"
         runs-on: ubuntu-latest
 
+        defaults:
+            run:
+                # See https://github.com/mamba-org/setup-micromamba?tab=readme-ov-file#about-login-shells
+                shell: bash -leo pipefail {0}
+
         steps:
             - name: "Checkout sources"
               uses: actions/checkout@v4
 
-            - name: "Set up Python"
-              uses: actions/setup-python@v4
+            - name: "Install Conda environment with Micromamba"
+              uses: mamba-org/setup-micromamba@v1
               with:
-                  python-version: "3.9"
-
-            - name: "Install dependencies"
-              run: |
-                  python -m pip install --upgrade pip
-                  # tox version: https://github.com/tox-dev/tox/issues/2778
-                  python -m pip install tox==3.28.0
+                  micromamba-version: '1.5.8-0'
+                  environment-name: coverage
+                  create-args: >-
+                      python=3.10
+                      black>=22.10.0
+                      mypy>=0.812
+                      pinocchio>=2.6.4
+                      pylint>=2.8.2
+                      qpsolvers>=2.7.2
+                      quadprog>=0.1.11
+                      robot_descriptions>=1.9.0
+                      ruff>=0.4.3
+                  cache-environment: true
+                  post-cleanup: 'all'
 
             - name: "Check code format"
               run: |
-                  tox -e lint
+                  black --check --diff pink
+                  mypy pink --ignore-missing-imports
+                  pylint pink --exit-zero --rcfile={toxinidir}/tox.ini
+                  ruff check pink
+                  ruff format --check pink
 
     test:
         name: "Test ${{ matrix.os }} with Python ${{ matrix.python-version }}"

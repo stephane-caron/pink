@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- CICD: Switch from tox to Anaconda environments
 - CICD: Update checkout action to v4
 - Update supported Python versions to 3.9–3.12
 
