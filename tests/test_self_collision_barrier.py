@@ -35,7 +35,6 @@ class TestSelfCollisionBarrier(unittest.TestCase):
         )
 
         self.non_colliding_objects_pair_id = 5
-        self.colliding_objects_pair_id = 24  # Between second and third bodies
         self.q0 = np.zeros(self.robot.model.nq)
         self.robot.collision_data = process_collision_pairs(
             self.robot.model, self.robot.collision_model
@@ -126,8 +125,20 @@ class TestSelfCollisionBarrier(unittest.TestCase):
             n_collision_pairs=len(self.robot.collision_model.collisionPairs),
             d_min=0.02,
         )
-        h = barrier.compute_barrier(self.configuration)
-        self.assertTrue(np.all(h[self.colliding_objects_pair_id] < 0))
+        # See https://github.com/stephane-caron/pink/pull/129 for an
+        # illustration of this test configuration
+        q_test = np.zeros(self.robot.model.nq)
+        q_test[1] = 2.0
+        q_test[3] = -2.5
+        configuration = Configuration(
+            self.robot.model,
+            self.robot.data,
+            q_test,
+            collision_model=self.robot.collision_model,
+            collision_data=self.robot.collision_data,
+        )
+        h = barrier.compute_barrier(configuration)
+        self.assertTrue(np.min(h) < 0)  # there is a collision
 
     def test_closest_collision_pairs(self):
         """Test that the closest collision pairs are considered if number of
