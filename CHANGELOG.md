@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `open` keyword argument to `start_meshcat_visualizer`
+
 ### Changed
 
 - **Breaking:** check QP results in `solve_ik` and return `None` if no solution
