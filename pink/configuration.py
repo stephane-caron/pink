@@ -4,12 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Configuration space of a robot model.
+"""Configuration of a robot model.
 
 Pink uses `Pinocchio <https://github.com/stack-of-tasks/pinocchio>`__ for
-forward kinematics. A :class:`Configuration` is a pair of Pinocchio model and
-data where forward kinematics have been run, indicating that frame transforms
-and frame Jacobians used for IK can be queried.
+forward kinematics. A :class:`Configuration` holds a Pinocchio model and data
+for this model where forward kinematics have been run, so that frame transforms
+and frame Jacobians can be queried.
 """
 
 import logging
@@ -51,11 +51,11 @@ class Configuration:
             model, data, collision_model, collision_data, q)
 
     Attributes:
-        data: Data corresponding to :data:`Configuration.model`.
-        model: Kinodynamic model.
         collision_data: Data corresponding to
             :data:`Configuration.collision_model`.
         collision_model: Collision model.
+        data: Data corresponding to :data:`Configuration.model`.
+        model: Kinodynamic model.
         q: Configuration vector for the robot model.
     """
 
