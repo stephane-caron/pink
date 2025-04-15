@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking:** check QP results in `solve_ik` and return `None` if no solution
 - CICD: Switch from tox to Anaconda environments
 - CICD: Update checkout action to v4
 - CICD: Update QP solvers used in unit tests
