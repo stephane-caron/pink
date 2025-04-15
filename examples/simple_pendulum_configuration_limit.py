@@ -37,11 +37,6 @@ from pink import solve_ik
 from pink.tasks import FrameTask
 from pink.visualization import start_meshcat_visualizer
 
-qp_solver = qpsolvers.available_solvers[0]
-if "quadprog" in qpsolvers.available_solvers:
-    qp_solver = "quadprog"
-
-
 if __name__ == "__main__":
     # Load robot description from robots/simple_pendulum.urdf
     robot = pin.RobotWrapper.BuildFromURDF(
@@ -83,11 +78,16 @@ if __name__ == "__main__":
     viewer["tip"].set_transform(init_pose.np)
     visualizer.display(configuration.q)
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     # Run closed-loop inverse kinematics
     rate = RateLimiter(frequency=100.0, warn=False)
     dt = rate.period
     while True:
-        velocity = solve_ik(configuration, tasks, dt, solver=qp_solver)
+        velocity = solve_ik(configuration, tasks, dt, solver=solver)
         configuration.integrate_inplace(velocity, dt)
         visualizer.display(configuration.q)
         rate.sleep()
