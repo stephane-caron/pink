@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `open` keyword argument to `start_meshcat_visualizer`
+- Introduce *constraints* to enforce tasks as QP equality constraints
 
 ### Changed
 

@@ -66,7 +66,7 @@ def __compute_qp_objective(
 
 
 def __compute_qp_inequalities(
-    configuration,
+    configuration: Configuration,
     limits: Optional[Iterable[Limit]],
     dt: float,
     barriers: Optional[Iterable[Barrier]] = None,
@@ -112,6 +112,33 @@ def __compute_qp_inequalities(
     return np.vstack(G_list), np.hstack(h_list)
 
 
+def __compute_qp_equalities(
+    configuration: Configuration,
+    constraints: Optional[Iterable[Task]],
+) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
+    r"""Compute equality constraints for the quadratic program.
+
+    Args:
+        configuration: Robot configuration to read kinematics from.
+        constraints: List of tasks to enforce via equality constraints.
+
+    Returns:
+        Pair :math:`(A, b)` of equality matrix and vector representing the
+        equation :math:`A \Delta q = b`, or ``(None, None)`` if there is no
+        equality constraint.
+    """
+    if not constraints:
+        return None, None
+    A_list = []
+    b_list = []
+    for task in constraints:
+        jacobian = task.compute_jacobian(configuration)
+        feedback = -task.gain * task.compute_error(configuration)
+        A_list.append(jacobian)
+        b_list.append(feedback)
+    return np.vstack(A_list), np.hstack(b_list)
+
+
 def build_ik(
     configuration: Configuration,
     tasks: Iterable[Task],
@@ -119,6 +146,7 @@ def build_ik(
     damping: float = 1e-12,
     limits: Optional[Iterable[Limit]] = None,
     barriers: Optional[Iterable[Barrier]] = None,
+    constraints: Optional[Iterable[Task]] = None,
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
 
@@ -155,7 +183,8 @@ def build_ik(
     """
     P, q = __compute_qp_objective(configuration, tasks, damping, barriers)
     G, h = __compute_qp_inequalities(configuration, limits, dt, barriers)
-    problem = qpsolvers.Problem(P, q, G, h)
+    A, b = __compute_qp_equalities(configuration, constraints)
+    problem = qpsolvers.Problem(P, q, G, h, A, b)
     return problem
 
 
@@ -167,6 +196,7 @@ def solve_ik(
     damping: float = 1e-12,
     limits: Optional[Iterable[Limit]] = None,
     barriers: Optional[Iterable[Barrier]] = None,
+    constraints: Optional[Iterable[Task]] = None,
     safety_break: bool = True,
     **kwargs,
 ) -> Optional[np.ndarray]:
@@ -188,7 +218,10 @@ def solve_ik(
         limits: Collection of limits to enforce. By default, consists of
             configuration and velocity limits (set to the empty list ``[]`` to
             disable limits).
-        barriers: Collection of barriers functions.
+        barriers: Collection of barrier functions.
+        constraints: List of kinematic tasks to be enforced strictly, as hard
+            equality constraints in the underlying QP rather than in its cost
+            function.
         safety_break: If True, stop execution and raise an exception if
             the current configuration is outside limits. If False, print a
             warning and continue execution.
@@ -215,6 +248,7 @@ def solve_ik(
         damping,
         limits,
         barriers,
+        constraints,
     )
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
