@@ -30,12 +30,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CICD: Switch from tox to Anaconda environments
 - CICD: Update QP solvers used in unit tests
 - CICD: Update checkout action to v4
+- Move pink.tasks.exceptions to pink.exceptions
 - Raise custom `NoSolutionFound` rather than `AssertionError` in `solve_ik`
 - Update supported Python versions to 3.9–3.12
+- docs: Refactor Tasks page and update references
+- examples: Update installation hints when example dependencies are missing
 
 ### Fixed
 
 - CICD: Update unit test for self-collision barrier
+- Task: Report LM damping in CoM task
 
 ### Removed
 
