@@ -210,8 +210,8 @@ class TestFrameTask(unittest.TestCase):
         H_1, c_1 = task.compute_qp_objective(self.configuration)
         task.lm_damping = 1e-4
         H_2, c_2 = task.compute_qp_objective(self.configuration)
-        qd_1 = solve_qp(H_1, c_1, solver="quadprog")  # H_1 p.s.d. (LM damping)
-        qd_2 = solve_qp(H_2, c_2, solver="quadprog")  # idem for H_2
+        qd_1 = solve_qp(H_1, c_1, solver="daqp")  # H_1 p.s.d. (LM damping)
+        qd_2 = solve_qp(H_2, c_2, solver="daqp")  # idem for H_2
         self.assertGreater(np.linalg.norm(qd_2 - qd_1), 1e-6)
 
     def test_task_on_user_added_op_frame(self):

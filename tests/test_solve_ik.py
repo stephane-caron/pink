@@ -15,9 +15,9 @@ from numpy.linalg import norm
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration, build_ik, solve_ik
-from pink.exceptions import NotWithinConfigurationLimits
-from pink.tasks import FrameTask, ComTask
 from pink.barriers import PositionBarrier
+from pink.exceptions import NotWithinConfigurationLimits
+from pink.tasks import ComTask, FrameTask
 
 
 class TestSolveIK(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestSolveIK(unittest.TestCase):
         q[7] = 20  # above limit for Upkie's first joint
         configuration = Configuration(robot.model, robot.data, q)
         with self.assertRaises(NotWithinConfigurationLimits):
-            solve_ik(configuration, [], dt=1.0, solver="quadprog")
+            solve_ik(configuration, [], dt=1.0, solver="daqp")
 
     def test_ignore_configuration_limits(self):
         """If flag is set, do not check configuration limits."""
@@ -47,7 +47,7 @@ class TestSolveIK(unittest.TestCase):
             configuration,
             [],
             dt=1.0,
-            solver="quadprog",
+            solver="daqp",
             safety_break=False,
         )
 
@@ -70,7 +70,7 @@ class TestSolveIK(unittest.TestCase):
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)
         tasks = []
-        v = solve_ik(configuration, tasks, dt=1e-3, solver="quadprog")
+        v = solve_ik(configuration, tasks, dt=1e-3, solver="daqp")
         self.assertTrue(np.allclose(v, np.zeros(robot.nv)))
 
     def test_single_task_fulfilled(self):
@@ -85,7 +85,7 @@ class TestSolveIK(unittest.TestCase):
         task.set_target(
             configuration.get_transform_frame_to_world("left_contact")
         )
-        velocity = solve_ik(configuration, [task], dt=5e-3, solver="quadprog")
+        velocity = solve_ik(configuration, [task], dt=5e-3, solver="daqp")
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_barrier_fullfilled(self):
@@ -111,7 +111,7 @@ class TestSolveIK(unittest.TestCase):
             configuration,
             [task],
             dt=5e-3,
-            solver="quadprog",
+            solver="daqp",
             barriers=[barrier],
         )
         self.assertTrue(np.allclose(velocity, 0.0))
@@ -139,7 +139,7 @@ class TestSolveIK(unittest.TestCase):
             configuration,
             [task],
             dt=5e-3,
-            solver="quadprog",
+            solver="daqp",
             barriers=[barrier],
         )
         self.assertFalse(np.allclose(velocity, 0.0))
@@ -164,7 +164,7 @@ class TestSolveIK(unittest.TestCase):
         )
         task.set_target(transform_target_to_world)
         dt = 5e-3  # [s]
-        velocity = solve_ik(configuration, [task], dt, solver="quadprog")
+        velocity = solve_ik(configuration, [task], dt, solver="daqp")
 
         # Initially we are nowhere near the target and moving
         self.assertFalse(np.allclose(velocity, 0.0))
@@ -184,7 +184,7 @@ class TestSolveIK(unittest.TestCase):
             last_error = error
             q = configuration.integrate(velocity, dt)
             configuration = Configuration(robot.model, robot.data, q)
-            velocity = solve_ik(configuration, [task], dt, solver="quadprog")
+            velocity = solve_ik(configuration, [task], dt, solver="daqp")
 
         # After nb_steps we are at the target and not moving
         self.assertTrue(np.allclose(velocity, 0.0))
@@ -220,7 +220,7 @@ class TestSolveIK(unittest.TestCase):
             [contact_task],
             dt=1e-3,
             damping=1e-12,
-            solver="quadprog",
+            solver="daqp",
         )
         jacobian_contact_in_contact = configuration.get_frame_jacobian(
             "right_contact"
@@ -260,7 +260,7 @@ class TestSolveIK(unittest.TestCase):
         )
 
         tasks = [pelvis_task, left_ankle_task, right_ankle_task]
-        velocity = solve_ik(configuration, tasks, dt=5e-3, solver="quadprog")
+        velocity = solve_ik(configuration, tasks, dt=5e-3, solver="daqp")
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_three_tasks_convergence(self):
@@ -303,21 +303,29 @@ class TestSolveIK(unittest.TestCase):
 
         # Run IK in closed loop
         dt = 4e-3  # [s]
-        for nb_iter in range(42):
-            velocity = solve_ik(configuration, tasks, dt, solver="quadprog")
-            if norm(velocity) < 1e-10:
+        max_iter = 42
+        conv_velocity_norm = 1e-6
+        for nb_iter in range(max_iter):
+            velocity = solve_ik(
+                configuration,
+                tasks,
+                dt,
+                solver="proxqp",
+                eps_abs=1e-6,
+            )
+            if norm(velocity) < conv_velocity_norm:
                 break
             q = configuration.integrate(velocity, dt)
             configuration = Configuration(robot.model, robot.data, q)
-        self.assertLess(nb_iter, 42)
-        self.assertLess(norm(velocity), 1e-10)
+        self.assertLess(nb_iter, max_iter)
+        self.assertLess(norm(velocity), conv_velocity_norm)
         self.assertLess(
             max(norm(task.compute_error(configuration)) for task in tasks),
             0.5,
         )
 
     def test_com_task_fulfilled(self):
-        """No motion when all targets are reached."""
+        """No motion when all targets, including the CoM, are reached."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -339,11 +347,11 @@ class TestSolveIK(unittest.TestCase):
         com_task.set_target_from_configuration(configuration)
 
         tasks = [com_task, left_ankle_task, right_ankle_task]
-        velocity = solve_ik(configuration, tasks, dt=5e-3, solver="quadprog")
+        velocity = solve_ik(configuration, tasks, dt=5e-3, solver="daqp")
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_com_task_convergence(self):
-        """Three simultaneously feasible tasks on the JVRC model converge."""
+        """Feasible CoM and ankle tasks on the JVRC model converge."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -385,14 +393,22 @@ class TestSolveIK(unittest.TestCase):
 
         # Run IK in closed loop
         dt = 4e-3  # [s]
-        for nb_iter in range(42):
-            velocity = solve_ik(configuration, tasks, dt, solver="quadprog")
-            if np.linalg.norm(velocity) < 1e-10:
+        max_iter = 42
+        conv_velocity_norm = 1e-5
+        for nb_iter in range(max_iter):
+            velocity = solve_ik(
+                configuration,
+                tasks,
+                dt,
+                solver="proxqp",
+                eps_abs=1e-6,
+            )
+            if np.linalg.norm(velocity) < conv_velocity_norm:
                 break
             configuration.integrate_inplace(velocity, dt)
 
-        self.assertLess(nb_iter, 42)
-        self.assertLess(np.linalg.norm(velocity), 1e-10)
+        self.assertLess(nb_iter, max_iter)
+        self.assertLess(np.linalg.norm(velocity), conv_velocity_norm)
         self.assertLess(
             max(
                 np.linalg.norm(task.compute_error(configuration))

@@ -11,11 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - CICD: Switch from tox to Anaconda environments
 - CICD: Update checkout action to v4
+- CICD: Update QP solvers used in unit tests
 - Update supported Python versions to 3.9–3.12
 
 ### Fixed
 
 - CICD: Update unit test for self-collision barrier
+
+### Removed
+
+- Remove dependency on quadprog (thanks to @peterd-NV)
 
 ## [3.1.0] - 2024-10-28
 

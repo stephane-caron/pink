@@ -62,12 +62,17 @@ class TestAccelerationLimit(unittest.TestCase):
         velocity_limit = configuration.model.velocity_limit
         tasks = [end_effector_task]
         dt = 5e-3
+        solver_settings = {
+            "eps_abs": 1e-7,
+            "eps_rel": 0.0,
+        }
         v_prev = solve_ik(
             configuration,
             tasks,
             dt,
-            solver="quadprog",
+            solver="scs",
             limits=[configuration_limit, velocity_limit],
+            **solver_settings,
         )
         configuration.integrate_inplace(v_prev, dt)
         self.limit.set_last_integration(v_prev, dt)
@@ -76,18 +81,25 @@ class TestAccelerationLimit(unittest.TestCase):
             configuration,
             tasks,
             dt,
-            solver="quadprog",
+            solver="scs",
             limits=[configuration_limit, velocity_limit, self.limit],
+            **solver_settings,
         )
         v_without = solve_ik(
             configuration,
             tasks,
             dt,
-            solver="quadprog",
+            solver="scs",
             limits=[configuration_limit, velocity_limit],
+            **solver_settings,
         )
         a_with = (v_with - v_prev) / dt
         a_without = (v_without - v_prev) / dt
-        tolerance = 1e-10  # [rad] / [s]^2
-        self.assertTrue(np.all(np.abs(a_with) < self.a_max + tolerance))
+        tolerance = 1e-3  # [rad] / [s]^2
+        max_a_with = float(np.max(np.abs(a_with)))
+        a_max = float(np.max(self.a_max))
+        self.assertTrue(
+            np.all(np.abs(a_with) < self.a_max + tolerance),
+            f"max(a_with) = {max_a_with} > a_max = {a_max}",
+        )
         self.assertFalse(np.all(np.abs(a_without) < self.a_max + tolerance))
