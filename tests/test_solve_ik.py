@@ -317,7 +317,7 @@ class TestSolveIK(unittest.TestCase):
         )
 
     def test_com_task_fulfilled(self):
-        """No motion when all targets are reached."""
+        """No motion when all targets, including the CoM, are reached."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
@@ -343,7 +343,7 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_com_task_convergence(self):
-        """Three simultaneously feasible tasks on the JVRC model converge."""
+        """Feasible CoM and ankle tasks on the JVRC model converge."""
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
