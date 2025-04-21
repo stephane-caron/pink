@@ -7,6 +7,8 @@
 
 """Exceptions specific to Pink."""
 
+import qpsolvers
+
 
 class PinkError(Exception):
     """Base class for Pink exceptions."""
@@ -19,11 +21,7 @@ class ConfigurationError(PinkError):
 class FrameNotFound(PinkError):
     """Exception raised when a frame is not found in the robot model."""
 
-    def __init__(
-        self,
-        name: str,
-        frames,
-    ) -> None:
+    def __init__(self, name: str, frames: list) -> None:
         """Create exception.
 
         Args:
@@ -36,6 +34,24 @@ class FrameNotFound(PinkError):
             f'Name "{name}" is not a robot frame name in {frame_names}'
         )
         super().__init__(self.message)
+
+
+class NoSolutionFound(PinkError):
+    """The QP solver did not find a solution to the differential IK problem."""
+
+    def __init__(
+        self, problem: qpsolvers.Problem, results: qpsolvers.Solution
+    ) -> None:
+        """Create exception.
+
+        Args:
+            problem: Quadratic-programming problem, for investigation.
+            results: Results returned by the backend QP solver.
+        """
+        super().__init__(
+            "QP solver did not find a solution to the differential IK problem"
+        )
+        self.results = results
 
 
 class NotWithinConfigurationLimits(PinkError):

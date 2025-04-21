@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `NoSolutionFound` exception
 - Add `open` keyword argument to `start_meshcat_visualizer`
 - examples: Detail that quadprog works best on Stretch examples
 - examples: Installation instruction for loop-rate-limiters
@@ -18,10 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Breaking:** check QP results in `solve_ik` and return `None` if no solution
 - CICD: Switch from tox to Anaconda environments
-- CICD: Update checkout action to v4
 - CICD: Update QP solvers used in unit tests
+- CICD: Update checkout action to v4
+- Raise custom `NoSolutionFound` rather than `AssertionError` in `solve_ik`
 - Update supported Python versions to 3.9–3.12
 
 ### Fixed
