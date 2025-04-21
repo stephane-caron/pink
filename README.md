@@ -172,7 +172,7 @@ If you use Pink in your scientific works, please cite it *e.g.* as follows:
 }
 ```
 
-Don't forget to add yourself to the BibTeX above and to `CITATION.cff` if you contribute code to this repository.
+Don't forget to add yourself to the BibTeX above and to `CITATION.cff` if you make a contribution to this repository.
 
 ## See also
 
