@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - CICD: Switch from tox to Anaconda environments
 - CICD: Update checkout action to v4
+- CICD: Use DAQP rather than quadprog in unit tests
 - Update supported Python versions to 3.9–3.12
 
 ### Fixed

@@ -66,7 +66,7 @@ class TestAccelerationLimit(unittest.TestCase):
             configuration,
             tasks,
             dt,
-            solver="quadprog",
+            solver="daqp",
             limits=[configuration_limit, velocity_limit],
         )
         configuration.integrate_inplace(v_prev, dt)
@@ -76,14 +76,14 @@ class TestAccelerationLimit(unittest.TestCase):
             configuration,
             tasks,
             dt,
-            solver="quadprog",
+            solver="daqp",
             limits=[configuration_limit, velocity_limit, self.limit],
         )
         v_without = solve_ik(
             configuration,
             tasks,
             dt,
-            solver="quadprog",
+            solver="daqp",
             limits=[configuration_limit, velocity_limit],
         )
         a_with = (v_with - v_prev) / dt
