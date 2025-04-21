@@ -1,4 +1,4 @@
-name: pink
+name: pink_doc
 channels:
     - conda-forge
 dependencies:

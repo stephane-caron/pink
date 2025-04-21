@@ -52,3 +52,11 @@ Configuration
 
 .. automodule:: pink.configuration
     :members:
+
+Task formalism
+==============
+
+The *task function approach* followed in Pink, and many works before it, was originally formalized by Samson, Espiau and Le Borgne in [Samson1991]_.
+
+.. automodule:: pink.tasks.task
+    :members:

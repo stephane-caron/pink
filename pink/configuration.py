@@ -8,8 +8,9 @@
 
 Pink uses `Pinocchio <https://github.com/stack-of-tasks/pinocchio>`__ for
 forward kinematics. A :class:`Configuration` holds a Pinocchio model and data
-for this model where forward kinematics have been run, so that frame transforms
-and frame Jacobians can be queried.
+for this model where forward kinematics have been run. This means that the
+geometric state of the model has been computed, and quantities such as frame
+transforms and frame Jacobians are available.
 """
 
 import logging
