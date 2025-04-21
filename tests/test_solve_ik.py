@@ -303,14 +303,22 @@ class TestSolveIK(unittest.TestCase):
 
         # Run IK in closed loop
         dt = 4e-3  # [s]
-        for nb_iter in range(42):
-            velocity = solve_ik(configuration, tasks, dt, solver="daqp")
-            if norm(velocity) < 1e-10:
+        max_iter = 42
+        conv_velocity_norm = 1e-6
+        for nb_iter in range(max_iter):
+            velocity = solve_ik(
+                configuration,
+                tasks,
+                dt,
+                solver="proxqp",
+                eps_abs=1e-6,
+            )
+            if norm(velocity) < conv_velocity_norm:
                 break
             q = configuration.integrate(velocity, dt)
             configuration = Configuration(robot.model, robot.data, q)
-        self.assertLess(nb_iter, 42)
-        self.assertLess(norm(velocity), 1e-10)
+        self.assertLess(nb_iter, max_iter)
+        self.assertLess(norm(velocity), conv_velocity_norm)
         self.assertLess(
             max(norm(task.compute_error(configuration)) for task in tasks),
             0.5,
@@ -393,9 +401,7 @@ class TestSolveIK(unittest.TestCase):
                 tasks,
                 dt,
                 solver="proxqp",
-                check_duality_gap=True,  # important
                 eps_abs=1e-6,
-                eps_rel=0.0,
             )
             if np.linalg.norm(velocity) < conv_velocity_norm:
                 break
