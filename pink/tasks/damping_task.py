@@ -9,6 +9,7 @@
 import numpy as np
 
 from ..configuration import Configuration
+from ..utils import get_root_joint_dim
 from .posture_task import PostureTask
 
 
@@ -32,7 +33,11 @@ class DampingTask(PostureTask):
             cost: joint angular velocity cost, in
                 :math:`[\mathrm{cost}] [\mathrm{s}] / [\mathrm{rad}]`.
         """
-        super().__init__(cost=cost, gain=0.0, lm_damping=0.0)
+        super().__init__(
+            cost=cost,
+            gain=0.0,  # no gain: the task error is always zero
+            lm_damping=0.0,  # no LM damping: the task error is always zero
+        )
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute damping task error.
