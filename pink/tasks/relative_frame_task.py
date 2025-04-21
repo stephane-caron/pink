@@ -13,7 +13,7 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from .exceptions import TargetNotSet, TaskDefinitionError
+from ..exceptions import TargetNotSet, TaskDefinitionError
 from .task import Task
 
 

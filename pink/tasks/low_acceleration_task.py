@@ -37,7 +37,11 @@ class LowAccelerationTask(PostureTask):
             cost: joint angular acceleration cost, in
                 :math:`[\mathrm{cost}] [\mathrm{s}]^2 / [\mathrm{rad}]`.
         """
-        super().__init__(cost=cost, gain=1.0, lm_damping=0.0)
+        super().__init__(
+            cost=cost,
+            gain=1.0,  # this task hacks around the definition of error
+            lm_damping=0.0,  # idem
+        )
         self.Delta_q_prev = None
 
     def set_last_integration(self, v_prev: np.ndarray, dt) -> None:
