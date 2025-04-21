@@ -30,7 +30,7 @@ if __name__ == "__main__":
     print(f"URDF description successfully loaded in {robot}")
 
     if yourdfpy is None:
-        print("If you ``pip install yourdfpy``, this example will display it.")
+        print("If you `pip install yourdfpy`, this example will display it.")
     else:  # yourdfpy is not None
         viz = yourdfpy.URDF.load(urdf_path)
         viz.show()

@@ -6,11 +6,11 @@
 
 """DRACO 3 humanoid standing on two feet and reaching with a hand."""
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, JointCouplingTask, PostureTask
@@ -29,7 +29,7 @@ try:
 except ModuleNotFoundError as exc:
     raise ModuleNotFoundError(
         "Examples need robot_descriptions, "
-        "try `pip install robot_descriptions`"
+        "try `[conda|pip] install robot_descriptions`"
     ) from exc
 
 

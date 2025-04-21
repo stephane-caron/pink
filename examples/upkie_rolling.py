@@ -27,7 +27,7 @@ try:
 except ModuleNotFoundError:
     raise ModuleNotFoundError(
         "Examples need robot_descriptions, "
-        "try `pip install robot_descriptions`"
+        "try `[conda|pip] install robot_descriptions`"
     )
 
 
@@ -65,13 +65,6 @@ if __name__ == "__main__":
         position_cost=1.0,
         orientation_cost=0.0,
     )
-    tasks = [
-        base_task,
-        left_wheel_position,
-        left_wheel_rolling,
-        right_wheel_position,
-        right_wheel_rolling,
-    ]
 
     init_x = -2.0  # in [m]
     q_init = robot.q0.copy()
@@ -120,10 +113,11 @@ if __name__ == "__main__":
         # Compute velocity and integrate it into next configuration
         velocity = solve_ik(
             configuration,
-            tasks,
-            dt,
+            tasks=[base_task, left_wheel_position, right_wheel_position],
+            dt=dt,
             solver=solver,
             damping=1e-3,
+            constraints=[left_wheel_rolling, right_wheel_rolling],
         )
         configuration.integrate_inplace(velocity, dt)
 
