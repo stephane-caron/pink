@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `NoSolutionFound` exception
 - Add `open` keyword argument to `start_meshcat_visualizer`
 - Introduce *constraints* to enforce tasks as QP equality constraints
+- Task: Report LM damping in CoM task representation
 - examples: Detail that quadprog works best on Stretch examples
 - examples: Installation instruction for loop-rate-limiters
 - examples: Switch to DAQP solvers in examples where it works well

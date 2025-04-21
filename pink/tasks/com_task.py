@@ -12,12 +12,12 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from .exceptions import TargetNotSet, TaskDefinitionError
+from ..exceptions import TargetNotSet, TaskDefinitionError
 from .task import Task
 
 
 class ComTask(Task):
-    r"""Regulate the center of mass of a robot.
+    r"""Regulate the position of the center of mass.
 
     Attributes:
         target_com: Target position of the center of mass.
@@ -55,7 +55,6 @@ class ComTask(Task):
             gain=gain,
             lm_damping=lm_damping,
         )
-        self.lm_damping = lm_damping
         self.target_com = None
         self.set_cost(cost)
 
@@ -154,7 +153,8 @@ class ComTask(Task):
         cost = self.cost if isinstance(self.cost, float) else self.cost[0:3]
         return (
             "ComTask("
-            f"gain={self.gain}, "
+            f"target_com={self.target_com}, "
             f"cost={cost}, "
-            f"target_com={self.target_com})"
+            f"gain={self.gain}, "
+            f"lm_damping={self.lm_damping})"
         )
