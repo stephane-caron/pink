@@ -26,20 +26,23 @@ to goal tip" distance, and make the pendulum turn anti-clockwise.
 
 import os
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
-from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask
 from pink.visualization import start_meshcat_visualizer
 
-qp_solver = qpsolvers.available_solvers[0]
-if "quadprog" in qpsolvers.available_solvers:
-    qp_solver = "quadprog"
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
 
 
 if __name__ == "__main__":
@@ -83,11 +86,16 @@ if __name__ == "__main__":
     viewer["tip"].set_transform(init_pose.np)
     visualizer.display(configuration.q)
 
+    # Select QP solver
+    solver = qpsolvers.available_solvers[0]
+    if "quadprog" in qpsolvers.available_solvers:
+        solver = "quadprog"
+
     # Run closed-loop inverse kinematics
     rate = RateLimiter(frequency=100.0, warn=False)
     dt = rate.period
     while True:
-        velocity = solve_ik(configuration, tasks, dt, solver=qp_solver)
+        velocity = solve_ik(configuration, tasks, dt, solver=solver)
         configuration.integrate_inplace(velocity, dt)
         visualizer.display(configuration.q)
         rate.sleep()

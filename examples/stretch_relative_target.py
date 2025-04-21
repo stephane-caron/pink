@@ -7,16 +7,23 @@
 
 """Move a Stretch RE1 with a fingertip target in the mobile-base frame."""
 
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
-from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, RelativeFrameTask
 from pink.visualization import start_meshcat_visualizer
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description

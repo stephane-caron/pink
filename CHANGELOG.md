@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- examples: Installation instruction for loop-rate-limiters
+
 ### Changed
 
 - CICD: Switch from tox to Anaconda environments
