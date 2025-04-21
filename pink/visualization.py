@@ -18,6 +18,7 @@ def start_meshcat_visualizer(
 
     Args:
         robot: Pinocchio robot wrapper with its model and data.
+        open: If set (default), open MeshCat in a new Web browser tab.
 
     Returns:
         MeshCat visualizer.
