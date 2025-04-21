@@ -217,7 +217,7 @@ class RelativeFrameTask(Task):
             \end{align}
 
         The formula implemented here is more general than the one detailed in
-        [FrameTaskJacobian]_. See also
+        [Caron2023]_. See also
         :func:`pink.tasks.task.Task.compute_jacobian` for more context on task
         Jacobians.
 

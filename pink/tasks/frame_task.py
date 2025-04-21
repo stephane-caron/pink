@@ -165,7 +165,7 @@ class FrameTask(Task):
         :math:`0` the inertial frame.
 
         See :func:`pink.tasks.task.Task.compute_error` for more context, and
-        [MLT]_ for details on the right-minus operator.
+        [Sola2018]_ for details on the right-minus operator.
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -204,7 +204,7 @@ class FrameTask(Task):
             J(q) = -\text{Jlog}_6(T_{tb}) {}_b J_{0b}(q)
 
         The derivation of the formula for this Jacobian is detailed in
-        [FrameTaskJacobian]_. See also
+        [Caron2023]_. See also
         :func:`pink.tasks.task.Task.compute_jacobian` for more context on task
         Jacobians.
 
