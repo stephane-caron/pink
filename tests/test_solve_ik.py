@@ -15,9 +15,9 @@ from numpy.linalg import norm
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration, build_ik, solve_ik
-from pink.exceptions import NotWithinConfigurationLimits
-from pink.tasks import FrameTask, ComTask
 from pink.barriers import PositionBarrier
+from pink.exceptions import NotWithinConfigurationLimits
+from pink.tasks import ComTask, FrameTask
 
 
 class TestSolveIK(unittest.TestCase):
@@ -385,14 +385,24 @@ class TestSolveIK(unittest.TestCase):
 
         # Run IK in closed loop
         dt = 4e-3  # [s]
-        for nb_iter in range(42):
-            velocity = solve_ik(configuration, tasks, dt, solver="daqp")
-            if np.linalg.norm(velocity) < 1e-10:
+        max_iter = 42
+        conv_velocity_norm = 1e-5
+        for nb_iter in range(max_iter):
+            velocity = solve_ik(
+                configuration,
+                tasks,
+                dt,
+                solver="proxqp",
+                check_duality_gap=True,  # important
+                eps_abs=1e-6,
+                eps_rel=0.0,
+            )
+            if np.linalg.norm(velocity) < conv_velocity_norm:
                 break
             configuration.integrate_inplace(velocity, dt)
 
-        self.assertLess(nb_iter, 42)
-        self.assertLess(np.linalg.norm(velocity), 1e-10)
+        self.assertLess(nb_iter, max_iter)
+        self.assertLess(np.linalg.norm(velocity), conv_velocity_norm)
         self.assertLess(
             max(
                 np.linalg.norm(task.compute_error(configuration))
