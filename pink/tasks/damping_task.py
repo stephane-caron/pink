@@ -16,14 +16,14 @@ from .posture_task import PostureTask
 class DampingTask(PostureTask):
     r"""Minimize joint velocities.
 
-    The damping task minimizes :math:`\| v \|` with :math:`v` the velocity
-    output of the differential IK. The word "damping" is used here by analogy
-    with forces that fight against motion, and bring the robot to a rest if
-    nothing else drives it.
+    The damping task minimizes :math:`\| v \|_2` with :math:`v` the joint
+    velocity resulting from differential IK. The word "damping" is used here by
+    analogy with forces that fight against motion, and bring the robot to a
+    rest if nothing else drives it.
 
     Note:
-        The damping task is implemented as a special case of the posture task
-        where the gain $\alpha$ is zero.
+        The damping task is implemented as a special case of the
+        :class:`PostureTask` where the gain $\alpha$ is zero.
     """
 
     def __init__(self, cost: float) -> None:
@@ -48,7 +48,8 @@ class DampingTask(PostureTask):
         Returns:
             Damping task error :math:`e(q) = 0`.
         """
-        return np.zeros(configuration.model.nv)
+        _, root_nv = get_root_joint_dim(configuration.model)
+        return np.zeros(configuration.model.nv - root_nv)
 
     def __repr__(self):
         """Human-readable representation of the task."""

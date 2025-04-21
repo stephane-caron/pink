@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - CICD: Update unit test for self-collision barrier
+- Task: Fix damping task when the robot model has a mobile root joint
 - Task: Report LM damping in CoM task
 
 ### Removed
