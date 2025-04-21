@@ -3,14 +3,22 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-"""Move an end-effector to a prescribed target."""
+"""Move the end-effector of a UR10 arm to a prescribed target."""
 
 import numpy as np
 import pinocchio
-from robot_descriptions.loaders.pinocchio import load_robot_description
+import qpsolvers
 
 import pink
 from pink.tasks import FrameTask
+
+try:
+    from robot_descriptions.loaders.pinocchio import load_robot_description
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples need robot_descriptions, "
+        "try `[conda|pip] install robot_descriptions`"
+    ) from exc
 
 # IK parameters
 dt = 1e-2
@@ -65,7 +73,11 @@ if __name__ == "__main__":
             tasks=[ee_task],
             dt=dt,
             damping=1e-8,
-            solver="quadprog",
+            solver=(
+                "daqp"
+                if "daqp" in qpsolvers.available_solvers
+                else qpsolvers.available_solvers[0]
+            ),
         )
         q_out = pinocchio.integrate(robot.model, configuration.q, dv * dt)
         configuration = pink.Configuration(robot.model, robot.data, q_out)

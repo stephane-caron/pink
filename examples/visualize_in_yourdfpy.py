@@ -78,8 +78,8 @@ if __name__ == "__main__":
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]
-    if "quadprog" in qpsolvers.available_solvers:
-        solver = "quadprog"
+    if "daqp" in qpsolvers.available_solvers:
+        solver = "daqp"
 
     animation_time = 0.0  # [s]
     visualizer_fps = 100  # [Hz]

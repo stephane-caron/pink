@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- examples: Detail that quadprog works best on Stretch examples
 - examples: Installation instruction for loop-rate-limiters
+- examples: Switch to DAQP solvers in examples where it works well
+- examples: Switch to ProxQP on JVRC-1 example
+- examples: Switch to ProxQP on one-dof configuration limit example
 
 ### Changed
 
