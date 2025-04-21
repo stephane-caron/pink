@@ -40,9 +40,16 @@ class JointCouplingTask(LinearHolonomicTask):
 
     This task is a particular case of the more general
     :class:`pink.tasks.linear_holonomic_task.LinearHolonomicTask`.
+
+    Attributes:
+        joint_names: a list of joint names consisting of a linear holonomic
+            constraint.
+        ratios: a list of ratios that each joint takes in a linear holonomic
+            constraint.
     """
 
     joint_names: Sequence[str]
+    ratios: Sequence[float]
 
     def __init__(
         self,
