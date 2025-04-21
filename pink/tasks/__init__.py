@@ -8,7 +8,6 @@
 
 from .com_task import ComTask
 from .damping_task import DampingTask
-from .exceptions import TargetNotSet, TaskJacobianNotSet
 from .frame_task import FrameTask
 from .joint_coupling_task import JointCouplingTask
 from .linear_holonomic_task import LinearHolonomicTask
@@ -28,7 +27,5 @@ __all__ = [
     "PostureTask",
     "RelativeFrameTask",
     "RollingTask",
-    "TargetNotSet",
     "Task",
-    "TaskJacobianNotSet",
 ]
