@@ -6,6 +6,8 @@
 
 """Rolling task implementation."""
 
+from typing import Optional
+
 import numpy as np
 import pinocchio as pin
 
@@ -46,7 +48,7 @@ class RollingTask(Task):
         hub_frame: str,
         floor_frame: str,
         wheel_radius: float,
-        cost: float,
+        cost: Optional[float],
         gain: float = 1.0,
         lm_damping: float = 0.0,
     ):

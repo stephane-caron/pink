@@ -65,12 +65,12 @@ class LowAccelerationTask(PostureTask):
         Args:
             configuration: Robot configuration :math:`q`.
 
-        Returns:
-            Low-acceleration task error :math:`e(q) = -\mathrm{d}t *
-            v_{\mathrm{prev}}`. This choice, along with :math:`\alpha = 1` and
-            the Jacobian :math:`J` being the identity, ensures that :math:`J(q)
-            \Delta q = -\alpha e(q) \Leftrightarrow v = \Delta q / \mathrm{d}t
-            = v_{\mathrm{prev}}`.
+        Return:
+            Low-acceleration task error
+            :math:`e(q) = -\mathrm{d}t v_{\mathrm{prev}}`. This choice, along
+            with :math:`\alpha = 1` and the Jacobian :math:`J` being the
+            identity, ensures that :math:`J(q) \Delta q = -\alpha e(q)
+            \Leftrightarrow v = \Delta q / \mathrm{d}t = v_{\mathrm{prev}}`.
 
         """
         Delta_q_prev: np.ndarray = (

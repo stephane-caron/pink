@@ -30,9 +30,13 @@ class FrameTask(Task):
     0.1, then a 1 [cm] error in task "foo" costs as much as a 10 [cm] error in
     task "bar".
 
-    Note:
-        Dimensionally, the 6D cost vector is a (normalized) force screw and our
-        objective function is a (normalized) energy.
+    Dimensionally, the 6D cost vector is a (normalized) force screw and our
+    objective function is a (normalized) energy.
+
+    See also:
+        The :class:`RelativeFrameTask` also regulates the pose of a robot
+        frame, but its target can be expressed in an arbitrary frame (inertial
+        or mobile) and not necessarily in the (inertial) world frame.
     """
 
     frame: str
