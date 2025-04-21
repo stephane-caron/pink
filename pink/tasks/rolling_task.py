@@ -137,3 +137,15 @@ class RollingTask(Task):
         jacobian_hub_in_hub = configuration.get_frame_jacobian(self.hub_frame)
         jacobian_hub_in_rim = transform_hub_to_rim.action @ jacobian_hub_in_hub
         return jacobian_hub_in_rim[:3]  # translation
+
+    def __repr__(self):
+        """Human-readable representation of the task."""
+        return (
+            "RollingTask("
+            f"hub_frame={self.hub_frame}, "
+            f"floor_frame={self.floor_frame}, "
+            f"wheel_radius={self.wheel_radius}, "
+            f"cost={self.cost}, "
+            f"gain={self.gain}, "
+            f"lm_damping={self.lm_damping})"
+        )
