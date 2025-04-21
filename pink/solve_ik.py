@@ -13,6 +13,7 @@ import qpsolvers
 
 from .barriers import Barrier
 from .configuration import Configuration
+from .exceptions import NoSolutionFound
 from .limits import Limit
 from .tasks import Task
 
@@ -169,7 +170,7 @@ def solve_ik(
     barriers: Optional[Iterable[Barrier]] = None,
     safety_break: bool = True,
     **kwargs,
-) -> Optional[np.ndarray]:
+) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
 
     The computed velocity satisfies at (weighted) best the set of kinematic
@@ -195,10 +196,11 @@ def solve_ik(
         kwargs: Keyword arguments to forward to the backend QP solver.
 
     Returns:
-        Velocity :math:`v` in tangent space, or `None` if the QP solver did not
-        find a solution to the differential IK problem.
+        Velocity :math:`v` in tangent space.
 
     Raises:
+        NoSolutionFound: if the backend QP solver does not find a solution to
+            the differential IK problem.
         NotWithinConfigurationLimits: if the current configuration is not
             within limits.
 
@@ -219,6 +221,6 @@ def solve_ik(
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
     if not result.found or Delta_q is None:
-        return None
+        raise NoSolutionFound(problem, result)
     v: np.ndarray = Delta_q / dt
     return v
