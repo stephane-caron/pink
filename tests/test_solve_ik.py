@@ -311,6 +311,7 @@ class TestSolveIK(unittest.TestCase):
                 tasks,
                 dt,
                 solver="proxqp",
+                check_duality_gap=True,
                 eps_abs=1e-6,
             )
             if norm(velocity) < conv_velocity_norm:
@@ -400,8 +401,8 @@ class TestSolveIK(unittest.TestCase):
                 configuration,
                 tasks,
                 dt,
-                solver="proxqp",
-                eps_abs=1e-6,
+                solver="osqp",
+                eps_abs=1e-8,
             )
             if np.linalg.norm(velocity) < conv_velocity_norm:
                 break
