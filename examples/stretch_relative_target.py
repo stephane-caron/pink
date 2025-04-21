@@ -13,7 +13,7 @@ import qpsolvers
 
 import meshcat_shapes
 import pink
-from pink import solve_ik
+from pink import PinkError, solve_ik
 from pink.tasks import FrameTask, RelativeFrameTask
 from pink.visualization import start_meshcat_visualizer
 
@@ -39,7 +39,8 @@ FINGERTIP_HEIGHT = 0.7  # [m]
 
 if __name__ == "__main__":
     robot = load_robot_description(
-        "stretch_description", root_joint=pin.JointModelPlanar()
+        "stretch_description",
+        root_joint=pin.JointModelPlanar(),
     )
 
     # Initialize visualization
@@ -113,7 +114,17 @@ if __name__ == "__main__":
         )
 
         # Compute velocity and integrate it into next configuration
-        velocity = solve_ik(configuration, tasks, dt, solver=solver)
+        try:
+            velocity = solve_ik(configuration, tasks, dt, solver=solver)
+        except PinkError as exn:
+            if solver != "quadprog":
+                raise PinkError(
+                    "IK failed as detailed in the traceback above. "
+                    f"Note that `solve_ik` was called with {solver=}, "
+                    "but this example works better with solver='quadprog'."
+                ) from exn
+            raise exn
+
         configuration.integrate_inplace(velocity, dt)
 
         # Visualize result at fixed FPS

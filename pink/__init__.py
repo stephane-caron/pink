@@ -8,6 +8,7 @@
 """Inverse kinematics for articulated robot models, based on Pinocchio."""
 
 from .configuration import Configuration
+from .exceptions import PinkError
 from .solve_ik import build_ik, solve_ik
 from .tasks import (
     FrameTask,
@@ -25,9 +26,10 @@ __all__ = [
     "FrameTask",
     "JointCouplingTask",
     "LinearHolonomicTask",
+    "PinkError",
     "PostureTask",
+    "Task",
     "build_ik",
     "custom_configuration_vector",
     "solve_ik",
-    "Task",
 ]
