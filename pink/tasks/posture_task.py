@@ -13,7 +13,7 @@ import pinocchio as pin
 
 from ..configuration import Configuration
 from ..utils import get_root_joint_dim
-from .exceptions import TargetNotSet
+from ..exceptions import TargetNotSet
 from .task import Task
 
 

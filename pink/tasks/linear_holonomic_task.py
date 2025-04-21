@@ -12,7 +12,7 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from .exceptions import TaskDefinitionError, TaskJacobianNotSet
+from ..exceptions import TaskDefinitionError, TaskJacobianNotSet
 from .task import Task
 
 

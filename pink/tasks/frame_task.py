@@ -12,7 +12,7 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from .exceptions import TargetNotSet, TaskDefinitionError
+from ..exceptions import TargetNotSet, TaskDefinitionError
 from .task import Task
 
 
@@ -240,5 +240,5 @@ class FrameTask(Task):
             f"gain={self.gain}, "
             f"orientation_cost={orientation_cost}, "
             f"position_cost={position_cost}, "
-            f"transform_target_to_world={self.transform_target_to_world})"
+            f"lm_damping={self.lm_damping})"
         )

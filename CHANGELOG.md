@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Task: Make `__repr__` of base class abstract to ensure tasks define their own
+
 ## [3.2.0] - 2025-04-22
 
 ### Added
@@ -27,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CICD: Update QP solvers used in unit tests
 - CICD: Update checkout action to v4
 - Raise custom `NoSolutionFound` rather than `AssertionError` in `solve_ik`
-- Update supported Python versions
+- Update supported Python versions to 3.9–3.12
 
 ### Fixed
 
