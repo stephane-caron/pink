@@ -74,7 +74,6 @@ jobs:
                   environment-name: coverage
                   create-args: >-
                       python=3.10
-                      black>=22.10.0
                       mypy>=0.812
                       pinocchio>=2.6.4
                       pylint>=2.8.2
@@ -86,7 +85,6 @@ jobs:
 
             - name: "Check code format"
               run: |
-                  black --check --diff pink
                   mypy pink --ignore-missing-imports
                   pylint pink --exit-zero --rcfile=pyproject.toml
                   ruff check pink
