@@ -10,12 +10,19 @@ import numpy as np
 import pinocchio as pin
 import qpsolvers
 import yourdfpy
-from loop_rate_limiters import RateLimiter
 
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
 
 try:
     from robot_descriptions import upkie_description

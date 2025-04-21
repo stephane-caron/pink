@@ -9,17 +9,24 @@
 from typing import Tuple
 
 import hppfcl as fcl
-import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
-from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -127,7 +134,6 @@ if __name__ == "__main__":
     meshcat_shapes.frame(viewer["left_ee_target"], opacity=0.5)
     meshcat_shapes.frame(viewer["right_ee"], opacity=1.0)
     meshcat_shapes.frame(viewer["right_ee_target"], opacity=0.5)
-
 
     base_task = FrameTask(
         "base",

@@ -6,17 +6,24 @@
 
 """Go2 squat with z-axis barrier."""
 
-import meshcat_shapes
 import numpy as np
-import qpsolvers
-from loop_rate_limiters import RateLimiter
 import pinocchio as pin
+import qpsolvers
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.barriers import PositionBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description

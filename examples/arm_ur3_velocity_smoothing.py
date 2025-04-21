@@ -7,17 +7,24 @@
 """UR3 arm tracking a target, first without then with velocity smoothing."""
 
 import matplotlib.pyplot as plt
-import meshcat_shapes
 import numpy as np
 import qpsolvers
-from loop_rate_limiters import RateLimiter
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.limits import AccelerationLimit
 from pink.tasks import DampingTask, FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description

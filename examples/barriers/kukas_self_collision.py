@@ -7,24 +7,44 @@
 """Two iiwa14-s with full-body self-collision avoidance using hpp-fcl."""
 
 import os
-import meshcat_shapes
+
 import numpy as np
 import pinocchio as pin
 import qpsolvers
-from loop_rate_limiters import RateLimiter
 
-from robot_descriptions.iiwa14_description import PACKAGE_PATH, REPOSITORY_PATH
-
+import meshcat_shapes
 import pink
 from pink import solve_ik
-from pink.utils import process_collision_pairs
 from pink.barriers import SelfCollisionBarrier
 from pink.tasks import FrameTask, PostureTask
+from pink.utils import process_collision_pairs
 from pink.visualization import start_meshcat_visualizer
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
+
+try:
+    from robot_descriptions.iiwa14_description import (
+        PACKAGE_PATH,
+        REPOSITORY_PATH,
+    )
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples need robot_descriptions, "
+        "try `[conda|pip] install robot_descriptions`"
+    ) from exc
 
 
 def prefix_frames(
-    model: pin.Model, visual_model: pin.GeometryModel, geometry_model: pin.GeometryModel, prefix: str
+    model: pin.Model,
+    visual_model: pin.GeometryModel,
+    geometry_model: pin.GeometryModel,
+    prefix: str,
 ) -> None:
     for frame in model.frames:
         frame.name = f"{prefix}_{frame.name}"
@@ -38,14 +58,24 @@ def prefix_frames(
 
 if __name__ == "__main__":
     # Empty model
-    model, visual_model, collision_model = pin.Model(), pin.GeometryModel(), pin.GeometryModel()
-    urdf_path = os.path.join(PACKAGE_PATH, "urdf", "iiwa14_spheres_collision.urdf")
+    model, visual_model, collision_model = (
+        pin.Model(),
+        pin.GeometryModel(),
+        pin.GeometryModel(),
+    )
+    urdf_path = os.path.join(
+        PACKAGE_PATH, "urdf", "iiwa14_spheres_collision.urdf"
+    )
 
     # === Left arm ====
-    left_arm = pin.RobotWrapper.BuildFromURDF(urdf_path, package_dirs=[os.path.dirname(REPOSITORY_PATH)])
+    left_arm = pin.RobotWrapper.BuildFromURDF(
+        urdf_path, package_dirs=[os.path.dirname(REPOSITORY_PATH)]
+    )
 
     # Add prefix to frames, links and geons of the arm
-    prefix_frames(left_arm.model, left_arm.visual_model, left_arm.collision_model, "left")
+    prefix_frames(
+        left_arm.model, left_arm.visual_model, left_arm.collision_model, "left"
+    )
 
     # Place left arm on the left to the origin
     left_arm_placement = pin.SE3.Identity()
@@ -70,10 +100,17 @@ if __name__ == "__main__":
     )
 
     # === Right arm ====
-    right_arm = pin.RobotWrapper.BuildFromURDF(urdf_path, package_dirs=[os.path.dirname(REPOSITORY_PATH)])
+    right_arm = pin.RobotWrapper.BuildFromURDF(
+        urdf_path, package_dirs=[os.path.dirname(REPOSITORY_PATH)]
+    )
 
     # Add prefix to frames, links and geons of the arm
-    prefix_frames(right_arm.model, right_arm.visual_model, right_arm.collision_model, "right")
+    prefix_frames(
+        right_arm.model,
+        right_arm.visual_model,
+        right_arm.collision_model,
+        "right",
+    )
 
     # Place left arm on the left to the origin
     right_arm_placement = pin.SE3.Identity()
@@ -104,20 +141,26 @@ if __name__ == "__main__":
         visual_model=visual_model,
     )
 
-    srdf_path = os.path.dirname(os.path.realpath(__file__)) + "/iiwa14_spheres_collision.srdf"
+    srdf_path = (
+        os.path.dirname(os.path.realpath(__file__))
+        + "/iiwa14_spheres_collision.srdf"
+    )
     print(srdf_path)
     viz = start_meshcat_visualizer(robot)
     q_ref = np.zeros(robot.model.nq)
 
-    # Collisions: processing collisions from urdf (include all) and srdf (exclude specified)
-    # and updating collision model and creating corresponding collision data
-    robot.collision_data = process_collision_pairs(robot.model, robot.collision_model, srdf_path)
+    # Collisions: processing collisions from urdf (include all) and srdf
+    # (exclude specified) and updating collision model and creating
+    # corresponding collision data
+    robot.collision_data = process_collision_pairs(
+        robot.model, robot.collision_model, srdf_path
+    )
 
     configuration = pink.Configuration(
         robot.model,
         robot.data,
         q_ref,
-        collision_model=robot.collision_model,  # Collision model is required for self_collision_barrier
+        collision_model=robot.collision_model,  # for self-collision barrier
         collision_data=robot.collision_data,
     )
 
@@ -178,21 +221,33 @@ if __name__ == "__main__":
     while True:
         # Make a sinusoidal trajectory between points A and B
         mu = (1 + np.cos(t)) / 2
-        l_y_des[:] = A + (B - A + 0.2 * np.array([0, 0, np.sin(mu * np.pi) ** 2])) * mu
-        r_y_des[:] = B + (A - B + 0.2 * np.array([0, 0, -np.sin(mu * np.pi) ** 2])) * mu
+        l_y_des[:] = (
+            A + (B - A + 0.2 * np.array([0, 0, np.sin(mu * np.pi) ** 2])) * mu
+        )
+        r_y_des[:] = (
+            B + (A - B + 0.2 * np.array([0, 0, -np.sin(mu * np.pi) ** 2])) * mu
+        )
 
         left_end_effector_task.transform_target_to_world.translation = l_y_des
         right_end_effector_task.transform_target_to_world.translation = r_y_des
 
         # Update visualization frames
         viewer["left_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(left_end_effector_task.frame).np
+            configuration.get_transform_frame_to_world(
+                left_end_effector_task.frame
+            ).np
         )
         viewer["right_end_effector"].set_transform(
-            configuration.get_transform_frame_to_world(right_end_effector_task.frame).np
+            configuration.get_transform_frame_to_world(
+                right_end_effector_task.frame
+            ).np
         )
-        viewer["left_end_effector_target"].set_transform(left_end_effector_task.transform_target_to_world.np)
-        viewer["right_end_effector_target"].set_transform(right_end_effector_task.transform_target_to_world.np)
+        viewer["left_end_effector_target"].set_transform(
+            left_end_effector_task.transform_target_to_world.np
+        )
+        viewer["right_end_effector_target"].set_transform(
+            right_end_effector_task.transform_target_to_world.np
+        )
 
         velocity = solve_ik(
             configuration,

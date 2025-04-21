@@ -9,13 +9,20 @@
 import numpy as np
 import pinocchio as pin
 import qpsolvers
-from loop_rate_limiters import RateLimiter
 
 import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, JointCouplingTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ModuleNotFoundError as exc:
+    raise ModuleNotFoundError(
+        "Examples use loop rate limiters, "
+        "try `[conda|pip] install loop-rate-limiters`"
+    ) from exc
 
 try:
     from robot_descriptions.loaders.pinocchio import load_robot_description
@@ -63,7 +70,6 @@ if __name__ == "__main__":
     viz = start_meshcat_visualizer(robot)
     wrist_frame = viz.viewer["right_wrist_pose"]
     meshcat_shapes.frame(wrist_frame)
-
 
     # Set initial robot configuration
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
