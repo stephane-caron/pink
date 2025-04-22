@@ -162,15 +162,17 @@ Install the library and use it! Report bugs in the [issue tracker](https://githu
 If you use Pink in your scientific works, please cite it *e.g.* as follows:
 
 ```bibtex
-@software{pink2024,
+@software{pink,
   title = {{Pink: Python inverse kinematics based on Pinocchio}},
   author = {Caron, Stéphane and De Mont-Marin, Yann and Budhiraja, Rohan and Bang, Seung Hyeon and Domrachev, Ivan and Nedelchev, Simeon},
   license = {Apache-2.0},
   url = {https://github.com/stephane-caron/pink},
-  version = {3.1.0},
-  year = {2024}
+  version = {3.2.0},
+  year = {2025}
 }
 ```
+
+Don't forget to add yourself to the BibTeX above and to `CITATION.cff` if you contribute code to this repository.
 
 ## See also
 
