@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- CICD: Switch to Pixi to run unit tests
 - Move pink.tasks.exceptions to pink.exceptions
 - Task: Make `__repr__` of base class abstract to ensure tasks define their own
 - docs: Refactor Tasks page and update references
