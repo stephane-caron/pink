@@ -7,9 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Introduce *constraints* to enforce tasks as QP equality constraints
+- Task: Add missing task `__repr__` functions
+- Task: Report LM damping in CoM task representation
+
 ### Changed
 
+- Move pink.tasks.exceptions to pink.exceptions
 - Task: Make `__repr__` of base class abstract to ensure tasks define their own
+- docs: Refactor Tasks page and update references
+- examples: Update installation hints when example dependencies are missing
+
+### Fixed
+
+- Task: Fix damping task when the robot model has a mobile root joint
+- Task: Report LM damping in CoM task
 
 ## [3.2.0] - 2025-04-22
 
@@ -17,9 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `NoSolutionFound` exception
 - Add `open` keyword argument to `start_meshcat_visualizer`
-- Introduce *constraints* to enforce tasks as QP equality constraints
-- Task: Add missing task `__repr__` functions
-- Task: Report LM damping in CoM task representation
 - examples: Detail that quadprog works best on Stretch examples
 - examples: Installation instruction for loop-rate-limiters
 - examples: Switch to DAQP solvers in examples where it works well
@@ -31,17 +42,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CICD: Switch from tox to Anaconda environments
 - CICD: Update QP solvers used in unit tests
 - CICD: Update checkout action to v4
-- Move pink.tasks.exceptions to pink.exceptions
 - Raise custom `NoSolutionFound` rather than `AssertionError` in `solve_ik`
 - Update supported Python versions to 3.9–3.12
-- docs: Refactor Tasks page and update references
-- examples: Update installation hints when example dependencies are missing
 
 ### Fixed
 
 - CICD: Update unit test for self-collision barrier
-- Task: Fix damping task when the robot model has a mobile root joint
-- Task: Report LM damping in CoM task
 
 ### Removed
 
