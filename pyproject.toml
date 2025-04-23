@@ -63,6 +63,43 @@ generated-members = [
 [tool.flit.module]
 name = "pink"
 
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+pin-pink = { path = ".", editable = true }
+
+[tool.pixi.dependencies]
+python = ">=3.9"
+loop-rate-limiters = ">=0.1.0"
+numpy = ">=1.19.0"
+pinocchio = ">=2.6.3"
+qpsolvers = ">=4.3.1"
+
+[tool.pixi.feature.py39]
+dependencies = { python = "3.9.*" }
+
+[tool.pixi.feature.py310]
+dependencies = { python = "3.10.*" }
+
+[tool.pixi.feature.py311]
+dependencies = { python = "3.11.*" }
+
+[tool.pixi.feature.py312]
+dependencies = { python = "3.12.*" }
+
+[tool.pixi.feature.test]
+tasks = { cmd = "python -m unittest discover --failfast" }
+
+[tool.pixi.environments]
+default = { features = [], solve-group = "default" }
+py39 = ["py39"]
+py310 = ["py310"]
+py311 = ["py311"]
+py312 = ["py312"]
+test = { features = ["test"], solve-group = "default" }
+
 [tool.ruff]
 line-length = 79
 
