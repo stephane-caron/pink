@@ -40,28 +40,15 @@ jobs:
             - name: "Checkout sources"
               uses: actions/checkout@v4
 
-            - name: "Install Conda environment with Micromamba"
-              uses: mamba-org/setup-micromamba@v1
+            - name: "Setup Pixi"
+              uses: prefix-dev/setup-pixi@v0.8.8
               with:
-                  micromamba-version: '1.5.8-0'
-                  environment-name: coverage
-                  create-args: >-
-                      python=3.10
-                      mypy>=0.812
-                      pinocchio>=2.6.4
-                      pylint>=2.8.2
-                      qpsolvers>=2.7.2
-                      robot_descriptions>=1.9.0
-                      ruff>=0.4.3
-                  cache-environment: true
-                  post-cleanup: 'all'
+                  pixi-version: v0.44.0
+                  cache: true
 
             - name: "Check code format"
               run: |
-                  mypy pink --ignore-missing-imports
-                  pylint pink --exit-zero --rcfile=pyproject.toml
-                  ruff check pink
-                  ruff format --check pink
+                  pixi run lint
 
     test:
         name: "Test with ${{ matrix.environment }} on ${{ matrix.os }}"
