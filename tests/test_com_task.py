@@ -13,7 +13,8 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks import ComTask, TargetNotSet
+from pink.exceptions import TargetNotSet
+from pink.tasks import ComTask
 
 
 class TestComTask(unittest.TestCase):

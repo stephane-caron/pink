@@ -14,7 +14,7 @@ from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
 from pink.tasks import LinearHolonomicTask, TaskJacobianNotSet
-from pink.tasks.exceptions import TaskDefinitionError
+from pink.exceptions import TaskDefinitionError
 from pink.utils import get_joint_idx
 
 
