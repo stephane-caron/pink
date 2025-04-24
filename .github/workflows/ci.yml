@@ -11,12 +11,6 @@ jobs:
     coverage:
         name: "Code coverage"
         runs-on: ubuntu-latest
-
-        defaults:
-            run:
-                # See https://github.com/mamba-org/setup-micromamba?tab=readme-ov-file#about-login-shells
-                shell: bash -leo pipefail {0}
-
         steps:
             - name: "Checkout sources"
               uses: actions/checkout@v4
@@ -42,12 +36,6 @@ jobs:
     lint:
         name: "Code style"
         runs-on: ubuntu-latest
-
-        defaults:
-            run:
-                # See https://github.com/mamba-org/setup-micromamba?tab=readme-ov-file#about-login-shells
-                shell: bash -leo pipefail {0}
-
         steps:
             - name: "Checkout sources"
               uses: actions/checkout@v4
@@ -78,17 +66,10 @@ jobs:
     test:
         name: "Test with ${{ matrix.environment }} on ${{ matrix.os }}"
         runs-on: ${{ matrix.os }}
-
         strategy:
             matrix:
                 os: [ubuntu-latest, macos-latest]
                 environment: [py39, py310, py311, py312]
-
-        defaults:
-            run:
-                # See https://github.com/mamba-org/setup-micromamba?tab=readme-ov-file#about-login-shells
-                shell: bash -leo pipefail {0}
-
         steps:
             - name: "Checkout sources"
               uses: actions/checkout@v4
