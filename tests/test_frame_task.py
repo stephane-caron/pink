@@ -15,8 +15,8 @@ from qpsolvers import solve_qp
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
+from pink.exceptions import TargetNotSet, TaskDefinitionError
 from pink.tasks import FrameTask
-from pink.exceptions import TaskDefinitionError, TargetNotSet
 
 
 class TestFrameTask(unittest.TestCase):
@@ -67,9 +67,11 @@ class TestFrameTask(unittest.TestCase):
         earflap_task = FrameTask(
             "earflap", position_cost=1.0, orientation_cost=0.1
         )
+        self.assertTrue("frame=" in repr(earflap_task))
         self.assertTrue("gain=" in repr(earflap_task))
-        self.assertTrue("cost=" in repr(earflap_task))
-        self.assertTrue("transform_target_to_world=" in repr(earflap_task))
+        self.assertTrue("orientation_cost=" in repr(earflap_task))
+        self.assertTrue("position_cost=" in repr(earflap_task))
+        self.assertTrue("lm_damping=" in repr(earflap_task))
 
     def test_target_not_set(self):
         """Raise an exception when the target is not set."""
