@@ -98,9 +98,10 @@ dependencies = { python = "3.11.*" }
 dependencies = { python = "3.12.*" }
 
 [tool.pixi.feature.test]
-tasks = { cmd = "python -m unittest discover --failfast" }
+tasks.test = { cmd = "python -m unittest discover --failfast" }
 
 [tool.pixi.environments]
+coverage = { features = ["coverage"], solve-group = "default" }
 default = { features = [], solve-group = "default" }
 py39 = ["py39"]
 py310 = ["py310"]
