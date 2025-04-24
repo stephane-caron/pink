@@ -178,6 +178,9 @@ def build_ik(
             configuration and velocity limits (set to the empty list ``[]`` to
             disable limits).
         barriers: Collection of barriers.
+        constraints: List of kinematic tasks to be enforced strictly, as hard
+            equality constraints in the underlying QP rather than in its cost
+            function.
 
     Returns:
         Quadratic program of the inverse kinematics problem.
