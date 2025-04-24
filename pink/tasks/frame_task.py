@@ -241,8 +241,8 @@ class FrameTask(Task):
         return (
             "FrameTask("
             f"frame={self.frame}, "
-            f"gain={self.gain}, "
-            f"orientation_cost={orientation_cost}, "
             f"position_cost={position_cost}, "
-            f"lm_damping={self.lm_damping})"
+            f"orientation_cost={orientation_cost}, "
+            f"lm_damping={self.lm_damping}, "
+            f"gain={self.gain})"
         )

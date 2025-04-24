@@ -261,6 +261,6 @@ class RelativeFrameTask(Task):
             f"root={self.root}, "
             f"position_cost={position_cost}, "
             f"orientation_cost={orientation_cost}, "
-            f"gain={self.gain}, "
-            f"lm_damping={self.lm_damping})"
+            f"lm_damping={self.lm_damping}, "
+            f"gain={self.gain})"
         )
