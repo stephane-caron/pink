@@ -15,8 +15,8 @@ from qpsolvers import solve_qp
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks import FrameTask, TargetNotSet
-from pink.tasks.exceptions import TaskDefinitionError
+from pink.tasks import FrameTask
+from pink.exceptions import TaskDefinitionError, TargetNotSet
 
 
 class TestFrameTask(unittest.TestCase):
