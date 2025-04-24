@@ -12,8 +12,8 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
-from ..utils import get_root_joint_dim
 from ..exceptions import TargetNotSet
+from ..utils import get_root_joint_dim
 from .task import Task
 
 
