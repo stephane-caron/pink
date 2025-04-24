@@ -76,6 +76,14 @@ loop-rate-limiters = ">=0.1.0"
 numpy = ">=1.19.0"
 pinocchio = ">=2.6.3"
 qpsolvers = ">=4.3.1"
+robot_descriptions = ">=1.9.0"
+
+[tool.pixi.feature.coverage]
+dependencies = { coveralls = ">=4.0.0" }
+tasks.coverage-erase = { cmd = "coverage erase" }
+tasks.coverage-run = { cmd = "coverage run -m unittest discover --failfast", depends-on = ["coverage-erase"] }
+tasks.coverage = { cmd = "coverage report --include=\"pink/*\"", depends-on = ["coverage-run"] }
+tasks.coveralls = { cmd = "coveralls --service=github" }
 
 [tool.pixi.feature.py39]
 dependencies = { python = "3.9.*" }
