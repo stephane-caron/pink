@@ -91,15 +91,12 @@ jobs:
                   ruff format --check pink
 
     test:
-        name: "Test ${{ matrix.os }} with Python ${{ matrix.python-version }}"
+        name: "Test with ${{ matrix.environment }} on ${{ matrix.os }}"
         runs-on: ${{ matrix.os }}
 
         strategy:
             matrix:
-                os: [ubuntu-latest]
-                # Blocker: https://github.com/stack-of-tasks/pinocchio/issues/2231
-                # os: [ubuntu-latest, macos-latest]
-                # python-version: ["3.9", "3.10", "3.11", "3.12"]
+                os: [ubuntu-latest, macos-latest]
                 environment: [py39, py310, py311, py312]
 
         defaults:
@@ -118,7 +115,7 @@ jobs:
                   environments: ${{ matrix.environment }}
                   cache: true
 
-            - name: "Run unit tests with {{ matrix.environment }} on ${{ matrix.os }}"
+            - name: "Run unit tests with ${{ matrix.environment }} on ${{ matrix.os }}"
               run: |
                   pixi run -e ${{ matrix.environment }} test
 
