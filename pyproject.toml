@@ -119,11 +119,10 @@ tasks.test = { cmd = "python -m unittest discover --failfast" }
 coverage = { features = ["coverage"], solve-group = "default" }
 default = { features = [], solve-group = "default" }
 lint = { features = ["lint", "mypy", "pylint", "ruff"], solve-group = "default" }
-py310 = ["py310"]
-py311 = ["py311"]
-py312 = ["py312"]
-py39 = ["py39"]
-test = { features = ["test"], solve-group = "default" }
+test-py310 = ["py310", "test"]
+test-py311 = ["py311", "test"]
+test-py312 = ["py312", "test"]
+test-py39 = ["py39", "test"]
 
 [tool.ruff]
 line-length = 79
