@@ -1,6 +1,7 @@
 *.pyc
 *.pyo
 .coverage
+.pixi
 .ropeproject
 .tox
 _build
