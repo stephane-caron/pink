@@ -40,9 +40,11 @@ def __compute_qp_objective(
         configuration: Robot configuration to read kinematics from.
         tasks: List of kinematic tasks to fulfill at (weighted) best.
         damping: weight of Tikhonov (everywhere) regularization. Its unit is
-            `[cost]^2 / [tangent]` where `[tangent]` is "the" unit of robot
-            velocities. Improves numerical stability, but larger values slow
-            down all tasks.
+            :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
+            :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
+            Improves numerical stability, but larger values slow down all
+            tasks. The same weight is applied to all joints, including if
+            applicable the root joint (floating base, ...).
         dt: Integration timestep in [s].
         barriers: Collection of barriers.
 
@@ -173,7 +175,8 @@ def build_ik(
             :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
-            tasks.
+            tasks. The same weight is applied to all joints, including if
+            applicable the root joint (floating base, ...).
         limits: Collection of limits to enforce. By default, consists of
             configuration and velocity limits (set to the empty list ``[]`` to
             disable limits).
@@ -218,7 +221,8 @@ def solve_ik(
             :math:`[\mathrm{cost}]^2 / [\mathrm{tangent}]` where
             :math:`[\mathrm{tangent}]` is "the" unit of robot velocities.
             Improves numerical stability, but larger values slow down all
-            tasks.
+            tasks. The same weight is applied to all joints, including if
+            applicable the root joint (floating base, ...).
         limits: Collection of limits to enforce. By default, consists of
             configuration and velocity limits (set to the empty list ``[]`` to
             disable limits).
