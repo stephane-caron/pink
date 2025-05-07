@@ -53,9 +53,10 @@ class TestRelativeFrameTask(unittest.TestCase):
         )
         self.assertTrue("frame=" in repr(earflap_task))
         self.assertTrue("root=" in repr(earflap_task))
+        self.assertTrue("position_cost=" in repr(earflap_task))
+        self.assertTrue("orientation_cost=" in repr(earflap_task))
+        self.assertTrue("lm_damping=" in repr(earflap_task))
         self.assertTrue("gain=" in repr(earflap_task))
-        self.assertTrue("cost=" in repr(earflap_task))
-        self.assertTrue("transform_target_to_root=" in repr(earflap_task))
 
     def test_matches_frame_task(self):
         relative_task = RelativeFrameTask(
