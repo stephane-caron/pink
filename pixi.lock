@@ -8465,7 +8465,7 @@ packages:
 - pypi: .
   name: pin-pink
   version: 3.2.0
-  sha256: dbd8bc3aeecf68cc484c56d1a0f184e2b7e2bf2ec511f40f78d0820acefe4c86
+  sha256: 6d4e4f939d3d63b469f361bea5a69e58caba2938df97a4d9d77cd507b2aa8319
   requires_dist:
   - loop-rate-limiters>=0.1.0
   - numpy>=1.19.0
