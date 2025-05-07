@@ -70,7 +70,7 @@ jobs:
 
             - name: "Run unit tests with ${{ matrix.environment }} on ${{ matrix.os }}"
               run: |
-                  pixi run -e ${{ matrix.environment }} test
+                  pixi run -e test-${{ matrix.environment }} test
 
     ci_success:
         name: "CI success"
