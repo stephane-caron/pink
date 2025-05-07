@@ -116,13 +116,12 @@ tasks.ruff = { cmd = "ruff check pink && ruff format --check pink" }
 tasks.test = { cmd = "python -m unittest discover --failfast" }
 
 [tool.pixi.environments]
-coverage = { features = ["coverage"], solve-group = "default" }
-default = { features = [], solve-group = "default" }
-lint = { features = ["lint", "mypy", "pylint", "ruff"], solve-group = "default" }
-test-py310 = { features = ["py310", "test"], solve-group = "default" }
-test-py311 = { features = ["py311", "test"], solve-group = "default" }
-test-py312 = { features = ["py312", "test"], solve-group = "default" }
-test-py39 = { features = ["py39", "test"], solve-group = "default" }
+coverage = { features = ["py312", "coverage"], solve-group = "py312" }
+lint = { features = ["py312", "lint", "mypy", "pylint", "ruff"], solve-group = "py312" }
+test-py310 = { features = ["py310", "test"], solve-group = "py310" }
+test-py311 = { features = ["py311", "test"], solve-group = "py311" }
+test-py312 = { features = ["py312", "test"], solve-group = "py312" }
+test-py39 = { features = ["py39", "test"], solve-group = "py39" }
 
 [tool.ruff]
 line-length = 79
