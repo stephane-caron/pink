@@ -8078,8 +8078,6 @@ packages:
   - python_abi 3.12.* *_cp312
   constrains:
   - jinja2 >=3.0.0
-  arch: x86_64
-  platform: linux
   license: BSD-3-Clause
   license_family: BSD
   purls:
@@ -8095,8 +8093,6 @@ packages:
   - python_abi 3.12.* *_cp312
   constrains:
   - jinja2 >=3.0.0
-  arch: aarch64
-  platform: linux
   license: BSD-3-Clause
   license_family: BSD
   purls:
@@ -8113,8 +8109,6 @@ packages:
   - python_abi 3.12.* *_cp312
   constrains:
   - jinja2 >=3.0.0
-  arch: arm64
-  platform: osx
   license: BSD-3-Clause
   license_family: BSD
   purls:
@@ -9079,7 +9073,7 @@ packages:
 - pypi: .
   name: pin-pink
   version: 3.2.0
-  sha256: d58dc9881758a3a86997f53e0b058f175b37c128a4a3a935a4afbae31d492eeb
+  sha256: 5e62ea841747a24dfbfc6fa0f9a766c8d7475a3b13c0c8fe406ed26bff8a819e
   requires_dist:
   - loop-rate-limiters>=0.1.0
   - numpy>=1.19.0
