@@ -13,8 +13,8 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
-from pink.tasks import LinearHolonomicTask
 from pink.exceptions import TaskDefinitionError, TaskJacobianNotSet
+from pink.tasks import LinearHolonomicTask
 from pink.utils import get_joint_idx
 
 
