@@ -6,26 +6,5 @@
 Limits
 ******
 
-Definition
-==========
-
-.. automodule:: pink.limits.limit
+.. automodule:: pink.limits
     :members:
-
-Configuration limit
-===================
-
-.. automodule:: pink.limits.configuration_limit
-   :members:
-
-Velocity limit
-==============
-
-.. automodule:: pink.limits.velocity_limit
-   :members:
-
-Acceleration limit
-==================
-
-.. automodule:: pink.limits.acceleration_limit
-   :members:
