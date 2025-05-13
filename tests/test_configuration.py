@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 
-"""Test the Configuration type."""
+"""Test the configuration type."""
 
 import unittest
 

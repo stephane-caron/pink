@@ -9,12 +9,10 @@
 import unittest
 
 import numpy as np
-import pinocchio as pin
-from pink import Configuration
-from pink.exceptions import TargetNotSet, TaskDefinitionError
-from pink.tasks import RollingTask
-from qpsolvers import solve_qp
 from robot_descriptions.loaders.pinocchio import load_robot_description
+
+from pink import Configuration
+from pink.tasks import RollingTask
 
 
 class TestRollingTask(unittest.TestCase):

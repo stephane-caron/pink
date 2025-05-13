@@ -8,9 +8,10 @@
 
 import unittest
 
+from robot_descriptions.loaders.pinocchio import load_robot_description
+
 from pink import Configuration
 from pink.tasks import OmniwheelTask
-from robot_descriptions.loaders.pinocchio import load_robot_description
 
 
 class TestOmniwheelTask(unittest.TestCase):
