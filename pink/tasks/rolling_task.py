@@ -6,7 +6,7 @@
 
 """Rolling task implementation."""
 
-from typing import Optional
+from typing import Optional, Union, Sequence
 
 import numpy as np
 import pinocchio as pin
@@ -36,7 +36,6 @@ class RollingTask(Task):
     Note:
         See also the similar `wheel task in the PlaCo C++ library
         <https://github.com/Rhoban/placo/blob/9e65abadff45071ab11274eb74770d71e10b7ca8/docs/kinematics/wheel_task.rst>`__.
-        It additionally handles omniwheels.
     """
 
     hub_frame: str
@@ -48,7 +47,7 @@ class RollingTask(Task):
         hub_frame: str,
         floor_frame: str,
         wheel_radius: float,
-        cost: Optional[float],
+        cost: Optional[Union[float, Sequence[float], np.ndarray]],
         gain: float = 1.0,
         lm_damping: float = 0.0,
     ):

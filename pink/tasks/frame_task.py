@@ -127,10 +127,7 @@ class FrameTask(Task):
                 f"currently cost={self.cost}"
             )
 
-    def set_target(
-        self,
-        transform_target_to_world: pin.SE3,
-    ) -> None:
+    def set_target(self, transform_target_to_world: pin.SE3) -> None:
         """Set task target pose in the world frame.
 
         Args:
