@@ -36,6 +36,18 @@ class FrameNotFound(PinkError):
         super().__init__(self.message)
 
 
+class InvalidCollisionPairs(PinkError):
+    """IF the number of collision pairs is invalid."""
+
+
+class NegativeMinimumDistance(PinkError):
+    """If the minimum distance in body spherical barrier is negative."""
+
+
+class NoPositionLimitProvided(PinkError):
+    """If neither minimum nor maximum position limits are provided."""
+
+
 class NoSolutionFound(PinkError):
     """The QP solver did not find a solution to the differential IK problem."""
 

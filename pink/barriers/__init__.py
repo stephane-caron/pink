@@ -8,20 +8,12 @@
 
 from .barrier import Barrier
 from .body_spherical_barrier import BodySphericalBarrier
-from .exceptions import (
-    InvalidCollisionPairs,
-    NegativeMinimumDistance,
-    NoPositionLimitProvided,
-)
 from .position_barrier import PositionBarrier
 from .self_collision_barrier import SelfCollisionBarrier
 
 __all__ = [
     "Barrier",
     "PositionBarrier",
-    "NoPositionLimitProvided",
-    "NegativeMinimumDistance",
     "BodySphericalBarrier",
     "SelfCollisionBarrier",
-    "InvalidCollisionPairs",
 ]
