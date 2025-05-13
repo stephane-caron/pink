@@ -14,11 +14,8 @@ import pinocchio as pin
 from robot_descriptions.iiwa14_description import PACKAGE_PATH, REPOSITORY_PATH
 
 from pink import Configuration
-from pink.barriers import (
-    InvalidCollisionPairs,
-    NegativeMinimumDistance,
-    SelfCollisionBarrier,
-)
+from pink.barriers import SelfCollisionBarrier
+from pink.exceptions import InvalidCollisionPairs, NegativeMinimumDistance
 from pink.utils import process_collision_pairs
 
 
