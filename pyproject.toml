@@ -85,6 +85,12 @@ tasks.coverage-run = { cmd = "coverage run -m unittest discover --failfast", dep
 tasks.coverage = { cmd = "coverage report --include=\"pink/*\"", depends-on = ["coverage-run"] }
 tasks.coveralls = { cmd = "coveralls --service=github" }
 
+[tool.pixi.feature.docs]
+dependencies = { "sphinx" = ">=7.2.2", "sphinx-rtd-theme" = "*", "sphinx-favicon" = "*", "sphinx-autodoc-typehints" = "*" }
+pypi-dependencies = { "sphinx-mathjax-offline" = "*" }
+tasks.docs-build = { cmd = "sphinx-build doc/ _build -W" }
+tasks.docs-open = { cmd = "xdg-open _build/index.html", depends-on = "docs-build" }
+
 [tool.pixi.feature.lint]
 tasks.lint = { depends-on = ["mypy", "pylint", "ruff"] }
 
@@ -117,6 +123,7 @@ tasks.test = { cmd = "python -m unittest discover --failfast" }
 
 [tool.pixi.environments]
 coverage = { features = ["py312", "coverage"], solve-group = "py312" }
+docs = { features = ["py312", "docs"], solve-group = "py312" }
 lint = { features = ["py312", "lint", "mypy", "pylint", "ruff"], solve-group = "py312" }
 test-py310 = { features = ["py310", "test"], solve-group = "py310" }
 test-py311 = { features = ["py311", "test"], solve-group = "py311" }
