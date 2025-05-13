@@ -119,6 +119,7 @@ dependencies = { ruff = ">=0.4.3" }
 tasks.ruff = { cmd = "ruff check pink && ruff format --check pink" }
 
 [tool.pixi.feature.test]
+dependencies = { daqp = "*", osqp = "*", proxsuite = "*", scs = "*" }
 tasks.test = { cmd = "python -m unittest discover --failfast" }
 
 [tool.pixi.environments]
