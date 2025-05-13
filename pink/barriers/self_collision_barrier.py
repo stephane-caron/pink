@@ -12,8 +12,8 @@ import numpy as np
 import pinocchio as pin
 
 from ..configuration import Configuration
+from ..exceptions import InvalidCollisionPairs, NegativeMinimumDistance
 from .barrier import Barrier
-from .exceptions import InvalidCollisionPairs, NegativeMinimumDistance
 
 
 class SelfCollisionBarrier(Barrier):

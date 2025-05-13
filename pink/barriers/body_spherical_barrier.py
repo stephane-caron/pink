@@ -11,8 +11,8 @@ from typing import Tuple, Union
 import numpy as np
 
 from ..configuration import Configuration
+from ..exceptions import NegativeMinimumDistance
 from .barrier import Barrier
-from .exceptions import NegativeMinimumDistance
 
 
 class BodySphericalBarrier(Barrier):

@@ -11,8 +11,8 @@ from typing import List, Optional, Union
 import numpy as np
 
 from ..configuration import Configuration
+from ..exceptions import NoPositionLimitProvided
 from .barrier import Barrier
-from .exceptions import NoPositionLimitProvided
 
 
 class PositionBarrier(Barrier):
