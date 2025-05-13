@@ -6,11 +6,6 @@ on:
     pull_request:
         branches: [ main ]
 
-defaults:
-    run:
-        # See https://github.com/mamba-org/setup-micromamba#about-login-shells
-        shell: bash -l {0}
-
 jobs:
     docs:
         name: "GitHub Pages"
@@ -21,16 +16,15 @@ jobs:
             - name: "Checkout Git repository"
               uses: actions/checkout@v4
 
-            - name: "Install Conda environment with Micromamba"
-              uses: mamba-org/setup-micromamba@v1
+            - name: "Setup Pixi"
+              uses: prefix-dev/setup-pixi@v0.8.8
               with:
-                  cache-downloads: true
-                  environment-file: doc/environment.yml
-                  environment-name: pink
+                  pixi-version: v0.44.0
+                  cache: true
 
             - name: "Build documentation"
               run: |
-                  sphinx-build doc _build -W
+                  pixi run docs-build
 
             - name: "Deploy to GitHub Pages"
               uses: peaceiris/actions-gh-pages@v3
