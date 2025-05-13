@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Introduce *constraints* to enforce tasks as QP equality constraints
 - Task: Add missing task `__repr__` functions
+- Task: Omniwheel task, like a rolling task but allowing lateral motion
 - Task: Report LM damping in CoM task representation
 
 ### Changed
