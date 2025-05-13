@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- CICD: Unit test fixture for the rolling task
+- CICD: Unit test fixture for the omniwheel task
 - Introduce *constraints* to enforce tasks as QP equality constraints
 - Task: Add missing task `__repr__` functions
 - Task: Omniwheel task, like a rolling task but allowing lateral motion
