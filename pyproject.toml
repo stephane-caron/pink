@@ -67,9 +67,6 @@ name = "pink"
 channels = ["conda-forge"]
 platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
 
-[tool.pixi.pypi-dependencies]
-pin-pink = { path = ".", editable = true }
-
 [tool.pixi.dependencies]
 python = ">=3.9"
 loop-rate-limiters = ">=0.1.0"
