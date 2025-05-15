@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- CICD: Switch to Pixi for code coverage, documentation, linting and unit testing
+- CICD: Switch to Pixi for code coverage, documentation, linting and testing
 - Move pink.barriers.exceptions to pink.exceptions
 - Move pink.tasks.exceptions to pink.exceptions
 - Task: Make `__repr__` of base class abstract to ensure tasks define their own
@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- CICD: Improve Pixi configuration (thanks to @jorisv)
 - Task: Fix damping task when the robot model has a mobile root joint
 - Task: Report LM damping in CoM task representation
 
