@@ -123,8 +123,8 @@ class Task(abc.ABC):
 
         .. math::
 
-            \| J \Delta q + \alpha e \|_{W}^2 = \frac{1}{2} \Delta q^T H
-            \Delta q + c^T q
+            \frac{1}{2} \| J \Delta q + \alpha e \|_{W}^2 = \frac{1}{2} \Delta
+            q^T H \Delta q + c^T q
 
         The weight matrix :math:`W \in \mathbb{R}^{k \times k}` weighs and
         normalizes task coordinates to the same unit. The unit of the overall
