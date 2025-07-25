@@ -10,20 +10,16 @@ import numpy as np
 
 from ..configuration import Configuration
 from ..utils import get_root_joint_dim
-from .posture_task import PostureTask
+from .joint_velocity_task import JointVelocityTask
 
 
-class DampingTask(PostureTask):
+class DampingTask(JointVelocityTask):
     r"""Minimize joint velocities.
 
     The damping task minimizes :math:`\| v \|_2` with :math:`v` the joint
     velocity resulting from differential IK. The word "damping" is used here by
     analogy with forces that fight against motion, and bring the robot to a
     rest if nothing else drives it.
-
-    Note:
-        The damping task is implemented as a special case of the
-        :class:`PostureTask` where the gain $\alpha$ is zero.
     """
 
     def __init__(self, cost: float) -> None:
