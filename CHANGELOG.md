@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move pink.barriers.exceptions to pink.exceptions
 - Move pink.tasks.exceptions to pink.exceptions
 - Task: Make `__repr__` of base class abstract to ensure tasks define their own
+- docs: Correct objective-function formula (thanks to @aescande)
 - docs: Refactor Tasks page and update references
 - examples: Update installation hints when example dependencies are missing
 
