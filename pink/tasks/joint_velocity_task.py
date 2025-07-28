@@ -46,6 +46,7 @@ class JointVelocityTask(Task):
 
         Args:
             target_v: Target joint-velocity vector in the tangent space.
+            dt: Integration duration in [s].
         """
         if target_v.ndim != 1:
             raise TaskDefinitionError(
