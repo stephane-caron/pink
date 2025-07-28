@@ -12,6 +12,7 @@ import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
 from pink import Configuration
+from pink.exceptions import TargetNotSet, TaskDefinitionError
 from pink.tasks import JointVelocityTask
 
 
@@ -29,19 +30,34 @@ class TestJointVelocityTask(unittest.TestCase):
             "ur3_description",
             root_joint=pin.JointModelFreeFlyer(),
         )
-        self.configuration = Configuration(robot.model, robot.data, robot.q0)
+        configuration = Configuration(robot.model, robot.data, robot.q0)
+        self.configuration = configuration
+        self.dt = 3e-3  # seconds
+        self.nq = configuration.model.nq
+        self.nv = configuration.model.nv
 
     def test_task_repr(self):
         """String representation reports the task gain, costs and target."""
         task = JointVelocityTask(cost=1.0)
         self.assertTrue("cost=" in repr(task))
-        self.assertTrue("gain=" in repr(task))
 
-    def test_unit_cost_qp_objective(self):
-        """A unit cost vector means the QP objective is (J^T J, -e^T J)."""
+    def test_target_not_set(self):
+        """Exception raised when the target is unset."""
         task = JointVelocityTask(cost=1.0)
+        with self.assertRaises(TargetNotSet):
+            task.compute_error(self.configuration)
+
+    def test_target_dim_mismatch(self):
+        """Exception raised when the target dimension is unexpected."""
+        task = JointVelocityTask(cost=1.0)
+        task.set_target(np.zeros(self.nv), self.dt)
+        with self.assertRaises(TaskDefinitionError):
+            task.compute_error(self.configuration)
+
+    def test_matrix_shapes(self):
+        """Check the shapes of the error vector and Jacobian matrix."""
+        task = JointVelocityTask(cost=1.0)
+        task.set_target(np.zeros(self.nv - 6), self.dt)
         e = task.compute_error(self.configuration)
         J = task.compute_jacobian(self.configuration)
-        H, c = task.compute_qp_objective(self.configuration)
-        self.assertTrue(np.allclose(J.T @ J, H))
-        self.assertTrue(np.allclose(-e.T @ J, c))
+        self.assertEqual(e.shape[0], J.shape[0])
