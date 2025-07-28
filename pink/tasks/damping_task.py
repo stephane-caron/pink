@@ -29,11 +29,7 @@ class DampingTask(JointVelocityTask):
             cost: joint angular velocity cost, in
                 :math:`[\mathrm{cost}] [\mathrm{s}] / [\mathrm{rad}]`.
         """
-        super().__init__(
-            cost=cost,
-            gain=0.0,  # no gain: the task error is always zero
-            lm_damping=0.0,  # no LM damping: the task error is always zero
-        )
+        super().__init__(cost=cost)
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute damping task error.
