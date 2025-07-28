@@ -82,7 +82,6 @@ class SelfCollisionBarrier(Barrier):
         )
 
         self.d_min = d_min
-        self.__q_prev = None
 
     def compute_barrier(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the value of the barrier function.
