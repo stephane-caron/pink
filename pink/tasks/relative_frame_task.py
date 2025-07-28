@@ -91,12 +91,12 @@ class RelativeFrameTask(Task):
             if not isinstance(position_cost, np.ndarray):  # Must be seq
                 try:
                     position_cost = np.array(position_cost)
-                except Exception:  # Not a proper float sequence
+                except Exception as exn:  # Not a proper float sequence
                     raise TaskDefinitionError(
                         "Position task cost should be a float or a "
                         "seq of float or ndarray of size 1 or 3,"
                         f"currently cost={self.cost}"
-                    )
+                    ) from exn
             assert np.all(position_cost >= 0.0)
 
         self.cost[0:3] = position_cost
@@ -118,12 +118,12 @@ class RelativeFrameTask(Task):
             if not isinstance(orientation_cost, np.ndarray):  # Must be seq
                 try:
                     orientation_cost = np.array(orientation_cost)
-                except Exception:  # Not a proper float sequence
+                except Exception as exn:  # Not a proper float sequence
                     raise TaskDefinitionError(
                         "Orientation task cost should be a float or a "
                         "seq of float or ndarray of size 1 or 3,"
                         f"currently cost={self.cost}"
-                    )
+                    ) from exn
             assert np.all(orientation_cost >= 0.0)
 
         self.cost[3:] = orientation_cost
