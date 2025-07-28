@@ -32,9 +32,9 @@ except ModuleNotFoundError:
 
 if __name__ == "__main__":
     print(
-        "In this example, the arm tracks a reference sinusoidal "
-        "joint-velocity trajectory that is unfeasible at times.\n"
-        "The trajectory is tracked while within joint limits."
+        "In this example, the arm tracks a sinusoidal joint-velocity "
+        "trajectory that is unfeasible at times.\nThe trajectory is only "
+        "tracked while the robot stays within joint limits."
     )
     robot = load_robot_description("z1_description")
     viz = start_meshcat_visualizer(robot)
