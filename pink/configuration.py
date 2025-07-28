@@ -191,14 +191,13 @@ class Configuration:
                         q_min[i],
                         q_max[i],
                     )
-                else:
-                    logging.warning(
-                        "Value %f at index %d is out of limits: [%f, %f]",
-                        self.q[i],
-                        i,
-                        q_min[i],
-                        q_max[i],
-                    )
+                logging.warning(
+                    "Value %f at index %d is out of limits: [%f, %f]",
+                    self.q[i],
+                    i,
+                    q_min[i],
+                    q_max[i],
+                )
 
     def get_frame_jacobian(self, frame: str) -> np.ndarray:
         r"""Compute the Jacobian matrix of a frame velocity.
