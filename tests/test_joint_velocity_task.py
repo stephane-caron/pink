@@ -61,3 +61,17 @@ class TestJointVelocityTask(unittest.TestCase):
         e = task.compute_error(self.configuration)
         J = task.compute_jacobian(self.configuration)
         self.assertEqual(e.shape[0], J.shape[0])
+
+    def test_dt(self):
+        """Check the shapes of the error vector and Jacobian matrix."""
+        task = JointVelocityTask(cost=1.0)
+
+        dt_1 = 3e-3  # seconds
+        task.set_target(np.ones(self.nv - 6), dt_1)
+        e_1 = task.compute_error(self.configuration)
+        self.assertAlmostEqual(e_1[0], dt_1)  # unit target
+
+        dt_2 = 7e-3  # seconds
+        task.set_target(np.ones(self.nv - 6), dt_2)
+        e_2 = task.compute_error(self.configuration)
+        self.assertAlmostEqual(e_2[0], dt_2)  # unit target
