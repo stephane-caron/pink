@@ -260,10 +260,20 @@ class Barrier(abc.ABC):
         Returns:
             str: String representation.
         """
+        safe_displacement = (
+            "no"
+            if np.allclose(self.safe_displacement_gain, 0)
+            else self.safe_displacement
+        )
+        safe_displacement_gain = (
+            "no"
+            if np.allclose(self.safe_displacement_gain, 0)
+            else self.safe_displacement_gain
+        )
         return (
             f"Barrier("
             f"gain={self.gain}, "
-            f"safe_displacement={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement}, "  # noqa: E501
-            f"safe_displacement_gain={'no' if np.allclose(self.safe_displacement_gain, 0) else self.safe_displacement_gain})"  # noqa: E501
+            f"{safe_displacement=}, "
+            f"{safe_displacement_gain=}, "
             f"dim={self.dim})"
         )
