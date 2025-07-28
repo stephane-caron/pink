@@ -10,6 +10,7 @@ from .com_task import ComTask
 from .damping_task import DampingTask
 from .frame_task import FrameTask
 from .joint_coupling_task import JointCouplingTask
+from .joint_velocity_task import JointVelocityTask
 from .linear_holonomic_task import LinearHolonomicTask
 from .low_acceleration_task import LowAccelerationTask
 from .omniwheel_task import OmniwheelTask
@@ -23,6 +24,7 @@ __all__ = [
     "DampingTask",
     "FrameTask",
     "JointCouplingTask",
+    "JointVelocityTask",
     "LinearHolonomicTask",
     "LowAccelerationTask",
     "OmniwheelTask",
