@@ -9,7 +9,7 @@
 import numpy as np
 
 from ..configuration import Configuration
-from ..exceptions import TaskDefinitionError
+from ..exceptions import TaskDefinitionError, TargetNotSet
 from ..utils import get_root_joint_dim
 from .task import Task
 
@@ -59,11 +59,12 @@ class JointVelocityTask(Task):
             Joint-velocity task error.
         """
         _, root_nv = get_root_joint_dim(configuration.model)
-        target_nv = self.__target_Delta_q.shape[0]
         task_nv = configuration.model.nv - root_nv
-        if target_nv != task_nv:
+        if self.__target_Delta_q is None:
+            raise TargetNotSet(repr(self))
+        elif self.__target_Delta_q.shape[0] != task_nv:
             raise TaskDefinitionError(
-                f"Target has dimension nv={target_nv} "
+                f"Target has dimension nv={self.__target_Delta_q.shape[0]} "
                 f"but the task expects nv={task_nv} "
                 f"({configuration.model.nv=}, {root_nv=})"
             )
