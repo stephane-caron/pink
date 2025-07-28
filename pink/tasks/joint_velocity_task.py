@@ -9,6 +9,7 @@
 import numpy as np
 
 from ..configuration import Configuration
+from ..exceptions import TaskDefinitionError
 from ..utils import get_root_joint_dim
 from .task import Task
 
@@ -38,15 +39,15 @@ class JointVelocityTask(Task):
             gain=0.0,  # no gain: the task error is directly a velocity
             lm_damping=0.0,  # no LM damping either
         )
-        self.target_v = None
+        self.__target_Delta_q = None
 
-    def set_target(self, target_v: np.ndarray) -> None:
+    def set_target(self, target_v: np.ndarray, dt: float) -> None:
         """Set target joint velocity.
 
         Args:
             target_v: Target joint-velocity vector in the tangent space.
         """
-        self.target_v = target_v.copy()
+        self.__target_Delta_q = target_v.copy()
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the joint-velocity task error.
@@ -58,7 +59,15 @@ class JointVelocityTask(Task):
             Joint-velocity task error.
         """
         _, root_nv = get_root_joint_dim(configuration.model)
-        return np.zeros(configuration.model.nv - root_nv)
+        target_nv = self.__target_Delta_q.shape[0]
+        task_nv = configuration.model.nv - root_nv
+        if target_nv != task_nv:
+            raise TaskDefinitionError(
+                f"Target has dimension nv={target_nv} "
+                f"but the task expects nv={task_nv} "
+                f"({configuration.model.nv=}, {root_nv=})"
+            )
+        return self.__target_Delta_q
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the joint-velocity task Jacobian.
