@@ -6,6 +6,8 @@
 
 """Joint velocity task."""
 
+from typing import Optional
+
 import numpy as np
 
 from ..configuration import Configuration
@@ -39,7 +41,7 @@ class JointVelocityTask(Task):
             gain=1.0,  # unit gain as the task error is directly a velocity
             lm_damping=0.0,  # no Levenberg-Marquardt damping
         )
-        self.__target_Delta_q = None
+        self.__target_Delta_q: Optional[np.ndarray] = None
 
     def set_target(self, target_v: np.ndarray, dt: float) -> None:
         """Set target joint velocity.
@@ -68,7 +70,7 @@ class JointVelocityTask(Task):
         task_nv = configuration.model.nv - root_nv
         if self.__target_Delta_q is None:
             raise TargetNotSet(repr(self))
-        elif self.__target_Delta_q.shape[0] != task_nv:
+        if self.__target_Delta_q.shape[0] != task_nv:
             raise TaskDefinitionError(
                 f"Target has dimension nv={self.__target_Delta_q.shape[0]} "
                 f"but the task expects nv={task_nv} "
