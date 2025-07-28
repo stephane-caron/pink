@@ -6,6 +6,7 @@
 """Move the end-effector of a UR10 arm to a prescribed target."""
 
 import numpy as np
+import pinocchio as pin
 import pinocchio
 import qpsolvers
 
@@ -31,22 +32,22 @@ if __name__ == "__main__":
     joint_name = robot.model.names[-1]
     parent_joint = robot.model.getJointId(joint_name)
     parent_frame = robot.model.getFrameId(joint_name)
-    placement = pinocchio.SE3.Identity()
+    placement = pin.SE3.Identity()
 
     FRAME_NAME = "ee_frame"
     ee_frame = robot.model.addFrame(
-        pinocchio.Frame(
+        pin.Frame(
             FRAME_NAME,
             parent_joint,
             parent_frame,
             placement,
-            pinocchio.FrameType.OP_FRAME,
+            pin.FrameType.OP_FRAME,
         )
     )
-    robot.data = pinocchio.Data(robot.model)
+    robot.data = pin.Data(robot.model)
     low = robot.model.lowerPositionLimit
     high = robot.model.upperPositionLimit
-    robot.q0 = pinocchio.neutral(robot.model)
+    robot.q0 = pin.neutral(robot.model)
 
     # Task details
     np.random.seed(0)
@@ -56,7 +57,7 @@ if __name__ == "__main__":
             for i in range(6)
         ]
     )
-    pinocchio.forwardKinematics(robot.model, robot.data, q_final)
+    pin.forwardKinematics(robot.model, robot.data, q_final)
     target_pose = robot.data.oMi[parent_joint]
     ee_task = FrameTask(FRAME_NAME, [1.0, 1.0, 1.0], [1.0, 1.0, 1.0])
     ee_task.set_target(target_pose)
@@ -79,9 +80,9 @@ if __name__ == "__main__":
                 else qpsolvers.available_solvers[0]
             ),
         )
-        q_out = pinocchio.integrate(robot.model, configuration.q, dv * dt)
+        q_out = pin.integrate(robot.model, configuration.q, dv * dt)
         configuration = pink.Configuration(robot.model, robot.data, q_out)
-        pinocchio.updateFramePlacements(robot.model, robot.data)
+        pin.updateFramePlacements(robot.model, robot.data)
         error_norm = np.linalg.norm(ee_task.compute_error(configuration))
         nb_steps += 1
 
