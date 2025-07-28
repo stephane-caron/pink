@@ -9,7 +9,7 @@
 import numpy as np
 
 from ..configuration import Configuration
-from ..exceptions import TaskDefinitionError, TargetNotSet
+from ..exceptions import TargetNotSet, TaskDefinitionError
 from ..utils import get_root_joint_dim
 from .task import Task
 
@@ -47,7 +47,12 @@ class JointVelocityTask(Task):
         Args:
             target_v: Target joint-velocity vector in the tangent space.
         """
-        self.__target_Delta_q = target_v.copy()
+        if target_v.ndim != 1:
+            raise TaskDefinitionError(
+                "joint velocity target should be a vector, "
+                f"but the provided target has shape {target_v.shape}"
+            )
+        self.__target_Delta_q = target_v * dt
 
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the joint-velocity task error.
