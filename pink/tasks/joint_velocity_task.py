@@ -78,9 +78,16 @@ class JointVelocityTask(Task):
 
         .. math::
 
-            J(q) \Delta q = \Delta q = \alpha (q^* \ominus q)
+            J(q) \Delta q = \Delta q
 
-        See :func:`pink.tasks.task.Task.compute_jacobian` for more context.
+        Combining this with :math:`e(q) = \Delta q_{ref}` and :math:`\alpha =
+        1`, we get an overall velocity-tracking task dynamics:
+
+        .. math::
+
+            J(q) \Delta q = -\alpha e(q)
+            \quad \Leftrightarrow \quad
+            \Delta q = \Delta q_{ref}
 
         Args:
             configuration: Robot configuration :math:`q`.
@@ -88,8 +95,8 @@ class JointVelocityTask(Task):
         Returns:
             Joint-velocity task Jacobian :math:`J(q)`.
         """
-        _, nv = get_root_joint_dim(configuration.model)
-        return configuration.tangent.eye[nv:, :]
+        _, root_nv = get_root_joint_dim(configuration.model)
+        return configuration.tangent.eye[root_nv:, :]
 
     def __repr__(self):
         """Human-readable representation of the task."""
