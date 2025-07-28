@@ -13,6 +13,7 @@ from .solve_ik import build_ik, solve_ik
 from .tasks import (
     FrameTask,
     JointCouplingTask,
+    JointVelocityTask,
     LinearHolonomicTask,
     PostureTask,
     Task,
@@ -25,6 +26,7 @@ __all__ = [
     "Configuration",
     "FrameTask",
     "JointCouplingTask",
+    "JointVelocityTask",
     "LinearHolonomicTask",
     "PinkError",
     "PostureTask",
