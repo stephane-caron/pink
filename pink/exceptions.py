@@ -52,7 +52,9 @@ class NoSolutionFound(PinkError):
     """The QP solver did not find a solution to the differential IK problem."""
 
     def __init__(
-        self, problem: qpsolvers.Problem, results: qpsolvers.Solution
+        self,
+        problem: qpsolvers.Problem,
+        results: qpsolvers.Solution,
     ) -> None:
         """Create exception.
 
@@ -63,6 +65,7 @@ class NoSolutionFound(PinkError):
         super().__init__(
             "QP solver did not find a solution to the differential IK problem"
         )
+        self.problem = problem
         self.results = results
 
 
