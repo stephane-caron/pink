@@ -36,8 +36,8 @@ class JointVelocityTask(Task):
         """
         super().__init__(
             cost=cost,
-            gain=0.0,  # no gain: the task error is directly a velocity
-            lm_damping=0.0,  # no LM damping either
+            gain=1.0,  # unit gain as the task error is directly a velocity
+            lm_damping=0.0,  # no Levenberg-Marquardt damping
         )
         self.__target_Delta_q = None
 
