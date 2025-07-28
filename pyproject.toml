@@ -47,17 +47,25 @@ line-length = 79
 disable = ["C0103", "E1130", "import-error"]
 generated-members = [
     "pin.Data",
+    "pin.GeometryData",
+    "pin.GeometryModel",
+    "pin.Jlog6",
     "pin.JointModelFreeFlyer",
     "pin.Model",
     "pin.ReferenceFrame",
     "pin.SE3",
+    "pin.centerOfMass",
+    "pin.computeCollisions",
+    "pin.computeDistances",
     "pin.computeJointJacobians",
+    "pin.dDifference",
     "pin.difference",
     "pin.getFrameJacobian",
+    "pin.getJointJacobian",
     "pin.integrate",
     "pin.neutral",
+    "pin.skew",
     "pin.updateFramePlacements",
-    "pin.Jlog6"
 ]
 
 [tool.flit.module]
