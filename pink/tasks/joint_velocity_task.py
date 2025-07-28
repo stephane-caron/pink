@@ -6,8 +6,6 @@
 
 """Joint velocity task."""
 
-from typing import Optional
-
 import numpy as np
 
 from ..configuration import Configuration
@@ -28,11 +26,7 @@ class JointVelocityTask(Task):
         (a.k.a. root joint in Pinocchio).
     """
 
-    target_v: Optional[np.ndarray]
-
-    def __init__(
-        self, cost: float, lm_damping: float = 0.0, gain: float = 1.0
-    ) -> None:
+    def __init__(self, cost: float) -> None:
         r"""Initialize task.
 
         Args:
@@ -41,8 +35,8 @@ class JointVelocityTask(Task):
         """
         super().__init__(
             cost=cost,
-            gain=gain,
-            lm_damping=lm_damping,
+            gain=0.0,  # no gain: the task error is directly a velocity
+            lm_damping=0.0,  # no LM damping either
         )
         self.target_v = None
 
