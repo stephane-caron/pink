@@ -44,8 +44,17 @@ Changelog = "https://github.com/stephane-caron/pink/blob/main/CHANGELOG.md"
 line-length = 79
 
 [tool.pylint]
-disable = ["C0103", "E1130", "import-error"]
+disable = [
+    "C0103",  # Variable name doesn't conform to snake_case naming style
+    "R0801",  # Similar lines in 2 files
+    "R0902",  # Too many instance attributes
+    "R0903",  # Too few public methods
+    "R0913",  # Too many arguments
+    "R0914",  # Too many local variables
+    "R0917",  # Too many positional arguments
+]
 generated-members = [
+    "pin.ARG1",
     "pin.Data",
     "pin.GeometryData",
     "pin.GeometryModel",
@@ -63,8 +72,10 @@ generated-members = [
     "pin.getFrameJacobian",
     "pin.getJointJacobian",
     "pin.integrate",
+    "pin.jacobianCenterOfMass",
     "pin.neutral",
     "pin.skew",
+    "pin.removeCollisionPairs",
     "pin.updateFramePlacements",
 ]
 

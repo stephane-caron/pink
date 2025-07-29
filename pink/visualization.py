@@ -12,7 +12,7 @@ from pinocchio import visualize
 
 def start_meshcat_visualizer(
     robot: pin.RobotWrapper,
-    open: bool = True,
+    open: bool = True,  # pylint: disable=redefined-builtin
 ) -> visualize.MeshcatVisualizer:
     """Open a MeshCat visualizer in a Web browser.
 
