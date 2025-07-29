@@ -60,6 +60,9 @@ class JointVelocityTask(Task):
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         r"""Compute the joint-velocity task error.
 
+        The task error is
+        :math:`e(q) = \Delta q_{\mathit{ref}} = v_{\mathit{ref}} \mathrm{d}t`.
+
         Args:
             configuration: Robot configuration :math:`q`.
 
