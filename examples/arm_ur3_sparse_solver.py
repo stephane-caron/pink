@@ -68,7 +68,7 @@ if __name__ == "__main__":
         raise Exception(
             "this example is for QP solvers with a sparse-matrix API, "
             "yet qpsolvers did not find any. "
-            "You can install for instance OSQP, ProxQP or SCS, then try again."
+            "You can install e.g. Clarabel, OSQP or SCS, then try again."
         )
     sparse_solver = qpsolvers.sparse_solvers[0]
 
