@@ -19,8 +19,8 @@ from .task import Task
 class JointVelocityTask(Task):
     r"""Track joint velocities.
 
-    This task minimizes :math:`\| v^{\mathit{ref}} - v \|_2` with :math:`v` the
-    joint velocity resulting from differential IK and :math:`v^{\mathit{ref}}`
+    This task minimizes :math:`\| v_{\mathit{ref}} - v \|_2` with :math:`v` the
+    joint velocity resulting from differential IK and :math:`v_{\mathit{ref}}`
     is a reference joint-velocity vector.
 
     Note:
