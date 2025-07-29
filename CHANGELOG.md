@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- examples: Add example with a sparse QP solver, suppressing matrix conversion warnings
+
 ### Changed
 
 - CICD: Update Pylint configuration
