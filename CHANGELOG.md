@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - CICD: Update Pylint configuration
 
+### Fixed
+
+- Correct changelog version comparison links
+
 ## [3.4.0] - 2025-07-29
 
 ### Added
@@ -403,26 +407,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Python package infrastructure
 
-[unreleased]: https://github.com/qpsolvers/qpsolvers/compare/v3.4.0...HEAD
-[3.4.0]: https://github.com/qpsolvers/qpsolvers/compare/v3.3.0...v3.4.0
-[3.3.0]: https://github.com/qpsolvers/qpsolvers/compare/v3.2.0...v3.3.0
-[3.2.0]: https://github.com/qpsolvers/qpsolvers/compare/v3.1.0...v3.2.0
-[3.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v3.0.0...v3.1.0
-[3.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.1.0...v3.0.0
-[2.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v2.0.0...v2.1.0
-[2.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v1.1.0...v2.0.0
-[1.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.11.0...v1.0.0
-[0.11.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.10.0...v0.11.0
-[0.10.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.9.0....v0.10.0
-[0.9.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.8.0...v0.9.0
-[0.8.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.7.0...v0.8.0
-[0.7.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.6.0...v0.7.0
-[0.6.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.5.0...v0.6.0
-[0.5.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/qpsolvers/qpsolvers/compare/v0.0.2...v0.1.0
-[0.0.2]: https://github.com/qpsolvers/qpsolvers/compare/v0.0.1...v0.0.2
-[0.0.1]: https://github.com/qpsolvers/qpsolvers/releases/tag/v0.0.1
+[unreleased]: https://github.com/stephane-caron/pink/compare/v3.4.0...HEAD
+[3.4.0]: https://github.com/stephane-caron/pink/compare/v3.3.0...v3.4.0
+[3.3.0]: https://github.com/stephane-caron/pink/compare/v3.2.0...v3.3.0
+[3.2.0]: https://github.com/stephane-caron/pink/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/stephane-caron/pink/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/stephane-caron/pink/compare/v2.1.0...v3.0.0
+[2.1.0]: https://github.com/stephane-caron/pink/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/stephane-caron/pink/compare/v1.1.0...v2.0.0
+[1.1.0]: https://github.com/stephane-caron/pink/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/stephane-caron/pink/compare/v0.11.0...v1.0.0
+[0.11.0]: https://github.com/stephane-caron/pink/compare/v0.10.0...v0.11.0
+[0.10.0]: https://github.com/stephane-caron/pink/compare/v0.9.0....v0.10.0
+[0.9.0]: https://github.com/stephane-caron/pink/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/stephane-caron/pink/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/stephane-caron/pink/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/stephane-caron/pink/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/stephane-caron/pink/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/stephane-caron/pink/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/stephane-caron/pink/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/stephane-caron/pink/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/stephane-caron/pink/compare/v0.0.2...v0.1.0
+[0.0.2]: https://github.com/stephane-caron/pink/compare/v0.0.1...v0.0.2
+[0.0.1]: https://github.com/stephane-caron/pink/releases/tag/v0.0.1
