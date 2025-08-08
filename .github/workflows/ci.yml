@@ -68,7 +68,7 @@ jobs:
                   environments: test-${{ matrix.pyenv }}
                   cache: true
 
-            - name: "Run unit tests with ${{ matrix.pyenv }} on ${{ matrix.os }}"
+            - name: "Run unit tests"
               run: |
                   pixi run -e test-${{ matrix.pyenv }} test
 
