@@ -94,49 +94,69 @@ pinocchio = ">=2.6.3"
 qpsolvers = ">=4.3.1"
 robot_descriptions = ">=1.9.0"
 
-[tool.pixi.feature.coverage]
-dependencies = { coveralls = ">=4.0.0" }
-tasks.coverage-erase = { cmd = "coverage erase" }
-tasks.coverage-run = { cmd = "coverage run -m unittest discover --failfast", depends-on = ["coverage-erase"] }
-tasks.coverage = { cmd = "coverage report --include=\"pink/*\"", depends-on = ["coverage-run"] }
-tasks.coveralls = { cmd = "coveralls --service=github" }
+[tool.pixi.feature.coverage.dependencies]
+coveralls = ">=4.0.0"
 
-[tool.pixi.feature.docs]
-dependencies = { "sphinx" = ">=7.2.2", "sphinx-rtd-theme" = "*", "sphinx-favicon" = "*", "sphinx-autodoc-typehints" = "*" }
-pypi-dependencies = { "sphinx-mathjax-offline" = "*" }
-tasks.docs-build = { cmd = "sphinx-build doc/ _build -W" }
-tasks.docs-open = { cmd = "xdg-open _build/index.html", depends-on = "docs-build" }
+[tool.pixi.feature.coverage.tasks]
+coverage-erase = { cmd = "coverage erase" }
+coverage-run = { cmd = "coverage run -m unittest discover --failfast", depends-on = ["coverage-erase"] }
+coverage = { cmd = "coverage report --include=\"pink/*\"", depends-on = ["coverage-run"] }
+coveralls = { cmd = "coveralls --service=github" }
+
+[tool.pixi.feature.docs.dependencies]
+sphinx = ">=7.2.2"
+sphinx-rtd-theme = "*"
+sphinx-favicon = "*"
+sphinx-autodoc-typehints = "*"
+
+[tool.pixi.feature.docs.pypi-dependencies]
+sphinx-mathjax-offline = "*"
+
+[tool.pixi.feature.docs.tasks]
+docs-build = { cmd = "sphinx-build doc/ _build -W" }
+docs-open = { cmd = "xdg-open _build/index.html", depends-on = "docs-build" }
 
 [tool.pixi.feature.lint]
 tasks.lint = { depends-on = ["mypy", "pylint", "ruff"] }
 
-[tool.pixi.feature.mypy]
-dependencies = { mypy = ">=0.812" }
-tasks.mypy = { cmd = "mypy pink --ignore-missing-imports" }
+[tool.pixi.feature.mypy.dependencies]
+mypy = ">=0.812"
 
-[tool.pixi.feature.py39]
-dependencies = { python = "3.9.*" }
+[tool.pixi.feature.mypy.tasks]
+mypy = "mypy pink --ignore-missing-imports"
 
-[tool.pixi.feature.py310]
-dependencies = { python = "3.10.*" }
+[tool.pixi.feature.py39.dependencies]
+python = "3.9.*"
 
-[tool.pixi.feature.py311]
-dependencies = { python = "3.11.*" }
+[tool.pixi.feature.py310.dependencies]
+python = "3.10.*"
 
-[tool.pixi.feature.py312]
-dependencies = { python = "3.12.*" }
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
 
-[tool.pixi.feature.pylint]
-dependencies = { pylint = ">=2.8.2" }
-tasks.pylint = { cmd = "pylint pink --exit-zero --rcfile=pyproject.toml" }
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
 
-[tool.pixi.feature.ruff]
-dependencies = { ruff = ">=0.4.3" }
-tasks.ruff = { cmd = "ruff check pink && ruff format --check pink" }
+[tool.pixi.feature.pylint.dependencies]
+pylint = ">=2.8.2"
 
-[tool.pixi.feature.test]
-dependencies = { daqp = "*", osqp = "*", proxsuite = "*", scs = "*" }
-tasks.test = { cmd = "python -m unittest discover --failfast" }
+[tool.pixi.feature.pylint.tasks]
+pylint = "pylint pink --exit-zero --rcfile=pyproject.toml"
+
+[tool.pixi.feature.ruff.dependencies]
+ruff = ">=0.4.3"
+
+[tool.pixi.feature.ruff.tasks]
+ruff = "ruff check pink && ruff format --check pink"
+
+[tool.pixi.feature.test.dependencies]
+daqp = "*"
+osqp = "*"
+proxsuite = "*"
+scs = "*"
+
+[tool.pixi.feature.test.tasks]
+test = "python -m unittest discover --failfast"
 
 [tool.pixi.environments]
 coverage = { features = ["py312", "coverage"], solve-group = "py312" }

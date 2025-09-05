@@ -10,13 +10,15 @@ jobs:
     docs:
         name: "GitHub Pages"
         runs-on: ubuntu-latest
+
         permissions:
             contents: write
+
         steps:
             - name: "Checkout Git repository"
               uses: actions/checkout@v4
 
-            - name: "Setup Pixi"
+            - name: "Set up Pixi"
               uses: prefix-dev/setup-pixi@v0.8.8
               with:
                   pixi-version: v0.44.0
