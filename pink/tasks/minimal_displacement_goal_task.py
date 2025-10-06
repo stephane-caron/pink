@@ -104,6 +104,11 @@ class MinimalDisplacementGoalTask(Task):
         if self.variable_weights is not None and self.variable_weights.shape[0] != n_vars:
             raise ValueError(f"Weight dim {self.variable_weights.shape[0]} != q dim {n_vars}")
 
+    '''
+    TODO:   1. so far the 'current joint positions' comes from the configuration passed in,
+    but we might want to allow setting it explicitly
+            2. need to check the size of 'variable_weights' if set.
+    '''
     def compute_error(self, configuration: Configuration) -> np.ndarray:
         q = np.asarray(configuration.q, dtype=float).reshape(-1)
         n = q.shape[0]
@@ -120,8 +125,13 @@ class MinimalDisplacementGoalTask(Task):
         
         # Apply task cost scaling: error = √c × weighted_displacement
         # This ensures ||error||² = c × Σᵢ [wᵢ(qᵢ - q₀ᵢ)]²
-        sqrt_cost = np.sqrt(self.cost)
-        return sqrt_cost * weighted_disp
+        sum_cost = 0.0
+        for i in range(len(weighted_disp)):
+            if np.isnan(weighted_disp[i]) or np.isinf(weighted_disp[i]):
+                raise ValueError(f"Computed error has invalid value at index {i}: {weighted_disp[i]}")
+            else:
+                sum_cost += weighted_disp[i]**2
+        return sum_cost
 
 
     def compute_jacobian(self, configuration: Configuration) -> np.ndarray:
