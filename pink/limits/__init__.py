@@ -20,12 +20,14 @@ space at :math:`q`.
 
 from .acceleration_limit import AccelerationLimit
 from .configuration_limit import ConfigurationLimit
+from .floating_base_velocity_limit import FloatingBaseVelocityLimit
 from .limit import Limit
 from .velocity_limit import VelocityLimit
 
 __all__ = [
     "AccelerationLimit",
     "ConfigurationLimit",
+    "FloatingBaseVelocityLimit",
     "Limit",
     "VelocityLimit",
 ]

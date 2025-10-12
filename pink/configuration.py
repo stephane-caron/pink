@@ -105,6 +105,8 @@ class Configuration:
             model.configuration_limit = ConfigurationLimit(model)
         if not hasattr(model, "velocity_limit"):
             model.velocity_limit = VelocityLimit(model)
+        if not hasattr(model, "floating_base_velocity_limit"):
+            model.floating_base_velocity_limit = None
         q_readonly = q.copy()
         q_readonly.setflags(write=False)
         self.data = data.copy() if copy_data else data
