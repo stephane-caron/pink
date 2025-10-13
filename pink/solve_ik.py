@@ -8,6 +8,8 @@
 
 from typing import Iterable, Optional, Tuple
 
+import warnings
+
 import numpy as np
 import qpsolvers
 
@@ -16,6 +18,33 @@ from .configuration import Configuration
 from .exceptions import NoSolutionFound
 from .limits import Limit
 from .tasks import Task
+
+
+def _require_sparse_module():
+    """Import SciPy sparse on demand."""
+    try:
+        from scipy import sparse
+    except ImportError as exc:
+        raise ImportError(
+            "Sparse QP assembly requires SciPy. Install it or call build_ik "
+            "with use_sparse=False."
+        ) from exc
+    return sparse
+
+
+def _numpy_supports_copy_keyword() -> bool:
+    """Return True if numpy.asarray supports the ``copy`` keyword.
+    
+    We need this to avoid issues w/ certain JAX backends."""
+    try:
+        np.asarray(np.array([0.0]), copy=True)
+    except TypeError:
+        return False
+    return True
+
+
+_NUMPY_SUPPORTS_COPY_KEYWORD = _numpy_supports_copy_keyword()
+_JAX_SOLVERS = {"jaxopt_osqp", "qpax"}
 
 
 def __compute_qp_objective(
@@ -158,6 +187,7 @@ def build_ik(
     limits: Optional[Iterable[Limit]] = None,
     barriers: Optional[Iterable[Barrier]] = None,
     constraints: Optional[Iterable[Task]] = None,
+    use_sparse: bool = False,
 ) -> qpsolvers.Problem:
     r"""Build quadratic program from current configuration and tasks.
 
@@ -192,6 +222,9 @@ def build_ik(
         constraints: List of kinematic tasks to be enforced strictly, as hard
             equality constraints in the underlying QP rather than in its cost
             function.
+        use_sparse: If True, convert QP matrices to SciPy sparse matrices,
+            which is useful for sparse-first solvers such as OSQP. Defaults to
+            False to preserve dense behaviour.
 
     Returns:
         Quadratic program of the inverse kinematics problem.
@@ -199,6 +232,21 @@ def build_ik(
     P, q = __compute_qp_objective(configuration, tasks, damping, barriers)
     G, h = __compute_qp_inequalities(configuration, limits, dt, barriers)
     A, b = __compute_qp_equalities(configuration, constraints)
+
+    sparse_module = None
+    if use_sparse:
+        try:
+            sparse_module = _require_sparse_module()
+        except ImportError as error:
+            warnings.warn(str(error), stacklevel=2)
+            use_sparse = False
+    if use_sparse and sparse_module is not None:
+        P = sparse_module.csc_matrix(P)
+        if G is not None:
+            G = sparse_module.csc_matrix(G)
+        if A is not None:
+            A = sparse_module.csc_matrix(A)
+
     problem = qpsolvers.Problem(P, q, G, h, A, b)
     return problem
 
@@ -213,6 +261,7 @@ def solve_ik(
     barriers: Optional[Iterable[Barrier]] = None,
     constraints: Optional[Iterable[Task]] = None,
     safety_break: bool = True,
+    use_sparse: bool = False,
     **kwargs,
 ) -> np.ndarray:
     r"""Compute a velocity tangent to the current robot configuration.
@@ -241,6 +290,7 @@ def solve_ik(
         safety_break: If True, stop execution and raise an exception if
             the current configuration is outside limits. If False, print a
             warning and continue execution.
+        use_sparse: Pass True to assemble the QP with SciPy sparse matrices.
         kwargs: Keyword arguments to forward to the backend QP solver.
 
     Returns:
@@ -257,6 +307,28 @@ def solve_ik(
         homogeneous. If it helps we can add a tangent-space scaling to damp the
         floating base differently from joint angular velocities.
     """
+    if use_sparse and solver in _JAX_SOLVERS:
+        if not _NUMPY_SUPPORTS_COPY_KEYWORD:
+            warnings.warn(
+                (
+                    "Falling back to dense matrices for solver '%s' because "
+                    "numpy.asarray does not support the copy keyword in this "
+                    "environment."
+                )
+                % solver,
+                stacklevel=2,
+            )
+        else:
+            warnings.warn(
+                (
+                    "Falling back to dense matrices for solver '%s' because "
+                    "the current backend does not accept SciPy sparse matrices."
+                )
+                % solver,
+                stacklevel=2,
+            )
+        use_sparse = False
+
     configuration.check_limits(safety_break=safety_break)
     problem = build_ik(
         configuration,
@@ -266,6 +338,7 @@ def solve_ik(
         limits,
         barriers,
         constraints,
+        use_sparse=use_sparse,
     )
     result = qpsolvers.solve_problem(problem, solver=solver, **kwargs)
     Delta_q = result.x
