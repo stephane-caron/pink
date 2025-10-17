@@ -164,7 +164,7 @@ If you use Pink in your scientific works, please cite it *e.g.* as follows:
 ```bibtex
 @software{pink,
   title = {{Pink: Python inverse kinematics based on Pinocchio}},
-  author = {Caron, Stéphane and De Mont-Marin, Yann and Budhiraja, Rohan and Bang, Seung Hyeon and Domrachev, Ivan and Nedelchev, Simeon, and @peterd-NV and Vaillant, Joris},
+  author = {Caron, Stéphane and De Mont-Marin, Yann and Budhiraja, Rohan and Bang, Seung Hyeon and Domrachev, Ivan and Nedelchev, Simeon and peterd-NV, Github user and Vaillant, Joris},
   license = {Apache-2.0},
   url = {https://github.com/stephane-caron/pink},
   version = {3.4.0},
