@@ -95,7 +95,15 @@ def __compute_qp_inequalities(
     if limits is None:
         configuration_limit = configuration.model.configuration_limit
         velocity_limit = configuration.model.velocity_limit
-        limits = (configuration_limit, velocity_limit)
+        floating_base_limit = getattr(
+            configuration.model, "floating_base_velocity_limit", None
+        )
+        limits = [
+            configuration_limit,
+            velocity_limit,
+        ]
+        if floating_base_limit is not None:
+            limits.append(floating_base_limit)
     barriers = barriers if barriers is not None else []
     G_list = []
     h_list = []
