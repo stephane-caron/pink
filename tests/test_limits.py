@@ -27,8 +27,9 @@ class TestLimits(unittest.TestCase):
         )
         model = robot.model
         dt = 1e-3  # [s]
+        configuration = Configuration(model, robot.data, robot.q0)
         for limit in [ConfigurationLimit(model), VelocityLimit(model)]:
-            G, h = limit.compute_qp_inequalities(robot.q0, dt)
+            G, h = limit.compute_qp_inequalities(configuration, dt)
             self.assertEqual(G.shape[0], h.shape[0])
             self.assertEqual(G.shape[1], model.nv)
 
@@ -40,8 +41,9 @@ class TestLimits(unittest.TestCase):
         )
         robot = pin.RobotWrapper(model=model)
         dt = 1e-3  # [s]
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         for limit in [ConfigurationLimit(model), VelocityLimit(model)]:
-            return_value = limit.compute_qp_inequalities(robot.q0, dt)
+            return_value = limit.compute_qp_inequalities(configuration, dt)
             self.assertIsNone(return_value)
 
     def test_model_with_limitless_joint(self):
@@ -59,8 +61,9 @@ class TestLimits(unittest.TestCase):
         )
         robot = pin.RobotWrapper(model=model)
         dt = 1e-3  # [s]
+        configuration = Configuration(robot.model, robot.data, robot.q0)
         for limit in [ConfigurationLimit(model), VelocityLimit(model)]:
-            return_value = limit.compute_qp_inequalities(robot.q0, dt)
+            return_value = limit.compute_qp_inequalities(configuration, dt)
             self.assertIsNone(return_value)
 
     def test_velocity_without_configuration_limits(self, tol: float = 1e-10):

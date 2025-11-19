@@ -121,6 +121,24 @@ for t in np.arange(0.0, 42.0, dt):
 
 If task targets are continuously updated, there will be no stationary solution to converge to, but the model will keep on tracking each target at best. Note that [`solve_ik`](https://stephane-caron.github.io/pink/inverse-kinematics.html#pink.solve_ik.solve_ik) will take care of both configuration and velocity limits read from the robot model.
 
+### Floating-base velocity limits
+
+Robots with planar or free flyer bases can clamp their commanded twists by attaching a `FloatingBaseVelocityLimit` to the configuration's model:
+
+```python
+from pink.limits import FloatingBaseVelocityLimit
+
+floating_limit = FloatingBaseVelocityLimit(
+    configuration.model,
+    base_frame="base_link",
+    max_linear_velocity=[0.3, 0.3, 0.2],    # [m] / [s]
+    max_angular_velocity=[1.0, 1.0, 1.0],   # [rad] / [s]
+)
+configuration.model.floating_base_velocity_limit = floating_limit
+```
+
+Once attached, the limit is automatically taken into account when building the IK constraints.
+
 ## Examples
 
 Illustrated examples showcase how Pink performs on various robot morphologies:
@@ -132,6 +150,7 @@ Illustrated examples showcase how Pink performs on various robot morphologies:
 - Humanoid: [Draco 3](https://github.com/stephane-caron/pink/tree/main/examples#humanoid-draco-3)
 - Mobile base: [Stretch R1](https://github.com/stephane-caron/pink/tree/main/examples#mobile-stretch)
 - Quadruped: [Go2 squatting with floating-base limits](https://github.com/stephane-caron/pink/tree/main/examples/barriers#go2-squat)
+- Floating base: [Clamp free-flyer velocities](https://github.com/stephane-caron/pink/blob/main/examples/floating_base_velocity_limit.py)
 - Wheeled biped: [Upkie rolling without slipping](https://github.com/stephane-caron/pink/tree/main/examples#wheeled-biped-upkie)
 
 There are also more basic examples to get started:

@@ -7,12 +7,15 @@
 
 """Subset of velocity-limited joints in a robot model."""
 
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, TYPE_CHECKING
 
 import numpy as np
 import pinocchio as pin
 
 from .limit import Limit
+
+if TYPE_CHECKING:
+    from ..configuration import Configuration
 
 
 class VelocityLimit(Limit):
@@ -67,7 +70,7 @@ class VelocityLimit(Limit):
 
     def compute_qp_inequalities(
         self,
-        q: np.ndarray,
+        configuration: "Configuration",
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute inequalities for velocity limits.
@@ -83,7 +86,7 @@ class VelocityLimit(Limit):
         computed by the inverse kinematics.
 
         Args:
-            q: Robot configuration.
+            configuration: Robot configuration (unused).
             dt: Integration timestep in [s].
 
         Returns:

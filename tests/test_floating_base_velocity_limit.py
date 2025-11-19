@@ -11,6 +11,7 @@ import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
+from pink import Configuration
 from pink.limits import FloatingBaseVelocityLimit
 from pink.utils import get_joint_idx
 
@@ -25,6 +26,7 @@ class TestFloatingBaseVelocityLimitPlanar(unittest.TestCase):
         )
         self.robot = robot
         self.model = robot.model
+        self.configuration = Configuration(self.model, robot.data, robot.q0)
         self.dt = 0.1  # [s]
         self.linear_max = np.array([0.4, 0.2, np.inf])  # [m] / [s]
         self.angular_max = np.array([np.inf, np.inf, 1.0])  # [rad] / [s]
@@ -45,7 +47,7 @@ class TestFloatingBaseVelocityLimitPlanar(unittest.TestCase):
 
     def test_qp_constraints_match_frame_jacobian(self):
         """Computed inequalities should mirror the base frame Jacobian."""
-        result = self.limit.compute_qp_inequalities(self.robot.q0, self.dt)
+        result = self.limit.compute_qp_inequalities(self.configuration, self.dt)
         self.assertIsNotNone(result)
         G, h = result
 
@@ -80,7 +82,7 @@ class TestFloatingBaseVelocityLimitPlanar(unittest.TestCase):
 
     def test_velocity_projection_indices(self):
         """Bounded tangent directions should come from the root joint."""
-        result = self.limit.compute_qp_inequalities(self.robot.q0, self.dt)
+        result = self.limit.compute_qp_inequalities(self.configuration, self.dt)
         self.assertIsNotNone(result)
         G, _ = result
         _, idx_v = get_joint_idx(self.model, "root_joint")
@@ -103,6 +105,7 @@ class TestFloatingBaseVelocityLimitFreeFlyer(unittest.TestCase):
         )
         self.robot = robot
         self.model = robot.model
+        self.configuration = Configuration(self.model, robot.data, robot.q0)
         self.dt = 0.05  # [s]
         self.linear_max = np.array([0.3, 0.3, 0.2])  # [m] / [s]
         self.angular_max = np.array([1.0, 1.0, 1.5])  # [rad] / [s]
@@ -123,7 +126,7 @@ class TestFloatingBaseVelocityLimitFreeFlyer(unittest.TestCase):
 
     def test_expected_number_of_constraints(self):
         """Every finite bound contributes two inequality rows."""
-        result = self.limit.compute_qp_inequalities(self.robot.q0, self.dt)
+        result = self.limit.compute_qp_inequalities(self.configuration, self.dt)
         self.assertIsNotNone(result)
         G, h = result
         finite_bounds = np.isfinite(self.linear_max).sum() + np.isfinite(
@@ -135,7 +138,7 @@ class TestFloatingBaseVelocityLimitFreeFlyer(unittest.TestCase):
 
     def test_velocity_within_limits_satisfies_constraints(self):
         """A displacement matching the limit should satisfy the inequalities."""
-        result = self.limit.compute_qp_inequalities(self.robot.q0, self.dt)
+        result = self.limit.compute_qp_inequalities(self.configuration, self.dt)
         self.assertIsNotNone(result)
         G, h = result
 
@@ -157,4 +160,9 @@ class TestFloatingBaseVelocityLimitFreeFlyer(unittest.TestCase):
             max_linear_velocity=self.linear_max,
             max_angular_velocity=self.angular_max,
         )
-        self.assertIsNone(limit.compute_qp_inequalities(np.array([]), self.dt))
+        configuration = Configuration(
+            model, model.createData(), np.empty(model.nq)
+        )
+        self.assertIsNone(
+            limit.compute_qp_inequalities(configuration, self.dt)
+        )

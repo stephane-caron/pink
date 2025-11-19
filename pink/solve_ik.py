@@ -137,7 +137,7 @@ def __compute_qp_inequalities(
     G_list = []
     h_list = []
     for limit in limits:
-        matvec = limit.compute_qp_inequalities(configuration.q, dt)
+        matvec = limit.compute_qp_inequalities(configuration, dt)
         if matvec is not None:
             G_list.append(matvec[0])
             h_list.append(matvec[1])

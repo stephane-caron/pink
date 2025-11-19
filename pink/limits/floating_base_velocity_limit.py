@@ -3,12 +3,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 """Floating-base velocity limits."""
-from typing import Optional, Sequence, Tuple, Union
+from typing import Optional, Sequence, Tuple, Union, TYPE_CHECKING
 
 import numpy as np
 import pinocchio as pin
 
 from .limit import Limit
+
+if TYPE_CHECKING:
+    from ..configuration import Configuration
 
 
 def _as_velocity_vector(
@@ -38,7 +41,6 @@ class FloatingBaseVelocityLimit(Limit):
     root_joint_id: Optional[int]
     root_idx_v: Optional[int]
     root_nv: int
-    data: pin.Data
 
     def __init__(
         self,
@@ -66,8 +68,6 @@ class FloatingBaseVelocityLimit(Limit):
         self.angular_max = _as_velocity_vector(
             max_angular_velocity, "max_angular_velocity"
         )
-        self.data = model.createData()
-
         if model.existJointName("root_joint"):
             self.root_joint_id = model.getJointId("root_joint")
             root_joint = model.joints[self.root_joint_id]
@@ -101,7 +101,7 @@ class FloatingBaseVelocityLimit(Limit):
 
     def compute_qp_inequalities(
         self,
-        q: np.ndarray,
+        configuration: "Configuration",
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         """Linearize floating base velocity bounds."""
@@ -113,11 +113,9 @@ class FloatingBaseVelocityLimit(Limit):
         ):
             return None
 
-        pin.computeJointJacobians(self.model, self.data, q)
-        pin.updateFramePlacements(self.model, self.data)
         jacobian = pin.getFrameJacobian(
             self.model,
-            self.data,
+            configuration.data,
             self.frame_id,
             pin.ReferenceFrame.LOCAL,
         )
