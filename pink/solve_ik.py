@@ -6,9 +6,8 @@
 
 """Build and solve the inverse kinematics problem."""
 
-from typing import Iterable, Optional, Tuple
-
 import warnings
+from typing import Iterable, Optional, Tuple
 
 import numpy as np
 import qpsolvers
@@ -34,8 +33,9 @@ def _require_sparse_module():
 
 def _numpy_supports_copy_keyword() -> bool:
     """Return True if numpy.asarray supports the ``copy`` keyword.
-    
-    We need this to avoid issues w/ certain JAX backends."""
+
+    We need this to avoid issues w/ certain JAX backends.
+    """
     try:
         np.asarray(np.array([0.0]), copy=True)
     except TypeError:
@@ -321,8 +321,9 @@ def solve_ik(
         else:
             warnings.warn(
                 (
-                    "Falling back to dense matrices for solver '%s' because "
-                    "the current backend does not accept SciPy sparse matrices."
+                    "Falling back to dense matrices for "
+                    "solver '%s' because the current backend "
+                    "does  not accept SciPy sparse matrices."
                 )
                 % solver,
                 stacklevel=2,

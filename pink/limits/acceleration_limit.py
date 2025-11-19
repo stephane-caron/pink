@@ -6,7 +6,7 @@
 
 """Subset of acceleration-limited joints in a robot model."""
 
-from typing import List, Optional, Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 import numpy as np
 import pinocchio as pin

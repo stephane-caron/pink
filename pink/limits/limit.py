@@ -7,7 +7,7 @@
 """All kinematic limits derive from the :class:`Limit` base class."""
 
 import abc
-from typing import Optional, Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Tuple
 
 import numpy as np
 
