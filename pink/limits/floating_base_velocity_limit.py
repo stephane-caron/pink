@@ -51,7 +51,7 @@ class FloatingBaseVelocityLimit(Limit):
 
         Args:
             model: Robot model with a floating base joint.
-            base_frame: Frame attached to the floating base. The corresponding 
+            base_frame: Frame attached to the floating base. The corresponding
             Jacobian rows constrain the base twist.
             max_linear_velocity: Linear velocity limits along the base frame
                 axes. A scalar applies the same bound to all axes.
