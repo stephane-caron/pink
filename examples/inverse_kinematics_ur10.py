@@ -13,17 +13,10 @@ import numpy as np
 import pinocchio
 import pinocchio as pin
 import qpsolvers
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
 from pink.tasks import FrameTask
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    ) from exc
 
 # IK parameters
 dt = 1e-2

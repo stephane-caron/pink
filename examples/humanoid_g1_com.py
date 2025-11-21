@@ -5,8 +5,8 @@
 # Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 #
 # /// script
-# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
-# "robot_descriptions"]
+# dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
 # ///
 
 """G1 humanoid squat by regulating CoM"""
@@ -14,28 +14,13 @@
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
 from pink import solve_ik
 from pink.tasks import ComTask, FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    ) from exc  # noqa: E501
-
 
 if __name__ == "__main__":
     robot = load_robot_description(
@@ -73,7 +58,7 @@ if __name__ == "__main__":
         )
         tasks.append(task)
 
-    for arm_points in ["right_palm_link", "left_palm_link"]:
+    for arm_points in ["right_wrist_yaw_link", "left_wrist_yaw_link"]:
         task = FrameTask(
             arm_points,
             position_cost=4.0,  # [cost] / [m]
@@ -85,7 +70,7 @@ if __name__ == "__main__":
         task.set_target_from_configuration(configuration)
         if isinstance(task, FrameTask):
             target = task.transform_target_to_world
-            if task.frame in ["right_palm_link", "left_palm_link"]:
+            if task.frame in ["right_wrist_yaw_link", "left_wrist_yaw_link"]:
                 target.translation += np.array([-0.1, 0.0, -0.2])
                 task.set_target(target)
 
