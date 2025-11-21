@@ -5,7 +5,7 @@
 # Copyright 2022 Stéphane Caron
 #
 # /// script
-# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# dependencies = ["clarabel", "meshcat", "pin-pink", "qpsolvers",
 # "robot_descriptions"]
 # ///
 
