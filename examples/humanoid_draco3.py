@@ -5,8 +5,8 @@
 # Copyright 2023 Inria
 #
 # /// script
-# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
-# "robot_descriptions"]
+# dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
 # ///
 
 """DRACO 3 humanoid standing on two feet and reaching with a hand."""
@@ -14,28 +14,14 @@
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, JointCouplingTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    ) from exc
 
 
 class WavingPose:

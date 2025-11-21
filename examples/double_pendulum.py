@@ -5,8 +5,8 @@
 # Copyright 2022 Stéphane Caron
 #
 # /// script
-# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
-# "robot_descriptions"]
+# dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
 # ///
 
 """Swing the double pendulum left and right."""
@@ -16,20 +16,13 @@ import os
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+from loop_rate_limiters import RateLimiter
 
 import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
 
 if __name__ == "__main__":
     # Load robot description

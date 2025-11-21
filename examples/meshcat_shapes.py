@@ -15,15 +15,8 @@ so that it can be used by examples that need it without making meshcat-shapes
 (and thus meshcat) a dependency of the project.
 """
 
+import meshcat
 import numpy as np
-
-try:
-    import meshcat
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "This example requires MeshCat. "
-        "It can be installed e.g. by `conda install meshcat-python`"
-    ) from exc
 
 
 def __attach_axes(
