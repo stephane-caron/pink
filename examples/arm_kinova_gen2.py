@@ -3,6 +3,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["daqp", "pin-pink", "meshcat", "qpsolvers",
+# "robot_descriptions"]
+# ///
 
 """Kinova Gen2 arm tracking a moving target."""
 

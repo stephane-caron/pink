@@ -2,12 +2,16 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
+#
+# /// script
+# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# ///
 
 """Move the end-effector of a UR10 arm to a prescribed target."""
 
 import numpy as np
-import pinocchio as pin
 import pinocchio
+import pinocchio as pin
 import qpsolvers
 
 import pink
