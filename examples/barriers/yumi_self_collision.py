@@ -3,6 +3,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# ///
 
 """Yumi two-armed manipulator with definition of custom frame and
 collision avoidance w.r.t. those frames."""

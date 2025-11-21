@@ -3,13 +3,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# ///
 
 """Upkie wheeled biped bending its knees."""
 
-import meshcat_shapes
 import numpy as np
 import qpsolvers
 
+import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask

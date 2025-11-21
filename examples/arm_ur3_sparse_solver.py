@@ -2,12 +2,17 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
+#
+# /// script
+# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# ///
 
 """Arm tracking a circular end-effector motion, use a sparse QP solver."""
 
+import warnings
+
 import numpy as np
 import qpsolvers
-import warnings
 
 import meshcat_shapes
 import pink

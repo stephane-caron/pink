@@ -4,6 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 # Copyright 2023 Inria
+#
+# /// script
+# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# ///
 
 """Move a Stretch RE1 with a fixed fingertip target around the origin."""
 
