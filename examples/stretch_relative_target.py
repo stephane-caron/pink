@@ -6,7 +6,7 @@
 # Copyright 2023 Inria
 #
 # /// script
-# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# dependencies = ["clarabel", "meshcat", "pin-pink", "qpsolvers",
 # "robot_descriptions"]
 # ///
 
