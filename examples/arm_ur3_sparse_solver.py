@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # /// script
-# dependencies = ["clarabel", "meshcat", "pin-pink", "qpsolvers",
-# "robot_descriptions"]
+# dependencies = ["clarabel", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
 # ///
 
 """Arm tracking a circular end-effector motion, use a sparse QP solver."""
@@ -14,29 +14,14 @@ import warnings
 
 import numpy as np
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    )
-
 
 # Target circle parameters
 CENTER = np.array([0.3, 0.0, 0.5])  # m, in the world frame
