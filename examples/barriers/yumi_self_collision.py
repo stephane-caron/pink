@@ -5,7 +5,8 @@
 # Copyright 2022 Stéphane Caron
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """Yumi two-armed manipulator with definition of custom frame and

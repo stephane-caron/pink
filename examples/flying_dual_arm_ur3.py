@@ -5,7 +5,8 @@
 # Copyright 2023 Inria
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """A pair of UR3 arms on a mobile body tracking moving targets."""

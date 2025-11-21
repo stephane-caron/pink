@@ -4,7 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["clarabel", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """Arm tracking a circular end-effector motion, use a sparse QP solver."""

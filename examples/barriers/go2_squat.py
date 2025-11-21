@@ -5,7 +5,8 @@
 # Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """Go2 squat with z-axis barrier."""
