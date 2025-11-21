@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - examples: Add example with a sparse QP solver, suppressing matrix conversion warnings
+- examples: Add uv script dependencies to all examples
 
 ### Changed
 
