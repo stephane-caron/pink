@@ -5,8 +5,8 @@
 # Copyright 2024 Ivan Domrachev, Simeon Nedelchev
 #
 # /// script
-# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
-# "robot_descriptions"]
+# dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
 # ///
 
 """Two iiwa14-s with full-body self-collision avoidance using hpp-fcl."""
@@ -16,6 +16,8 @@ import os
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.iiwa14_description import PACKAGE_PATH, REPOSITORY_PATH
 
 import meshcat_shapes
 import pink
@@ -24,25 +26,6 @@ from pink.barriers import SelfCollisionBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.utils import process_collision_pairs
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.iiwa14_description import (
-        PACKAGE_PATH,
-        REPOSITORY_PATH,
-    )
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    ) from exc
 
 
 def prefix_frames(
