@@ -14,6 +14,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import meshcat_shapes
 import pink
@@ -22,22 +24,6 @@ from pink.limits import AccelerationLimit
 from pink.tasks import DampingTask, FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError:
-    raise ModuleNotFoundError(
-        "Examples need the 'robot_descriptions' package "
-        "(available from conda-forge or PyPI)"
-    )
 
 NB_STEPS = 3000  # number of steps to run the example for
 
