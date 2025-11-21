@@ -5,7 +5,8 @@
 # Copyright 2024 Inria
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """UR3 arm tracking a target, first without then with velocity smoothing."""

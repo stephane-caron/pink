@@ -6,7 +6,8 @@
 # Copyright 2024 Inria
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """Example of differential IK stuck in a local minimum.

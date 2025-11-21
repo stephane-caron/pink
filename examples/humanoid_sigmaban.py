@@ -5,7 +5,8 @@
 # Copyright 2023 Inria
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """SigmaBan humanoid standing on two feet."""

@@ -6,7 +6,8 @@
 # Copyright 2023 Inria
 #
 # /// script
-# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# dependencies = ["daqp", "meshcat", "pin-pink", "qpsolvers",
+# "robot_descriptions"]
 # ///
 
 """Move a Stretch RE1 with a fingertip target in the mobile-base frame."""
