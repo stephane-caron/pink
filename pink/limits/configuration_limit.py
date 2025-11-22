@@ -7,12 +7,15 @@
 
 """Subset of bounded joints associated with a robot model."""
 
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 import numpy as np
 import pinocchio as pin
 
 from .limit import Limit
+
+if TYPE_CHECKING:
+    from ..configuration import Configuration
 
 
 class ConfigurationLimit(Limit):
@@ -80,7 +83,7 @@ class ConfigurationLimit(Limit):
 
     def compute_qp_inequalities(
         self,
-        q: np.ndarray,
+        configuration: "Configuration",
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute the configuration-dependent velocity limits.
@@ -97,7 +100,7 @@ class ConfigurationLimit(Limit):
         :math:`q_{min} \leq q \leq q_{max}`.
 
         Args:
-            q: Robot configuration.
+            configuration: Robot configuration.
             dt: Integration timestep in [s].
 
         Returns:
@@ -108,10 +111,10 @@ class ConfigurationLimit(Limit):
             return None
 
         Delta_q_max = pin.difference(
-            self.model, q, self.model.upperPositionLimit
+            self.model, configuration.q, self.model.upperPositionLimit
         )
         Delta_q_min = pin.difference(
-            self.model, q, self.model.lowerPositionLimit
+            self.model, configuration.q, self.model.lowerPositionLimit
         )
         p_max = self.config_limit_gain * Delta_q_max[self.indices]
         p_min = self.config_limit_gain * Delta_q_min[self.indices]
