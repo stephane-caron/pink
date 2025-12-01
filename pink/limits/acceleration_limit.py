@@ -144,11 +144,11 @@ class AccelerationLimit(Limit):
             [
                 np.minimum(
                     self.a_max * dt_sq + self.Delta_q_prev,
-                    np.sqrt(2 * self.a_max * Delta_q_max),
+                    dt * np.sqrt(2 * self.a_max * Delta_q_max),
                 ),
                 np.minimum(
                     self.a_max * dt_sq - self.Delta_q_prev,
-                    np.sqrt(2 * self.a_max * Delta_q_min),
+                    dt * np.sqrt(2 * self.a_max * Delta_q_min),
                 ),
             ]
         )
