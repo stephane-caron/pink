@@ -120,7 +120,7 @@ class AccelerationLimit(Limit):
         previous iteration of differential IK.
 
         Second, our new velocity :math:`\Delta q / \mathrm{d} t` should not
-        exceed the "breaking distance" until configuration limits:
+        exceed the "braking distance" until configuration limits:
 
         .. math::
 
