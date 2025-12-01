@@ -24,8 +24,8 @@ class AccelerationLimit(Limit):
 
     .. math::
 
-        -\sqrt{2 a_{\max} (q \ominus q_{\min})} \leq a \leq \sqrt{2 a_{\max}
-        (q_{\max} \ominus q)}
+        -\sqrt{2 a_{\mathrm{max}} (q \ominus q_{\min})} \leq a \leq \sqrt{2
+        a_{\mathrm{max}} (q_{\max} \ominus q)}
 
     This additional inequality is detailed in [Flacco2015]_ as well as in
     [DelPrete2018]_.
@@ -111,14 +111,15 @@ class AccelerationLimit(Limit):
 
         .. math::
 
-            \Delta q_{\mathrm{prev}} - a_max \mathrm{d} t^2
+            \Delta q_{\mathrm{prev}} - a_{\mathrm{max}} \mathrm{d} t^2
             \leq \Delta q
-            \leq \Delta q_{\mathrm{prev}} + a_max \mathrm{d} t^2
+            \leq \Delta q_{\mathrm{prev}} + a_{\mathrm{max}} \mathrm{d} t^2
 
-        where :math:`a_{max} \in {\cal T}` is the robot's acceleration limit
-        vector (in the tangent space) and :math:`\Delta q \in T_q({\cal C})` is
-        the displacement computed by the inverse kinematics, with :math:`\Delta
-        q_{\mathrm{prev}}` the displacement from the previous iteration.
+        where :math:`a_{\mathrm{max}} \in {\cal T}` is the robot's acceleration
+        limit vector (in the tangent space) and
+        :math:`\Delta q \in T_q({\cal C})` is the displacement computed by the
+        inverse kinematics, with :math:`\Delta q_{\mathrm{prev}}` the
+        displacement from the previous iteration.
 
         Args:
             q: Robot configuration.
