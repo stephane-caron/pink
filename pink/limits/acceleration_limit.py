@@ -24,7 +24,7 @@ class AccelerationLimit(Limit):
 
     .. math::
 
-        -\sqrt{2 a_max (q \ominus q_{\min})} \leq a \leq \sqrt{2 a_max
+        -\sqrt{2 a_{\max} (q \ominus q_{\min})} \leq a \leq \sqrt{2 a_{\max}
         (q_{\max} \ominus q)}
 
     This additional inequality is detailed in [Flacco2015]_ as well as in
