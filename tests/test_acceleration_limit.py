@@ -16,6 +16,10 @@ from pink import Configuration, solve_ik
 from pink.limits import AccelerationLimit
 from pink.tasks import FrameTask
 
+# UR3 max acceleration taken as 800 deg/s² ≈ 14 rad/s² in these tests
+# https://forum.universal-robots.com/t/maximum-axis-speed-acceleration/13338/2
+UR3_MAX_ACCEL = 14.0  # rad/s²
+
 
 class TestAccelerationLimit(unittest.TestCase):
     """Test fixture for acceleration limit."""
@@ -24,7 +28,7 @@ class TestAccelerationLimit(unittest.TestCase):
         """Set test fixture up."""
         robot = load_robot_description("ur3_description")
         model = robot.model
-        a_max = np.ones(robot.model.nv)
+        a_max = UR3_MAX_ACCEL * np.ones(robot.model.nv)  # rad/s²
         self.a_max = a_max
         self.data = robot.data
         self.q_ref = robot.q0
