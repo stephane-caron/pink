@@ -19,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Correct changelog version comparison links
-- Limit: Fix braking-limit formula in acceleration limit
-- docs: Fix typo in the acceleration limit documentation
+- Limit: Fix braking-limit formula in acceleration limit (thanks @bwingo47 for pointing it out)
+- docs: Fix typos in the acceleration limit documentation
 
 ## [3.4.0] - 2025-07-29
 
