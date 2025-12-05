@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- CICD: Update CoM unit test that has started failing on macOS runners
 - Correct changelog version comparison links
 - Limit: Fix braking-limit formula in acceleration limit (thanks to @bwingo47 for pointing it out)
 - docs: Fix typos in the acceleration limit documentation
