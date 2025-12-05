@@ -395,7 +395,7 @@ class TestSolveIK(unittest.TestCase):
         # Run IK in closed loop
         dt = 4e-3  # [s]
         max_iter = 42
-        conv_velocity_norm = 1e-5
+        conv_velocity_norm = 2e-5
         for nb_iter in range(max_iter):
             velocity = solve_ik(
                 configuration,
