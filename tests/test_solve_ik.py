@@ -401,8 +401,7 @@ class TestSolveIK(unittest.TestCase):
                 configuration,
                 tasks,
                 dt,
-                solver="osqp",
-                eps_abs=1e-8,
+                solver="daqp",
             )
             if np.linalg.norm(velocity) < conv_velocity_norm:
                 break
