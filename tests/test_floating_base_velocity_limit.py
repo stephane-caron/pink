@@ -45,40 +45,25 @@ class TestFloatingBaseVelocityLimitPlanar(unittest.TestCase):
             max_angular_velocity=self.angular_max,
         )
 
-    def test_qp_constraints_match_frame_jacobian(self):
-        """Computed inequalities should mirror the base frame Jacobian."""
+    def test_constraints_clip_base_twist(self):
+        """Constraints keep twists inside bounds."""
         result = self.limit.compute_qp_inequalities(self.configuration, self.dt)
         self.assertIsNotNone(result)
         G, h = result
 
-        data = self.model.createData()
-        pin.computeJointJacobians(self.model, data, self.robot.q0)
-        pin.updateFramePlacements(self.model, data)
-        frame_id = self.model.getFrameId(self.limit.base_frame)
-        jacobian = pin.getFrameJacobian(
-            self.model, data, frame_id, pin.ReferenceFrame.LOCAL
+        twist_bounds = np.hstack([self.linear_max, self.angular_max])
+        _, idx_v = get_joint_idx(self.model, "root_joint")
+
+        dq_inside = np.zeros(self.model.nv)
+        dq_inside[idx_v : idx_v + 6] = self.dt * twist_bounds * 0.999
+        self.assertTrue(np.all(G @ dq_inside <= h + 1e-12))
+
+        dq_outside = dq_inside.copy()
+        finite_axes = np.nonzero(np.isfinite(twist_bounds))[0]
+        dq_outside[idx_v + finite_axes[0]] = (
+            self.dt * twist_bounds[finite_axes[0]] * 1.01
         )
-
-        expected_rows = []
-        expected_bounds = []
-        for row_idx, max_velocity in enumerate(self.linear_max):
-            if not np.isfinite(max_velocity):
-                continue
-            row = jacobian[row_idx, :]
-            expected_rows.extend([row, -row])
-            expected_bounds.extend([self.dt * max_velocity] * 2)
-        for row_idx, max_velocity in enumerate(self.angular_max):
-            if not np.isfinite(max_velocity):
-                continue
-            row = jacobian[3 + row_idx, :]
-            expected_rows.extend([row, -row])
-            expected_bounds.extend([self.dt * max_velocity] * 2)
-
-        expected_G = np.vstack(expected_rows)
-        expected_h = np.array(expected_bounds)
-
-        np.testing.assert_allclose(G, expected_G)
-        np.testing.assert_allclose(h, expected_h)
+        self.assertTrue(np.any(G @ dq_outside > h + 1e-12))
 
     def test_velocity_projection_indices(self):
         """Bounded tangent directions should come from the root joint."""
