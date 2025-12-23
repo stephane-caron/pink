@@ -77,8 +77,8 @@ class FloatingBaseVelocityLimit(Limit):
         Args:
             model: Robot model with a floating base joint.
             base_frame: Optional frame attached to the floating base. The
-            corresponding Jacobian rows constrain the base twist. Pass ``None``
-            to select the first frame attached to ``root_joint``.
+                corresponding Jacobian rows constrain the base twist. Pass 
+                ``None`` to select the first frame attached to ``root_joint``.
             max_linear_velocity: Linear velocity limits along the base frame
                 axes. A scalar applies the same bound to all axes.
             max_angular_velocity: Angular velocity limits around the base frame
