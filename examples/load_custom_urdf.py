@@ -3,6 +3,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["pin-pink", "pyglet<2", "yourdfpy"]
+# ///
 
 """Load a custom URDF."""
 

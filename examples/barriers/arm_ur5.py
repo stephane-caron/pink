@@ -3,6 +3,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2024 Ivan Domrachev, Simeon Nedelchev
+#
+# /// script
+# dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
+# ///
 
 """Universal Robots UR5 arm tracking a moving target."""
 
@@ -10,6 +15,8 @@ import argparse
 
 import numpy as np
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import meshcat_shapes
 import pink
@@ -17,23 +24,6 @@ from pink import solve_ik
 from pink.barriers import PositionBarrier
 from pink.tasks import FrameTask, PostureTask
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    ) from exc  # noqa: E501
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

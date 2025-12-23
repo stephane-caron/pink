@@ -40,9 +40,6 @@ Source = "https://github.com/stephane-caron/pink"
 Tracker = "https://github.com/stephane-caron/pink/issues"
 Changelog = "https://github.com/stephane-caron/pink/blob/main/CHANGELOG.md"
 
-[tool.black]
-line-length = 79
-
 [tool.pylint]
 disable = [
     "C0103",  # Variable name doesn't conform to snake_case naming style
@@ -82,7 +79,7 @@ generated-members = [
 [tool.flit.module]
 name = "pink"
 
-[tool.pixi.project]
+[tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
 

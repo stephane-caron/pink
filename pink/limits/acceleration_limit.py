@@ -23,15 +23,8 @@ class AccelerationLimit(Limit):
 
     Acceleration limits consists of two parts: the expected :math:`|a| \leq
     a_{\mathrm{max}}`, but also the following term accounting for the "breaking
-    distance" to configuration limits:
-
-    .. math::
-
-        -\sqrt{2 a_max (q \ominus q_{\min})} \leq a \leq \sqrt{2 a_max
-        (q_{\max} \ominus q)}
-
-    This additional inequality is detailed in [Flacco2015]_ as well as in
-    [DelPrete2018]_.
+    distance" to configuration limits. This additional inequality is detailed
+    in [Flacco2015]_ as well as in [DelPrete2018]_.
 
     Attributes:
         Delta_q_prev: Latest displacement of the robot.
@@ -110,18 +103,36 @@ class AccelerationLimit(Limit):
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute inequalities for acceleration limits.
 
-        Those limits are defined by:
+        Those limits are defined by two constraints. First, the
+        finite-difference approximation of the acceleration is bounded by
+        the robot's acceleration-limit vector
+        :math:`a_{\mathrm{max}} \in {\cal T}_q({\cal C})` (which belongs to
+        the tangent space at the current configuration
+        :math:`q \in \mathcal{C}`):
 
         .. math::
 
-            \Delta q_{\mathrm{prev}} - a_max \mathrm{d} t^2
-            \leq \Delta q
-            \leq \Delta q_{\mathrm{prev}} + a_max \mathrm{d} t^2
+            - a_{\mathrm{max}}
+            \leq \frac{\frac{\Delta q}{\mathrm{d} t} - \frac{\Delta
+            q_{\mathrm{prev}}}{\mathrm{d} t}}{\mathrm{d} t}
+            \leq a_{\mathrm{max}}
 
-        where :math:`a_{max} \in {\cal T}` is the robot's acceleration limit
-        vector (in the tangent space) and :math:`\Delta q \in T_q({\cal C})` is
-        the displacement computed by the inverse kinematics, with :math:`\Delta
-        q_{\mathrm{prev}}` the displacement from the previous iteration.
+        where :math:`\Delta q \in T_q({\cal C})` is the displacement
+        computed by the inverse kinematics, and
+        :math:`\Delta q_{\mathrm{prev}}` is the displacement from our
+        previous iteration of differential IK.
+
+        Second, our new velocity :math:`\Delta q / \mathrm{d} t` should not
+        exceed the "braking distance" until configuration limits:
+
+        .. math::
+
+            -\sqrt{2 a_{\mathrm{max}} (q \ominus q_{\min})} \leq
+            \frac{\Delta q}{\mathrm{d} t} \leq \sqrt{2 a_{\mathrm{max}}
+            (q_{\max} \ominus q)}
+
+        This additional inequality is detailed in [Flacco2015]_ as well as
+        in [DelPrete2018]_.
 
         Args:
             configuration: Robot configuration.
@@ -148,11 +159,11 @@ class AccelerationLimit(Limit):
             [
                 np.minimum(
                     self.a_max * dt_sq + self.Delta_q_prev,
-                    np.sqrt(2 * self.a_max * Delta_q_max),
+                    dt * np.sqrt(2 * self.a_max * Delta_q_max),
                 ),
                 np.minimum(
                     self.a_max * dt_sq - self.Delta_q_prev,
-                    np.sqrt(2 * self.a_max * Delta_q_min),
+                    dt * np.sqrt(2 * self.a_max * Delta_q_min),
                 ),
             ]
         )
