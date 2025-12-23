@@ -2,33 +2,23 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
+#
+# /// script
+# dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
+# ///
 
 """Unitree Z1 arm tracking a reference joint-velocity trajectory."""
 
 import numpy as np
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import pink
 from pink import solve_ik
 from pink.tasks import JointVelocityTask
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    )
-
 
 if __name__ == "__main__":
     print(

@@ -12,7 +12,6 @@ This project's goal is to make it easy to do inverse kinematics on all kinds of 
 
 There are also a number of tasks from Pymanoid that are not in Pink yet. If you happen to need one of them for your application, check out the reference implementation and add it to Pink:
 
-- [`COMTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L119)
 - [`MinCAMTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L394)
 - [`MinVelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L424)
 - [`COMAccelTask`](https://github.com/stephane-caron/pymanoid/blob/1b16932ee3216782fc4b66abafcf8099c19d6d8e/pymanoid/tasks.py#L163)

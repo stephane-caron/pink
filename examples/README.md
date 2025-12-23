@@ -5,6 +5,7 @@ The following examples include *tasks* and *limits*:
 - [Arm: UR5](#arm-ur5)
 - [Flying dual-arm UR3](#flying-dual-arm-ur3)
 - [Humanoid: Draco 3](#humanoid-draco-3)
+- [Inverse kinematics of a UR10 arm](#inverse-kinematics-of-a-ur10-arm)
 - [Mobile: Stretch](#mobile-stretch)
 - [Wheeled biped: Upkie](#wheeled-biped-upkie)
 
@@ -16,10 +17,10 @@ A UR5 arm tracking a moving target:
 
 https://github.com/stephane-caron/pink/assets/1189580/d0d6aae9-326b-45fe-8cd3-013f29f7343a
 
-| Task | Cost |
-|------|------|
-| End-effector | 1 |
-| Posture | $10^{-3}$ |
+| Task         | Cost      |
+|--------------|-----------|
+| End-effector | 1         |
+| Posture      | $10^{-3}$ |
 
 ## Flying dual-arm UR3
 
@@ -49,6 +50,21 @@ https://github.com/stephane-caron/pink/assets/1189580/db6acda8-82a4-4f4d-9acf-1f
 | Right knee coupling | 100 |
 | Right wrist | (4, 4) |
 | Torso | (1, 0) |
+
+## Inverse kinematics of a UR10 arm
+
+A UR10 arm solving inverse kinematics (by iterating differential IK) to find a configuration that achieves a given end-effector pose:
+
+```console
+$ uv run inverse_kinematics_ur10.py
+Starting from error_norm = 2.4
+Desired precision is error_norm < 1e-08
+Terminated after 141 steps with error_norm = 1.1e-09
+```
+
+| Task         | Cost |
+|--------------|------|
+| End-effector | 1    |
 
 ## Mobile: Stretch
 

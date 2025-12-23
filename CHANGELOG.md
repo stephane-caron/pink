@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5.0] - 2025-12-02
+
 ### Added
 
-- examples: Add example with a sparse QP solver, suppressing matrix conversion warnings
+- examples: Add uv script dependencies to all examples; Add example with a sparse QP solver, suppressing matrix conversion warnings
 - limits: Allow floating base velocity limits with `FloatingBaseVelocityLimit` to plug into configurations to automatically clamp base twists (thanks to @Soontosh)
 
 ### Changed
@@ -18,7 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- CICD: Update CoM unit test that has started failing on macOS runners
 - Correct changelog version comparison links
+- Limit: Fix braking-limit formula in acceleration limit (thanks to @bwingo47 for pointing it out)
+- docs: Fix typos in the acceleration limit documentation
 
 ## [3.4.0] - 2025-07-29
 
@@ -412,7 +417,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Python package infrastructure
 
-[unreleased]: https://github.com/stephane-caron/pink/compare/v3.4.0...HEAD
+[unreleased]: https://github.com/stephane-caron/pink/compare/v3.5.0...HEAD
+[3.5.0]: https://github.com/stephane-caron/pink/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/stephane-caron/pink/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/stephane-caron/pink/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/stephane-caron/pink/compare/v3.1.0...v3.2.0

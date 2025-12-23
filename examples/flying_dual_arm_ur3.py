@@ -3,6 +3,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2023 Inria
+#
+# /// script
+# dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
+# ///
 
 """A pair of UR3 arms on a mobile body tracking moving targets."""
 
@@ -12,6 +17,8 @@ import hppfcl as fcl
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import meshcat_shapes
 import pink
@@ -19,22 +26,6 @@ from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    ) from exc
 
 
 def create_floating_base(

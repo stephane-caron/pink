@@ -4,34 +4,25 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
 # Copyright 2023 Inria
+#
+# /// script
+# dependencies = ["clarabel", "loop-rate-limiters", "meshcat", "pin-pink",
+# "qpsolvers", "robot_descriptions"]
+# ///
 
 """Move a Stretch RE1 with a fixed fingertip target around the origin."""
 
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+from loop_rate_limiters import RateLimiter
+from robot_descriptions.loaders.pinocchio import load_robot_description
 
 import meshcat_shapes
 import pink
 from pink import PinkError, solve_ik
 from pink.tasks import FrameTask
 from pink.visualization import start_meshcat_visualizer
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ModuleNotFoundError as exc:
-    raise ModuleNotFoundError(
-        "Examples use loop rate limiters, "
-        "try `[conda|pip] install loop-rate-limiters`"
-    ) from exc
-
-try:
-    from robot_descriptions.loaders.pinocchio import load_robot_description
-except ModuleNotFoundError:
-    raise ModuleNotFoundError(
-        "Examples need robot_descriptions, "
-        "try `[conda|pip] install robot_descriptions`"
-    )
 
 # Trajectory parameters to play with ;)
 CIRCLE_RADIUS = 0.5  # [m]
