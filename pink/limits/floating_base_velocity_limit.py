@@ -59,6 +59,7 @@ class FloatingBaseVelocityLimit(Limit):
     frame_id: int
     linear_max: np.ndarray
     angular_max: np.ndarray
+    twist_max: np.ndarray
     model: pin.Model
     root_joint_id: int
     root_idx_v: int
@@ -67,7 +68,7 @@ class FloatingBaseVelocityLimit(Limit):
     def __init__(
         self,
         model: pin.Model,
-        base_frame: Optional[str] = None,
+        base_frame: Optional[str],
         max_linear_velocity: Union[Sequence[float], float],
         max_angular_velocity: Union[Sequence[float], float],
     ):
@@ -76,8 +77,8 @@ class FloatingBaseVelocityLimit(Limit):
         Args:
             model: Robot model with a floating base joint.
             base_frame: Optional frame attached to the floating base. The
-            corresponding Jacobian rows constrain the base twist. When omitted,
-            the first frame attached to ``root_joint`` is selected.
+            corresponding Jacobian rows constrain the base twist. Pass ``None``
+            to select the first frame attached to ``root_joint``.
             max_linear_velocity: Linear velocity limits along the base frame
                 axes. A scalar applies the same bound to all axes.
             max_angular_velocity: Angular velocity limits around the base frame
@@ -90,6 +91,7 @@ class FloatingBaseVelocityLimit(Limit):
         self.angular_max = _as_velocity_vector(
             max_angular_velocity, "max_angular_velocity"
         )
+        self.twist_max = np.hstack([self.linear_max, self.angular_max])
         if not model.existJointName("root_joint"):
             raise ValueError(
                 "FloatingBaseVelocityLimit requires a floating-base root joint."
@@ -114,9 +116,8 @@ class FloatingBaseVelocityLimit(Limit):
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         """Linearize floating base velocity bounds."""
-        if not np.isfinite(self.linear_max).any() and not np.isfinite(
-            self.angular_max
-        ).any():
+        finite_mask = np.isfinite(self.twist_max)
+        if not finite_mask.any():
             return None
 
         jacobian = pin.getFrameJacobian(
@@ -126,37 +127,17 @@ class FloatingBaseVelocityLimit(Limit):
             pin.ReferenceFrame.LOCAL,
         )
 
-        rows = []
-        bounds = []
+        # Keep only columns belonging to the root joint twist.
+        if self.root_idx_v is not None:
+            jacobian[:, : self.root_idx_v] = 0.0
+            after_start = self.root_idx_v + self.root_nv
+            if after_start < jacobian.shape[1]:
+                jacobian[:, after_start:] = 0.0
 
-        for axis, bound in enumerate(self.linear_max):
-            if not np.isfinite(bound):
-                continue
-            row = jacobian[axis, :].copy()
-            if self.root_idx_v is not None:
-                row[: self.root_idx_v] = 0.0
-                after_start = self.root_idx_v + self.root_nv
-                if after_start < row.shape[0]:
-                    row[after_start:] = 0.0
-            rows.extend([row, -row])
-            bounds.extend([dt * bound, dt * bound])
+        active_rows = jacobian[finite_mask, :]
+        G = np.vstack([active_rows, -active_rows])
 
-        for axis, bound in enumerate(self.angular_max):
-            if not np.isfinite(bound):
-                continue
-            row = jacobian[3 + axis, :].copy()
-            if self.root_idx_v is not None:
-                row[: self.root_idx_v] = 0.0
-                after_start = self.root_idx_v + self.root_nv
-                if after_start < row.shape[0]:
-                    row[after_start:] = 0.0
-            rows.extend([row, -row])
-            bounds.extend([dt * bound, dt * bound])
-
-        if not rows:
-            return None
-
-        G = np.vstack(rows)
-        h = np.asarray(bounds)
+        bounds = dt * self.twist_max[finite_mask]
+        h = np.hstack([bounds, bounds])
 
         return G, h
