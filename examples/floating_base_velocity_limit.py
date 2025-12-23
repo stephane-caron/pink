@@ -58,8 +58,8 @@ def main() -> None:
     for step in range(10):
         velocity = pink.solve_ik(configuration, [base_task], dt, solver=solver)
         base_velocity = velocity[root_joint.idx_v : root_joint.idx_v + 6]
-        angular = base_velocity[:3]
-        linear = base_velocity[3:]
+        angular = base_velocity[3:]
+        linear = base_velocity[:3]
         print(
             f"step {step:02d} | "
             f"linear = {linear}  [m/s], "
