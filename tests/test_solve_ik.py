@@ -14,11 +14,6 @@ import qpsolvers
 from numpy.linalg import norm
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-try:
-    from scipy import sparse
-except ImportError:
-    sparse = None
-
 from pink import Configuration, build_ik, solve_ik
 from pink.barriers import PositionBarrier
 from pink.exceptions import NotWithinConfigurationLimits
@@ -35,15 +30,6 @@ def _numpy_supports_copy_keyword() -> bool:
 
 
 NUMPY_SUPPORTS_COPY_KEYWORD = _numpy_supports_copy_keyword()
-
-SPARSE_SOLVERS = {
-    "clarabel",
-    "jaxopt_osqp",
-    "osqp",
-    "qpalm",
-    "qpax",
-    "scs",
-}
 
 JAX_SOLVERS = {"jaxopt_osqp", "qpax"}
 
@@ -90,28 +76,6 @@ class TestSolveIK(unittest.TestCase):
         problem = build_ik(configuration, [], dt=1.0)
         self.assertIsNone(problem.G)
         self.assertIsNone(problem.h)
-
-    @unittest.skipIf(
-        sparse is None,
-        "SciPy is required for sparse tests. Install SciPy to run them.",
-    )
-    def test_sparse_problem_matrices_optional(self):
-        """Test that sparse problem matrices can be requested."""
-        robot = load_robot_description(
-            "upkie_description", root_joint=pin.JointModelFreeFlyer()
-        )
-        configuration = Configuration(robot.model, robot.data, robot.q0)
-        dt = 1e-3
-
-        dense_problem = build_ik(configuration, [], dt)
-        self.assertIsInstance(dense_problem.P, np.ndarray)
-
-        sparse_problem = build_ik(configuration, [], dt, use_sparse=True)
-        self.assertTrue(sparse.isspmatrix(sparse_problem.P))
-        if sparse_problem.G is not None:
-            self.assertTrue(sparse.isspmatrix(sparse_problem.G))
-        if sparse_problem.A is not None:
-            self.assertTrue(sparse.isspmatrix(sparse_problem.A))
 
     def test_no_task(self):
         """Raise an error when the robot body is not found."""
@@ -513,13 +477,11 @@ class TestSolveIK(unittest.TestCase):
                     "NumPy copy keyword unsupported, skipping JAX-based solver."
                 )
             configuration, tasks, dt = self.get_jvrc_problem()
-            use_sparse = sparse is not None and solver in SPARSE_SOLVERS
             solve_ik(
                 configuration,
                 tasks,
                 dt,
                 solver=solver,
-                use_sparse=use_sparse,
             )
 
         return test
