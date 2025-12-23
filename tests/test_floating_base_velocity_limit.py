@@ -151,18 +151,26 @@ class TestFloatingBaseVelocityLimitFreeFlyer(unittest.TestCase):
         dq[idx_v : idx_v + 6] *= 0.999
         self.assertTrue(np.all(G @ dq <= h + 1e-12))
 
-    def test_missing_root_joint_returns_none(self):
-        """Manipulator only robots should not produce floating-base limits."""
+    def test_missing_root_joint_raises(self):
+        """Manipulator only robots should fail fast when no floating base exists."""
         model = pin.Model()
+        with self.assertRaises(ValueError):
+            FloatingBaseVelocityLimit(
+                model=model,
+                base_frame="base_link",
+                max_linear_velocity=self.linear_max,
+                max_angular_velocity=self.angular_max,
+            )
+
+    def test_default_base_frame_detection(self):
+        """Omitting base_frame should pick the frame attached to root_joint."""
         limit = FloatingBaseVelocityLimit(
-            model=model,
-            base_frame="base_link",
+            model=self.model,
+            base_frame=None,
             max_linear_velocity=self.linear_max,
             max_angular_velocity=self.angular_max,
         )
-        configuration = Configuration(
-            model, model.createData(), np.empty(model.nq)
-        )
-        self.assertIsNone(
-            limit.compute_qp_inequalities(configuration, self.dt)
+        root_joint_id = self.model.getJointId("root_joint")
+        self.assertEqual(
+            self.model.frames[limit.frame_id].parentJoint, root_joint_id
         )

@@ -30,22 +30,44 @@ def _as_velocity_vector(
     return array
 
 
+def _find_base_frame(model: pin.Model, base_frame: Optional[str]) -> Tuple[str, int]:
+    """Return the name and id of the frame attached to the root joint.
+
+    The frame is either provided explicitly or discovered as the first frame
+    attached to ``root_joint``. Raises ``ValueError`` if the requested frame
+    does not exist or if no frame is attached to the root joint.
+    """
+
+    if base_frame is not None:
+        if not model.existFrame(base_frame):
+            raise ValueError(f"Frame '{base_frame}' does not exist in the model.")
+        frame_id = model.getFrameId(base_frame)
+        return base_frame, frame_id
+
+    root_joint_id = model.getJointId("root_joint")
+    for frame in model.frames:
+        if frame.parentJoint == root_joint_id:
+            return frame.name, model.getFrameId(frame.name)
+
+    raise ValueError("Model does not expose a frame attached to 'root_joint'.")
+
+
 class FloatingBaseVelocityLimit(Limit):
     """Velocity limits applied to the robot floating base."""
 
     base_frame: str
-    frame_id: Optional[int]
+    frame_id: int
     linear_max: np.ndarray
     angular_max: np.ndarray
     model: pin.Model
-    root_joint_id: Optional[int]
-    root_idx_v: Optional[int]
+    root_joint_id: int
+    root_idx_v: int
     root_nv: int
 
     def __init__(
         self,
         model: pin.Model,
-        base_frame: str,
+        base_frame: Optional[str] = None,
         max_linear_velocity: Union[Sequence[float], float],
         max_angular_velocity: Union[Sequence[float], float],
     ):
@@ -53,50 +75,37 @@ class FloatingBaseVelocityLimit(Limit):
 
         Args:
             model: Robot model with a floating base joint.
-            base_frame: Frame attached to the floating base. The corresponding
-            Jacobian rows constrain the base twist.
+            base_frame: Optional frame attached to the floating base. The
+            corresponding Jacobian rows constrain the base twist. When omitted,
+            the first frame attached to ``root_joint`` is selected.
             max_linear_velocity: Linear velocity limits along the base frame
                 axes. A scalar applies the same bound to all axes.
             max_angular_velocity: Angular velocity limits around the base frame
                 axes. A scalar applies the same bound to all axes.
         """
         self.model = model
-        self.base_frame = base_frame
         self.linear_max = _as_velocity_vector(
             max_linear_velocity, "max_linear_velocity"
         )
         self.angular_max = _as_velocity_vector(
             max_angular_velocity, "max_angular_velocity"
         )
-        if model.existJointName("root_joint"):
-            self.root_joint_id = model.getJointId("root_joint")
-            root_joint = model.joints[self.root_joint_id]
-            self.root_idx_v = root_joint.idx_v
-            self.root_nv = root_joint.nv
-        else:
-            self.root_joint_id = None
-            self.root_idx_v = None
-            self.root_nv = 0
-
-        if model.existFrame(base_frame):
-            self.frame_id = model.getFrameId(base_frame)
-            parent_joint = model.frames[self.frame_id].parentJoint
-        else:
-            self.frame_id = None
-            parent_joint = None
-
-        if self.root_joint_id is not None and self.frame_id is None:
+        if not model.existJointName("root_joint"):
             raise ValueError(
-                f"Frame '{base_frame}' does not exist in the model."
+                "FloatingBaseVelocityLimit requires a floating-base root joint."
             )
 
-        if (
-            self.frame_id is not None
-            and self.root_joint_id is not None
-            and parent_joint != self.root_joint_id
-        ):
+        self.root_joint_id = model.getJointId("root_joint")
+        root_joint = model.joints[self.root_joint_id]
+        self.root_idx_v = root_joint.idx_v
+        self.root_nv = root_joint.nv
+
+        self.base_frame, self.frame_id = _find_base_frame(model, base_frame)
+
+        parent_joint = model.frames[self.frame_id].parentJoint
+        if parent_joint != self.root_joint_id:
             raise ValueError(
-                f"Frame '{base_frame}' is not attached to the root joint."
+                f"Frame '{self.base_frame}' is not attached to the root joint."
             )
 
     def compute_qp_inequalities(
@@ -105,12 +114,9 @@ class FloatingBaseVelocityLimit(Limit):
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         """Linearize floating base velocity bounds."""
-        if (
-            self.frame_id is None
-            or self.root_joint_id is None
-            or not np.isfinite(self.linear_max).any()
-            and not np.isfinite(self.angular_max).any()
-        ):
+        if not np.isfinite(self.linear_max).any() and not np.isfinite(
+            self.angular_max
+        ).any():
             return None
 
         jacobian = pin.getFrameJacobian(

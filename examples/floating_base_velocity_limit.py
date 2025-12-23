@@ -23,15 +23,6 @@ except ModuleNotFoundError as exc:
     ) from exc
 
 
-def _get_root_frame(model: pin.Model) -> str:
-    """Return the name of the first frame attached to the floating base."""
-    root_joint_id = model.getJointId("root_joint")
-    for frame in model.frames:
-        if frame.parentJoint == root_joint_id:
-            return frame.name
-    raise ValueError("Model does not expose a frame attached to 'root_joint'.")
-
-
 def main() -> None:
     """Run a short IK loop where the base velocity remains bounded."""
     robot = load_robot_description(
@@ -39,17 +30,16 @@ def main() -> None:
     )
     configuration = pink.Configuration(robot.model, robot.data, robot.q0)
 
-    base_frame = _get_root_frame(robot.model)
     floating_limit = FloatingBaseVelocityLimit(
         model=robot.model,
-        base_frame=base_frame,
+        base_frame=None,
         max_linear_velocity=[0.3, 0.3, 0.2],  # [m] / [s]
         max_angular_velocity=[0.8, 0.8, 0.8],  # [rad] / [s]
     )
     configuration.model.floating_base_velocity_limit = floating_limit
 
     base_task = FrameTask(
-        base_frame,
+        floating_limit.base_frame,
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
     )

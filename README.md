@@ -138,6 +138,7 @@ configuration.model.floating_base_velocity_limit = floating_limit
 ```
 
 Once attached, the limit is automatically taken into account when building the IK constraints.
+Omit ``base_frame`` to let Pink pick the frame attached to ``root_joint`` automatically.
 
 ## Examples
 
