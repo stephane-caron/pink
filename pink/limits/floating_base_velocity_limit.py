@@ -30,17 +30,20 @@ def _as_velocity_vector(
     return array
 
 
-def _find_base_frame(model: pin.Model, base_frame: Optional[str]) -> Tuple[str, int]:
+def _find_base_frame(
+    model: pin.Model, base_frame: Optional[str]
+) -> Tuple[str, int]:
     """Return the name and id of the frame attached to the root joint.
 
     The frame is either provided explicitly or discovered as the first frame
     attached to ``root_joint``. Raises ``ValueError`` if the requested frame
     does not exist or if no frame is attached to the root joint.
     """
-
     if base_frame is not None:
         if not model.existFrame(base_frame):
-            raise ValueError(f"Frame '{base_frame}' does not exist in the model.")
+            raise ValueError(
+                f"Frame '{base_frame}' does not exist in the model."
+            )
         frame_id = model.getFrameId(base_frame)
         return base_frame, frame_id
 
@@ -77,7 +80,7 @@ class FloatingBaseVelocityLimit(Limit):
         Args:
             model: Robot model with a floating base joint.
             base_frame: Optional frame attached to the floating base. The
-                corresponding Jacobian rows constrain the base twist. Pass 
+                corresponding Jacobian rows constrain the base twist. Pass
                 ``None`` to select the first frame attached to ``root_joint``.
             max_linear_velocity: Linear velocity limits along the base frame
                 axes. A scalar applies the same bound to all axes.
@@ -94,7 +97,8 @@ class FloatingBaseVelocityLimit(Limit):
         self.twist_max = np.hstack([self.linear_max, self.angular_max])
         if not model.existJointName("root_joint"):
             raise ValueError(
-                "FloatingBaseVelocityLimit requires a floating-base root joint."
+                "FloatingBaseVelocityLimit requires a floating-base root "
+                "joint."
             )
 
         self.root_joint_id = model.getJointId("root_joint")
