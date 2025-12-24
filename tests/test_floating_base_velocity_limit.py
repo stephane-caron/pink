@@ -55,11 +55,14 @@ class TestFloatingBaseVelocityLimitPlanar(unittest.TestCase):
         _, idx_v = get_joint_idx(self.model, "root_joint")
 
         dq_inside = np.zeros(self.model.nv)
-        dq_inside[idx_v : idx_v + 6] = self.dt * twist_bounds * 0.999
+        finite_mask = np.isfinite(twist_bounds)
+        dq_inside[idx_v : idx_v + 6][finite_mask] = (
+            self.dt * twist_bounds[finite_mask] * 0.999
+        )
         self.assertTrue(np.all(G @ dq_inside <= h + 1e-12))
 
         dq_outside = dq_inside.copy()
-        finite_axes = np.nonzero(np.isfinite(twist_bounds))[0]
+        finite_axes = np.nonzero(finite_mask)[0]
         dq_outside[idx_v + finite_axes[0]] = (
             self.dt * twist_bounds[finite_axes[0]] * 1.01
         )
