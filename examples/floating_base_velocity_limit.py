@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
+#
+# /// script
+# dependencies = ["daqp", "pin-pink", "qpsolvers", "robot_descriptions"]
+# ///
+
 """Clamp floating-base velocities with FloatingBaseVelocityLimit."""
 
 from __future__ import annotations
