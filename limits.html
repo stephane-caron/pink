@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon-180x180.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Limits &mdash; pink 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6d33002f" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="_static/mathjax/tex-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Barriers" href="barriers.html" />
+    <link rel="prev" title="Tasks" href="tasks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pink
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Limits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pink.limits.AccelerationLimit"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.AccelerationLimit.Delta_q_prev"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit.Delta_q_prev</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.AccelerationLimit.a_max"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit.a_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.AccelerationLimit.indices"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit.indices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.AccelerationLimit.model"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.AccelerationLimit.projection_matrix"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit.projection_matrix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.AccelerationLimit.compute_qp_inequalities"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit.compute_qp_inequalities()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.AccelerationLimit.set_last_integration"><code class="docutils literal notranslate"><span class="pre">AccelerationLimit.set_last_integration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.limits.ConfigurationLimit"><code class="docutils literal notranslate"><span class="pre">ConfigurationLimit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.ConfigurationLimit.config_limit_gain"><code class="docutils literal notranslate"><span class="pre">ConfigurationLimit.config_limit_gain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.ConfigurationLimit.model"><code class="docutils literal notranslate"><span class="pre">ConfigurationLimit.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.ConfigurationLimit.joints"><code class="docutils literal notranslate"><span class="pre">ConfigurationLimit.joints</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.ConfigurationLimit.projection_matrix"><code class="docutils literal notranslate"><span class="pre">ConfigurationLimit.projection_matrix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.ConfigurationLimit.compute_qp_inequalities"><code class="docutils literal notranslate"><span class="pre">ConfigurationLimit.compute_qp_inequalities()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.limits.FloatingBaseVelocityLimit"><code class="docutils literal notranslate"><span class="pre">FloatingBaseVelocityLimit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.FloatingBaseVelocityLimit.compute_qp_inequalities"><code class="docutils literal notranslate"><span class="pre">FloatingBaseVelocityLimit.compute_qp_inequalities()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.limits.Limit"><code class="docutils literal notranslate"><span class="pre">Limit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.Limit.compute_qp_inequalities"><code class="docutils literal notranslate"><span class="pre">Limit.compute_qp_inequalities()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.limits.VelocityLimit"><code class="docutils literal notranslate"><span class="pre">VelocityLimit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.VelocityLimit.indices"><code class="docutils literal notranslate"><span class="pre">VelocityLimit.indices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.VelocityLimit.joints"><code class="docutils literal notranslate"><span class="pre">VelocityLimit.joints</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.VelocityLimit.model"><code class="docutils literal notranslate"><span class="pre">VelocityLimit.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.VelocityLimit.projection_matrix"><code class="docutils literal notranslate"><span class="pre">VelocityLimit.projection_matrix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.limits.VelocityLimit.compute_qp_inequalities"><code class="docutils literal notranslate"><span class="pre">VelocityLimit.compute_qp_inequalities()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="barriers.html">Barriers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-kinematics.html">Inverse kinematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-notes.html">Developer notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pink</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Limits</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/stephane-caron/pink/tree/main/doc/limits.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="limits">
+<span id="id1"></span><h1>Limits<a class="headerlink" href="#limits" title="Link to this heading"></a></h1>
+<p id="module-pink.limits">Limits implemented as inequality constraints in the IK problem.</p>
+<p>Kinematic limits derive from the <a class="reference internal" href="#pink.limits.Limit" title="pink.limits.Limit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Limit</span></code></a> base class. They compute QP
+inequality constraints of the form:</p>
+<div class="math notranslate nohighlight">
+\[G(q) \Delta q \leq h(q)\]</div>
+<p>where <span class="math notranslate nohighlight">\(q \in {\cal C}\)</span> is the robot’s configuration and
+<span class="math notranslate nohighlight">\(\Delta q \in T_q({\cal C})\)</span> is the displacement in the tangent
+space at <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.limits.</span></span><span class="sig-name descname"><span class="pre">AccelerationLimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acceleration_limit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.AccelerationLimit" title="Link to this definition"></a></dt>
+<dd><p>Subset of acceleration-limited joints in a robot model.</p>
+<p>Acceleration limits consists of two parts: the expected <span class="math notranslate nohighlight">\(|a| \leq
+a_{\mathrm{max}}\)</span>, but also the following term accounting for the “breaking
+distance” to configuration limits. This additional inequality is detailed
+in <a class="reference internal" href="references.html#flacco2015" id="id2"><span>[Flacco2015]</span></a> as well as in <a class="reference internal" href="references.html#delprete2018" id="id3"><span>[DelPrete2018]</span></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit.Delta_q_prev">
+<span class="sig-name descname"><span class="pre">Delta_q_prev</span></span><a class="headerlink" href="#pink.limits.AccelerationLimit.Delta_q_prev" title="Link to this definition"></a></dt>
+<dd><p>Latest displacement of the robot.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit.a_max">
+<span class="sig-name descname"><span class="pre">a_max</span></span><a class="headerlink" href="#pink.limits.AccelerationLimit.a_max" title="Link to this definition"></a></dt>
+<dd><p>Maximum acceleration vector for acceleration-limited joints.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit.indices">
+<span class="sig-name descname"><span class="pre">indices</span></span><a class="headerlink" href="#pink.limits.AccelerationLimit.indices" title="Link to this definition"></a></dt>
+<dd><p>Tangent indices corresponding to acceleration-limited joints.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#pink.limits.AccelerationLimit.model" title="Link to this definition"></a></dt>
+<dd><p>Robot model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit.projection_matrix">
+<span class="sig-name descname"><span class="pre">projection_matrix</span></span><a class="headerlink" href="#pink.limits.AccelerationLimit.projection_matrix" title="Link to this definition"></a></dt>
+<dd><p>Projection from tangent space to subspace with
+acceleration-limited joints.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit.compute_qp_inequalities">
+<span class="sig-name descname"><span class="pre">compute_qp_inequalities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.AccelerationLimit.compute_qp_inequalities" title="Link to this definition"></a></dt>
+<dd><p>Compute inequalities for acceleration limits.</p>
+<p>Those limits are defined by two constraints. First, the
+finite-difference approximation of the acceleration is bounded by
+the robot’s acceleration-limit vector
+<span class="math notranslate nohighlight">\(a_{\mathrm{max}} \in {\cal T}_q({\cal C})\)</span> (which belongs to
+the tangent space at the current configuration
+<span class="math notranslate nohighlight">\(q \in \mathcal{C}\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[- a_{\mathrm{max}}
+\leq \frac{\frac{\Delta q}{\mathrm{d} t} - \frac{\Delta
+q_{\mathrm{prev}}}{\mathrm{d} t}}{\mathrm{d} t}
+\leq a_{\mathrm{max}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta q \in T_q({\cal C})\)</span> is the displacement
+computed by the inverse kinematics, and
+<span class="math notranslate nohighlight">\(\Delta q_{\mathrm{prev}}\)</span> is the displacement from our
+previous iteration of differential IK.</p>
+<p>Second, our new velocity <span class="math notranslate nohighlight">\(\Delta q / \mathrm{d} t\)</span> should not
+exceed the “braking distance” until configuration limits:</p>
+<div class="math notranslate nohighlight">
+\[-\sqrt{2 a_{\mathrm{max}} (q \ominus q_{\min})} \leq
+\frac{\Delta q}{\mathrm{d} t} \leq \sqrt{2 a_{\mathrm{max}}
+(q_{\max} \ominus q)}\]</div>
+<p>This additional inequality is detailed in <a class="reference internal" href="references.html#flacco2015" id="id4"><span>[Flacco2015]</span></a> as well as
+in <a class="reference internal" href="references.html#delprete2018" id="id5"><span>[DelPrete2018]</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Integration timestep in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pair <span class="math notranslate nohighlight">\((G, h)\)</span> representing the inequality constraint as
+<span class="math notranslate nohighlight">\(G \Delta q \leq h\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no limit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.limits.AccelerationLimit.set_last_integration">
+<span class="sig-name descname"><span class="pre">set_last_integration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_prev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.AccelerationLimit.set_last_integration" title="Link to this definition"></a></dt>
+<dd><p>Set the latest velocity and the duration it was applied for.</p>
+<p>The goal of the low-acceleration task is to minimize the difference
+between the new velocity and the previous one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v_prev</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Latest integrated velocity.</p></li>
+<li><p><strong>dt</strong> – Integration timestep in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.limits.ConfigurationLimit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.limits.</span></span><span class="sig-name descname"><span class="pre">ConfigurationLimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_limit_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.ConfigurationLimit" title="Link to this definition"></a></dt>
+<dd><p>Subspace of the tangent space restricted to joints with position limits.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.ConfigurationLimit.config_limit_gain">
+<span class="sig-name descname"><span class="pre">config_limit_gain</span></span><a class="headerlink" href="#pink.limits.ConfigurationLimit.config_limit_gain" title="Link to this definition"></a></dt>
+<dd><p>gain between 0 and 1 to steer away from
+configuration limits. It is described in “Real-time prioritized
+kinematic control under inequality constraints for redundant
+manipulators” (Kanoun, 2012). More details in <a class="reference external" href="https://scaron.info/teaching/inverse-kinematics.html">this writeup</a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.ConfigurationLimit.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#pink.limits.ConfigurationLimit.model" title="Link to this definition"></a></dt>
+<dd><p>Robot model the limit applies to.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.ConfigurationLimit.joints">
+<span class="sig-name descname"><span class="pre">joints</span></span><a class="headerlink" href="#pink.limits.ConfigurationLimit.joints" title="Link to this definition"></a></dt>
+<dd><p>Joints with configuration limits.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.ConfigurationLimit.projection_matrix">
+<span class="sig-name descname"><span class="pre">projection_matrix</span></span><a class="headerlink" href="#pink.limits.ConfigurationLimit.projection_matrix" title="Link to this definition"></a></dt>
+<dd><p>Projection from tangent space to subspace with
+configuration-limited joints.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.limits.ConfigurationLimit.compute_qp_inequalities">
+<span class="sig-name descname"><span class="pre">compute_qp_inequalities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.ConfigurationLimit.compute_qp_inequalities" title="Link to this definition"></a></dt>
+<dd><p>Compute the configuration-dependent velocity limits.</p>
+<p>Those limits are returned as:</p>
+<div class="math notranslate nohighlight">
+\[{q \ominus q_{min}} \leq \Delta q \leq {q_{max} \ominus q}\]</div>
+<p>where <span class="math notranslate nohighlight">\(q \in {\cal C}\)</span> is the robot’s configuration and
+<span class="math notranslate nohighlight">\(\Delta q \in T_q({\cal C})\)</span> is the displacement in the tangent
+space at <span class="math notranslate nohighlight">\(q\)</span>. These limits correspond to the derivative of
+<span class="math notranslate nohighlight">\(q_{min} \leq q \leq q_{max}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Integration timestep in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pair <span class="math notranslate nohighlight">\((G, h)\)</span> representing the inequality constraint as
+<span class="math notranslate nohighlight">\(G \Delta q \leq h\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no limit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.limits.FloatingBaseVelocityLimit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.limits.</span></span><span class="sig-name descname"><span class="pre">FloatingBaseVelocityLimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_linear_velocity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_angular_velocity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.FloatingBaseVelocityLimit" title="Link to this definition"></a></dt>
+<dd><p>Velocity limits applied to the robot floating base.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.limits.FloatingBaseVelocityLimit.compute_qp_inequalities">
+<span class="sig-name descname"><span class="pre">compute_qp_inequalities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.FloatingBaseVelocityLimit.compute_qp_inequalities" title="Link to this definition"></a></dt>
+<dd><p>Linearize floating base velocity bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.limits.Limit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.limits.</span></span><span class="sig-name descname"><span class="pre">Limit</span></span><a class="headerlink" href="#pink.limits.Limit" title="Link to this definition"></a></dt>
+<dd><p>Abstract base class for kinematic limits.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.limits.Limit.compute_qp_inequalities">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_qp_inequalities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.Limit.compute_qp_inequalities" title="Link to this definition"></a></dt>
+<dd><p>Compute limit as linearized QP inequalities.</p>
+<p>Those limits are returned as:</p>
+<div class="math notranslate nohighlight">
+\[G(q) \Delta q \leq h(q)\]</div>
+<p>where <span class="math notranslate nohighlight">\(q \in {\cal C}\)</span> is the robot’s configuration and
+<span class="math notranslate nohighlight">\(\Delta q \in T_q({\cal C})\)</span> is the displacement in the tangent
+space at <span class="math notranslate nohighlight">\(q\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration providing up-to-date kinematics.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Integration timestep in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pair <span class="math notranslate nohighlight">\((G, h)\)</span> representing the inequality constraint as
+<span class="math notranslate nohighlight">\(G \Delta q \leq h\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no limit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.limits.VelocityLimit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.limits.</span></span><span class="sig-name descname"><span class="pre">VelocityLimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.VelocityLimit" title="Link to this definition"></a></dt>
+<dd><p>Subset of velocity-limited joints in a robot model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.VelocityLimit.indices">
+<span class="sig-name descname"><span class="pre">indices</span></span><a class="headerlink" href="#pink.limits.VelocityLimit.indices" title="Link to this definition"></a></dt>
+<dd><p>Tangent indices corresponding to velocity-limited joints.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.VelocityLimit.joints">
+<span class="sig-name descname"><span class="pre">joints</span></span><a class="headerlink" href="#pink.limits.VelocityLimit.joints" title="Link to this definition"></a></dt>
+<dd><p>List of velocity-limited joints.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.VelocityLimit.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#pink.limits.VelocityLimit.model" title="Link to this definition"></a></dt>
+<dd><p>Robot model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.limits.VelocityLimit.projection_matrix">
+<span class="sig-name descname"><span class="pre">projection_matrix</span></span><a class="headerlink" href="#pink.limits.VelocityLimit.projection_matrix" title="Link to this definition"></a></dt>
+<dd><p>Projection from tangent space to subspace with
+velocity-limited joints.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.limits.VelocityLimit.compute_qp_inequalities">
+<span class="sig-name descname"><span class="pre">compute_qp_inequalities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.limits.VelocityLimit.compute_qp_inequalities" title="Link to this definition"></a></dt>
+<dd><p>Compute inequalities for velocity limits.</p>
+<p>Those limits are defined by:</p>
+<div class="math notranslate nohighlight">
+\[-\mathrm{d}t v_{max} \leq \Delta q \leq \mathrm{d}t v_{max}\]</div>
+<p>where <span class="math notranslate nohighlight">\(v_{max} \in {\cal T}\)</span> is the robot’s velocity limit
+vector and <span class="math notranslate nohighlight">\(\Delta q \in T_q({\cal C})\)</span> is the displacement
+computed by the inverse kinematics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration (unused).</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Integration timestep in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pair <span class="math notranslate nohighlight">\((G, h)\)</span> representing the inequality constraint as
+<span class="math notranslate nohighlight">\(G \Delta q \leq h\)</span>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no limit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tasks.html" class="btn btn-neutral float-left" title="Tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="barriers.html" class="btn btn-neutral float-right" title="Barriers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Stéphane Caron..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

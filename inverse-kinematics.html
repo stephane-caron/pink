@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon-180x180.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inverse kinematics &mdash; pink 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6d33002f" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="_static/mathjax/tex-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Developer notes" href="developer-notes.html" />
+    <link rel="prev" title="Barriers" href="barriers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pink
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limits.html">Limits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barriers.html">Barriers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Inverse kinematics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pink.solve_ik.solve_ik"><code class="docutils literal notranslate"><span class="pre">solve_ik()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.solve_ik.build_ik"><code class="docutils literal notranslate"><span class="pre">build_ik()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer-notes.html">Developer notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pink</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Inverse kinematics</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/stephane-caron/pink/tree/main/doc/inverse-kinematics.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="inverse-kinematics">
+<h1>Inverse kinematics<a class="headerlink" href="#inverse-kinematics" title="Link to this heading"></a></h1>
+<p>The main function solve inverse kinematics is <a class="reference internal" href="#pink.solve_ik.solve_ik" title="pink.solve_ik.solve_ik"><code class="xref py py-func docutils literal notranslate"><span class="pre">solve_ik()</span></code></a>. Here is for
+instance how it appears in a closed-loop inverse kinematics:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rate</span> <span class="o">=</span> <span class="n">RateLimiter</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># [...] &lt;- update task targets here</span>
+    <span class="n">velocity</span> <span class="o">=</span> <span class="n">solve_ik</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">rate</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">)</span>
+    <span class="n">configuration</span><span class="o">.</span><span class="n">integrate_inplace</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">rate</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+    <span class="n">rate</span><span class="o">.</span><span class="n">sleep</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> folder in the repository for complete use cases.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pink.solve_ik.solve_ik">
+<span class="sig-prename descclassname"><span class="pre">pink.solve_ik.</span></span><span class="sig-name descname"><span class="pre">solve_ik</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">barriers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safety_break</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.solve_ik.solve_ik" title="Link to this definition"></a></dt>
+<dd><p>Compute a velocity tangent to the current robot configuration.</p>
+<p>The computed velocity satisfies at (weighted) best the set of kinematic
+tasks given in argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration to read kinematics from.</p></li>
+<li><p><strong>tasks</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="introduction.html#pink.tasks.task.Task" title="pink.tasks.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a>]</span>) – List of kinematic tasks.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Integration timestep in [s].</p></li>
+<li><p><strong>solver</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Backend quadratic programming (QP) solver.</p></li>
+<li><p><strong>damping</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – weight of Tikhonov (everywhere) regularization. Its unit is
+<span class="math notranslate nohighlight">\([\mathrm{cost}]^2 / [\mathrm{tangent}]\)</span> where
+<span class="math notranslate nohighlight">\([\mathrm{tangent}]\)</span> is “the” unit of robot velocities.
+Improves numerical stability, but larger values slow down all
+tasks. The same weight is applied to all joints, including if
+applicable the root joint (floating base, …).</p></li>
+<li><p><strong>limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="limits.html#pink.limits.Limit" title="pink.limits.limit.Limit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Limit</span></code></a>]]</span>) – Collection of limits to enforce. By default, consists of
+configuration and velocity limits (set to the empty list <code class="docutils literal notranslate"><span class="pre">[]</span></code> to
+disable limits).</p></li>
+<li><p><strong>barriers</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="barriers.html#pink.barriers.Barrier" title="pink.barriers.barrier.Barrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Barrier</span></code></a>]]</span>) – Collection of barrier functions.</p></li>
+<li><p><strong>constraints</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="introduction.html#pink.tasks.task.Task" title="pink.tasks.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a>]]</span>) – List of kinematic tasks to be enforced strictly, as hard
+equality constraints in the underlying QP rather than in its cost
+function.</p></li>
+<li><p><strong>safety_break</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, stop execution and raise an exception if
+the current configuration is outside limits. If False, print a
+warning and continue execution.</p></li>
+<li><p><strong>kwargs</strong> – Keyword arguments to forward to the backend QP solver.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Velocity <span class="math notranslate nohighlight">\(v\)</span> in tangent space.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="developer-notes.html#pink.exceptions.NoSolutionFound" title="pink.exceptions.NoSolutionFound"><strong>NoSolutionFound</strong></a> – if the backend QP solver does not find a solution to
+    the differential IK problem.</p></li>
+<li><p><a class="reference internal" href="developer-notes.html#pink.exceptions.NotWithinConfigurationLimits" title="pink.exceptions.NotWithinConfigurationLimits"><strong>NotWithinConfigurationLimits</strong></a> – if the current configuration is not
+    within limits.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Our Tikhonov damping is isotropic despite tangent velocities not being
+homogeneous. If it helps we can add a tangent-space scaling to damp the
+floating base differently from joint angular velocities.</p>
+</div>
+</dd></dl>
+
+<p>It is also possible to ask Pink to only build the underlying inverse kinematics
+problem via the <a class="reference internal" href="#pink.solve_ik.build_ik" title="pink.solve_ik.build_ik"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_ik()</span></code></a> function:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pink.solve_ik.build_ik">
+<span class="sig-prename descclassname"><span class="pre">pink.solve_ik.</span></span><span class="sig-name descname"><span class="pre">build_ik</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">barriers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.solve_ik.build_ik" title="Link to this definition"></a></dt>
+<dd><p>Build quadratic program from current configuration and tasks.</p>
+<p>This quadratic program is, in standard form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}\begin{array}{ll}
+    \underset{\Delta q}{\mbox{minimize}} &amp;
+        \frac{1}{2} {\Delta q}^T H {\Delta q} + c^T {\Delta q} \\
+    \mbox{subject to}
+        &amp; G {\Delta q} \leq h
+\end{array}\end{split}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta q\)</span> is a vector of joint displacements corresponding to
+the joint velocities <span class="math notranslate nohighlight">\(v = {\Delta q} / {\mathrm{d}t}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration to read kinematics from.</p></li>
+<li><p><strong>tasks</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="introduction.html#pink.tasks.task.Task" title="pink.tasks.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a>]</span>) – List of kinematic tasks.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Integration timestep in [s].</p></li>
+<li><p><strong>damping</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – weight of Tikhonov (everywhere) regularization. Its unit is
+<span class="math notranslate nohighlight">\([\mathrm{cost}]^2 / [\mathrm{tangent}]\)</span> where
+<span class="math notranslate nohighlight">\([\mathrm{tangent}]\)</span> is “the” unit of robot velocities.
+Improves numerical stability, but larger values slow down all
+tasks. The same weight is applied to all joints, including if
+applicable the root joint (floating base, …).</p></li>
+<li><p><strong>limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="limits.html#pink.limits.Limit" title="pink.limits.limit.Limit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Limit</span></code></a>]]</span>) – Collection of limits to enforce. By default, consists of
+configuration and velocity limits (set to the empty list <code class="docutils literal notranslate"><span class="pre">[]</span></code> to
+disable limits).</p></li>
+<li><p><strong>barriers</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="barriers.html#pink.barriers.Barrier" title="pink.barriers.barrier.Barrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Barrier</span></code></a>]]</span>) – Collection of barriers.</p></li>
+<li><p><strong>constraints</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<a class="reference internal" href="introduction.html#pink.tasks.task.Task" title="pink.tasks.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a>]]</span>) – List of kinematic tasks to be enforced strictly, as hard
+equality constraints in the underlying QP rather than in its cost
+function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://qpsolvers.github.io/qpsolvers/quadratic-programming.html#qpsolvers.problem.Problem" title="(in qpsolvers v4.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Quadratic program of the inverse kinematics problem.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="barriers.html" class="btn btn-neutral float-left" title="Barriers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="developer-notes.html" class="btn btn-neutral float-right" title="Developer notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Stéphane Caron..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

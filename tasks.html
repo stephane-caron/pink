@@ -1,0 +1,1330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon-180x180.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasks &mdash; pink 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6d33002f" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="_static/mathjax/tex-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Limits" href="limits.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pink
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tasks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.ComTask"><code class="docutils literal notranslate"><span class="pre">ComTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.ComTask.target_com"><code class="docutils literal notranslate"><span class="pre">ComTask.target_com</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.ComTask.compute_error"><code class="docutils literal notranslate"><span class="pre">ComTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.ComTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">ComTask.compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.ComTask.set_cost"><code class="docutils literal notranslate"><span class="pre">ComTask.set_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.ComTask.set_target"><code class="docutils literal notranslate"><span class="pre">ComTask.set_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.ComTask.set_target_from_configuration"><code class="docutils literal notranslate"><span class="pre">ComTask.set_target_from_configuration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.DampingTask"><code class="docutils literal notranslate"><span class="pre">DampingTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.DampingTask.compute_error"><code class="docutils literal notranslate"><span class="pre">DampingTask.compute_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.FrameTask"><code class="docutils literal notranslate"><span class="pre">FrameTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.frame"><code class="docutils literal notranslate"><span class="pre">FrameTask.frame</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.transform_target_to_world"><code class="docutils literal notranslate"><span class="pre">FrameTask.transform_target_to_world</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.compute_error"><code class="docutils literal notranslate"><span class="pre">FrameTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">FrameTask.compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.set_orientation_cost"><code class="docutils literal notranslate"><span class="pre">FrameTask.set_orientation_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.set_position_cost"><code class="docutils literal notranslate"><span class="pre">FrameTask.set_position_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.set_target"><code class="docutils literal notranslate"><span class="pre">FrameTask.set_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.FrameTask.set_target_from_configuration"><code class="docutils literal notranslate"><span class="pre">FrameTask.set_target_from_configuration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.JointCouplingTask"><code class="docutils literal notranslate"><span class="pre">JointCouplingTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.JointCouplingTask.joint_names"><code class="docutils literal notranslate"><span class="pre">JointCouplingTask.joint_names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.JointCouplingTask.ratios"><code class="docutils literal notranslate"><span class="pre">JointCouplingTask.ratios</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.JointVelocityTask"><code class="docutils literal notranslate"><span class="pre">JointVelocityTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.JointVelocityTask.compute_error"><code class="docutils literal notranslate"><span class="pre">JointVelocityTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.JointVelocityTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">JointVelocityTask.compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.JointVelocityTask.set_target"><code class="docutils literal notranslate"><span class="pre">JointVelocityTask.set_target()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.LinearHolonomicTask"><code class="docutils literal notranslate"><span class="pre">LinearHolonomicTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LinearHolonomicTask.A"><code class="docutils literal notranslate"><span class="pre">LinearHolonomicTask.A</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LinearHolonomicTask.b"><code class="docutils literal notranslate"><span class="pre">LinearHolonomicTask.b</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LinearHolonomicTask.q_0"><code class="docutils literal notranslate"><span class="pre">LinearHolonomicTask.q_0</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LinearHolonomicTask.compute_error"><code class="docutils literal notranslate"><span class="pre">LinearHolonomicTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LinearHolonomicTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">LinearHolonomicTask.compute_jacobian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.LowAccelerationTask"><code class="docutils literal notranslate"><span class="pre">LowAccelerationTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LowAccelerationTask.Delta_q_prev"><code class="docutils literal notranslate"><span class="pre">LowAccelerationTask.Delta_q_prev</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LowAccelerationTask.compute_error"><code class="docutils literal notranslate"><span class="pre">LowAccelerationTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.LowAccelerationTask.set_last_integration"><code class="docutils literal notranslate"><span class="pre">LowAccelerationTask.set_last_integration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.OmniwheelTask"><code class="docutils literal notranslate"><span class="pre">OmniwheelTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.OmniwheelTask.hub_frame"><code class="docutils literal notranslate"><span class="pre">OmniwheelTask.hub_frame</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.OmniwheelTask.floor_frame"><code class="docutils literal notranslate"><span class="pre">OmniwheelTask.floor_frame</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.OmniwheelTask.wheel_radius"><code class="docutils literal notranslate"><span class="pre">OmniwheelTask.wheel_radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.OmniwheelTask.compute_error"><code class="docutils literal notranslate"><span class="pre">OmniwheelTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.OmniwheelTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">OmniwheelTask.compute_jacobian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.PostureTask"><code class="docutils literal notranslate"><span class="pre">PostureTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.PostureTask.target_q"><code class="docutils literal notranslate"><span class="pre">PostureTask.target_q</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.PostureTask.compute_error"><code class="docutils literal notranslate"><span class="pre">PostureTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.PostureTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">PostureTask.compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.PostureTask.set_target"><code class="docutils literal notranslate"><span class="pre">PostureTask.set_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.PostureTask.set_target_from_configuration"><code class="docutils literal notranslate"><span class="pre">PostureTask.set_target_from_configuration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.RelativeFrameTask"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.frame"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.frame</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.root"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.transform_target_to_root"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.transform_target_to_root</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.compute_error"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.set_orientation_cost"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.set_orientation_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.set_position_cost"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.set_position_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.set_target"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.set_target()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RelativeFrameTask.set_target_from_configuration"><code class="docutils literal notranslate"><span class="pre">RelativeFrameTask.set_target_from_configuration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.RollingTask"><code class="docutils literal notranslate"><span class="pre">RollingTask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RollingTask.hub_frame"><code class="docutils literal notranslate"><span class="pre">RollingTask.hub_frame</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RollingTask.floor_frame"><code class="docutils literal notranslate"><span class="pre">RollingTask.floor_frame</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RollingTask.wheel_radius"><code class="docutils literal notranslate"><span class="pre">RollingTask.wheel_radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RollingTask.compute_error"><code class="docutils literal notranslate"><span class="pre">RollingTask.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.RollingTask.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">RollingTask.compute_jacobian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.tasks.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.Task.cost"><code class="docutils literal notranslate"><span class="pre">Task.cost</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.Task.gain"><code class="docutils literal notranslate"><span class="pre">Task.gain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.Task.lm_damping"><code class="docutils literal notranslate"><span class="pre">Task.lm_damping</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.Task.compute_error"><code class="docutils literal notranslate"><span class="pre">Task.compute_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.Task.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">Task.compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.Task.compute_qp_objective"><code class="docutils literal notranslate"><span class="pre">Task.compute_qp_objective()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="limits.html">Limits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barriers.html">Barriers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-kinematics.html">Inverse kinematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-notes.html">Developer notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pink</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tasks</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/stephane-caron/pink/tree/main/doc/tasks.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tasks">
+<span id="id1"></span><h1>Tasks<a class="headerlink" href="#tasks" title="Link to this heading"></a></h1>
+<p id="module-pink.tasks">Kinematic tasks.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.ComTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">ComTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.ComTask" title="Link to this definition"></a></dt>
+<dd><p>Regulate the position of the center of mass.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.ComTask.target_com">
+<span class="sig-name descname"><span class="pre">target_com</span></span><a class="headerlink" href="#pink.tasks.ComTask.target_com" title="Link to this definition"></a></dt>
+<dd><p>Target position of the center of mass.</p>
+</dd></dl>
+
+<p>Costs are designed so that errors with varying SI units, here position
+displacements, can be cast to homogeneous values. For example, if task
+“foo” has a position cost of 1.0 and task “bar” a position cost of 0.1,
+then a 1 [cm] error in task “foo” costs as much as a 10 [cm] error in task
+“bar”.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.ComTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.ComTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the CoM task error.</p>
+<p>The error is the difference between the target CoM position and the
+current CoM position, both expressed in the world frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CoM task error <span class="math notranslate nohighlight">\(e(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.ComTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.ComTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the CoM task Jacobian.</p>
+<p>The task Jacobian <span class="math notranslate nohighlight">\(J(q) \in \mathbb{R}^{3 \times n_v}\)</span> is the
+derivative of the CoM position with respect to the configuration
+<span class="math notranslate nohighlight">\(q\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Jacobian matrix <span class="math notranslate nohighlight">\(J\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.ComTask.set_cost">
+<span class="sig-name descname"><span class="pre">set_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.ComTask.set_cost" title="Link to this definition"></a></dt>
+<dd><p>Set a new cost for all 3D CoM position coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cost</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Contribution of position errors to the normalized cost, in
+<span class="math notranslate nohighlight">\([\mathrm{cost}] / [\mathrm{m}]\)</span>. If this is a vector,
+the cost is anisotropic and each coordinate corresponds to an
+axis of the frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.ComTask.set_target">
+<span class="sig-name descname"><span class="pre">set_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_com</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.ComTask.set_target" title="Link to this definition"></a></dt>
+<dd><p>Set the target CoM position in the world frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target_com</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Target position of the center of mass in the world
+frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.ComTask.set_target_from_configuration">
+<span class="sig-name descname"><span class="pre">set_target_from_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.ComTask.set_target_from_configuration" title="Link to this definition"></a></dt>
+<dd><p>Set the task target pose from a given robot configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration used to compute the target CoM.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.DampingTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">DampingTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.DampingTask" title="Link to this definition"></a></dt>
+<dd><p>Minimize joint velocities.</p>
+<p>The damping task minimizes <span class="math notranslate nohighlight">\(\| v \|_2\)</span> with <span class="math notranslate nohighlight">\(v\)</span> the joint
+velocity resulting from differential IK. The word “damping” is used here by
+analogy with forces that fight against motion, and bring the robot to a
+rest if nothing else drives it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.DampingTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.DampingTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute damping task error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Damping task error <span class="math notranslate nohighlight">\(e(q) = 0\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">FrameTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position_cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation_cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.FrameTask" title="Link to this definition"></a></dt>
+<dd><p>Regulate the pose of a robot frame in the world frame.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.frame">
+<span class="sig-name descname"><span class="pre">frame</span></span><a class="headerlink" href="#pink.tasks.FrameTask.frame" title="Link to this definition"></a></dt>
+<dd><p>Frame name, typically the name of a link or joint from the robot
+description.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.transform_target_to_world">
+<span class="sig-name descname"><span class="pre">transform_target_to_world</span></span><a class="headerlink" href="#pink.tasks.FrameTask.transform_target_to_world" title="Link to this definition"></a></dt>
+<dd><p>Target pose of the frame.</p>
+</dd></dl>
+
+<p>Costs are designed so that errors with varying SI units, here position and
+orientation displacements, can be cast to homogeneous values. For example,
+if task “foo” has a position cost of 1.0 and task “bar” a position cost of
+0.1, then a 1 [cm] error in task “foo” costs as much as a 10 [cm] error in
+task “bar”.</p>
+<p>Dimensionally, the 6D cost vector is a (normalized) force screw and our
+objective function is a (normalized) energy.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference internal" href="#pink.tasks.RelativeFrameTask" title="pink.tasks.RelativeFrameTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">RelativeFrameTask</span></code></a> also regulates the pose of a robot
+frame, but its target can be expressed in an arbitrary frame (inertial
+or mobile) and not necessarily in the (inertial) world frame.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.FrameTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute frame task error.</p>
+<p>This error is a twist <span class="math notranslate nohighlight">\(e(q) \in se(3)\)</span> expressed in the local
+frame (i.e. it is a <em>body</em> twist). We map it to <span class="math notranslate nohighlight">\(\mathbb{R}^6\)</span>
+using Pinocchio’s convention where linear coordinates are followed by
+angular coordinates.</p>
+<p>The error is the right-minus difference between the target pose
+<span class="math notranslate nohighlight">\(T_{0t}\)</span> and current frame pose <span class="math notranslate nohighlight">\(T_{0b}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[e(q) := {}_b \xi_{0b} = -(T_{t0} \boxminus T_{b0})
+= -\log(T_{t0} \cdot T_{0b}) = -\log(T_{tb}) = \log(T_{bt})\]</div>
+<p>where <span class="math notranslate nohighlight">\(b\)</span> denotes our frame, <span class="math notranslate nohighlight">\(t\)</span> the target frame and
+<span class="math notranslate nohighlight">\(0\)</span> the inertial frame.</p>
+<p>See <a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_error" title="pink.tasks.task.Task.compute_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_error()</span></code></a> for more context, and
+<a class="reference internal" href="references.html#sola2018" id="id2"><span>[Sola2018]</span></a> for details on the right-minus operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Frame task error <span class="math notranslate nohighlight">\(e(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.FrameTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the frame task Jacobian.</p>
+<p>The task Jacobian <span class="math notranslate nohighlight">\(J(q) \in \mathbb{R}^{6 \times n_v}\)</span> is the
+derivative of the task error <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^6\)</span> with respect
+to the configuration <span class="math notranslate nohighlight">\(q\)</span>. The formula for the frame task is:</p>
+<div class="math notranslate nohighlight">
+\[J(q) = -\text{Jlog}_6(T_{tb}) {}_b J_{0b}(q)\]</div>
+<p>The derivation of the formula for this Jacobian is detailed in
+<a class="reference internal" href="references.html#caron2023" id="id3"><span>[Caron2023]</span></a>. See also
+<a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_jacobian" title="pink.tasks.task.Task.compute_jacobian"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_jacobian()</span></code></a> for more context on task
+Jacobians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Jacobian matrix <span class="math notranslate nohighlight">\(J\)</span>, expressed locally in the frame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.set_orientation_cost">
+<span class="sig-name descname"><span class="pre">set_orientation_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orientation_cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.FrameTask.set_orientation_cost" title="Link to this definition"></a></dt>
+<dd><p>Set a new cost for all 3D orientation coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>orientation_cost</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Contribution of orientation errors to the
+normalized cost, in <span class="math notranslate nohighlight">\([\mathrm{cost}] / [\mathrm{rad}]\)</span>.
+If this is a vector, the cost is anisotropic and each
+coordinate corresponds to an axis of the frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.set_position_cost">
+<span class="sig-name descname"><span class="pre">set_position_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position_cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.FrameTask.set_position_cost" title="Link to this definition"></a></dt>
+<dd><p>Set a new cost for all 3D position coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position_cost</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Contribution of position errors to the normalized
+cost, in <span class="math notranslate nohighlight">\([\mathrm{cost}] / [\mathrm{m}]\)</span>. If this is a
+vector, the cost is anisotropic and each coordinate corresponds
+to an axis of the frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.set_target">
+<span class="sig-name descname"><span class="pre">set_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform_target_to_world</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.FrameTask.set_target" title="Link to this definition"></a></dt>
+<dd><p>Set task target pose in the world frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>transform_target_to_world</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">SE3</span></code></span>) – Transform from the task target frame to
+the world frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.FrameTask.set_target_from_configuration">
+<span class="sig-name descname"><span class="pre">set_target_from_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.FrameTask.set_target_from_configuration" title="Link to this definition"></a></dt>
+<dd><p>Set task target pose from a robot configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.JointCouplingTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">JointCouplingTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joint_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratios</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.JointCouplingTask" title="Link to this definition"></a></dt>
+<dd><p>Coupling between two revolute joints.</p>
+<p>This task enforces a one-dimensional relationship:</p>
+<div class="math notranslate nohighlight">
+\[\sum_{j \in J} r_j q_j = 0\]</div>
+<p>where <span class="math notranslate nohighlight">\(J\)</span> is a given set of joints the task is configured for,
+<span class="math notranslate nohighlight">\(r_j\)</span> is the “ratio” associated with a joint <span class="math notranslate nohighlight">\(j \in J\)</span> and
+<span class="math notranslate nohighlight">\(q_j\)</span> is the current joint angle (in the configuration vector
+<span class="math notranslate nohighlight">\(q\)</span>).</p>
+<p>For instance, the humanoid Draco 3 examples uses this task to enforce:</p>
+<div class="math notranslate nohighlight">
+\[q_1 - q_2 = 0\]</div>
+<p>where two joints <span class="math notranslate nohighlight">\(J = \{1, 2\}\)</span> are coupled to share the same joint
+angle. The ratios are then <span class="math notranslate nohighlight">\(r_1 = 1\)</span> and <span class="math notranslate nohighlight">\(r_2 = -1\)</span>.</p>
+<p>This task is a particular case of the more general
+<a class="reference internal" href="#pink.tasks.LinearHolonomicTask" title="pink.tasks.linear_holonomic_task.LinearHolonomicTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">pink.tasks.linear_holonomic_task.LinearHolonomicTask</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.JointCouplingTask.joint_names">
+<span class="sig-name descname"><span class="pre">joint_names</span></span><a class="headerlink" href="#pink.tasks.JointCouplingTask.joint_names" title="Link to this definition"></a></dt>
+<dd><p>a list of joint names consisting of a linear holonomic
+constraint.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.JointCouplingTask.ratios">
+<span class="sig-name descname"><span class="pre">ratios</span></span><a class="headerlink" href="#pink.tasks.JointCouplingTask.ratios" title="Link to this definition"></a></dt>
+<dd><p>a list of ratios that each joint takes in a linear holonomic
+constraint.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.JointVelocityTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">JointVelocityTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.JointVelocityTask" title="Link to this definition"></a></dt>
+<dd><p>Track joint velocities.</p>
+<p>This task minimizes <span class="math notranslate nohighlight">\(\| v_{\mathit{ref}} - v \|_2\)</span> with <span class="math notranslate nohighlight">\(v\)</span> the
+joint velocity resulting from differential IK and <span class="math notranslate nohighlight">\(v_{\mathit{ref}}\)</span>
+is a reference joint-velocity vector.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Like the <a class="reference internal" href="#pink.tasks.PostureTask" title="pink.tasks.PostureTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">PostureTask</span></code></a>, this task does not apply to
+floating-base coordinates if the robot model has a floating base
+(a.k.a. root joint in Pinocchio).</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.JointVelocityTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.JointVelocityTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the joint-velocity task error.</p>
+<p>The task error is
+<span class="math notranslate nohighlight">\(e(q) = \Delta q_{\mathit{ref}} = v_{\mathit{ref}} \mathrm{d}t\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Joint-velocity task error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.JointVelocityTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.JointVelocityTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the joint-velocity task Jacobian.</p>
+<p>The task Jacobian is the identity <span class="math notranslate nohighlight">\(I_{n_v} \in \mathbb{R}^{n_v
+\times n_v}\)</span>, with <span class="math notranslate nohighlight">\(n_v\)</span> the dimension of the robot’s tangent
+space, so that the task dynamics are:</p>
+<div class="math notranslate nohighlight">
+\[J(q) \Delta q = \Delta q\]</div>
+<p>Combining this with <span class="math notranslate nohighlight">\(e(q) = \Delta q_{ref}\)</span> and <span class="math notranslate nohighlight">\(\alpha =
+1\)</span>, we get an overall velocity-tracking task dynamics:</p>
+<div class="math notranslate nohighlight">
+\[J(q) \Delta q = -\alpha e(q)
+\quad \Leftrightarrow \quad
+\Delta q = \Delta q_{ref}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Joint-velocity task Jacobian <span class="math notranslate nohighlight">\(J(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.JointVelocityTask.set_target">
+<span class="sig-name descname"><span class="pre">set_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.JointVelocityTask.set_target" title="Link to this definition"></a></dt>
+<dd><p>Set target joint velocity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_v</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Target joint-velocity vector in the tangent space.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Integration duration in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.LinearHolonomicTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">LinearHolonomicTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.LinearHolonomicTask" title="Link to this definition"></a></dt>
+<dd><p>Linear holonomic task <span class="math notranslate nohighlight">\(A (q \ominus q_0) = b\)</span>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.LinearHolonomicTask.A">
+<span class="sig-name descname"><span class="pre">A</span></span><a class="headerlink" href="#pink.tasks.LinearHolonomicTask.A" title="Link to this definition"></a></dt>
+<dd><p>Matrix that defines the task:</p>
+\begin{align}
+e(q) & = A (q \ominus^\ell q_0) - b \\
+\dot{e}(q) & := A \dot{q}
+\end{align}<p>where <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^{k}\)</span> is the quantity that the task
+aims to drive to zero (<span class="math notranslate nohighlight">\(k\)</span> is the dimension of the task).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.LinearHolonomicTask.b">
+<span class="sig-name descname"><span class="pre">b</span></span><a class="headerlink" href="#pink.tasks.LinearHolonomicTask.b" title="Link to this definition"></a></dt>
+<dd><p>Vector that defines the affine part of the task</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.LinearHolonomicTask.q_0">
+<span class="sig-name descname"><span class="pre">q_0</span></span><a class="headerlink" href="#pink.tasks.LinearHolonomicTask.q_0" title="Link to this definition"></a></dt>
+<dd><p>Element for which we work in the Lie algebra. If set to None, it
+will use the neutral configuration of the robot.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>To be fully explicit, our quantities in the task equation <span class="math notranslate nohighlight">\(e(q) =
+A (q \ominus^\ell q_0) - b\)</span> belong to the following sets:</p>
+<blockquote>
+<div>\begin{align}
+e(q) & \in \mathbb{R}^p &
+A & \in \mathcal{L}(\mathfrak{g}^\ell_{q_0}, \mathbb{R}^p) &
+b & \in \mathbb{R}^p
+\end{align}</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\mathfrak{g}^\ell_{q_0}\)</span> is the Lie algebra associated
+with the Lie group <span class="math notranslate nohighlight">\(\mathcal{C}\)</span> (our configuration space), taken
+in the local frame (<span class="math notranslate nohighlight">\(\ell\)</span>, <em>a.k.a.</em> body frame) at the reference
+configuration <span class="math notranslate nohighlight">\(q_0\)</span>.</p>
+<p>We take the <em>local</em> difference <span class="math notranslate nohighlight">\(q \ominus^\ell q_0\)</span> between our
+configurations <span class="math notranslate nohighlight">\(q \in \mathcal{C}\)</span> and <span class="math notranslate nohighlight">\(q_0 \in
+\mathcal{C}\)</span>, which is an element of the local Lie algebra in
+<span class="math notranslate nohighlight">\(\mathfrak{g}^\ell_{q_0}\)</span> at <span class="math notranslate nohighlight">\(q_0\)</span>. In Pinocchio the
+convention is to use local differences, unless specified otherwise
+(e.g. world-aligned frames). It should not be confused with the general
+Lie difference <span class="math notranslate nohighlight">\(\ominus\)</span> (that one is never used in practice),
+nor the spatial difference <span class="math notranslate nohighlight">\(\ominus^s\)</span>, which is an element of
+the spatial Lie algebra <span class="math notranslate nohighlight">\(\mathfrak{g}^s_{q_0}\)</span> associated with
+<span class="math notranslate nohighlight">\(q_0\)</span>:</p>
+<blockquote>
+<div>\begin{align}
+q \ominus q_0 & \in \mathcal{T}_{q_0} \mathcal{C} \\
+q \ominus^\ell q_0 & \in \mathfrak{g}^\ell_{q_0} \\
+q \ominus^s q_0 & \in \mathfrak{g}^s_{q_0}
+\end{align}</div></blockquote>
+<p>On a side note, here’s a look at the dimensions of these elements:</p>
+<blockquote>
+<div>\begin{align}
+\mathrm{dim}(q) = \mathrm{dim}(q_0) = n_q \\
+\mathrm{dim}(q \ominus q_0) = n_q \\
+\mathrm{dim}(q \ominus^\ell q_0)
+= \mathrm{dim}(q \ominus^s q_0)
+= n_v
+\end{align}</div></blockquote>
+<p>Finally, we derive the Jacobian of our error <span class="math notranslate nohighlight">\(e(q)\)</span> as follows,
+denoting by <span class="math notranslate nohighlight">\(a = \log(q_0^{-1} q)\)</span> so that <span class="math notranslate nohighlight">\(q \ominus^\ell
+q_0 = \log(a)\)</span>:</p>
+<blockquote>
+<div>\begin{align}
+\left.\frac{\partial e(q)}{\partial q} \right|_{\ell}
+= A \left. \frac{\partial \log}{\partial q}
+\right|_{\ell}^{\ell} \left.
+\frac{\partial a}{\partial q} \right|_{\ell} = A \left.
+\frac{\partial \log}{\partial q}
+\right|_{\ell}
+\end{align}</div></blockquote>
+<p>By virtue of the identity <span class="math notranslate nohighlight">\(\left.{}^\ell \frac{\partial
+a}{\partial q}\right|_{\ell} = I_{\mathfrak{g}}\)</span>. (See Yann de
+Mont-Marin’s future blog for details :p)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.LinearHolonomicTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.LinearHolonomicTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the task error function.</p>
+<p>The error function <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^{p}\)</span> is the quantity that
+the task aims to drive to zero (<span class="math notranslate nohighlight">\(p\)</span> is the dimension of the
+task). See the documentation of
+<a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_error" title="pink.tasks.task.Task.compute_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_error()</span></code></a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task error vector <span class="math notranslate nohighlight">\(e(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.LinearHolonomicTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.LinearHolonomicTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the task Jacobian at a given configuration.</p>
+<p>See the documentation of <a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_jacobian" title="pink.tasks.task.Task.compute_jacobian"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_jacobian()</span></code></a>
+for details on the task Jacobian.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task Jacobian <span class="math notranslate nohighlight">\(J(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.LowAccelerationTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">LowAccelerationTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.LowAccelerationTask" title="Link to this definition"></a></dt>
+<dd><p>Minimize joint accelerations.</p>
+<p>The task is to minimize <span class="math notranslate nohighlight">\(\| v \ominus v_{\mathrm{prev}} \|\)</span> where
+<span class="math notranslate nohighlight">\(v_{\mathrm{prev}}\)</span> is the latest integrated velocity.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.LowAccelerationTask.Delta_q_prev">
+<span class="sig-name descname"><span class="pre">Delta_q_prev</span></span><a class="headerlink" href="#pink.tasks.LowAccelerationTask.Delta_q_prev" title="Link to this definition"></a></dt>
+<dd><p>Latest displacement of the robot.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This task does not dissipate energy and will thus tend to yield
+oscillations. Considering coupling it with a <a class="reference internal" href="#pink.tasks.DampingTask" title="pink.tasks.DampingTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampingTask</span></code></a>.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.LowAccelerationTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.LowAccelerationTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the low-acceleration task error.</p>
+<p>The task error is opposite to the previous velocity, so that the
+overall task objective is <span class="math notranslate nohighlight">\(\| v \ominus v_{\mathrm{prev}} \|^2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Low-acceleration task error
+<span class="math notranslate nohighlight">\(e(q) = -\mathrm{d}t v_{\mathrm{prev}}\)</span>. This choice, along
+with <span class="math notranslate nohighlight">\(\alpha = 1\)</span> and the Jacobian <span class="math notranslate nohighlight">\(J\)</span> being the
+identity, ensures that <span class="math notranslate nohighlight">\(J(q) \Delta q = -\alpha e(q)
+\Leftrightarrow v = \Delta q / \mathrm{d}t = v_{\mathrm{prev}}\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.LowAccelerationTask.set_last_integration">
+<span class="sig-name descname"><span class="pre">set_last_integration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_prev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.LowAccelerationTask.set_last_integration" title="Link to this definition"></a></dt>
+<dd><p>Set the latest velocity and the duration it was applied for.</p>
+<p>The goal of the low-acceleration task is to minimize the difference
+between the new velocity and the previous one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v_prev</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Latest integrated velocity.</p></li>
+<li><p><strong>dt</strong> – Integration timestep in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.OmniwheelTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">OmniwheelTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hub_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">floor_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheel_radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.OmniwheelTask" title="Link to this definition"></a></dt>
+<dd><p>Roll without slipping on a plane, allowing lateral motion.</p>
+<p>The name of this task comes from omniwheels, also known as poly wheels.
+See the <a class="reference internal" href="#pink.tasks.RollingTask" title="pink.tasks.rolling_task.RollingTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">pink.tasks.rolling_task.RollingTask</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.OmniwheelTask.hub_frame">
+<span class="sig-name descname"><span class="pre">hub_frame</span></span><a class="headerlink" href="#pink.tasks.OmniwheelTask.hub_frame" title="Link to this definition"></a></dt>
+<dd><p>Name of a frame attached to the hub of the wheel in the
+robot model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.OmniwheelTask.floor_frame">
+<span class="sig-name descname"><span class="pre">floor_frame</span></span><a class="headerlink" href="#pink.tasks.OmniwheelTask.floor_frame" title="Link to this definition"></a></dt>
+<dd><p>Name of the inertial frame whose xy-plane defines the
+contact surface the wheel is rolling onto.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.OmniwheelTask.wheel_radius">
+<span class="sig-name descname"><span class="pre">wheel_radius</span></span><a class="headerlink" href="#pink.tasks.OmniwheelTask.wheel_radius" title="Link to this definition"></a></dt>
+<dd><p>Radius of the wheel, i.e. distance in meters from the hub
+to the nearest point on the rim.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See also the similar <a class="reference external" href="https://github.com/Rhoban/placo/blob/9e65abadff45071ab11274eb74770d71e10b7ca8/docs/kinematics/wheel_task.rst">wheel task in the PlaCo C++ library</a>.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.OmniwheelTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.OmniwheelTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the rolling task error.</p>
+<p>The error is a 2D vector <span class="math notranslate nohighlight">\({}_R e(q)\)</span> of the rim frame <span class="math notranslate nohighlight">\(R\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}{}_R e(q) := \begin{bmatrix}
+    0 \\
+    z_{\mathit{hub}} - \rho
+    \end{bmatrix}\end{split}\]</div>
+<p>The error is zero along the x-axis of the rim frame to roll without
+slipping (<em>i.e.</em>, the velocity of the contact point is zero in the
+floor plane). The error along the z-axis of the rim frame is chosen so
+that the task keeps the wheel hub at distance <span class="math notranslate nohighlight">\(\rho\)</span> (wheel
+radius) from the floor plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task error <span class="math notranslate nohighlight">\({}_R e(q) \in \mathbb{R}^3\)</span>, a translation
+expressed in the rim frame <span class="math notranslate nohighlight">\(R\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.OmniwheelTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.OmniwheelTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the omniwheel task Jacobian.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Jacobian matrix <span class="math notranslate nohighlight">\({}_R J_{WR}\)</span>, expressed locally in the rim
+frame <span class="math notranslate nohighlight">\(R\)</span>, of shape <span class="math notranslate nohighlight">\((2, n_q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.PostureTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">PostureTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.PostureTask" title="Link to this definition"></a></dt>
+<dd><p>Regulate joint angles to a desired posture.</p>
+<p>A posture is a vector of actuated joint angles. Floating base coordinates
+are not affected by this task.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.PostureTask.target_q">
+<span class="sig-name descname"><span class="pre">target_q</span></span><a class="headerlink" href="#pink.tasks.PostureTask.target_q" title="Link to this definition"></a></dt>
+<dd><p>Target vector in the configuration space. If the model has a
+floating base, then this vector should include floating-base
+coordinates (although they have no effect on the posture task).</p>
+</dd></dl>
+
+<p>A posture task is typically used for regularization as it has a steady
+rank. For instance, when Upkie’s legs are stretched and the Jacobian of its
+contact frames becomes singular, the posture task will drive the knees
+toward a preferred orientation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.PostureTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.PostureTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute posture task error.</p>
+<p>The posture task error is defined as:</p>
+<div class="math notranslate nohighlight">
+\[e(q) = q^* \ominus q\]</div>
+<p>See <a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_error" title="pink.tasks.task.Task.compute_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_error()</span></code></a> for more context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Posture task error <span class="math notranslate nohighlight">\(e(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.PostureTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.PostureTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the posture task Jacobian.</p>
+<p>The task Jacobian is the identity <span class="math notranslate nohighlight">\(I_{n_v} \in \mathbb{R}^{n_v
+\times n_v}\)</span>, with <span class="math notranslate nohighlight">\(n_v\)</span> the dimension of the robot’s tangent
+space, so that the task dynamics are:</p>
+<div class="math notranslate nohighlight">
+\[J(q) \Delta q = \Delta q = \alpha (q^* \ominus q)\]</div>
+<p>See <a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_jacobian" title="pink.tasks.task.Task.compute_jacobian"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_jacobian()</span></code></a> for more context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Posture task Jacobian <span class="math notranslate nohighlight">\(J(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.PostureTask.set_target">
+<span class="sig-name descname"><span class="pre">set_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_q</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.PostureTask.set_target" title="Link to this definition"></a></dt>
+<dd><p>Set target posture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target_q</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span>) – Target vector in the configuration space. If the model
+has a floating base, then this vector should include
+floating-base coordinates (although they have no effect on the
+posture task).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.PostureTask.set_target_from_configuration">
+<span class="sig-name descname"><span class="pre">set_target_from_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.PostureTask.set_target_from_configuration" title="Link to this definition"></a></dt>
+<dd><p>Set target posture from a robot configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">RelativeFrameTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position_cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation_cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RelativeFrameTask" title="Link to this definition"></a></dt>
+<dd><p>Regulate the pose of a robot frame relative to another robot frame.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.frame">
+<span class="sig-name descname"><span class="pre">frame</span></span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.frame" title="Link to this definition"></a></dt>
+<dd><p>Frame name, typically the name of a link or joint from the robot
+description.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.root">
+<span class="sig-name descname"><span class="pre">root</span></span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.root" title="Link to this definition"></a></dt>
+<dd><p>Name of the robot frame the task is relative to.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.transform_target_to_root">
+<span class="sig-name descname"><span class="pre">transform_target_to_root</span></span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.transform_target_to_root" title="Link to this definition"></a></dt>
+<dd><p>Target pose of the frame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the error twist.</p>
+<p>The error is a twist <span class="math notranslate nohighlight">\(e(q) \in se(3)\)</span> expressed in the local
+frame (i.e., it is a <em>body</em> twist). We map it to <span class="math notranslate nohighlight">\(\mathbb{R}^6\)</span>
+following Pinocchio’s convention where linear coordinates are followed
+by angular coordinates. The error vector is:</p>
+<div class="math notranslate nohighlight">
+\[e(q) := \log(T_{tf}) = \log(T_{rt}^{-1} T_{rf})\]</div>
+<p>where <span class="math notranslate nohighlight">\(b\)</span> denotes our frame, <span class="math notranslate nohighlight">\(t\)</span> the target frame and
+<span class="math notranslate nohighlight">\(0\)</span> the inertial frame. See also
+<a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_error" title="pink.tasks.task.Task.compute_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_error()</span></code></a> for more context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Frame task error <span class="math notranslate nohighlight">\(e(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the frame task Jacobian.</p>
+<p>The task Jacobian <span class="math notranslate nohighlight">\(J(q) \in \mathbb{R}^{6 \times n_v}\)</span> is the
+derivative of the task error <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^6\)</span> with respect
+to the configuration <span class="math notranslate nohighlight">\(q\)</span>. The formula for the frame task is:</p>
+<div class="math notranslate nohighlight">
+\[J(q) = \text{Jlog}(T_{tf}) (
+    {}_f J_{0f}(q) - \text{Ad}_{T_{fr}}{}_r J_{0r}(q)
+)\]</div>
+<p>The proof is as follow if we denote <span class="math notranslate nohighlight">\(JT(q)\)</span> the Jacobian in the
+local frame <span class="math notranslate nohighlight">\(T_{tf}(q) = T_{rt}^{-1} T_{0r}^{-1}(q) T_{0f}(q)\)</span>
+we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+J(q) = \text{Jlog}(T_{tf}) JT
+[Jv]^{up} &amp; = T_{tf}^{-1} \dot{T}_{tf} \\
+    &amp; = T_{ft}T_{tr}T_{r0}\dot{T}_{0f}
+    - T_{ft}T_{tr}T_{0r}^{-1}\dot{T}_{0r}T_{0r}^{-1}T_{0f}
+    \\
+    &amp; = T_{0f}^{-1}\dot{T}_{0f}
+    - T_{fr}(T_{0r}^{-1}\dot{T}_{0r})T_{fr}^{-1} \\
+    &amp; = [{}_f J_{0f} v - \text{Ad}_{T_{fr}}{}_r J_{0r} v]^{up} \\
+J(q) &amp; = {}_f J_{0f} - \text{Ad}_{T_{fr}}{}_r J_{0r}
+\end{align}\end{split}\]</div>
+<p>The formula implemented here is more general than the one detailed in
+<a class="reference internal" href="references.html#caron2023" id="id4"><span>[Caron2023]</span></a>. See also
+<a class="reference internal" href="introduction.html#pink.tasks.task.Task.compute_jacobian" title="pink.tasks.task.Task.compute_jacobian"><code class="xref py py-func docutils literal notranslate"><span class="pre">pink.tasks.task.Task.compute_jacobian()</span></code></a> for more context on task
+Jacobians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Jacobian matrix <span class="math notranslate nohighlight">\(J\)</span>, expressed locally in the frame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.set_orientation_cost">
+<span class="sig-name descname"><span class="pre">set_orientation_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orientation_cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.set_orientation_cost" title="Link to this definition"></a></dt>
+<dd><p>Set a new cost for all 3D orientation coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>orientation_cost</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Contribution of orientation errors to the
+normalized cost, in <span class="math notranslate nohighlight">\([\mathrm{cost}] / [\mathrm{rad}]\)</span>.
+If this is a vector, the cost is anisotropic and each
+coordinate corresponds to an axis of the frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.set_position_cost">
+<span class="sig-name descname"><span class="pre">set_position_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position_cost</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.set_position_cost" title="Link to this definition"></a></dt>
+<dd><p>Set a new cost for all 3D position coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position_cost</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – Contribution of position errors to the normalized
+cost, in <span class="math notranslate nohighlight">\([\mathrm{cost}] / [\mathrm{m}]\)</span>. If this is a
+vector, the cost is anisotropic and each coordinate corresponds
+to an axis of the frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.set_target">
+<span class="sig-name descname"><span class="pre">set_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform_target_to_root</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.set_target" title="Link to this definition"></a></dt>
+<dd><p>Set task target pose in the root frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>transform_target_to_root</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">SE3</span></code></span>) – Affine transform matrix (4×4) from the
+task target frame to the root frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RelativeFrameTask.set_target_from_configuration">
+<span class="sig-name descname"><span class="pre">set_target_from_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RelativeFrameTask.set_target_from_configuration" title="Link to this definition"></a></dt>
+<dd><p>Set task target pose from a robot configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.RollingTask">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">RollingTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hub_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">floor_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheel_radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RollingTask" title="Link to this definition"></a></dt>
+<dd><p>Roll without slipping on a plane.</p>
+<p>Frames used in this task are:</p>
+<ul class="simple">
+<li><p>Floor: inertial frame defining the contact plane the wheel rolls on.</p></li>
+<li><p>Hub: frame attached to the hub of the wheel in the robot model.</p></li>
+<li><p>Rim: its origin is the projection of the hub origin onto the floor
+plane. Its orientation is the same as the floor frame.</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.RollingTask.hub_frame">
+<span class="sig-name descname"><span class="pre">hub_frame</span></span><a class="headerlink" href="#pink.tasks.RollingTask.hub_frame" title="Link to this definition"></a></dt>
+<dd><p>Name of a frame attached to the hub of the wheel in the
+robot model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.RollingTask.floor_frame">
+<span class="sig-name descname"><span class="pre">floor_frame</span></span><a class="headerlink" href="#pink.tasks.RollingTask.floor_frame" title="Link to this definition"></a></dt>
+<dd><p>Name of the inertial frame whose xy-plane defines the
+contact surface the wheel is rolling onto.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.RollingTask.wheel_radius">
+<span class="sig-name descname"><span class="pre">wheel_radius</span></span><a class="headerlink" href="#pink.tasks.RollingTask.wheel_radius" title="Link to this definition"></a></dt>
+<dd><p>Radius of the wheel, i.e. distance in meters from the hub
+to the nearest point on the rim.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See also the similar <a class="reference external" href="https://github.com/Rhoban/placo/blob/9e65abadff45071ab11274eb74770d71e10b7ca8/docs/kinematics/wheel_task.rst">wheel task in the PlaCo C++ library</a>.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RollingTask.compute_error">
+<span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RollingTask.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the rolling task error.</p>
+<p>The error is a 3D vector <span class="math notranslate nohighlight">\({}_R e(q)\)</span> of the rim frame <span class="math notranslate nohighlight">\(R\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}{}_R e(q) := \begin{bmatrix}
+    0 \\
+    0 \\
+    z_{\mathit{hub}} - \rho
+    \end{bmatrix}\end{split}\]</div>
+<p>The error is zero along the x- and y-axis of the rim frame to roll
+without slipping (<em>i.e.</em>, the velocity of the contact point is zero in
+the floor plane). The error along the z-axis of the rim frame is chosen
+so that the task keeps the wheel hub at distance <span class="math notranslate nohighlight">\(\rho\)</span> (wheel
+radius) from the floor plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task error <span class="math notranslate nohighlight">\({}_R e(q) \in \mathbb{R}^3\)</span>, a translation
+expressed in the rim frame <span class="math notranslate nohighlight">\(R\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.RollingTask.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.RollingTask.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the rolling task Jacobian.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Translation Jacobian matrix <span class="math notranslate nohighlight">\({}_R J_{WR}\)</span>, expressed locally
+in the rim frame <span class="math notranslate nohighlight">\(R\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.Task">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.Task" title="Link to this definition"></a></dt>
+<dd><p>Abstract base class for kinematic tasks.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.Task.cost">
+<span class="sig-name descname"><span class="pre">cost</span></span><a class="headerlink" href="#pink.tasks.Task.cost" title="Link to this definition"></a></dt>
+<dd><p>cost vector with the same dimension as the error of the task. Its
+units depends on the error as well.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.Task.gain">
+<span class="sig-name descname"><span class="pre">gain</span></span><a class="headerlink" href="#pink.tasks.Task.gain" title="Link to this definition"></a></dt>
+<dd><p>Task gain <span class="math notranslate nohighlight">\(\alpha \in [0, 1]\)</span> for additional low-pass
+filtering. Defaults to 1.0 (no filtering) for dead-beat control.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.Task.lm_damping">
+<span class="sig-name descname"><span class="pre">lm_damping</span></span><a class="headerlink" href="#pink.tasks.Task.lm_damping" title="Link to this definition"></a></dt>
+<dd><p>Unitless scale of the Levenberg-Marquardt (only when
+the error is large) regularization term, which helps when
+targets are unfeasible. Increase this value if the task is too
+jerky under unfeasible targets, but beware that a larger
+damping slows down the task.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.Task.compute_error">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.Task.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the task error function.</p>
+<p>The error function <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^{k}\)</span> is the quantity that
+the task aims to drive to zero (<span class="math notranslate nohighlight">\(k\)</span> is the dimension of the
+task). It appears in the first-order task dynamics:</p>
+<div class="math notranslate nohighlight">
+\[J(q) \Delta q = -\alpha e(q)\]</div>
+<p>The Jacobian matrix <span class="math notranslate nohighlight">\(J(q) \in \mathbb{R}^{k \times n_v}\)</span>, with
+<span class="math notranslate nohighlight">\(n_v\)</span> the dimension of the robot’s tangent space, is the
+derivative of the task error <span class="math notranslate nohighlight">\(e(q)\)</span> with respect to the
+configuration <span class="math notranslate nohighlight">\(q \in \mathbb{R}^{n_q}\)</span>. This Jacobian is
+implemented in <a class="reference internal" href="#pink.tasks.Task.compute_jacobian" title="pink.tasks.Task.compute_jacobian"><code class="xref py py-func docutils literal notranslate"><span class="pre">Task.compute_jacobian()</span></code></a>. Finally, the
+configuration displacement <span class="math notranslate nohighlight">\(\Delta q\)</span> is the output of inverse
+kinematics.</p>
+<p>In the first-order task dynamics, the error <span class="math notranslate nohighlight">\(e(q)\)</span> is multiplied
+by the task gain <span class="math notranslate nohighlight">\(\alpha \in [0, 1]\)</span>. This gain can be one for
+dead-beat control (<em>i.e.</em> converge as fast as possible, but might be
+unstable as it neglects our first-order approximation), but it can also
+be lower a slower task (similar to low-pass filtering).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task error vector <span class="math notranslate nohighlight">\(e(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.Task.compute_jacobian">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.Task.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the task Jacobian at a given configuration.</p>
+<p>The task Jacobian <span class="math notranslate nohighlight">\(J(q) \in \mathbb{R}^{k \times n_v}\)</span> is the
+first-order derivative of the error <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^{k}\)</span>
+that defines the task, with <span class="math notranslate nohighlight">\(k\)</span> the dimension of the task and
+<span class="math notranslate nohighlight">\(n_v\)</span> the dimension of the robot’s tangent space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task Jacobian <span class="math notranslate nohighlight">\(J(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.Task.compute_qp_objective">
+<span class="sig-name descname"><span class="pre">compute_qp_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.Task.compute_qp_objective" title="Link to this definition"></a></dt>
+<dd><p>Compute the matrix-vector pair <span class="math notranslate nohighlight">\((H, c)\)</span> of the QP objective.</p>
+<p>This pair is such that the contribution of the task to the QP objective
+of the IK is:</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \| J \Delta q + \alpha e \|_{W}^2 = \frac{1}{2} \Delta
+q^T H \Delta q + c^T q\]</div>
+<p>The weight matrix <span class="math notranslate nohighlight">\(W \in \mathbb{R}^{k \times k}\)</span> weighs and
+normalizes task coordinates to the same unit. The unit of the overall
+contribution is [cost]^2. The configuration displacement <span class="math notranslate nohighlight">\(\Delta
+q\)</span> is the output of inverse kinematics (we divide it by <span class="math notranslate nohighlight">\(\Delta
+t\)</span> to get a commanded velocity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pair <span class="math notranslate nohighlight">\((H(q), c(q))\)</span> of Hessian matrix and linear vector of
+the QP objective.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Levenberg-Marquardt damping is described in <a class="reference internal" href="references.html#sugihara2011" id="id5"><span>[Sugihara2011]</span></a>. The
+dimensional analysis in this class is our own.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="limits.html" class="btn btn-neutral float-right" title="Limits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Stéphane Caron..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon-180x180.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction &mdash; pink 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6d33002f" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="_static/mathjax/tex-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tasks" href="tasks.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pink
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#notations">Notations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.configuration.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.collision_data"><code class="docutils literal notranslate"><span class="pre">Configuration.collision_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.collision_model"><code class="docutils literal notranslate"><span class="pre">Configuration.collision_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.data"><code class="docutils literal notranslate"><span class="pre">Configuration.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.model"><code class="docutils literal notranslate"><span class="pre">Configuration.model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.q"><code class="docutils literal notranslate"><span class="pre">Configuration.q</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.check_limits"><code class="docutils literal notranslate"><span class="pre">Configuration.check_limits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.get_frame_jacobian"><code class="docutils literal notranslate"><span class="pre">Configuration.get_frame_jacobian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.get_transform"><code class="docutils literal notranslate"><span class="pre">Configuration.get_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.get_transform_frame_to_world"><code class="docutils literal notranslate"><span class="pre">Configuration.get_transform_frame_to_world()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.integrate"><code class="docutils literal notranslate"><span class="pre">Configuration.integrate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.integrate_inplace"><code class="docutils literal notranslate"><span class="pre">Configuration.integrate_inplace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.configuration.Configuration.update"><code class="docutils literal notranslate"><span class="pre">Configuration.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#task-formalism">Task formalism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.tasks.task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pink.tasks.task.Task.cost"><code class="docutils literal notranslate"><span class="pre">Task.cost</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.tasks.task.Task.gain"><code class="docutils literal notranslate"><span class="pre">Task.gain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.tasks.task.Task.lm_damping"><code class="docutils literal notranslate"><span class="pre">Task.lm_damping</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.tasks.task.Task.compute_error"><code class="docutils literal notranslate"><span class="pre">Task.compute_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.tasks.task.Task.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">Task.compute_jacobian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pink.tasks.task.Task.compute_qp_objective"><code class="docutils literal notranslate"><span class="pre">Task.compute_qp_objective()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limits.html">Limits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barriers.html">Barriers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-kinematics.html">Inverse kinematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-notes.html">Developer notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pink</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/stephane-caron/pink/tree/main/doc/introduction.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
+<p>Inverse kinematics (IK) is the problem of computing <em>motions</em> (in Pink: velocities) that achieve a given set of <em>tasks</em>, such as putting a foot on a surface, moving the center of mass to a target location, etc.</p>
+<p>This documentation assumes you are already familiar with task-based inverse kinematics. You can check out for instance this <a class="reference external" href="https://scaron.info/robot-locomotion/inverse-kinematics.html">post on inverse kinematics</a> for a general introduction.</p>
+<section id="notations">
+<h2>Notations<a class="headerlink" href="#notations" title="Link to this heading"></a></h2>
+<p>In Pink, we adopt the subscript right-to-left convention for transforms, and superscript notation to indicate the frame of a motion or force vector:</p>
+<table class="cheatsheet docutils align-default">
+<colgroup>
+<col style="width: 70.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Quantity</p></td>
+<td><p>Notation</p></td>
+</tr>
+<tr class="row-even"><td><p>Affine transform from frame <span class="math notranslate nohighlight">\(A\)</span> to frame <span class="math notranslate nohighlight">\(B\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(T_{BA}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Body angular velocity of frame <span class="math notranslate nohighlight">\(A\)</span> in frame <span class="math notranslate nohighlight">\(B\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\({}^A \omega_{BA}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Position of frame <span class="math notranslate nohighlight">\(B\)</span> in frame <span class="math notranslate nohighlight">\(A\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\({}^A p_B\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Rotation matrix from frame <span class="math notranslate nohighlight">\(A\)</span> to frame <span class="math notranslate nohighlight">\(B\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(R_{BA}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Spatial angular velocity of frame <span class="math notranslate nohighlight">\(A\)</span> in frame <span class="math notranslate nohighlight">\(B\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\({}^B \omega_{BA}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>World frame (inertial)</p></td>
+<td><p><span class="math notranslate nohighlight">\(W\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>With these notations frame transforms can be read left to right, for example:</p>
+\begin{align}
+T_{CA} & = T_{CB} T_{BA} &
+{}^{B} \omega & = R_{BA} {}^{A} \omega &
+{}^B p_C & = R_{BA} {}^A p_C + {}^B p_A
+\end{align}<p>See also this <a class="reference external" href="https://scaron.info/robot-locomotion/spatial-vector-algebra-cheat-sheet.html">spatial algebra cheat sheet</a>.</p>
+</section>
+<section id="configuration">
+<span id="id1"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p id="module-pink.configuration">Configuration of a robot model.</p>
+<p>Pink uses <a class="reference external" href="https://github.com/stack-of-tasks/pinocchio">Pinocchio</a> for
+forward kinematics. A <a class="reference internal" href="#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a> holds a Pinocchio model and data
+for this model where forward kinematics have been run. This means that the
+geometric state of the model has been computed, and quantities such as frame
+transforms and frame Jacobians are available.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.configuration.Configuration">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.configuration.</span></span><span class="sig-name descname"><span class="pre">Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forward_kinematics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collision_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collision_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration" title="Link to this definition"></a></dt>
+<dd><p>Type indicating that configuration-dependent quantities are available.</p>
+<p>In Pink, this type enables access to frame transforms and frame Jacobians.
+We rely on typing to make sure the proper forward kinematics functions have
+been called beforehand. In Pinocchio, these functions are:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pin</span><span class="o">.</span><span class="n">computeJointJacobians</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">configuration</span><span class="p">)</span>
+<span class="n">pin</span><span class="o">.</span><span class="n">updateFramePlacements</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The former computes the full model Jacobian into <code class="docutils literal notranslate"><span class="pre">data.J</span></code>. (It also
+computes forward kinematics, so there is no need to further call
+<code class="docutils literal notranslate"><span class="pre">pin.forwardKinematics(model,</span> <span class="pre">data,</span> <span class="pre">configuration)</span></code>.) The latter updates
+frame placements.</p>
+<p>Additionally, if a collision model is provided, it is used to evaluate
+distances between frames by calling the following two functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pin</span><span class="o">.</span><span class="n">computeCollisions</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">collision_model</span><span class="p">,</span> <span class="n">collision_data</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+<span class="n">pin</span><span class="o">.</span><span class="n">updateGeometryPlacements</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">collision_model</span><span class="p">,</span> <span class="n">collision_data</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.collision_data">
+<span class="sig-name descname"><span class="pre">collision_data</span></span><a class="headerlink" href="#pink.configuration.Configuration.collision_data" title="Link to this definition"></a></dt>
+<dd><p>Data corresponding to
+<a class="reference internal" href="#pink.configuration.Configuration.collision_model" title="pink.configuration.Configuration.collision_model"><code class="xref py py-data docutils literal notranslate"><span class="pre">Configuration.collision_model</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.collision_model">
+<span class="sig-name descname"><span class="pre">collision_model</span></span><a class="headerlink" href="#pink.configuration.Configuration.collision_model" title="Link to this definition"></a></dt>
+<dd><p>Collision model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#pink.configuration.Configuration.data" title="Link to this definition"></a></dt>
+<dd><p>Data corresponding to <a class="reference internal" href="#pink.configuration.Configuration.model" title="pink.configuration.Configuration.model"><code class="xref py py-data docutils literal notranslate"><span class="pre">Configuration.model</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#pink.configuration.Configuration.model" title="Link to this definition"></a></dt>
+<dd><p>Kinodynamic model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.q">
+<span class="sig-name descname"><span class="pre">q</span></span><a class="headerlink" href="#pink.configuration.Configuration.q" title="Link to this definition"></a></dt>
+<dd><p>Configuration vector for the robot model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.check_limits">
+<span class="sig-name descname"><span class="pre">check_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safety_break</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration.check_limits" title="Link to this definition"></a></dt>
+<dd><p>Check that the current configuration is within limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tol</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Tolerance in radians.</p></li>
+<li><p><strong>safety_break</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, stop execution and raise an exception if the
+current configuration is outside limits. If False, print a
+warning and continue execution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="developer-notes.html#pink.exceptions.NotWithinConfigurationLimits" title="pink.exceptions.NotWithinConfigurationLimits"><strong>NotWithinConfigurationLimits</strong></a> – If the current configuration is
+    outside limits.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.get_frame_jacobian">
+<span class="sig-name descname"><span class="pre">get_frame_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration.get_frame_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the Jacobian matrix of a frame velocity.</p>
+<p>Denoting our frame by <span class="math notranslate nohighlight">\(B\)</span> and the world frame by <span class="math notranslate nohighlight">\(W\)</span>, the
+Jacobian matrix <span class="math notranslate nohighlight">\({}_B J_{WB}\)</span> is related to the body velocity
+<span class="math notranslate nohighlight">\({}_B v_{WB}\)</span> by:</p>
+<div class="math notranslate nohighlight">
+\[{}_B v_{WB} = {}_B J_{WB} \dot{q}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the frame, typically a link name from the URDF.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Jacobian <span class="math notranslate nohighlight">\({}_B J_{WB}\)</span> of the frame.</p>
+</dd>
+</dl>
+<p>When the robot model includes a floating base
+(pin.JointModelFreeFlyer), the configuration vector <span class="math notranslate nohighlight">\(q\)</span> consists
+of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">q[0:3]</span></code>: position in [m] of the floating base in the inertial
+frame, formatted as <span class="math notranslate nohighlight">\([p_x, p_y, p_z]\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q[3:7]</span></code>: unit quaternion for the orientation of the floating base
+in the inertial frame, formatted as <span class="math notranslate nohighlight">\([q_x, q_y, q_z, q_w]\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q[7:]</span></code>: joint angles in [rad].</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.get_transform">
+<span class="sig-name descname"><span class="pre">get_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration.get_transform" title="Link to this definition"></a></dt>
+<dd><p>Get the pose of a frame with respect to another frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the frame to get the pose of.</p></li>
+<li><p><strong>dest</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the frame to get the pose in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">SE3</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current transform from the source frame to the dest frame.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – if any of the frame names is not found in the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.get_transform_frame_to_world">
+<span class="sig-name descname"><span class="pre">get_transform_frame_to_world</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration.get_transform_frame_to_world" title="Link to this definition"></a></dt>
+<dd><p>Get the pose of a frame in the current configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of a frame, typically a link name from the URDF.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">SE3</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current transform from the given frame to the world frame.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – if the frame name is not found in the robot model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velocity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration.integrate" title="Link to this definition"></a></dt>
+<dd><p>Integrate a velocity starting from the current configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>velocity</strong> – Velocity in tangent space.</p></li>
+<li><p><strong>dt</strong> – Integration duration in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>New configuration vector after integration.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.integrate_inplace">
+<span class="sig-name descname"><span class="pre">integrate_inplace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velocity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration.integrate_inplace" title="Link to this definition"></a></dt>
+<dd><p>Integrate a velocity starting from the current configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>velocity</strong> – Velocity in tangent space.</p></li>
+<li><p><strong>dt</strong> – Integration duration in [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.configuration.Configuration.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.configuration.Configuration.update" title="Link to this definition"></a></dt>
+<dd><p>Update configuration to a new vector.</p>
+<p>Calling this function runs forward kinematics and computes
+collision-pair distances, if applicable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>q</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span>) – New configuration vector.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="task-formalism">
+<h2>Task formalism<a class="headerlink" href="#task-formalism" title="Link to this heading"></a></h2>
+<p>The <em>task function approach</em> followed in Pink, and many works before it, was originally formalized by Samson, Espiau and Le Borgne in <a class="reference internal" href="references.html#samson1991" id="id2"><span>[Samson1991]</span></a>.</p>
+<p id="module-pink.tasks.task">In Pink, all kinematic tasks derive from the <a class="reference internal" href="#pink.tasks.task.Task" title="pink.tasks.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a> base class.</p>
+<p>The formalism used in the library is written down in <a class="reference external" href="https://scaron.info/robotics/differential-inverse-kinematics.html">this note on task-based
+inverse kinematics</a>. As of
+February 2022, it hasn’t been updated with the proper dimensional analysis, but
+the core concepts and notations are there.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.tasks.task.Task">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.tasks.task.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lm_damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.task.Task" title="Link to this definition"></a></dt>
+<dd><p>Abstract base class for kinematic tasks.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.task.Task.cost">
+<span class="sig-name descname"><span class="pre">cost</span></span><a class="headerlink" href="#pink.tasks.task.Task.cost" title="Link to this definition"></a></dt>
+<dd><p>cost vector with the same dimension as the error of the task. Its
+units depends on the error as well.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.task.Task.gain">
+<span class="sig-name descname"><span class="pre">gain</span></span><a class="headerlink" href="#pink.tasks.task.Task.gain" title="Link to this definition"></a></dt>
+<dd><p>Task gain <span class="math notranslate nohighlight">\(\alpha \in [0, 1]\)</span> for additional low-pass
+filtering. Defaults to 1.0 (no filtering) for dead-beat control.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.tasks.task.Task.lm_damping">
+<span class="sig-name descname"><span class="pre">lm_damping</span></span><a class="headerlink" href="#pink.tasks.task.Task.lm_damping" title="Link to this definition"></a></dt>
+<dd><p>Unitless scale of the Levenberg-Marquardt (only when
+the error is large) regularization term, which helps when
+targets are unfeasible. Increase this value if the task is too
+jerky under unfeasible targets, but beware that a larger
+damping slows down the task.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.task.Task.compute_error">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.task.Task.compute_error" title="Link to this definition"></a></dt>
+<dd><p>Compute the task error function.</p>
+<p>The error function <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^{k}\)</span> is the quantity that
+the task aims to drive to zero (<span class="math notranslate nohighlight">\(k\)</span> is the dimension of the
+task). It appears in the first-order task dynamics:</p>
+<div class="math notranslate nohighlight">
+\[J(q) \Delta q = -\alpha e(q)\]</div>
+<p>The Jacobian matrix <span class="math notranslate nohighlight">\(J(q) \in \mathbb{R}^{k \times n_v}\)</span>, with
+<span class="math notranslate nohighlight">\(n_v\)</span> the dimension of the robot’s tangent space, is the
+derivative of the task error <span class="math notranslate nohighlight">\(e(q)\)</span> with respect to the
+configuration <span class="math notranslate nohighlight">\(q \in \mathbb{R}^{n_q}\)</span>. This Jacobian is
+implemented in <a class="reference internal" href="#pink.tasks.task.Task.compute_jacobian" title="pink.tasks.task.Task.compute_jacobian"><code class="xref py py-func docutils literal notranslate"><span class="pre">Task.compute_jacobian()</span></code></a>. Finally, the
+configuration displacement <span class="math notranslate nohighlight">\(\Delta q\)</span> is the output of inverse
+kinematics.</p>
+<p>In the first-order task dynamics, the error <span class="math notranslate nohighlight">\(e(q)\)</span> is multiplied
+by the task gain <span class="math notranslate nohighlight">\(\alpha \in [0, 1]\)</span>. This gain can be one for
+dead-beat control (<em>i.e.</em> converge as fast as possible, but might be
+unstable as it neglects our first-order approximation), but it can also
+be lower a slower task (similar to low-pass filtering).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task error vector <span class="math notranslate nohighlight">\(e(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.task.Task.compute_jacobian">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.task.Task.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the task Jacobian at a given configuration.</p>
+<p>The task Jacobian <span class="math notranslate nohighlight">\(J(q) \in \mathbb{R}^{k \times n_v}\)</span> is the
+first-order derivative of the error <span class="math notranslate nohighlight">\(e(q) \in \mathbb{R}^{k}\)</span>
+that defines the task, with <span class="math notranslate nohighlight">\(k\)</span> the dimension of the task and
+<span class="math notranslate nohighlight">\(n_v\)</span> the dimension of the robot’s tangent space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Task Jacobian <span class="math notranslate nohighlight">\(J(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.tasks.task.Task.compute_qp_objective">
+<span class="sig-name descname"><span class="pre">compute_qp_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.tasks.task.Task.compute_qp_objective" title="Link to this definition"></a></dt>
+<dd><p>Compute the matrix-vector pair <span class="math notranslate nohighlight">\((H, c)\)</span> of the QP objective.</p>
+<p>This pair is such that the contribution of the task to the QP objective
+of the IK is:</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \| J \Delta q + \alpha e \|_{W}^2 = \frac{1}{2} \Delta
+q^T H \Delta q + c^T q\]</div>
+<p>The weight matrix <span class="math notranslate nohighlight">\(W \in \mathbb{R}^{k \times k}\)</span> weighs and
+normalizes task coordinates to the same unit. The unit of the overall
+contribution is [cost]^2. The configuration displacement <span class="math notranslate nohighlight">\(\Delta
+q\)</span> is the output of inverse kinematics (we divide it by <span class="math notranslate nohighlight">\(\Delta
+t\)</span> to get a commanded velocity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pair <span class="math notranslate nohighlight">\((H(q), c(q))\)</span> of Hessian matrix and linear vector of
+the QP objective.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Levenberg-Marquardt damping is described in <a class="reference internal" href="references.html#sugihara2011" id="id3"><span>[Sugihara2011]</span></a>. The
+dimensional analysis in this class is our own.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tasks.html" class="btn btn-neutral float-right" title="Tasks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Stéphane Caron..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

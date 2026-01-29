@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon-180x180.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barriers &mdash; pink 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6d33002f" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="_static/mathjax/tex-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Inverse kinematics" href="inverse-kinematics.html" />
+    <link rel="prev" title="Limits" href="limits.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pink
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limits.html">Limits</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Barriers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pink.barriers.Barrier"><code class="docutils literal notranslate"><span class="pre">Barrier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.dim"><code class="docutils literal notranslate"><span class="pre">Barrier.dim</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.gain"><code class="docutils literal notranslate"><span class="pre">Barrier.gain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.gain_function"><code class="docutils literal notranslate"><span class="pre">Barrier.gain_function</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.safe_displacement"><code class="docutils literal notranslate"><span class="pre">Barrier.safe_displacement</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.safe_displacement_gain"><code class="docutils literal notranslate"><span class="pre">Barrier.safe_displacement_gain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.compute_barrier"><code class="docutils literal notranslate"><span class="pre">Barrier.compute_barrier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">Barrier.compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.compute_qp_inequalities"><code class="docutils literal notranslate"><span class="pre">Barrier.compute_qp_inequalities()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.compute_qp_objective"><code class="docutils literal notranslate"><span class="pre">Barrier.compute_qp_objective()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.Barrier.compute_safe_displacement"><code class="docutils literal notranslate"><span class="pre">Barrier.compute_safe_displacement()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.barriers.BodySphericalBarrier"><code class="docutils literal notranslate"><span class="pre">BodySphericalBarrier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.BodySphericalBarrier.frames"><code class="docutils literal notranslate"><span class="pre">BodySphericalBarrier.frames</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.BodySphericalBarrier.d_min"><code class="docutils literal notranslate"><span class="pre">BodySphericalBarrier.d_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.BodySphericalBarrier.compute_barrier"><code class="docutils literal notranslate"><span class="pre">BodySphericalBarrier.compute_barrier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.BodySphericalBarrier.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">BodySphericalBarrier.compute_jacobian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.barriers.PositionBarrier"><code class="docutils literal notranslate"><span class="pre">PositionBarrier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.PositionBarrier.frame"><code class="docutils literal notranslate"><span class="pre">PositionBarrier.frame</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.PositionBarrier.indices"><code class="docutils literal notranslate"><span class="pre">PositionBarrier.indices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.PositionBarrier.p_min"><code class="docutils literal notranslate"><span class="pre">PositionBarrier.p_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.PositionBarrier.p_max"><code class="docutils literal notranslate"><span class="pre">PositionBarrier.p_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.PositionBarrier.compute_barrier"><code class="docutils literal notranslate"><span class="pre">PositionBarrier.compute_barrier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.PositionBarrier.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">PositionBarrier.compute_jacobian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pink.barriers.SelfCollisionBarrier"><code class="docutils literal notranslate"><span class="pre">SelfCollisionBarrier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.SelfCollisionBarrier.d_min"><code class="docutils literal notranslate"><span class="pre">SelfCollisionBarrier.d_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.SelfCollisionBarrier.compute_barrier"><code class="docutils literal notranslate"><span class="pre">SelfCollisionBarrier.compute_barrier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pink.barriers.SelfCollisionBarrier.compute_jacobian"><code class="docutils literal notranslate"><span class="pre">SelfCollisionBarrier.compute_jacobian()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="inverse-kinematics.html">Inverse kinematics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer-notes.html">Developer notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pink</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Barriers</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/stephane-caron/pink/tree/main/doc/barriers.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="barriers">
+<span id="id1"></span><h1>Barriers<a class="headerlink" href="#barriers" title="Link to this heading"></a></h1>
+<p id="module-pink.barriers">Control Barrier Functions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.barriers.Barrier">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.barriers.</span></span><span class="sig-name descname"><span class="pre">Barrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_displacement_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.Barrier" title="Link to this definition"></a></dt>
+<dd><p>Abstract base class for barrier.</p>
+<p>A barrier is a function <span class="math notranslate nohighlight">\(h(q)\)</span> that
+satisfies the following condition:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial h_j}{\partial q}
+\dot{q} +\alpha_j(h_j(q))
+\geq 0, \quad \forall j\]</div>
+<p>where <span class="math notranslate nohighlight">\(\frac{\partial h_j}{\partial q}\)</span>
+are the Jacobians of the constraint functions, <span class="math notranslate nohighlight">\(\dot{q}\)</span>
+is the joint velocity vector, and <span class="math notranslate nohighlight">\(\alpha_j\)</span> are extended
+<a class="reference external" href="https://en.wikipedia.org/wiki/Class_kappa_function">class kappa</a>
+functions.</p>
+<p>On top of that, following <a class="reference external" href="https://arxiv.org/pdf/2404.12329">this article</a> barriers utilize safe displacement
+term is added to the cost of the optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[\frac{r}{2\|J_h\|^{2}}\|dq-dq_{\text{safe}}(q)\|^{2},\]</div>
+<p>where <span class="math notranslate nohighlight">\(J_h\)</span> is the Jacobian of the barrier function, dq is the
+joint displacement vector, and <span class="math notranslate nohighlight">\(dq_{\text{safe}}(q)\)</span> is the safe
+displacement vector.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#pink.barriers.Barrier.dim" title="Link to this definition"></a></dt>
+<dd><p>Dimension of the barrier.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.gain">
+<span class="sig-name descname"><span class="pre">gain</span></span><a class="headerlink" href="#pink.barriers.Barrier.gain" title="Link to this definition"></a></dt>
+<dd><p>linear barrier gain.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.gain_function">
+<span class="sig-name descname"><span class="pre">gain_function</span></span><a class="headerlink" href="#pink.barriers.Barrier.gain_function" title="Link to this definition"></a></dt>
+<dd><p>function, that defines stabilization term as nonlinear
+function of barrier. Defaults to the (linear) identity function.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.safe_displacement">
+<span class="sig-name descname"><span class="pre">safe_displacement</span></span><a class="headerlink" href="#pink.barriers.Barrier.safe_displacement" title="Link to this definition"></a></dt>
+<dd><p>Safe backup displacement.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.safe_displacement_gain">
+<span class="sig-name descname"><span class="pre">safe_displacement_gain</span></span><a class="headerlink" href="#pink.barriers.Barrier.safe_displacement_gain" title="Link to this definition"></a></dt>
+<dd><p>positive gain for safe backup displacement.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.compute_barrier">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_barrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.Barrier.compute_barrier" title="Link to this definition"></a></dt>
+<dd><p>Compute the value of the barrier function.</p>
+<p>The barrier function <span class="math notranslate nohighlight">\(h(q)\)</span>
+is a vector-valued function that represents the safety constraints.
+It should be designed such that the set
+<span class="math notranslate nohighlight">\(\{q : h(q) \geq 0\}\)</span>
+represents the safe region of the configuration space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Value of the barrier function <span class="math notranslate nohighlight">\(h(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.compute_jacobian">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.Barrier.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the Jacobian matrix of the barrier function.</p>
+<p>The Jacobian matrix
+<span class="math notranslate nohighlight">\(\frac{\partial h}{\partial q}(q)\)</span>
+of the barrier function with respect to the configuration variables is
+required for the computation of the barrier condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Jacobian matrix
+<span class="math notranslate nohighlight">\(\frac{\partial h}{\partial q}(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.compute_qp_inequalities">
+<span class="sig-name descname"><span class="pre">compute_qp_inequalities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.Barrier.compute_qp_inequalities" title="Link to this definition"></a></dt>
+<dd><p>Compute the linear inequality constraints for the barrier-based QP.</p>
+<p>The linear inequality constraints enforce the barrier conditions:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial h_j}
+{\partial q} \dot{q} +
+\alpha_j(h_j(q)) \geq 0, \quad \forall j\]</div>
+<p>where <span class="math notranslate nohighlight">\(\frac{\partial h_j}{\partial q}\)</span>
+are the Jacobians of the constraint functions,
+<span class="math notranslate nohighlight">\(\dot{q}\)</span> is the joint velocity vector,
+and <span class="math notranslate nohighlight">\(\alpha_j\)</span> are extended class K functions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Jacobian and barrier values are cached to avoid recomputation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Time step for discrete-time implementation. Defaults to 1e-3.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Tuple containing the inequality constraint matrix (G)</dt><dd><p>and vector (h).</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.compute_qp_objective">
+<span class="sig-name descname"><span class="pre">compute_qp_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.Barrier.compute_qp_objective" title="Link to this definition"></a></dt>
+<dd><p>Compute the quadratic objective function for the barrier-based QP.</p>
+<p>The quadratic objective function includes a regularization term
+based on the safe backup policy:</p>
+<div class="math notranslate nohighlight">
+\[\gamma(q)\left\| \dot{q}-
+\dot{q}_{safe}(q)\right\|^{2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma(q)\)</span> is a configuration-dependent weight and
+<span class="math notranslate nohighlight">\(\dot{q}_{safe}(q)\)</span> is the safe backup policy.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <cite>safe_displacement_gain</cite> is set to zero, the regularization
+term is not included. Jacobian and barrier values are cached
+to avoid recomputation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p></li>
+<li><p><strong>dt</strong> – Time step for discrete-time implementation. Defaults to 1e-3.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Tuple containing the quadratic objective matrix (H) and linear</dt><dd><p>objective vector (c).</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.Barrier.compute_safe_displacement">
+<span class="sig-name descname"><span class="pre">compute_safe_displacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.Barrier.compute_safe_displacement" title="Link to this definition"></a></dt>
+<dd><p>Compute the safe backup displacement.</p>
+<p>The safe backup control displacement <span class="math notranslate nohighlight">\(dq_{safe}(q)\)</span>
+is a joint displacement vector that can guarantee that system
+would stay in safety set.</p>
+<p>By default, it is set to zero, since it could not violate safety set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Safe backup joint velocities</dt><dd><p><span class="math notranslate nohighlight">\(\dot{q}_{safe}(q)\)</span>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.barriers.BodySphericalBarrier">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.barriers.</span></span><span class="sig-name descname"><span class="pre">BodySphericalBarrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_displacement_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.BodySphericalBarrier" title="Link to this definition"></a></dt>
+<dd><p>A barrier based on the distance between two frames.</p>
+<p>Defines a barrier function based on the Euclidean distance between two
+specified frames. It allows for the specification of a minimum distance
+threshold.</p>
+<p>The barrier function is defined as:</p>
+<div class="math notranslate nohighlight">
+\[h(q) = \|p_1(q) -
+p_2(q)\|^2 - d_{min}^2\]</div>
+<p>where <span class="math notranslate nohighlight">\(p_1(q)\)</span> and
+<span class="math notranslate nohighlight">\(p_2(q)\)</span> are the positions of the two
+frames in the world coordinate system, and <span class="math notranslate nohighlight">\(d_{min}\)</span>
+is the minimum distance threshold.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.BodySphericalBarrier.frames">
+<span class="sig-name descname"><span class="pre">frames</span></span><a class="headerlink" href="#pink.barriers.BodySphericalBarrier.frames" title="Link to this definition"></a></dt>
+<dd><p>Tuple of two frame names.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.BodySphericalBarrier.d_min">
+<span class="sig-name descname"><span class="pre">d_min</span></span><a class="headerlink" href="#pink.barriers.BodySphericalBarrier.d_min" title="Link to this definition"></a></dt>
+<dd><p>Minimum distance threshold.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.BodySphericalBarrier.compute_barrier">
+<span class="sig-name descname"><span class="pre">compute_barrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.BodySphericalBarrier.compute_barrier" title="Link to this definition"></a></dt>
+<dd><p>Compute the value of the barrier function.</p>
+<p>The barrier function is computed based on the Euclidean distance
+between the two specified frames. It considers the minimum distance
+threshold.</p>
+<p>The barrier function is given by:</p>
+<div class="math notranslate nohighlight">
+\[h(q) = \|p_1(q) -
+p_2(q)\|^2 - d_{min}^2\]</div>
+<p>where <span class="math notranslate nohighlight">\(p_1(q)\)</span> and
+<span class="math notranslate nohighlight">\(p_2(q)\)</span> are the positions of the two
+frames in the world coordinate system, and <span class="math notranslate nohighlight">\(d_{min}\)</span>
+is the minimum distance threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Value of the barrier function</dt><dd><p><span class="math notranslate nohighlight">\(h(q)\)</span>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.BodySphericalBarrier.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.BodySphericalBarrier.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the Jacobian matrix of the barrier function.</p>
+<p>The Jacobian matrix is computed based on the position Jacobians of the
+two specified frames. The Jacobians are transformed to align with the
+world coordinate system.</p>
+<p>The Jacobian matrix is given by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{\partial h}{\partial q}(q) =
+2(p_1(q) -
+p_2(q))^T \begin{bmatrix}
+    \frac{\partial p_1}{\partial q}
+    (q) \\
+    -\frac{\partial p_2}{\partial q}
+    (q)
+\end{bmatrix}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\frac{\partial p_1}{\partial q}(q)\)</span>
+and <span class="math notranslate nohighlight">\(\frac{\partial p_2}{\partial q}(q)\)</span>
+are the position Jacobians of the two frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Jacobian matrix</dt><dd><p><span class="math notranslate nohighlight">\(\frac{\partial h}{\partial q}(q)\)</span>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.barriers.PositionBarrier">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.barriers.</span></span><span class="sig-name descname"><span class="pre">PositionBarrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_displacement_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.PositionBarrier" title="Link to this definition"></a></dt>
+<dd><p>A position-based barrier.</p>
+<p>Defines a barrier function based on the position of a
+specified frame in the world coordinate system. It allows for the
+specification of minimum and maximum position bounds along selected axes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.PositionBarrier.frame">
+<span class="sig-name descname"><span class="pre">frame</span></span><a class="headerlink" href="#pink.barriers.PositionBarrier.frame" title="Link to this definition"></a></dt>
+<dd><p>Name of the frame to monitor.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.PositionBarrier.indices">
+<span class="sig-name descname"><span class="pre">indices</span></span><a class="headerlink" href="#pink.barriers.PositionBarrier.indices" title="Link to this definition"></a></dt>
+<dd><p>Indices of the position components to consider.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.PositionBarrier.p_min">
+<span class="sig-name descname"><span class="pre">p_min</span></span><a class="headerlink" href="#pink.barriers.PositionBarrier.p_min" title="Link to this definition"></a></dt>
+<dd><p>Minimum position bounds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.PositionBarrier.p_max">
+<span class="sig-name descname"><span class="pre">p_max</span></span><a class="headerlink" href="#pink.barriers.PositionBarrier.p_max" title="Link to this definition"></a></dt>
+<dd><p>Maximum position bounds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.PositionBarrier.compute_barrier">
+<span class="sig-name descname"><span class="pre">compute_barrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.PositionBarrier.compute_barrier" title="Link to this definition"></a></dt>
+<dd><p>Compute the value of the barrier function.</p>
+<p>The barrier function is computed based on the position of the specified
+frame in the world coordinate system. It considers the minimum and
+maximum position bounds along the selected axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Value of the barrier function
+<span class="math notranslate nohighlight">\(h(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.PositionBarrier.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.PositionBarrier.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the Jacobian matrix of the barrier function.</p>
+<p>The Jacobian matrix is computed based on the position Jacobian of the
+specified frame. The Jacobian is transformed to align with the world
+coordinate system and only the selected indices are considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Jacobian matrix
+<span class="math notranslate nohighlight">\(\frac{\partial h}{\partial q}(q)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pink.barriers.SelfCollisionBarrier">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pink.barriers.</span></span><span class="sig-name descname"><span class="pre">SelfCollisionBarrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_collision_pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_displacement_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.SelfCollisionBarrier" title="Link to this definition"></a></dt>
+<dd><p>Self Collision Avoidance Barrier.</p>
+<p>This class defines a barrier function based on the smooth convex collision
+geometry. using hpp-fcl through Pinocchio. Note that for non-smooth
+collision geometries behaviour is undefined.</p>
+<p>The barrier function is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}h(q) = \begin{bmatrix} \ldots \\ d(p^1_i, p^2_i) - d_{min}^2 \\
+    \ldots \end{bmatrix} \quad \forall i \in 0 \ldots N\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(N\)</span> is number of collision pairs, <span class="math notranslate nohighlight">\(p^k_i\)</span> is the
+<span class="math notranslate nohighlight">\(k-th\)</span> body in <span class="math notranslate nohighlight">\(i\)</span>-th collision pair, <span class="math notranslate nohighlight">\(d(p^1_i, p^2_i)\)</span>
+is the distance between collision bodies in the pair, and <span class="math notranslate nohighlight">\(d_{min}\)</span>
+is minimal distance between any collision bodies.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of evaluated collision pairs might not be equal to the
+number of all collision pairs. If the former is lower, then only the
+closest collision pairs will be considered.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pink.barriers.SelfCollisionBarrier.d_min">
+<span class="sig-name descname"><span class="pre">d_min</span></span><a class="headerlink" href="#pink.barriers.SelfCollisionBarrier.d_min" title="Link to this definition"></a></dt>
+<dd><p>Minimum distance between collision pairs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.SelfCollisionBarrier.compute_barrier">
+<span class="sig-name descname"><span class="pre">compute_barrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.SelfCollisionBarrier.compute_barrier" title="Link to this definition"></a></dt>
+<dd><p>Compute the value of the barrier function.</p>
+<p>The barrier function is computed as the vector of lowest distances
+between collision pairs. It is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}h(q) = \begin{bmatrix} \ldots \\ d(p^1_i, p^2_i) - d_{min}^2 \\
+    \ldots \end{bmatrix} \quad \forall i \in 1 \ldots N\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(N\)</span> is number of collision pairs, <span class="math notranslate nohighlight">\(p^k_i\)</span> is the
+<span class="math notranslate nohighlight">\(k-th\)</span> body in <span class="math notranslate nohighlight">\(i\)</span>-th collision pair, <span class="math notranslate nohighlight">\(d(p^1_i,
+p^2_i)\)</span> is the distance between collision bodies in the pair, and
+<span class="math notranslate nohighlight">\(d_{min}\)</span> is the minimal distance between any collision bodies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Value of the barrier function</dt><dd><p><span class="math notranslate nohighlight">\(h(q)\)</span>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pink.barriers.SelfCollisionBarrier.compute_jacobian">
+<span class="sig-name descname"><span class="pre">compute_jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pink.barriers.SelfCollisionBarrier.compute_jacobian" title="Link to this definition"></a></dt>
+<dd><p>Compute the Jacobian matrix of the barrier function.</p>
+<p>The Jacobian matrix could be represented as stacked gradients of each
+collision pair distance function w.r.t. joints. They are computed based
+on joints Jacobians and normal surface vector at nearest distance
+points n.</p>
+<p>The gradient, <em>a.k.a.</em> the i-th row in the Jacobian matrix, is given
+by:</p>
+<div class="math notranslate nohighlight">
+\[J_i = n_1^T J^1_p + (r_1 \times n_1)^T J^1_w +
+    n_2^T J^2_p + (r_2 \times n_2)^T J^2_w,\]</div>
+<p>where <span class="math notranslate nohighlight">\(n_{1,2}\)</span> are normal vectors (note that <span class="math notranslate nohighlight">\(n_1 =
+-n_2\)</span>), <span class="math notranslate nohighlight">\(r_{1, 2}\)</span> are vectors from joint origin and nearest
+point, <span class="math notranslate nohighlight">\(J^{1, 2}_{p, w}\)</span> are position/orientation Jacobians of
+respective joint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configuration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="introduction.html#pink.configuration.Configuration" title="pink.configuration.Configuration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Configuration</span></code></a></span>) – Robot configuration <span class="math notranslate nohighlight">\(q\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Jacobian matrix</dt><dd><p><span class="math notranslate nohighlight">\(\frac{\partial h}{\partial q}(q)\)</span>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="limits.html" class="btn btn-neutral float-left" title="Limits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="inverse-kinematics.html" class="btn btn-neutral float-right" title="Inverse kinematics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 Stéphane Caron..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
