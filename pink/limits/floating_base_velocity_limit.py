@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 """Floating-base velocity limits."""
+
 from typing import TYPE_CHECKING, Optional, Sequence, Tuple, Union
 
 import numpy as np
