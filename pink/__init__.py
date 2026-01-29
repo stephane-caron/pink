@@ -20,7 +20,7 @@ from .tasks import (
 )
 from .utils import custom_configuration_vector
 
-__version__ = "3.5.0"
+__version__ = "4.0.0"
 
 __all__ = [
     "Configuration",
