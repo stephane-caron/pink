@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- examples: Add example with a sparse QP solver, suppressing matrix conversion warnings
-- examples: Add uv script dependencies to all examples
+- examples: Add uv script dependencies to all examples; Add example with a sparse QP solver, suppressing matrix conversion warnings
+- limits: Allow floating base velocity limits with `FloatingBaseVelocityLimit` to plug into configurations to automatically clamp base twists (thanks to @Soontosh)
 
 ### Changed
 

@@ -7,9 +7,12 @@
 """All kinematic limits derive from the :class:`Limit` base class."""
 
 import abc
-from typing import Optional, Tuple
+from typing import TYPE_CHECKING, Optional, Tuple
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from ..configuration import Configuration
 
 
 class Limit(abc.ABC):
@@ -18,7 +21,7 @@ class Limit(abc.ABC):
     @abc.abstractmethod
     def compute_qp_inequalities(
         self,
-        q: np.ndarray,
+        configuration: "Configuration",
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute limit as linearized QP inequalities.
@@ -34,7 +37,7 @@ class Limit(abc.ABC):
         space at :math:`q`.
 
         Args:
-            q: Robot configuration.
+            configuration: Robot configuration providing up-to-date kinematics.
             dt: Integration timestep in [s].
 
         Returns:

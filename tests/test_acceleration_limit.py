@@ -46,8 +46,11 @@ class TestAccelerationLimit(unittest.TestCase):
         empty_model = pin.Model()
         empty_bounded = AccelerationLimit(empty_model, self.a_max)
         self.assertEqual(len(empty_bounded.indices), 0)
+        empty_configuration = Configuration(
+            empty_model, empty_model.createData(), np.empty(0)
+        )
         self.assertIsNone(
-            empty_bounded.compute_qp_inequalities(np.empty(0), 1e-3)
+            empty_bounded.compute_qp_inequalities(empty_configuration, 1e-3)
         )
 
     def test_limit_has_an_effect(self):

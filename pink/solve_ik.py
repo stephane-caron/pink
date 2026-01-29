@@ -95,12 +95,20 @@ def __compute_qp_inequalities(
     if limits is None:
         configuration_limit = configuration.model.configuration_limit
         velocity_limit = configuration.model.velocity_limit
-        limits = (configuration_limit, velocity_limit)
+        floating_base_limit = getattr(
+            configuration.model, "floating_base_velocity_limit", None
+        )
+        limits = [
+            configuration_limit,
+            velocity_limit,
+        ]
+        if floating_base_limit is not None:
+            limits.append(floating_base_limit)
     barriers = barriers if barriers is not None else []
     G_list = []
     h_list = []
     for limit in limits:
-        matvec = limit.compute_qp_inequalities(configuration.q, dt)
+        matvec = limit.compute_qp_inequalities(configuration, dt)
         if matvec is not None:
             G_list.append(matvec[0])
             h_list.append(matvec[1])
@@ -191,6 +199,7 @@ def build_ik(
     P, q = __compute_qp_objective(configuration, tasks, damping, barriers)
     G, h = __compute_qp_inequalities(configuration, limits, dt, barriers)
     A, b = __compute_qp_equalities(configuration, constraints)
+
     problem = qpsolvers.Problem(P, q, G, h, A, b)
     return problem
 

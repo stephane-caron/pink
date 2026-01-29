@@ -6,13 +6,16 @@
 
 """Subset of acceleration-limited joints in a robot model."""
 
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 import numpy as np
 import pinocchio as pin
 
 from ..exceptions import PinkError
 from .limit import Limit
+
+if TYPE_CHECKING:
+    from ..configuration import Configuration
 
 
 class AccelerationLimit(Limit):
@@ -95,7 +98,7 @@ class AccelerationLimit(Limit):
 
     def compute_qp_inequalities(
         self,
-        q: np.ndarray,
+        configuration: "Configuration",
         dt: float,
     ) -> Optional[Tuple[np.ndarray, np.ndarray]]:
         r"""Compute inequalities for acceleration limits.
@@ -132,7 +135,7 @@ class AccelerationLimit(Limit):
         in [DelPrete2018]_.
 
         Args:
-            q: Robot configuration.
+            configuration: Robot configuration.
             dt: Integration timestep in [s].
 
         Returns:
@@ -143,10 +146,12 @@ class AccelerationLimit(Limit):
             return None
 
         Delta_q_max = pin.difference(
-            self.model, q, self.model.upperPositionLimit
+            self.model, configuration.q, self.model.upperPositionLimit
         )[self.indices]
         Delta_q_min = pin.difference(
-            self.model, self.model.lowerPositionLimit, q
+            self.model,
+            self.model.lowerPositionLimit,
+            configuration.q,
         )[self.indices]
         dt_sq = dt * dt
         G = np.vstack([self.projection_matrix, -self.projection_matrix])

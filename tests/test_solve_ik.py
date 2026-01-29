@@ -20,6 +20,20 @@ from pink.exceptions import NotWithinConfigurationLimits
 from pink.tasks import ComTask, FrameTask
 
 
+def _numpy_supports_copy_keyword() -> bool:
+    """Return True if numpy.asarray supports the copy keyword argument."""
+    try:
+        np.asarray(np.array([0.0]), copy=True)
+    except TypeError:
+        return False
+    return True
+
+
+NUMPY_SUPPORTS_COPY_KEYWORD = _numpy_supports_copy_keyword()
+
+JAX_SOLVERS = {"jaxopt_osqp", "qpax"}
+
+
 class TestSolveIK(unittest.TestCase):
     """Test fixture for the solve_ik function."""
 
@@ -458,8 +472,17 @@ class TestSolveIK(unittest.TestCase):
         """
 
         def test(self):
+            if solver in JAX_SOLVERS and not NUMPY_SUPPORTS_COPY_KEYWORD:
+                self.skipTest(
+                    "NumPy copy keyword unsupported, skipping JAX-based solver."
+                )
             configuration, tasks, dt = self.get_jvrc_problem()
-            solve_ik(configuration, tasks, dt, solver=solver)
+            solve_ik(
+                configuration,
+                tasks,
+                dt,
+                solver=solver,
+            )
 
         return test
 
