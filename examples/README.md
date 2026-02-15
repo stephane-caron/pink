@@ -25,9 +25,9 @@ https://github.com/stephane-caron/pink/assets/1189580/d0d6aae9-326b-45fe-8cd3-01
 
 ## Arm: Panda
 
-A Panda arm tracking an intercative target in Viser:
+A Panda arm tracking an interactive target in Viser:
 
-TODO video
+https://github.com/user-attachments/assets/1c4ac222-8e3f-469d-95c3-550f1c0979fa
 
 ## Flying dual-arm UR3
 
