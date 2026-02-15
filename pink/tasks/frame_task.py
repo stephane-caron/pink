@@ -229,7 +229,7 @@ class FrameTask(Task):
 
     @property
     def position_cost(self) -> Union[float, np.ndarray]:
-        """Position cost, in :math:`[\mathrm{cost}] / [\mathrm{m}]`."""
+        """Get the position cost."""
         if isinstance(self.cost, np.ndarray):
             return self.cost[0:3]
         elif isinstance(self.cost, float):
@@ -242,7 +242,7 @@ class FrameTask(Task):
 
     @property
     def orientation_cost(self) -> Union[float, np.ndarray]:
-        """Orientation cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`."""
+        """Get the orientation cost."""
         if isinstance(self.cost, np.ndarray):
             return self.cost[3:6]
         elif isinstance(self.cost, float):
