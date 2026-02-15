@@ -146,6 +146,7 @@ Pass ``base_frame=None`` to let Pink pick the frame attached to ``root_joint`` a
 Illustrated examples showcase how Pink performs on various robot morphologies:
 
 - Arm: [UR5](https://github.com/stephane-caron/pink/tree/main/examples#arm-ur5) and [UR5 with end-effector limits](https://github.com/stephane-caron/pink/tree/main/examples/barriers#arm-ur5)
+- Arm: [Panda](https://github.com/stephane-caron/pink/tree/main/examples#arm-panda)
 - Dual arms: [Flying dual-arm UR3](https://github.com/stephane-caron/pink/tree/main/examples#flying-dual-arm-ur3)
 - Dual arms: [Yumi with spherical self-collision avoidance](https://github.com/stephane-caron/pink/tree/main/examples/barriers#yumi-end-effector-self-collision-avoidance)
 - Dual arms: [Iiwa with whole-body self-collision avoidance](https://github.com/stephane-caron/pink/tree/main/examples/barriers#iiwa-whole-body-collision-avoidance)

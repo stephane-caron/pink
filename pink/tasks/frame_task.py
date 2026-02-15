@@ -227,19 +227,39 @@ class FrameTask(Task):
         J = -pin.Jlog6(transform_frame_to_target) @ jacobian_in_frame
         return J
 
+    @property
+    def position_cost(self) -> Union[float, np.ndarray]:
+        """Position cost, in :math:`[\mathrm{cost}] / [\mathrm{m}]`."""
+        if isinstance(self.cost, np.ndarray):
+            return self.cost[0:3]
+        elif isinstance(self.cost, float):
+            return self.cost
+        else:
+            raise TaskDefinitionError(
+                "Frame task cost should be a vector or a scalar, "
+                f"currently cost={self.cost}"
+            )
+
+    @property
+    def orientation_cost(self) -> Union[float, np.ndarray]:
+        """Orientation cost, in :math:`[\mathrm{cost}] / [\mathrm{rad}]`."""
+        if isinstance(self.cost, np.ndarray):
+            return self.cost[3:6]
+        elif isinstance(self.cost, float):
+            return self.cost
+        else:
+            raise TaskDefinitionError(
+                "Frame task cost should be a vector or a scalar, "
+                f"currently cost={self.cost}"
+            )
+
     def __repr__(self):
         """Human-readable representation of the task."""
-        orientation_cost = (
-            self.cost if isinstance(self.cost, float) else self.cost[3:6]
-        )
-        position_cost = (
-            self.cost if isinstance(self.cost, float) else self.cost[0:3]
-        )
         return (
             "FrameTask("
             f"frame={self.frame}, "
-            f"position_cost={position_cost}, "
-            f"orientation_cost={orientation_cost}, "
+            f"position_cost={self.position_cost}, "
+            f"orientation_cost={self.orientation_cost}, "
             f"lm_damping={self.lm_damping}, "
             f"gain={self.gain})"
         )
