@@ -12,117 +12,41 @@
 """Manipulability comparison example: two Panda IK solutions side-by-side.
 
 This example visualizes two IK solutions simultaneously:
-- Robot 1 (full opacity): Uses ManipulabilityTask for optimization
-- Robot 2 (gray, 50% opacity): Without ManipulabilityTask
+- Robot 1 (full opacity): Uses ManipulabilityTask for optimization.
+- Robot 2 (gray, 50% opacity): Without ManipulabilityTask.
 
 Both robots track the same end-effector target. Manipulability values for
 both configurations are logged to the console for comparison.
+
+If wanted, the user can enable "Auto-drive target" to have the end-effector
+target automatically move through a predefined sequence of poses,
+demonstrating how the manipulability-optimized robot adapts its configuration
+to maintain better manipulability compared to the baseline (or at least most of
+the time...).
 """
 
-from typing import List, Literal, Optional, Tuple
+import types
+from typing import List, Literal
 
 import numpy as np
 import pinocchio as pin
 import qpsolvers
+import trimesh
 import viser
 import viser.uplot
 from loop_rate_limiters import RateLimiter
 from pinocchio import visualize
 from robot_descriptions.loaders.pinocchio import load_robot_description
 from scipy.spatial.transform import Rotation, Slerp
-from viser_shapes import add_grid
 
 import pink
 from pink import solve_ik
-from pink.limits.configuration_limit import ConfigurationLimit
 from pink.tasks import DampingTask, FrameTask, ManipulabilityTask, PostureTask
 from pink.utils import custom_configuration_vector
 from pink.visualization import start_viser_visualizer
 
-
-def start_configuration_comparison_visualizer(
-    robot: pin.RobotWrapper,
-    configurations: List[Tuple[np.ndarray, Tuple[float, float, float, float]]],
-    labels: Optional[List[str]] = None,
-    target_pose: Optional[pin.SE3] = None,
-    open: bool = True,  # pylint: disable=redefined-builtin
-) -> "viser.ViserServer":
-    """Visualize multiple robot configurations side-by-side.
-
-    Creates a viser visualization showing multiple robot configurations
-    overlaid, each with a different color/opacity. Useful for comparing
-    IK solutions, trajectories, or the effects of different task parameters.
-
-    Args:
-        robot: Pinocchio robot wrapper with its model and data.
-        configurations: List of (q, rgba) tuples where q is a joint
-            configuration vector and rgba is a color tuple (r, g, b, a)
-            with values in [0, 1]. The alpha channel controls opacity.
-        labels: Optional list of labels for each configuration. If provided,
-            must have the same length as configurations.
-        target_pose: Optional target end-effector pose to display as a frame.
-        open: If set (default), open Viser in a new Web browser tab.
-
-    Returns:
-        The viser server instance. Call server.stop() to shut down, or
-        use in a context manager.
-
-    Example:
-        >>> configs = [
-        ...     (q_baseline, (0.5, 0.5, 0.5, 0.5)),  # Gray, semi-transparent
-        ...     (q_improved, (0.2, 0.8, 0.2, 1.0)),  # Green, opaque
-        ... ]
-        >>> server = start_configuration_comparison_visualizer(
-        ...     robot, configs, labels=["baseline", "improved"]
-        ... )
-    """
-    import viser
-    from scipy.spatial.transform import Rotation
-
-    # Create viser server
-    server = viser.ViserServer(port=8080)
-
-    # Create a visualizer for each configuration
-    visualizers = []
-    for i, (q, rgba) in enumerate(configurations):
-        label = labels[i] if labels else f"config_{i}"
-
-        viz = visualize.ViserVisualizer(
-            robot.model, robot.collision_model, robot.visual_model
-        )
-        viz.initViewer(viewer=server, open=(open and i == 0))
-        viz.loadViewerModel(
-            rootNodeName=f"robot_{label}",
-            visual_color=list(rgba),
-        )
-        viz.display(q)
-        visualizers.append(viz)
-
-    # Add target pose indicator if provided
-    if target_pose is not None:
-        target_quat = Rotation.from_matrix(target_pose.rotation).as_quat(
-            scalar_first=True
-        )
-        server.scene.add_frame(
-            "/target_pose",
-            position=tuple(target_pose.translation),
-            wxyz=tuple(target_quat),
-            axes_length=0.15,
-            axes_radius=0.008,
-        )
-
-    # Add a ground grid for reference
-    server.scene.add_grid(
-        "/grid",
-        width=2.0,
-        height=2.0,
-        cell_size=0.1,
-        plane="xy",
-        position=(0.0, 0.0, 0.0),
-    )
-
-    return server
-
+WINDOW_DURATION = 5.0  # seconds of data to show in the manipulability plot
+CONTROL_FREQUENCY = 200.0  # Hz
 
 TARGET_POSES = [
     pin.SE3(pose)
@@ -190,6 +114,11 @@ def interpolate_poses(pose_1: pin.SE3, pose_2: pin.SE3, t: float):
 
 
 class TargetPoseHandle:
+    """Manage a sequence of target poses for the end-effector.
+
+    Allows interpolation and holding at each pose.
+    """
+
     poses: List[pin.SE3]
     index: int
     interpolation_time: float
@@ -203,12 +132,29 @@ class TargetPoseHandle:
         interpolation_time: float = 3.0,
         hold_time: float = 6.0,
     ):
+        """Initialize the target pose handle.
+
+        Args:
+            poses: Sequence of SE3 poses to cycle through.
+            interpolation_time: Duration in seconds to interpolate
+                between poses.
+            hold_time: Duration in seconds to hold at each pose
+                before advancing.
+        """
         self.poses = poses
         self.interpolation_time = interpolation_time
         self.hold_time = hold_time
         self.reset()
 
     def reset(self, start_pose: pin.SE3 = None):
+        """Reset the pose handler to the beginning of the sequence.
+
+        Args:
+            start_pose: Optional starting pose to prepend to the
+                sequence. If provided, interpolation begins from
+                this pose to the first pose in the sequence.
+                If None, starts holding at the first pose.
+        """
         self._elapsed = 0.0
         if start_pose is not None:
             self.poses.insert(0, start_pose)
@@ -219,12 +165,36 @@ class TargetPoseHandle:
             self._phase = "holding"
 
     def current_pose(self) -> pin.SE3:
+        """Return the current target pose.
+
+        Returns:
+            The SE3 pose at the current index.
+        """
         return self.poses[self.index]
 
     def previous_pose(self) -> pin.SE3:
+        """Return the previous target pose.
+
+        Returns:
+            The SE3 pose at the previous index (index - 1).
+        """
         return self.poses[self.index - 1]
 
     def get_next_pose(self, dt: float) -> pin.SE3:
+        """Advance time and return the interpolated or held pose.
+
+        During the interpolating phase, smoothly blends from the
+        previous pose to the current pose over
+        ``interpolation_time`` seconds. During the holding phase,
+        stays at the current pose for ``hold_time`` seconds before
+        advancing to the next pose.
+
+        Args:
+            dt: Time step in seconds since the last call.
+
+        Returns:
+            The SE3 pose for the current instant.
+        """
         self._elapsed += dt
         if self._phase == "interpolating":
             t = min(self._elapsed / self.interpolation_time, 1.0)
@@ -245,30 +215,8 @@ class TargetPoseHandle:
 
 if __name__ == "__main__":
     robot = load_robot_description("panda_description", root_joint=None)
-    q_locked = custom_configuration_vector(
-        robot,
-        panda_joint1=0.0,
-        panda_joint2=-0.785398,
-        panda_joint3=0.0,
-        panda_joint4=-2.35619,
-        panda_joint5=0.0,
-        panda_joint6=1.5708,
-        panda_joint7=0.785398,
-    )
-    joint_to_lock = ["panda_finger_joint1", "panda_finger_joint2"]
-    list_of_joints_to_lock_by_id = [
-        robot.model.getJointId(joint_name) for joint_name in joint_to_lock
-    ]
-    robot.model, further_models = pin.buildReducedModel(
-        robot.model,
-        [robot.visual_model, robot.collision_model],
-        list_of_joints_to_lock_by_id,
-        q_locked,
-    )
-    robot.visual_model, robot.collision_model = further_models
-    robot.rebuildData()
 
-    # Create primary visualizer (full opacity) for manipulability-optimized robot
+    # Create primary visualizer (opacity) for manipulability-optimized robot
     viz = start_viser_visualizer(robot, open=False)
     viewer = viz.viewer
     frame_name = "panda_hand_tcp"
@@ -277,13 +225,34 @@ if __name__ == "__main__":
 
     # Create ghost visualizer (50% opacity, gray) for non-manipulability robot
     viz_ghost = visualize.ViserVisualizer(
-        robot.model, robot.collision_model, robot.visual_model
+        robot.model,
+        robot.collision_model,
+        robot.visual_model,
     )
+
+    ghost_color = [0.8, 0.8, 0.8, 0.5]  # gray with 50% opacity
+
+    def _patched_add_mesh_from_path(self, name, mesh_path, color):
+        """Load mesh and apply color override even for .dae files."""
+        mesh = trimesh.load_mesh(mesh_path, force="mesh")
+        return self.viewer.scene.add_mesh_simple(
+            name,
+            mesh.vertices,
+            mesh.faces,
+            color=color[:3],
+            opacity=color[3],
+        )
+
+    viz_ghost._add_mesh_from_path = types.MethodType(
+        _patched_add_mesh_from_path, viz_ghost
+    )
+
     viz_ghost.initViewer(viewer=viewer, open=False)
     viz_ghost.loadViewerModel(
         rootNodeName="robot_ghost",
-        visual_color=[0.7, 0.7, 0.9, 0.5],  # blue with 50% opacity
+        visual_color=ghost_color,
     )
+    viz_ghost.displayVisuals(True)
 
     # Tasks for robot with manipulability optimization
     end_effector_task = FrameTask(
@@ -301,15 +270,8 @@ if __name__ == "__main__":
         cost=0.3,  # [cost] / [m^6]
         lm_damping=0.001,
         gain=1.0,
-        manipulability_rate=1.0,
+        manipulability_rate=1.5,
     )
-
-    # collision_barrier = SelfCollisionBarrier(
-    #     n_collision_pairs=len(robot.collision_model.collisionPairs),
-    #     gain=10.0,
-    #     safe_displacement_gain=1.0,
-    #     d_min=0.05,
-    # )
 
     tasks_with_manip = [
         end_effector_task,
@@ -331,7 +293,6 @@ if __name__ == "__main__":
         cost=0.05,  # [cost] / [rad]
     )
 
-    config_limit = ConfigurationLimit(robot.model, 0.99)
     tasks_no_manip = [
         end_effector_task_ghost,
         damping_task_ghost,
@@ -351,14 +312,14 @@ if __name__ == "__main__":
     )
 
     # Create two separate configurations
-    configuration_manip = pink.Configuration(
+    configuration_manip_task = pink.Configuration(
         robot.model,
         robot.data,
         q_ref,
         collision_model=robot.collision_model,
         collision_data=robot.collision_data,
     )
-    configuration_no_manip = pink.Configuration(
+    configuration_no_manip_task = pink.Configuration(
         robot.model,
         robot.data,
         q_ref.copy(),
@@ -366,17 +327,21 @@ if __name__ == "__main__":
         collision_data=None,
     )
 
-    # Set initial configuration for both
-    configuration_manip.update(q_ref)
-    configuration_no_manip.update(q_ref.copy())
+    configuration_manip_task.update(q_ref)
+    configuration_no_manip_task.update(q_ref.copy())
 
-    # Get home pose from the initial configuration
-    pose_home = configuration_manip.get_transform_frame_to_world(
+    pose_home = configuration_manip_task.get_transform_frame_to_world(
         end_effector_task.frame
     ).np
 
+    auto_driving = False
+    activate_auto_drive = viz.viewer.gui.add_checkbox(
+        label="Auto-drive target",
+        initial_value=auto_driving,
+    )
+
     lm_damping_slider = viewer.gui.add_slider(
-        "Manipulability Damping",
+        "Manipulability LM-Damping",
         min=0.0,
         max=0.001,
         initial_value=manipulability_task.lm_damping,
@@ -393,9 +358,7 @@ if __name__ == "__main__":
         "Manipulability Cost",
         min=0.0,
         max=1.0,
-        initial_value=float(
-            manipulability_task._cost_float
-        ),  # TODO: properly handle cost types in the task class
+        initial_value=float(manipulability_task.cost),
         step=0.01,
     )
     frame_task_position_cost_slider = viewer.gui.add_slider(
@@ -423,6 +386,13 @@ if __name__ == "__main__":
         initial_value=damping_task.cost
         if isinstance(damping_task.cost, (float, int))
         else damping_task.cost[0],
+        step=0.01,
+    )
+    posture_cost_slider = viewer.gui.add_slider(
+        "Posture Cost (Ghost)",
+        min=0.0,
+        max=1.0,
+        initial_value=posture_task_ghost.cost,
         step=0.01,
     )
 
@@ -455,22 +425,40 @@ if __name__ == "__main__":
             event.target.value * 0.5
         )  # less damping for ghost
 
+    @posture_cost_slider.on_update
+    def _(event: viser.GuiEvent[viser.GuiSliderHandle]):
+        posture_task_ghost.cost = event.target.value
+
+    @activate_auto_drive.on_update
+    def _(gui_event: viser.GuiEvent[viser.GuiCheckboxHandle]) -> None:
+        global auto_driving
+        auto_driving = gui_event.target.value
+        if auto_driving:
+            print("Auto-driving target through predefined poses...")
+            target_pose_handler.reset(
+                start_pose=configuration_manip_task.get_transform_frame_to_world(
+                    frame_name
+                )
+            )
+        else:
+            print("Manual control enabled. Drag the transform handle.")
+
     # Set task targets to home configuration
     for task in tasks_with_manip:
         if isinstance(task, ManipulabilityTask) or isinstance(
             task, DampingTask
         ):
             continue
-        task.set_target_from_configuration(configuration_manip)
+        task.set_target_from_configuration(configuration_manip_task)
 
     for task in tasks_no_manip:
         if isinstance(task, DampingTask):
             continue
-        task.set_target_from_configuration(configuration_no_manip)
+        task.set_target_from_configuration(configuration_no_manip_task)
 
     # Display initial configurations
-    viz.display(configuration_manip.q)
-    viz_ghost.display(configuration_no_manip.q)
+    viz.display(configuration_manip_task.q)
+    viz_ghost.display(configuration_no_manip_task.q)
 
     # Select QP solver
     solver = qpsolvers.available_solvers[0]
@@ -488,31 +476,11 @@ if __name__ == "__main__":
         line_width=3.0,
     )
 
-    auto_driving = False
-    activate_auto_drive = viz.viewer.gui.add_checkbox(
-        label="Auto-drive target",
-        initial_value=auto_driving,
-    )
-
     # Store raw target from UI (updated by callback)
     raw_target = {
         "position": pose_home[:3, 3].copy(),
         "rotation": pose_home[:3, :3].copy(),
     }
-
-    @activate_auto_drive.on_update
-    def _(gui_event: viser.GuiEvent[viser.GuiCheckboxHandle]) -> None:
-        global auto_driving
-        auto_driving = gui_event.target.value
-        if auto_driving:
-            print("Auto-driving target through predefined poses...")
-            target_pose_handler.reset(
-                start_pose=configuration_manip.get_transform_frame_to_world(
-                    frame_name
-                )
-            )
-        else:
-            print("Manual control enabled. Drag the transform handle.")
 
     @transform_handle.on_update
     def _(handle: viser.TransformControlsEvent) -> None:
@@ -532,16 +500,12 @@ if __name__ == "__main__":
             scalar_first=True,
         ).as_matrix()
 
-    add_grid(viewer)
-
-    rate = RateLimiter(frequency=200.0, warn=False)
+    rate = RateLimiter(frequency=CONTROL_FREQUENCY, warn=False)
     dt = rate.period
     t = 0.0  # [s]
 
-    # Real-time manipulability plotting setup
-    num_timesteps = int(5.0 / dt)  # 5 second window at 200Hz = 1000 samples
+    num_timesteps = int(WINDOW_DURATION / dt)
 
-    # Rolling buffers for time and manipulability values
     time_data = np.zeros(num_timesteps, dtype=np.float64)
     for i in range(num_timesteps):
         time_data[i] = (i - num_timesteps) * dt
@@ -600,6 +564,12 @@ if __name__ == "__main__":
         aspect=2.5,
     )
 
+    viewer.scene.add_grid(
+        name="ground_grid",
+        width=2.0,
+        height=2.0,
+    )
+
     print("Starting manipulability comparison...")
     print("Drag the transform handle to move the end-effector target.")
     print(
@@ -607,7 +577,6 @@ if __name__ == "__main__":
     )
 
     while True:
-        # Update target for manipulability-optimized robot
         if auto_driving:
             target_pose = target_pose_handler.get_next_pose(dt)
             end_effector_task.transform_target_to_world = target_pose
@@ -618,65 +587,58 @@ if __name__ == "__main__":
                 target_pose.rotation
             ).as_quat(scalar_first=True)
 
-        # Solve IK for both configurations
-        try:
-            velocity_manip = solve_ik(
-                configuration_manip,
-                tasks_with_manip,
-                dt,
-                solver=solver,
-                limits=[config_limit],
-                # barriers=[collision_barrier],
-                safety_break=False,
-            )
-        except Exception as e:
-            print(
-                f"IK solver failed for manipulability-optimized robot at time {t:.2f}s: {e}"
-            )
-            raise e
-            velocity_manip = np.zeros_like(configuration_manip.q)
-
-        try:
-            velocity_no_manip = solve_ik(
-                configuration_no_manip, tasks_no_manip, dt, solver=solver
-            )
-        except Exception as e:
-            print(f"IK solver failed for baseline robot at time {t:.2f}s: {e}")
-            velocity_no_manip = np.zeros_like(configuration_no_manip.q)
+        velocity_manip_task = solve_ik(
+            configuration_manip_task,
+            tasks_with_manip,
+            dt,
+            solver=solver,
+        )
+        velocity_no_manip_task = solve_ik(
+            configuration_no_manip_task,
+            tasks_no_manip,
+            dt,
+            solver=solver,
+        )
 
         # Integrate velocities
-        configuration_manip.integrate_inplace(velocity_manip, dt)
-        configuration_no_manip.integrate_inplace(velocity_no_manip, dt)
-
-        manip_with = manipulability_task.compute_manipulability(
-            configuration_manip
+        configuration_manip_task.integrate_inplace(
+            velocity_manip_task,
+            dt,
         )
-        manip_without = manipulability_task.compute_manipulability(
-            configuration_no_manip
-        )
-
-        error_with = np.linalg.norm(
-            end_effector_task.compute_error(configuration_manip)
-        )
-        error_without = np.linalg.norm(
-            end_effector_task_ghost.compute_error(configuration_no_manip)
+        configuration_no_manip_task.integrate_inplace(
+            velocity_no_manip_task,
+            dt,
         )
 
-        viz.display(configuration_manip.q)
-        viz_ghost.display(configuration_no_manip.q)
+        manip_with_manip_task = manipulability_task.compute_manipulability(
+            configuration_manip_task
+        )
+        manip_without_manip_task = manipulability_task.compute_manipulability(
+            configuration_no_manip_task
+        )
+
+        error_with_manipulability_task = np.linalg.norm(
+            end_effector_task.compute_error(configuration_manip_task)
+        )
+        error_without_manipulability_task = np.linalg.norm(
+            end_effector_task_ghost.compute_error(configuration_no_manip_task)
+        )
+
+        viz.display(configuration_manip_task.q)
+        viz_ghost.display(configuration_no_manip_task.q)
 
         time_data = np.roll(time_data, -1)
         time_data[-1] = t
         manip_data_opt = np.roll(manip_data_opt, -1)
-        manip_data_opt[-1] = manip_with
+        manip_data_opt[-1] = manip_with_manip_task
         manip_data_base = np.roll(manip_data_base, -1)
-        manip_data_base[-1] = manip_without
+        manip_data_base[-1] = manip_without_manip_task
         uplot_manip.data = (time_data, manip_data_opt, manip_data_base)
 
         error_data_opt = np.roll(error_data_opt, -1)
-        error_data_opt[-1] = error_with
+        error_data_opt[-1] = error_with_manipulability_task
         error_data_base = np.roll(error_data_base, -1)
-        error_data_base[-1] = error_without
+        error_data_base[-1] = error_without_manipulability_task
         uplot_error.data = (time_data, error_data_opt, error_data_base)
 
         rate.sleep()
