@@ -3,6 +3,7 @@
 The following examples include *tasks* and *limits*:
 
 - [Arm: UR5](#arm-ur5)
+- [Arm: Panda](#arm-panda)
 - [Flying dual-arm UR3](#flying-dual-arm-ur3)
 - [Humanoid: Draco 3](#humanoid-draco-3)
 - [Inverse kinematics of a UR10 arm](#inverse-kinematics-of-a-ur10-arm)
@@ -21,6 +22,12 @@ https://github.com/stephane-caron/pink/assets/1189580/d0d6aae9-326b-45fe-8cd3-01
 |--------------|-----------|
 | End-effector | 1         |
 | Posture      | $10^{-3}$ |
+
+## Arm: Panda
+
+A Panda arm tracking an interactive target in Viser:
+
+https://github.com/user-attachments/assets/1c4ac222-8e3f-469d-95c3-550f1c0979fa
 
 ## Flying dual-arm UR3
 
