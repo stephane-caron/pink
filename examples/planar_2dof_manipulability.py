@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# SPDX-License-Identifier: Apache-2.0
-#
 # /// script
 # dependencies = ["daqp", "loop-rate-limiters", "viser", "pin-pink",
 # "qpsolvers"]
@@ -10,10 +8,14 @@
 
 """Example of a planar 2-DOF robot arm moving in the XY-plane.
 
-This example demonstrates inverse kinematics on a simple 2-DOF planar
-manipulator. Both joints rotate around the Z-axis, constraining all motion
-to the XY-plane. The end-effector follows a circular trajectory.
-"""
+This example tries to demonstrate the use of the manipulability task.
+This example...
+ - ...uses the "planar_xy" mask to only consider the XY-plane for manipulability
+ - ...allows to tune the manipulability rate and damping factor in real-time using Viser sliders
+
+If the manipulability rate is positive, the robot will form a 90-degree angle to maximize manipulability.
+If the manipulability rate is negative, the robot will strech out in a straight line or collapse (singular configuration).
+"""  # noqa: E501
 
 import os
 
@@ -22,7 +24,6 @@ import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 from viser import GuiButtonHandle, GuiEvent, GuiSliderHandle
-from viser_shapes import add_grid
 
 import pink
 from pink import solve_ik
@@ -45,7 +46,11 @@ if __name__ == "__main__":
     # Initialize visualization
     viz = start_viser_visualizer(robot, open=False)
     viewer = viz.viewer
-    add_grid(viewer)
+    viewer.scene.add_grid(
+        name="grid",
+        width=2.0,
+        height=2.0,
+    )
 
     # Define tasks
     manipulability_task = ManipulabilityTask(
@@ -54,6 +59,8 @@ if __name__ == "__main__":
         lm_damping=1e-3,
         manipulability_rate=50.0,
         mask="planar_xy",
+        # Same as:
+        # mask=np.array([1, 1, 0, 0, 0, 0]),
     )
 
     tasks = [
@@ -91,7 +98,10 @@ if __name__ == "__main__":
     @reset_button.on_click
     def _(_: GuiEvent[GuiButtonHandle]):
         global configuration
-        configuration.update(q=np.array([1.0, 1.0]))
+        q_initial = np.random.uniform(
+            low=-np.pi, high=np.pi, size=robot.model.nq
+        )
+        configuration.update(q=q_initial)
 
     @lm_damping_slider.on_update
     def _(event: GuiEvent[GuiSliderHandle]):
@@ -110,8 +120,8 @@ if __name__ == "__main__":
     dt = rate.period
 
     print("Planar 2-DOF robot example started.")
-    print("The end-effector follows a circular trajectory in the XY-plane.")
     print("Open the Viser URL in your browser to visualize.")
+    print("Use the sliders to adjust the manipulability damping and rate.")
 
     while True:
         # Compute velocity and integrate it into next configuration
