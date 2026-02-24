@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
-# SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
-#
 # /// script
 # dependencies = ["daqp", "loop-rate-limiters", "viser", "pin-pink",
 # "qpsolvers", "robot_descriptions"]

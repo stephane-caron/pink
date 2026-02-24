@@ -42,7 +42,6 @@ https://github.com/stephane-caron/pink/assets/1189580/ef3f2571-6188-4b14-ae3f-b2
 | Right end-effector | 1 |
 | Posture | $10^{-3}$ |
 
-
 ## Humanoid: Draco 3
 
 A Draco 3 humanoid moving its right hand laterally while standing. This model includes a closed kinematic chain, implemented in the example with a ``JointCouplingTask``:
