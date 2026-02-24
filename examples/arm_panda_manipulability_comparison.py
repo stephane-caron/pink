@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
-#
 # /// script
 # dependencies = ["daqp", "loop-rate-limiters", "viser", "pin-pink",
 # "qpsolvers", "robot_descriptions"]
@@ -25,6 +22,7 @@ to maintain better manipulability compared to the baseline (or at least most of
 the time...).
 """
 
+import time
 import types
 from typing import List, Literal
 
@@ -216,7 +214,6 @@ class TargetPoseHandle:
 if __name__ == "__main__":
     robot = load_robot_description("panda_description", root_joint=None)
 
-    # Create primary visualizer (opacity) for manipulability-optimized robot
     viz = start_viser_visualizer(robot, open=False)
     viewer = viz.viewer
     frame_name = "panda_hand_tcp"
@@ -267,7 +264,7 @@ if __name__ == "__main__":
 
     manipulability_task = ManipulabilityTask(
         frame=frame_name,
-        cost=0.3,  # [cost] / [m^6]
+        cost=0.3,
         lm_damping=0.001,
         gain=1.0,
         manipulability_rate=1.5,
@@ -334,7 +331,7 @@ if __name__ == "__main__":
         end_effector_task.frame
     ).np
 
-    auto_driving = False
+    auto_driving = True
     activate_auto_drive = viz.viewer.gui.add_checkbox(
         label="Auto-drive target",
         initial_value=auto_driving,
@@ -507,19 +504,21 @@ if __name__ == "__main__":
     num_timesteps = int(WINDOW_DURATION / dt)
 
     time_data = np.zeros(num_timesteps, dtype=np.float64)
-    for i in range(num_timesteps):
-        time_data[i] = (i - num_timesteps) * dt
+    time_data[:] = np.linspace(-WINDOW_DURATION, 0, num=num_timesteps)
+
     manip_data_opt = np.zeros(num_timesteps, dtype=np.float64)
     manip_data_base = np.zeros(num_timesteps, dtype=np.float64)
     error_data_opt = np.zeros(num_timesteps, dtype=np.float64)
     error_data_base = np.zeros(num_timesteps, dtype=np.float64)
+    solve_time_data_opt = np.zeros(num_timesteps, dtype=np.float64)
+    solve_time_data_base = np.zeros(num_timesteps, dtype=np.float64)
 
     uplot_manip = viewer.gui.add_uplot(
         data=(time_data, manip_data_opt, manip_data_base),
         series=(
             viser.uplot.Series(label="time"),
             viser.uplot.Series(
-                label="Optimized",
+                label="Manipulability Task",
                 stroke="#2ecc71",  # green
                 width=2,
             ),
@@ -533,7 +532,7 @@ if __name__ == "__main__":
         title="Manipulability Comparison",
         scales={
             "x": viser.uplot.Scale(time=False, auto=True),
-            "y": viser.uplot.Scale(range=(0.0, 0.015)),
+            "y": viser.uplot.Scale(range=(0.0, 0.15)),
         },
         legend=viser.uplot.Legend(show=True),
         aspect=2.5,
@@ -544,7 +543,7 @@ if __name__ == "__main__":
         series=(
             viser.uplot.Series(label="time"),
             viser.uplot.Series(
-                label="Optimized",
+                label="Manipulability Task",
                 stroke="#2ecc71",  # green
                 width=2,
             ),
@@ -556,6 +555,31 @@ if __name__ == "__main__":
             ),
         ),
         title="Tracking Error Comparison",
+        scales={
+            "x": viser.uplot.Scale(time=False, auto=True),
+            "y": viser.uplot.Scale(auto=True),
+        },
+        legend=viser.uplot.Legend(show=True),
+        aspect=2.5,
+    )
+
+    uplot_solve_time = viewer.gui.add_uplot(
+        data=(time_data, solve_time_data_opt, solve_time_data_base),
+        series=(
+            viser.uplot.Series(label="time"),
+            viser.uplot.Series(
+                label="Manipulability Task",
+                stroke="#2ecc71",  # green
+                width=2,
+            ),
+            viser.uplot.Series(
+                label="Baseline",
+                stroke="#e74c3c",  # red
+                width=2,
+                dash=(4.0, 4.0),
+            ),
+        ),
+        title="IK Solve Time Comparison (ms)",
         scales={
             "x": viser.uplot.Scale(time=False, auto=True),
             "y": viser.uplot.Scale(auto=True),
@@ -587,20 +611,24 @@ if __name__ == "__main__":
                 target_pose.rotation
             ).as_quat(scalar_first=True)
 
+        t_start = time.perf_counter()
         velocity_manip_task = solve_ik(
             configuration_manip_task,
             tasks_with_manip,
             dt,
             solver=solver,
         )
+        solve_time_opt = (time.perf_counter() - t_start) * 1000  # ms
+
+        t_start = time.perf_counter()
         velocity_no_manip_task = solve_ik(
             configuration_no_manip_task,
             tasks_no_manip,
             dt,
             solver=solver,
         )
+        solve_time_base = (time.perf_counter() - t_start) * 1000  # ms
 
-        # Integrate velocities
         configuration_manip_task.integrate_inplace(
             velocity_manip_task,
             dt,
@@ -640,6 +668,16 @@ if __name__ == "__main__":
         error_data_base = np.roll(error_data_base, -1)
         error_data_base[-1] = error_without_manipulability_task
         uplot_error.data = (time_data, error_data_opt, error_data_base)
+
+        solve_time_data_opt = np.roll(solve_time_data_opt, -1)
+        solve_time_data_opt[-1] = solve_time_opt
+        solve_time_data_base = np.roll(solve_time_data_base, -1)
+        solve_time_data_base[-1] = solve_time_base
+        uplot_solve_time.data = (
+            time_data,
+            solve_time_data_opt,
+            solve_time_data_base,
+        )
 
         rate.sleep()
         t += dt
