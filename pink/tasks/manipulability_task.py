@@ -5,7 +5,7 @@
 
 """A task to maximize the manipulability of a robot manipulator."""
 
-from typing import Literal
+from typing import Literal, Optional, Union
 
 import numpy as np
 import pinocchio as pin
@@ -59,9 +59,9 @@ class ManipulabilityTask(Task):
         gain: float = 1.0,
         reference_frame: pin.ReferenceFrame = pin.ReferenceFrame.LOCAL,
         manipulability_rate: float = 0.1,
-        mask: Literal["position", "orientation", "planar_xy"]
-        | np.ndarray
-        | None = None,
+        mask: Optional[
+            Union[Literal["position", "orientation", "planar_xy"], np.ndarray]
+        ] = None,
     ) -> None:
         r"""Initialize the manipulability task.
 
@@ -118,10 +118,10 @@ class ManipulabilityTask(Task):
 
     def _get_validated_mask(
         self,
-        mask: Literal["position", "orientation", "planar_xy"]
-        | np.ndarray
-        | None,
-    ) -> np.ndarray | None:
+        mask: Optional[
+            Union[Literal["position", "orientation", "planar_xy"], np.ndarray]
+        ],
+    ) -> Optional[np.ndarray]:
         if mask is None:
             return None
 
@@ -146,7 +146,7 @@ class ManipulabilityTask(Task):
     def _get_mask_from_string(
         self,
         mask_str: Literal["position", "orientation", "planar_xy"],
-    ) -> np.ndarray | None:
+    ) -> Optional[np.ndarray]:
         if mask_str == "position":
             return np.array([1, 1, 1, 0, 0, 0])
         elif mask_str == "orientation":
