@@ -30,17 +30,17 @@ class ManipulabilityTask(Task):
 
     .. math::
 
-         || J_m \dot{q} - v_\text{man} || ^2
+         || J_m \dot{q} - \dot{m}_\text{desired} || ^2
 
     This will try to increase the manipulability at a rate
-    of :math:`v_\text{man}`.
+    of :math:`\dot{m}_\text{desired}`.
 
     Attributes:
         frame: Frame name for which to compute manipulability.
         cost: Weight for the manipulability task in the QP objective.
         reference_frame: Pinocchio reference frame for Jacobian computation.
-        manipulability_rate: Desired rate of change of manipulability
-        to achieve.
+        manipulability_rate: Desired rate of change of manipulability :math:`\dot{m}_\text{desired}`
+            to achieve.
 
     Note:
         Check the manipulability task of PlaCo for a similar (yet different)
@@ -184,9 +184,9 @@ class ManipulabilityTask(Task):
 
         .. math::
 
-            w(q) = \det(J(q) J(q)^T)
+            w(q) = \sqrt{\det(J(q) J(q)^T)}
 
-        where :math:`J(q)` is the 6xn Jacobian matrix of the frame. This is
+        where :math:`J(q)` is the :math:`6\times n` Jacobian matrix of the frame. This is
         the square of the Yoshikawa manipulability measure. A higher value
         indicates better conditioning of the Jacobian, meaning the robot can
         generate velocities more uniformly in all Cartesian directions.
@@ -196,7 +196,7 @@ class ManipulabilityTask(Task):
                 manipulability.
 
         Returns:
-            The manipulability index :math:`\det(J J^T)`.
+            The manipulability index.
 
         Note:
             When the Jacobian becomes singular (at kinematic singularities),
@@ -210,7 +210,7 @@ class ManipulabilityTask(Task):
             self.reference_frame,
         )
         J0_masked = self._mask_jacobian(J0)
-        return float(np.linalg.det(J0_masked @ J0_masked.T))
+        return np.sqrt(float(np.linalg.det(J0_masked @ J0_masked.T)))
 
     def compute_kinematic_hessian(
         self, configuration: Configuration
@@ -225,13 +225,27 @@ class ManipulabilityTask(Task):
         The Hessian is computed using the relation:
 
         .. math::
-
             H_{ijk} = \frac{\partial J_{ki}}{\partial q_j}
 
         The Hessian can be used to compute the time derivative of the Jacobian:
 
         .. math::
             \dot{J} = H \cdot \dot{q}
+
+        The computation can be done by dividing the Jacobian into linear and angular parts:
+
+        - For the linear part (first 3 rows), the Hessian is given by:
+
+        .. math::
+            H_{j, :3, i} = \omega_j \times v_i
+
+        - For the angular part (last 3 rows), the Hessian is given by:
+
+        .. math::
+            H_{j, 3:, i} = \omega_j \times \omega_i
+
+        ...where :math:`\omega_j` is the j-th column of the angular part of the Jacobian
+        and :math:`v_i` is the i-th column of the linear part of the Jacobian.
 
         For more details consider reading "Manipulator Differential Kinematics
         Part 2: Acceleration and Advanced Applications" by Jesse Haviland and
@@ -258,19 +272,31 @@ class ManipulabilityTask(Task):
         )
         n = configuration.model.nv
 
+        v = J0[:3, :]  # shape (3, n)
+        omega = J0[3:, :]  # shape (3, n)
+
+        omega_j = omega.T[:, np.newaxis, :]  # (n, 1, 3)
+        v_i = v.T[np.newaxis, :, :]  # (1, n, 3)
+        omega_i = omega.T[np.newaxis, :, :]  # (1, n, 3)
+
+        H_linear = np.cross(omega_j, v_i)  # (n, n, 3)
+        H_angular = np.cross(omega_j, omega_i)  # (n, n, 3)
+
+        # Zero out lower triangle (j > i) - we only compute for j <= i
+        mask_upper = np.triu(np.ones((n, n), dtype=bool))
+        H_linear = H_linear * mask_upper[:, :, np.newaxis]
+        H_angular = H_angular * mask_upper[:, :, np.newaxis]
+
+        # Apply symmetry for linear part: H_linear[i, j, :] = H_linear[j, i, :]
+        i_lower, j_lower = np.tril_indices(n, k=-1)
+        H_linear[i_lower, j_lower, :] = H_linear[j_lower, i_lower, :]
+
+        # Build Hessian tensor: H[j, :, i] with shape (n, 6, n)
         H = np.zeros((n, 6, n))
+        H[:, :3, :] = H_linear.transpose(0, 2, 1)  # (n, 3, n)
+        H[:, 3:, :] = H_angular.transpose(0, 2, 1)  # (n, 3, n)
 
-        for j in range(n):
-            for i in range(j, n):
-                # Linear velocity part: omega_j x v_i
-                H[j, :3, i] = np.cross(J0[3:, j], J0[:3, i])
-                # Angular velocity part: omega_j x omega_i
-                H[j, 3:, i] = np.cross(J0[3:, j], J0[3:, i])
-
-                if i != j:
-                    # Symmetry for linear part
-                    H[i, :3, j] = H[j, :3, i]
-
+        # We finally mask the Hessian with the task dependent mask, if any
         H_masked = self._mask_hessian(H)
         return H_masked
 
@@ -334,7 +360,7 @@ class ManipulabilityTask(Task):
 
         .. math::
 
-            e(q) = - v_\text{man} \in \mathbb{R}
+            e(q) = - \dot{m}_\text{desired}\in \mathbb{R}
 
         If the `manipulability_rate` is positive, this will try to increase
         the manipulability.
