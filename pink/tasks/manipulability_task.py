@@ -5,7 +5,8 @@
 
 """A task to maximize the manipulability of a robot manipulator."""
 
-from typing import Literal, override
+from typing import Literal
+from typing_extensions import override
 
 import numpy as np
 import pinocchio as pin
