@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- Task: `ManipulabilityTask` for maximizing robot manipulability
 - examples: Add an example of a panda arm tracking an interactive target in Viser visualizer.
+- examples: Add planar 2-DOF manipulability example
+- examples: Add Panda manipulability comparison example
 
 ## [4.0.0] - 2026-01-29
 

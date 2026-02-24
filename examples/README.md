@@ -7,6 +7,7 @@ The following examples include *tasks* and *limits*:
 - [Flying dual-arm UR3](#flying-dual-arm-ur3)
 - [Humanoid: Draco 3](#humanoid-draco-3)
 - [Inverse kinematics of a UR10 arm](#inverse-kinematics-of-a-ur10-arm)
+- [Manipulability](#manipulability)
 - [Mobile: Stretch](#mobile-stretch)
 - [Wheeled biped: Upkie](#wheeled-biped-upkie)
 
@@ -72,6 +73,13 @@ Terminated after 141 steps with error_norm = 1.1e-09
 | Task         | Cost |
 |--------------|------|
 | End-effector | 1    |
+
+## Manipulability
+
+Two examples demonstrate the `ManipulabilityTask`:
+
+- **Planar 2-DOF**: A simple planar robot arm moving in the XY-plane, with interactive Viser sliders to tune manipulability rate and damping in real-time.
+- **Panda comparison**: Side-by-side comparison of two Panda arms tracking the same end-effector target: one with `ManipulabilityTask` optimization (full opacity) and one without (gray, 50% opacity).
 
 ## Mobile: Stretch
 
