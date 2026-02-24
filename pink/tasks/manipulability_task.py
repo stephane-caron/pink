@@ -6,10 +6,10 @@
 """A task to maximize the manipulability of a robot manipulator."""
 
 from typing import Literal
-from typing_extensions import override
 
 import numpy as np
 import pinocchio as pin
+from typing_extensions import override
 
 from ..configuration import Configuration
 from .task import Task
@@ -40,8 +40,8 @@ class ManipulabilityTask(Task):
         frame: Frame name for which to compute manipulability.
         cost: Weight for the manipulability task in the QP objective.
         reference_frame: Pinocchio reference frame for Jacobian computation.
-        manipulability_rate: Desired rate of change of manipulability :math:`\dot{m}_\text{desired}`
-            to achieve.
+        manipulability_rate: Desired rate of change of manipulability
+            :math:`\dot{m}_\text{desired}` to achieve.
 
     Note:
         Check the manipulability task of PlaCo for a similar (yet different)
@@ -187,8 +187,8 @@ class ManipulabilityTask(Task):
 
             m(q) = \sqrt{\det(J(q) J(q)^T)}
 
-        where :math:`J(q)` is the :math:`6\times n` Jacobian matrix of the frame. This is
-        the Yoshikawa manipulability measure. A higher value
+        where :math:`J(q)` is the :math:`6\times n` Jacobian matrix of the
+        frame. This is the Yoshikawa manipulability measure. A higher value
         indicates better conditioning of the Jacobian, meaning the robot can
         generate velocities more uniformly in all Cartesian directions.
 
@@ -233,7 +233,8 @@ class ManipulabilityTask(Task):
         .. math::
             \dot{J} = H \cdot \dot{q}
 
-        The computation can be done by dividing the Jacobian into linear and angular parts:
+        The computation can be done by dividing the Jacobian into linear and
+        angular parts:
 
         - For the linear part (first 3 rows), the Hessian is given by:
 
@@ -245,8 +246,9 @@ class ManipulabilityTask(Task):
         .. math::
             H_{j, 3:, i} = \omega_j \times \omega_i
 
-        ...where :math:`\omega_j` is the j-th column of the angular part of the Jacobian
-        and :math:`v_i` is the i-th column of the linear part of the Jacobian.
+        ...where :math:`\omega_j` is the j-th column of the angular part of
+        the Jacobian and :math:`v_i` is the i-th column of the linear part of
+        the Jacobian.
 
         For more details consider reading "Manipulator Differential Kinematics
         Part 2: Acceleration and Advanced Applications" by Jesse Haviland and
