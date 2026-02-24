@@ -77,8 +77,8 @@ class ManipulabilityTask(Task):
                 filtering. Defaults to 1.0 (no filtering) for dead-beat
                 control.
             reference_frame: Pinocchio reference frame for Jacobian
-                computation.
-                Only WORLD is supported for now. Defaults to WORLD.
+                computation. LOCAL and WORLD are supported.
+                Defaults to LOCAL.
             manipulability_rate: Desired rate of change of manipulability to
                 achieve, in units of manipulability per second. This is the
                 target velocity for the manipulability gradient ascent. Higher
@@ -184,10 +184,10 @@ class ManipulabilityTask(Task):
 
         .. math::
 
-            w(q) = \sqrt{\det(J(q) J(q)^T)}
+            m(q) = \sqrt{\det(J(q) J(q)^T)}
 
         where :math:`J(q)` is the :math:`6\times n` Jacobian matrix of the frame. This is
-        the square of the Yoshikawa manipulability measure. A higher value
+        the Yoshikawa manipulability measure. A higher value
         indicates better conditioning of the Jacobian, meaning the robot can
         generate velocities more uniformly in all Cartesian directions.
 
@@ -326,8 +326,7 @@ class ManipulabilityTask(Task):
 
         Returns:
             The manipulability Jacobian as a row vector of shape (1, n),
-            where n is the number of degrees of freedom which
-            depends on the masking.
+            where n is the number of degrees of freedom (model.nv).
         """
         frame_id = configuration.model.getFrameId(self.frame)
         J = pin.getFrameJacobian(
