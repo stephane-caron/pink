@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#
-# SPDX-License-Identifier: Apache-2.0
 
 """A task to maximize the manipulability of a robot manipulator."""
 

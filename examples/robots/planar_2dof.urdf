@@ -2,7 +2,6 @@
 <!-- Planar 2-DOF robot arm lying on the XY-plane.
      Both revolute joints rotate around the Z-axis, so motion is constrained
      to the XY-plane. Based on double_pendulum.urdf but reoriented. -->
-<!-- SPDX-License-Identifier: Apache-2.0 -->
 <robot name="planar_2dof">
   <link name="base_link">
     <inertial>
