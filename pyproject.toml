@@ -12,14 +12,13 @@ maintainers = [
     {name = "Stéphane Caron", email = "stephane.caron@normalesup.org"},
 ]
 dynamic = ['version', 'description']
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Robot Framework :: Library",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -84,7 +83,7 @@ channels = ["conda-forge"]
 platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
 
 [tool.pixi.dependencies]
-python = ">=3.9"
+python = ">=3.10"
 loop-rate-limiters = ">=0.1.0"
 numpy = ">=1.19.0"
 pinocchio = ">=2.6.3"
@@ -121,9 +120,6 @@ mypy = ">=0.812"
 
 [tool.pixi.feature.mypy.tasks]
 mypy = "mypy pink --ignore-missing-imports"
-
-[tool.pixi.feature.py39.dependencies]
-python = "3.9.*"
 
 [tool.pixi.feature.py310.dependencies]
 python = "3.10.*"
@@ -162,7 +158,6 @@ lint = { features = ["py312", "lint", "mypy", "pylint", "ruff"], solve-group = "
 test-py310 = { features = ["py310", "test"], solve-group = "py310" }
 test-py311 = { features = ["py311", "test"], solve-group = "py311" }
 test-py312 = { features = ["py312", "test"], solve-group = "py312" }
-test-py39 = { features = ["py39", "test"], solve-group = "py39" }
 
 [tool.ruff]
 line-length = 79

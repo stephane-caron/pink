@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - examples: Add an example of a panda arm tracking an interactive target in Viser visualizer.
 
+### Changed
+
+- Bump minimum Python version to 3.10
+
 ## [4.0.0] - 2026-01-29
 
 ### Added
