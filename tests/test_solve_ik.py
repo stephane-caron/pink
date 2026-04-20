@@ -365,7 +365,11 @@ class TestSolveIK(unittest.TestCase):
         self.assertTrue(np.allclose(velocity, 0.0))
 
     def test_com_task_convergence(self):
-        """Feasible CoM and ankle tasks on the JVRC model converge."""
+        """Feasible CoM and ankle tasks on the JVRC model converge.
+
+        Check out examples/humanoid_jvrc_com.py to run this test with live
+        visualization.
+        """
         robot = load_robot_description(
             "jvrc_description", root_joint=pin.JointModelFreeFlyer()
         )
