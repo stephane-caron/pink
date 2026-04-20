@@ -2,20 +2,19 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2024 Inria
 #
 # /// script
 # dependencies = ["clarabel", "loop-rate-limiters", "meshcat", "pin-pink",
 # "qpsolvers", "robot_descriptions"]
 # ///
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, RollingTask
