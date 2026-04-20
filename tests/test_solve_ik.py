@@ -420,6 +420,7 @@ class TestSolveIK(unittest.TestCase):
                 dt,
                 solver="daqp",
                 safety_break=False,
+                damping=1e-10,
             )
             if np.linalg.norm(velocity) < conv_velocity_norm:
                 break

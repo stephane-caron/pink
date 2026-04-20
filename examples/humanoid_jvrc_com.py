@@ -121,6 +121,7 @@ if __name__ == "__main__":
             dt,
             solver=solver,
             safety_break=False,
+            damping=1e-10,
         )
         configuration.integrate_inplace(velocity, dt)
         viz.display(configuration.q)
