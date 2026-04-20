@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2024 Stéphane Caron, Simeon Nedelchev, Ivan Domrachev
 
 """Center of mass task implementation."""
 
