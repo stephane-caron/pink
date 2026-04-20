@@ -30,10 +30,11 @@ if __name__ == "__main__":
 
     # Initialize visualization
     viz = start_meshcat_visualizer(robot)
-    viz.viewer["com_target"].set_object(
+    viewer = viz.viewer
+    viewer["com_target"].set_object(
         g.Sphere(0.03), g.MeshLambertMaterial(color=0x00FF00)
     )
-    viz.viewer["com"].set_object(
+    viewer["com"].set_object(
         g.Sphere(0.03), g.MeshLambertMaterial(color=0xFF0000)
     )
 
@@ -64,7 +65,9 @@ if __name__ == "__main__":
     )
 
     initial_com = pin.centerOfMass(robot.model, robot.data, configuration.q)
-    com_task.set_target(initial_com)
+    desired_com = initial_com.copy()
+    desired_com[2] += 0.05
+    com_task.set_target(desired_com)
 
     tasks = [com_task, left_ankle_task, right_ankle_task]
 
@@ -72,24 +75,13 @@ if __name__ == "__main__":
     solver = qpsolvers.available_solvers[0]
     if "daqp" in qpsolvers.available_solvers:
         solver = "daqp"
-    elif "osqp" in qpsolvers.available_solvers:
-        solver = "osqp"
 
     rate = RateLimiter(frequency=200.0, warn=False)
     dt = rate.period
-    t = 0.0  # [s]
-    period = 2
-    omega = 2 * np.pi / period
 
     while True:
         pin.centerOfMass(robot.model, robot.data, configuration.q)
         com = robot.data.com[0]
-
-        # Update CoM target
-        Az = 0.05
-        desired_com = initial_com.copy()
-        desired_com[2] += Az * np.sin(omega * t)
-        com_task.set_target(desired_com)
 
         velocity = solve_ik(
             configuration,
@@ -100,10 +92,6 @@ if __name__ == "__main__":
         )
         configuration.integrate_inplace(velocity, dt)
         viz.display(configuration.q)
-        viz.viewer["com_target"].set_transform(
-            tf.translation_matrix(desired_com)
-        )
-        viz.viewer["com"].set_transform(tf.translation_matrix(com))
+        viewer["com"].set_transform(tf.translation_matrix(com))
 
         rate.sleep()
-        t += dt

@@ -5,7 +5,7 @@
 #
 # /// script
 # dependencies = ["clarabel", "loop-rate-limiters", "meshcat", "pin-pink",
-# "qpsolvers", "robot_descriptions"]
+# "qpsolvers", "robot_descriptions", "typing-extensions"]
 # ///
 
 """JVRC-1 humanoid standing on two feet and reaching with a hand."""
