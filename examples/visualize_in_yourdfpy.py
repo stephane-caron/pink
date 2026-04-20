@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     def callback(scene, dz=0.05):
         """Callback function for the visualizer."""
-        global animation_time, configuration
+        global animation_time
         dt = rate.period
 
         # Update task targets
