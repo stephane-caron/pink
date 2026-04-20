@@ -13,13 +13,13 @@
 from typing import Tuple
 
 import hppfcl as fcl
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.tasks import FrameTask, PostureTask

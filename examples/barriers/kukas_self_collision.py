@@ -12,13 +12,13 @@
 
 import os
 
+import meshcat_shapes
 import numpy as np
 import pinocchio as pin
 import qpsolvers
 from loop_rate_limiters import RateLimiter
 from robot_descriptions.iiwa14_description import PACKAGE_PATH, REPOSITORY_PATH
 
-import meshcat_shapes
 import pink
 from pink import solve_ik
 from pink.barriers import SelfCollisionBarrier
