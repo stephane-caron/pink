@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
-# Copyright 2023 Inria
 
 """Subset of bounded joints associated with a robot model."""
 

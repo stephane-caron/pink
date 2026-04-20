@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 #
 # SPDX-License-Identifier: Apache-2.0
-# Copyright 2022 Stéphane Caron
-# Copyright 2024 Inria
 
 """Relative frame task implementation."""
 
