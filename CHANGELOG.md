@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- examples: Add an example with the JVRC-1 humanoid backbending via a CoM task
+
 ### Changed
 
 - Transfer copyright notices to `NOTICE` file
