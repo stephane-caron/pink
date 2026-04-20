@@ -473,7 +473,8 @@ class TestSolveIK(unittest.TestCase):
         def test(self):
             if solver in JAX_SOLVERS and not NUMPY_SUPPORTS_COPY_KEYWORD:
                 self.skipTest(
-                    "NumPy copy keyword unsupported, skipping JAX-based solver."
+                    "NumPy copy keyword unsupported, "
+                    "skipping JAX-based solver."
                 )
             configuration, tasks, dt = self.get_jvrc_problem()
             solve_ik(
