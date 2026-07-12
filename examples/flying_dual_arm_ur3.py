@@ -83,7 +83,9 @@ def prefix_frames(
 if __name__ == "__main__":
     model, visual_model = create_floating_base("base")
 
-    left_arm = load_robot_description("ur3_description", root_joint=None)
+    left_arm = load_robot_description(
+        "ur3_official_description", root_joint=None
+    )
     prefix_frames(left_arm.model, left_arm.visual_model, "left")
     left_arm_placement = pin.SE3.Identity()
     left_arm_placement.translation = np.array([0.3, 0.0, 0.0])
@@ -96,7 +98,9 @@ if __name__ == "__main__":
         left_arm_placement,
     )
 
-    right_arm = load_robot_description("ur3_description", root_joint=None)
+    right_arm = load_robot_description(
+        "ur3_official_description", root_joint=None
+    )
     prefix_frames(right_arm.model, right_arm.visual_model, "right")
     right_arm_placement = pin.SE3.Identity()
     right_arm_placement.translation = np.array([-0.3, 0.0, 0.0])
@@ -132,13 +136,13 @@ if __name__ == "__main__":
         lm_damping=0.1,
     )
     left_ee_task = FrameTask(
-        "left_ee_link",
+        "left_tool0",
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
         lm_damping=1.0,  # tuned for this setup
     )
     right_ee_task = FrameTask(
-        "right_ee_link",
+        "right_tool0",
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
         lm_damping=1.0,  # tuned for this setup

@@ -34,11 +34,11 @@ if __name__ == "__main__":
         action="store_true",
     )
     args = parser.parse_args()
-    robot = load_robot_description("ur5_description", root_joint=None)
+    robot = load_robot_description("ur5_official_description", root_joint=None)
     viz = start_meshcat_visualizer(robot)
 
     end_effector_task = FrameTask(
-        "ee_link",
+        "tool0",
         position_cost=10.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
     )
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     )
 
     pos_barrier = PositionBarrier(
-        "ee_link",
+        "tool0",
         indices=[1],
         p_min=np.array([-0.4]),
         p_max=np.array([0.6]),
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
         G, h = pos_barrier.compute_qp_inequalities(configuration, dt=dt)
         distance_to_manipulator = configuration.get_transform_frame_to_world(
-            "ee_link"
+            "tool0"
         ).translation[1]
         if args.verbose:
             print(

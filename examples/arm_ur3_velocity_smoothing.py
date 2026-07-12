@@ -27,7 +27,7 @@ from pink.visualization import start_meshcat_visualizer
 NB_STEPS = 3000  # number of steps to run the example for
 
 if __name__ == "__main__":
-    robot = load_robot_description("ur3_description", root_joint=None)
+    robot = load_robot_description("ur3_official_description", root_joint=None)
 
     viz = start_meshcat_visualizer(robot)
     viewer = viz.viewer
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     # Define inverse kinematics tasks and limits
     end_effector_task = FrameTask(
-        "ee_link",
+        "tool0",
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
         lm_damping=1.0,  # tuned for this setup

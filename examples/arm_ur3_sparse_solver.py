@@ -29,7 +29,7 @@ RADIUS = 0.15  # m
 
 
 if __name__ == "__main__":
-    robot = load_robot_description("ur3_description", root_joint=None)
+    robot = load_robot_description("ur3_official_description", root_joint=None)
 
     # Initialize visualization
     viz = start_meshcat_visualizer(robot)
@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     # Define differential IK tasks
     end_effector_task = FrameTask(
-        "ee_link",
+        "tool0",
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=0.1,  # [cost] / [rad]
     )
