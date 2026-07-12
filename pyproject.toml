@@ -91,6 +91,9 @@ pinocchio = ">=2.6.3"
 qpsolvers = ">=4.3.1"
 robot_descriptions = ">=1.9.0"
 
+[tool.pixi.pypi-dependencies]
+xacrodoc = ">=2.0.0"
+
 [tool.pixi.feature.coverage.dependencies]
 coveralls = ">=4.0.0"
 
