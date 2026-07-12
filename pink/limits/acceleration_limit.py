@@ -29,6 +29,10 @@ class AccelerationLimit(Limit):
         Delta_q_prev: Latest displacement of the robot.
         a_max: Maximum acceleration vector for acceleration-limited joints.
         indices: Tangent indices corresponding to acceleration-limited joints.
+        has_configuration_limit: Whether each acceleration-limited joint also
+            has a real configuration limit, in which case the "braking
+            distance" term applies. Continuous (unbounded) joints do not
+            have one.
         model: Robot model.
         projection_matrix: Projection from tangent space to subspace with
             acceleration-limited joints.
@@ -37,6 +41,7 @@ class AccelerationLimit(Limit):
     Delta_q_prev: np.ndarray
     a_max: np.ndarray
     indices: np.ndarray
+    has_configuration_limit: np.ndarray
     model: pin.Model
     projection_matrix: Optional[np.ndarray]
 
@@ -66,9 +71,24 @@ class AccelerationLimit(Limit):
             ].all()
         ]
 
+        has_configuration_limit = np.logical_and(
+            model.hasConfigurationLimit(),
+            np.logical_and(
+                model.upperPositionLimit < 1e20,
+                model.upperPositionLimit > model.lowerPositionLimit + 1e-10,
+            ),
+        )
+
         index_list: List[int] = []
+        config_limit_list: List[bool] = []
         for joint in joints:
             index_list.extend(range(joint.idx_v, joint.idx_v + joint.nv))
+            joint_has_config_limit = bool(
+                has_configuration_limit[
+                    slice(joint.idx_q, joint.idx_q + joint.nq)
+                ].all()
+            )
+            config_limit_list.extend([joint_has_config_limit] * joint.nv)
         indices = np.array(index_list)
         indices.setflags(write=False)
 
@@ -79,6 +99,7 @@ class AccelerationLimit(Limit):
         self.Delta_q_prev = np.zeros(dim)
         self.a_max = a_max
         self.indices = indices
+        self.has_configuration_limit = np.array(config_limit_list)
         self.model = model
         self.projection_matrix = projection_matrix
 
@@ -144,14 +165,24 @@ class AccelerationLimit(Limit):
         if self.projection_matrix is None:  # no joint (thus checked for mypy)
             return None
 
+        # Tangent upper position displacements
         Delta_q_max = pin.difference(
             self.model, configuration.q, self.model.upperPositionLimit
         )[self.indices]
+        Delta_q_max = np.where(
+            self.has_configuration_limit, Delta_q_max, np.inf
+        )
+
+        # Tangent lower position displacements
         Delta_q_min = pin.difference(
             self.model,
             self.model.lowerPositionLimit,
             configuration.q,
         )[self.indices]
+        Delta_q_min = np.where(
+            self.has_configuration_limit, Delta_q_min, np.inf
+        )
+
         dt_sq = dt * dt
         G = np.vstack([self.projection_matrix, -self.projection_matrix])
         h = np.hstack(
