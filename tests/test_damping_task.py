@@ -19,7 +19,9 @@ class TestDampingTask(unittest.TestCase):
 
     def setUp(self):
         """Prepare test fixture."""
-        robot = load_robot_description("ur3_description", root_joint=None)
+        robot = load_robot_description(
+            "ur3_official_description", root_joint=None
+        )
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
 
     def test_task_repr(self):

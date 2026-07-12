@@ -27,7 +27,7 @@ class TestJointVelocityTask(unittest.TestCase):
     def setUp(self):
         """Prepare test fixture."""
         robot = load_robot_description(
-            "ur3_description",
+            "ur3_official_description",
             root_joint=pin.JointModelFreeFlyer(),
         )
         configuration = Configuration(robot.model, robot.data, robot.q0)

@@ -25,7 +25,7 @@ class TestAccelerationLimit(unittest.TestCase):
 
     def setUp(self):
         """Set test fixture up."""
-        robot = load_robot_description("ur3_description")
+        robot = load_robot_description("ur3_official_description")
         model = robot.model
         a_max = UR3_MAX_ACCEL * np.ones(robot.model.nv)  # rad/s²
         self.a_max = a_max
@@ -55,7 +55,7 @@ class TestAccelerationLimit(unittest.TestCase):
     def test_limit_has_an_effect(self):
         """Check that the limit has an effect on a reaching task."""
         end_effector_task = FrameTask(
-            "ee_link",
+            "tool0",
             position_cost=1.0,  # [cost] / [m]
             orientation_cost=1.0,  # [cost] / [rad]
         )
