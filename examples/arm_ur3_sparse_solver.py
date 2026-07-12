@@ -5,7 +5,7 @@
 #
 # /// script
 # dependencies = ["clarabel", "loop-rate-limiters", "meshcat", "pin-pink",
-# "qpsolvers", "robot_descriptions"]
+# "qpsolvers", "robot_descriptions", "xacrodoc"]
 # ///
 
 """Arm tracking a circular end-effector motion, use a sparse QP solver."""

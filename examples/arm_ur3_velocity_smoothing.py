@@ -5,7 +5,7 @@
 #
 # /// script
 # dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
-# "qpsolvers", "robot_descriptions"]
+# "qpsolvers", "robot_descriptions", "xacrodoc"]
 # ///
 
 """UR3 arm tracking a target, first without then with velocity smoothing."""

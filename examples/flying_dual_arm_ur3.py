@@ -5,7 +5,7 @@
 #
 # /// script
 # dependencies = ["daqp", "loop-rate-limiters", "meshcat", "pin-pink",
-# "qpsolvers", "robot_descriptions"]
+# "qpsolvers", "robot_descriptions", "xacrodoc"]
 # ///
 
 """A pair of UR3 arms on a mobile body tracking moving targets."""

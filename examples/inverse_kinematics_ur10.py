@@ -9,6 +9,7 @@
 #     "pin-pink",
 #     "qpsolvers",
 #     "robot_descriptions",
+#     "xacrodoc",
 # ]
 # ///
 
