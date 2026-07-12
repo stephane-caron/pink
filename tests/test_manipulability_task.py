@@ -330,6 +330,33 @@ class TestManipulabilityTask(unittest.TestCase):
         with self.assertRaises(ValueError):
             ManipulabilityTask("ee", model, cost=1.0)
 
+    def test_continuous_joint_does_not_raise(self):
+        """Continuous (axis-aligned unbounded revolute) joint is supported.
+
+        Regression test: such joints (e.g. the wrist_3_joint of the
+        official UR descriptions) report their pinocchio shortname as
+        ``JointModelRUBX``/``RUBY``/``RUBZ``, not
+        ``JointModelRevoluteUnbounded``.
+        """
+        urdf_string = """\
+<?xml version="1.0"?>
+<robot name="continuous_robot">
+  <link name="base_link">
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <link name="ee"/>
+  <joint name="continuous_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="ee"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+</robot>"""
+        model = pin.buildModelFromXML(urdf_string)
+        ManipulabilityTask("ee", model, cost=1.0)
+
     def test_manipulability_jacobian_vs_finite_differences(self):
         """Manipulability Jacobian should match finite differences."""
         task = ManipulabilityTask(

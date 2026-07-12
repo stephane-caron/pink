@@ -17,7 +17,9 @@ REVOLUTE_SHORTNAMES = {
     "JointModelRY",
     "JointModelRZ",
     "JointModelRevoluteUnaligned",
-    "JointModelRevoluteUnbounded",
+    "JointModelRUBX",
+    "JointModelRUBY",
+    "JointModelRUBZ",
     "JointModelRevoluteUnboundedUnaligned",
 }
 
