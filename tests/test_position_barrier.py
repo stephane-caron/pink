@@ -20,7 +20,7 @@ class TestPositionBarrier(unittest.TestCase):
 
     def setUp(self):
         """Set test fixture up."""
-        robot = load_robot_description("ur3_description")
+        robot = load_robot_description("ur3_official_description")
         model = robot.model
         self.data = robot.data
         self.model = model
@@ -36,12 +36,10 @@ class TestPositionBarrier(unittest.TestCase):
 
     def test_dimension(self):
         """Check dimensions of configuration limit projection."""
-        self.assertEqual(PositionBarrier("ee_link", p_min=np.zeros(3)).dim, 3)
-        self.assertEqual(PositionBarrier("ee_link", p_max=np.zeros(3)).dim, 3)
+        self.assertEqual(PositionBarrier("tool0", p_min=np.zeros(3)).dim, 3)
+        self.assertEqual(PositionBarrier("tool0", p_max=np.zeros(3)).dim, 3)
         self.assertEqual(
-            PositionBarrier(
-                "ee_link", p_min=np.zeros(3), p_max=np.zeros(3)
-            ).dim,
+            PositionBarrier("tool0", p_min=np.zeros(3), p_max=np.zeros(3)).dim,
             6,
         )
 
@@ -49,27 +47,27 @@ class TestPositionBarrier(unittest.TestCase):
         """Check gains of configuration limit projection."""
         # One limit, scalar gain
         self.assertEqual(
-            PositionBarrier("ee_link", p_min=np.zeros(3), gain=1).gain.shape,
+            PositionBarrier("tool0", p_min=np.zeros(3), gain=1).gain.shape,
             (3,),
         )
         # One limit, vector gain
         self.assertEqual(
             PositionBarrier(
-                "ee_link", p_max=np.zeros(3), gain=np.array([1, 2, 3])
+                "tool0", p_max=np.zeros(3), gain=np.array([1, 2, 3])
             ).gain.shape,
             (3,),
         )
         # Two limits, scalar gain
         self.assertEqual(
             PositionBarrier(
-                "ee_link", p_min=np.zeros(3), p_max=np.zeros(3), gain=1
+                "tool0", p_min=np.zeros(3), p_max=np.zeros(3), gain=1
             ).gain.shape,
             (6,),
         )
         # Two limits, vector gain
         self.assertEqual(
             PositionBarrier(
-                "ee_link",
+                "tool0",
                 p_min=np.zeros(3),
                 p_max=np.zeros(3),
                 gain=np.array([1, 2, 3]),
@@ -80,7 +78,7 @@ class TestPositionBarrier(unittest.TestCase):
     def test_positive_when_in_safety_zone(self):
         """Check that the barrier is positive when in the safety zone."""
 
-        barrier = PositionBarrier("ee_link", p_min=np.zeros(3))
+        barrier = PositionBarrier("tool0", p_min=np.zeros(3))
         h = barrier.compute_barrier(self.configuration)
         self.assertTrue(np.all(h > 0))
 
@@ -90,6 +88,6 @@ class TestPositionBarrier(unittest.TestCase):
         for violated_idx in range(3):
             p_min = np.zeros(3)
             p_min[violated_idx] = 1.0
-            barrier = PositionBarrier("ee_link", p_min=p_min)
+            barrier = PositionBarrier("tool0", p_min=p_min)
             h = barrier.compute_barrier(self.configuration)
             self.assertTrue(np.any(h < 0))

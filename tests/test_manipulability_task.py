@@ -23,10 +23,12 @@ class TestManipulabilityTask(unittest.TestCase):
 
     def setUp(self):
         """Prepare test fixture."""
-        robot = load_robot_description("ur3_description", root_joint=None)
+        robot = load_robot_description(
+            "ur3_official_description", root_joint=None
+        )
         self.configuration = Configuration(robot.model, robot.data, robot.q0)
         # Use the end-effector frame for manipulability computation
-        self.frame_name = "ee_link"
+        self.frame_name = "tool0"
 
     def test_task_repr(self):
         """String representation reports the task parameters."""
