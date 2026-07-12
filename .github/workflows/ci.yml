@@ -17,10 +17,10 @@ jobs:
               with:
                   submodules: recursive
 
-            - name: "Setup Pixi"
-              uses: prefix-dev/setup-pixi@v0.8.8
+            - name: "Set up Pixi"
+              uses: prefix-dev/setup-pixi@v0.8.10
               with:
-                  pixi-version: v0.59.0
+                  pixi-version: v0.72.2
                   cache: true
 
             - name: "Run coverage tests"
@@ -40,10 +40,10 @@ jobs:
             - name: "Checkout sources"
               uses: actions/checkout@v4
 
-            - name: "Setup Pixi"
-              uses: prefix-dev/setup-pixi@v0.8.8
+            - name: "Set up Pixi"
+              uses: prefix-dev/setup-pixi@v0.8.10
               with:
-                  pixi-version: v0.59.0
+                  pixi-version: v0.72.2
                   cache: true
 
             - name: "Check code format"
@@ -61,10 +61,10 @@ jobs:
             - name: "Checkout sources"
               uses: actions/checkout@v4
 
-            - name: "Setup Pixi"
-              uses: prefix-dev/setup-pixi@v0.8.8
+            - name: "Set up Pixi"
+              uses: prefix-dev/setup-pixi@v0.8.10
               with:
-                  pixi-version: v0.59.0
+                  pixi-version: v0.72.2
                   environments: test-${{ matrix.pyenv }}
                   cache: true
 
