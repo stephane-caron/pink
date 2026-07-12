@@ -23,7 +23,7 @@ from pink.utils import custom_configuration_vector
 from pink.visualization import start_meshcat_visualizer
 
 if __name__ == "__main__":
-    robot = load_robot_description("ur5_description", root_joint=None)
+    robot = load_robot_description("ur5_official_description", root_joint=None)
 
     viz = start_meshcat_visualizer(robot)
     viewer = viz.viewer
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     meshcat_shapes.frame(viewer["end_effector"], opacity=1.0)
 
     end_effector_task = FrameTask(
-        "ee_link",
+        "tool0",
         position_cost=1.0,  # [cost] / [m]
         orientation_cost=1.0,  # [cost] / [rad]
         lm_damping=1.0,  # tuned for this setup

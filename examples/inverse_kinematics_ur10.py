@@ -28,7 +28,7 @@ dt = 1e-2
 stop_thres = 1e-8
 
 if __name__ == "__main__":
-    robot = load_robot_description("ur10_description")
+    robot = load_robot_description("ur10_official_description")
     model = robot.model
 
     # Frame details
