@@ -56,7 +56,7 @@ jobs:
         strategy:
             matrix:
                 os: [ubuntu-latest, macos-latest]
-                pyenv: [py310, py311, py312, py313]
+                pyenv: [py310, py311, py312, py313, py314]
         steps:
             - name: "Checkout sources"
               uses: actions/checkout@v4
