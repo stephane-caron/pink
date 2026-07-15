@@ -28,11 +28,11 @@ class AccelerationLimit(Limit):
     Attributes:
         Delta_q_prev: Latest displacement of the robot.
         a_max: Maximum acceleration vector for acceleration-limited joints.
-        indices: Tangent indices corresponding to acceleration-limited joints.
         has_configuration_limit: Whether each acceleration-limited joint also
             has a real configuration limit, in which case the "braking
             distance" term applies. Continuous (unbounded) joints do not
             have one.
+        indices: Tangent indices corresponding to acceleration-limited joints.
         model: Robot model.
         projection_matrix: Projection from tangent space to subspace with
             acceleration-limited joints.
@@ -40,8 +40,8 @@ class AccelerationLimit(Limit):
 
     Delta_q_prev: np.ndarray
     a_max: np.ndarray
-    indices: np.ndarray
     has_configuration_limit: np.ndarray
+    indices: np.ndarray
     model: pin.Model
     projection_matrix: Optional[np.ndarray]
 
@@ -98,8 +98,8 @@ class AccelerationLimit(Limit):
 
         self.Delta_q_prev = np.zeros(dim)
         self.a_max = a_max
-        self.indices = indices
         self.has_configuration_limit = np.array(config_limit_list)
+        self.indices = indices
         self.model = model
         self.projection_matrix = projection_matrix
 

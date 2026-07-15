@@ -53,16 +53,15 @@ class TestAccelerationLimit(unittest.TestCase):
         )
 
     def test_continuous_joint_has_no_braking_distance(self):
-        """Check that a continuous (unbounded) joint does not get a
-        "braking distance to configuration limits" bound.
+        """A continuous joint gets no braking-distance bound.
 
-        Regression test: pinocchio assigns placeholder position limits
-        (e.g. [-1.01, 1.01] for a URDF ``continuous`` joint) to joints
-        that have no real configuration limit. Applying the braking-
-        distance term from [Flacco2015]_ to such joints previously
-        produced self-contradictory inequalities (upper bound below
-        lower bound), making the QP infeasible. This is what the UR
-        wrist joints look like in the official UR descriptions.
+        A URDF ``continuous`` joint is unbounded: it has no configuration
+        limit, so only the plain acceleration bound applies to it and the
+        "braking distance to configuration limits" term must be skipped.
+
+        The acceleration inequalities for such a joint must therefore stay
+        self-consistent (lower bound not above upper bound), so that the QP
+        stays feasible.
         """
         urdf = """
         <robot name="continuous_joint_robot">
@@ -78,10 +77,12 @@ class TestAccelerationLimit(unittest.TestCase):
         model = pin.buildModelFromXML(urdf)
         data = model.createData()
         a_max = np.array([14.0])  # rad/s^2
+        dt = 5e-3  # s
         limit = AccelerationLimit(model, a_max)
         configuration = Configuration(model, data, pin.neutral(model))
-        dt = 5e-3
-        limit.set_last_integration(np.array([3.0]), dt)  # near velocity max
+        # Previous displacement large enough (3 rad / s * dt > a_max * dt^2)
+        # that the acceleration bound alone requires decelerating at next step.
+        limit.set_last_integration(np.array([3.0]), dt)
         G, h = limit.compute_qp_inequalities(configuration, dt)
         nb = len(limit.indices)
         upper_bound = h[:nb]
