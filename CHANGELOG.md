@@ -14,11 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Add `xacrodoc` to project dependencies, required by the official UR robot descriptions
+- CICD: Switch UR3, UR5 and UR10 to their official descriptions
 - Transfer copyright notices to `NOTICE` file
+- examples: Switch UR3, UR5 and UR10 to their official descriptions
 
 ### Fixed
 
 - Add `typing_extensions` to project dependencies
+- Limit: Fix `AccelerationLimit` braking-distance term for joints without a configuration limit, such as continuous joints
+- Task: Fix `ManipulabilityTask` rejecting continuous (axis-aligned unbounded revolute) joints
 
 ## [4.2.0] - 2026-04-20
 
