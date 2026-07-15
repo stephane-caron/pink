@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - CICD: Regression test on shortnames of continuous joints
+- Support for Python 3.13
 - examples: Add an example with the JVRC-1 humanoid backbending via a CoM task
 
 ### Changed
