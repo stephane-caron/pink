@@ -60,17 +60,17 @@ class TestJacobians(unittest.TestCase):
             configuration = Configuration(self.model, self.data, q)
             return task.compute_jacobian(configuration)
 
-        nq = self.model.nq
         nv = self.model.nv
         for q_0 in self.random_q:
             J_0 = J(q_0)
             e_0 = e(q_0)
 
             J_finite = np.empty((e_0.shape[0], nv))
-            for i in range(nq):
+            for i in range(nv):
                 h = 0.000001
-                e_i = np.eye(nq)[i]
-                J_finite[:, i] = (e(q_0 + h * e_i) - e_0) / h
+                e_i = np.eye(nv)[i]
+                q_i = pin.integrate(self.model, q_0, h * e_i)
+                J_finite[:, i] = (e(q_i) - e_0) / h
 
             self.assertLess(np.linalg.norm(J_0 - J_finite, ord=np.inf), tol)
 
