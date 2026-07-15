@@ -21,17 +21,25 @@ class TestJacobians(unittest.TestCase):
     def setUp(self, nb_configs=10, nb_dirs=2):
         """Prepare test fixture."""
         np.random.seed(42)
-        random_dq = 2.0 * np.random.random((nb_dirs, 6)) - 1.0
+        robot = load_robot_description("ur3_official_description")
+        self.assertEqual(robot.nv, 6)
+        model = robot.model
+        random_dq = 2.0 * np.random.random((nb_dirs, model.nv)) - 1.0
         l2norms = np.sqrt((random_dq * random_dq).sum(axis=1))
         random_dirs = random_dq / l2norms.reshape((nb_dirs, 1))
-        random_q = (
-            0.1 * np.pi * (2.0 * np.random.random((nb_configs, 6)) - 1.0)
+        random_q = np.array(
+            [
+                pin.integrate(
+                    model,
+                    pin.neutral(model),
+                    0.1 * np.pi * (2.0 * np.random.random(model.nv) - 1.0),
+                )
+                for _ in range(nb_configs)
+            ]
         )
-        robot = load_robot_description("ur3_description")
-        self.assertEqual(robot.nq, 6)
-        self.link = "ee_link"
+        self.link = "tool0"
         self.data = robot.data
-        self.model = robot.model
+        self.model = model
         self.random_dirs = random_dirs
         self.random_q = random_q
         self.robot = robot
