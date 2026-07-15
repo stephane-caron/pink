@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-07-15
+
 ### Added
 
 - CICD: Regression test on shortnames of continuous joints
@@ -16,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add `xacrodoc` to project dependencies, required by the official UR robot descriptions
+- Add `xacrodoc` to project dependencies
 - CICD: Switch UR3, UR5 and UR10 to their official descriptions
 - Transfer copyright notices to `NOTICE` file
 - examples: Switch UR3, UR5 and UR10 to their official descriptions
@@ -25,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `typing_extensions` to project dependencies
 - Limit: Fix `AccelerationLimit` braking-distance term for joints without a configuration limit, such as continuous joints
-- Task: Fix `ManipulabilityTask` rejecting continuous (axis-aligned unbounded revolute) joints
+- Task: Update list of revolute-joint shortnames supported by the `ManipulabilityTask`
 
 ## [4.2.0] - 2026-04-20
 
@@ -476,7 +478,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Python package infrastructure
 
-[unreleased]: https://github.com/stephane-caron/pink/compare/v4.2.0...HEAD
+[unreleased]: https://github.com/stephane-caron/pink/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/stephane-caron/pink/releases/tag/v4.3.0
 [4.2.0]: https://github.com/stephane-caron/pink/releases/tag/v4.2.0
 [4.1.0]: https://github.com/stephane-caron/pink/releases/tag/v4.1.0
 [4.0.0]: https://github.com/stephane-caron/pink/releases/tag/v4.0.0

@@ -42,6 +42,21 @@ Source = "https://github.com/stephane-caron/pink"
 Tracker = "https://github.com/stephane-caron/pink/issues"
 Changelog = "https://github.com/stephane-caron/pink/blob/main/CHANGELOG.md"
 
+[tool.flit.module]
+name = "pink"
+
+[tool.flit.sdist]
+exclude = [
+    ".git*",
+    "CITATION.cff",
+    "CONTRIBUTING.md",
+    "doc/",
+    "examples/",
+    "pixi.lock",
+    "tests/",
+    "uv.lock",
+]
+
 [tool.pylint]
 disable = [
     "C0103",  # Variable name doesn't conform to snake_case naming style
@@ -77,9 +92,6 @@ generated-members = [
     "pin.removeCollisionPairs",
     "pin.updateFramePlacements",
 ]
-
-[tool.flit.module]
-name = "pink"
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
