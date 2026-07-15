@@ -363,27 +363,31 @@ class TestManipulabilityTask(unittest.TestCase):
             self.frame_name, self.configuration.model, cost=1.0
         )
         # q0 is singular for UR3; use a non-singular configuration
-        q = np.array([0.0, -np.pi / 4, np.pi / 2, -np.pi / 4, -np.pi / 2, 0.0])
-        configuration = Configuration(
-            self.configuration.model, self.configuration.data, q
+        model = self.configuration.model
+        q = pin.integrate(
+            model,
+            pin.neutral(model),
+            np.array(
+                [0.0, -np.pi / 4, np.pi / 2, -np.pi / 4, -np.pi / 2, 0.0]
+            ),
         )
+        configuration = Configuration(model, self.configuration.data, q)
         Jm = task.compute_jacobian(configuration)
 
         eps = 1e-6
-        nv = self.configuration.model.nv
+        nv = model.nv
         grad_fd = np.zeros(nv)
         for i in range(nv):
-            q_plus = q.copy()
-            q_plus[i] += eps
+            e_i = np.eye(nv)[i]
+            q_plus = pin.integrate(model, q, eps * e_i)
             config_plus = Configuration(
-                self.configuration.model,
+                model,
                 self.configuration.data,
                 q_plus,
             )
-            q_minus = q.copy()
-            q_minus[i] -= eps
+            q_minus = pin.integrate(model, q, -eps * e_i)
             config_minus = Configuration(
-                self.configuration.model,
+                model,
                 self.configuration.data,
                 q_minus,
             )
