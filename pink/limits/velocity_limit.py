@@ -26,15 +26,15 @@ class VelocityLimit(Limit):
         model: Robot model.
         projection_matrix: Projection from tangent space to subspace with
             velocity-limited joints.
-        velocity_limit: Velocity-limit vector taking precedence over the
-            model's, or ``None`` to read limits from the model.
+        velocity_limit: Velocity-limit vector used to bound the joints: the
+            constructor argument when one is given, otherwise the model's.
     """
 
     indices: np.ndarray
     joints: list
     model: pin.Model
     projection_matrix: Optional[np.ndarray]
-    velocity_limit: Optional[np.ndarray]
+    velocity_limit: np.ndarray
 
     def __init__(
         self,
@@ -51,17 +51,16 @@ class VelocityLimit(Limit):
                 takes precedence over the model's, which is how joints that
                 carry no model limit — e.g. continuous joints — get bounded.
         """
-        if velocity_limit is not None:
+        if velocity_limit is None:
+            velocity_limit = model.velocityLimit
+        else:
             velocity_limit = np.asarray(velocity_limit, dtype=float).flatten()
             if model.nv > 0 and velocity_limit.shape[0] != model.nv:
                 raise PinkError(f"{velocity_limit.shape=} but {model.nv=}")
 
-        limit = (
-            model.velocityLimit if velocity_limit is None else velocity_limit
-        )
         has_velocity_limit = np.logical_and(
-            limit < 1e20,
-            limit > 1e-10,
+            velocity_limit < 1e20,
+            velocity_limit > 1e-10,
         )
 
         joints = [
@@ -116,12 +115,7 @@ class VelocityLimit(Limit):
         if self.projection_matrix is None:  # no joint (thus checked for mypy)
             return None
 
-        limit = (
-            self.model.velocityLimit
-            if self.velocity_limit is None
-            else self.velocity_limit
-        )
-        v_max = limit[self.indices]
+        v_max = self.velocity_limit[self.indices]
         G = np.vstack([self.projection_matrix, -self.projection_matrix])
         h = np.hstack([dt * v_max, dt * v_max])
         return G, h
