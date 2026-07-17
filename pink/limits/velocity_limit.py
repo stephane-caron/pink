@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, List, Optional, Tuple
 import numpy as np
 import pinocchio as pin
 
+from ..exceptions import PinkError
 from .limit import Limit
 
 if TYPE_CHECKING:
@@ -25,22 +26,42 @@ class VelocityLimit(Limit):
         model: Robot model.
         projection_matrix: Projection from tangent space to subspace with
             velocity-limited joints.
+        velocity_limit: Velocity-limit vector taking precedence over the
+            model's, or ``None`` to read limits from the model.
     """
 
     indices: np.ndarray
     joints: list
     model: pin.Model
     projection_matrix: Optional[np.ndarray]
+    velocity_limit: Optional[np.ndarray]
 
-    def __init__(self, model: pin.Model):
+    def __init__(
+        self,
+        model: pin.Model,
+        velocity_limit: Optional[np.ndarray] = None,
+    ):
         """Initialize bounded tangent of a model.
 
         Args:
             model: robot model.
+            velocity_limit: Optional vector of velocity limits, of dimension
+                ``model.nv``. When ``None`` (the default), limits are read
+                from the model (``model.velocityLimit``). When given, it
+                takes precedence over the model's, which is how joints that
+                carry no model limit — e.g. continuous joints — get bounded.
         """
+        if velocity_limit is not None:
+            velocity_limit = np.asarray(velocity_limit, dtype=float).flatten()
+            if model.nv > 0 and velocity_limit.shape[0] != model.nv:
+                raise PinkError(f"{velocity_limit.shape=} but {model.nv=}")
+
+        limit = (
+            model.velocityLimit if velocity_limit is None else velocity_limit
+        )
         has_velocity_limit = np.logical_and(
-            model.velocityLimit < 1e20,
-            model.velocityLimit > 1e-10,
+            limit < 1e20,
+            limit > 1e-10,
         )
 
         joints = [
@@ -65,6 +86,7 @@ class VelocityLimit(Limit):
         self.joints = joints
         self.model = model
         self.projection_matrix = projection_matrix
+        self.velocity_limit = velocity_limit
 
     def compute_qp_inequalities(
         self,
@@ -94,7 +116,12 @@ class VelocityLimit(Limit):
         if self.projection_matrix is None:  # no joint (thus checked for mypy)
             return None
 
-        v_max = self.model.velocityLimit[self.indices]
+        limit = (
+            self.model.velocityLimit
+            if self.velocity_limit is None
+            else self.velocity_limit
+        )
+        v_max = limit[self.indices]
         G = np.vstack([self.projection_matrix, -self.projection_matrix])
         h = np.hstack([dt * v_max, dt * v_max])
         return G, h

@@ -7,9 +7,11 @@
 
 import unittest
 
+import numpy as np
 import pinocchio as pin
 from robot_descriptions.loaders.pinocchio import load_robot_description
 
+from pink.exceptions import PinkError
 from pink.limits import VelocityLimit
 
 
@@ -40,3 +42,21 @@ class TestVelocityLimit(unittest.TestCase):
         empty_model = pin.Model()
         empty_bounded = VelocityLimit(empty_model)
         self.assertEqual(len(empty_bounded.indices), 0)
+
+    def test_velocity_limit_argument_overrides_model(self):
+        """A given velocity_limit takes precedence over the model's."""
+        nv = self.model.nv
+        limit = VelocityLimit(self.model, velocity_limit=2.0 * np.ones(nv))
+        # Every tangent coordinate now carries a finite limit, so every
+        # joint is bounded regardless of what the model declares.
+        self.assertEqual(len(limit.indices), nv)
+        # The QP bound uses the argument, not model.velocityLimit.
+        _, h = limit.compute_qp_inequalities(configuration=None, dt=1e-3)
+        self.assertTrue(np.allclose(h, 1e-3 * 2.0))
+
+    def test_velocity_limit_argument_wrong_shape(self):
+        """A velocity_limit of the wrong dimension is rejected."""
+        with self.assertRaises(PinkError):
+            VelocityLimit(
+                self.model, velocity_limit=np.ones(self.model.nv + 1)
+            )
