@@ -96,13 +96,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Task: `JointVelocityTask` for tracking a reference joint-velocity trajectory
 
-### Fixed
-
-- Save problem instance in `NoSolutionFound` exception
-
 ### Removed
 
 - Remove unused attribute of `SelfCollisionBarrier`
+
+### Fixed
+
+- Save problem instance in `NoSolutionFound` exception
 
 ## [3.3.0] - 2025-05-15
 
@@ -150,13 +150,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Raise custom `NoSolutionFound` rather than `AssertionError` in `solve_ik`
 - Update supported Python versions to 3.9–3.12
 
-### Fixed
-
-- CICD: Update unit test for self-collision barrier
-
 ### Removed
 
 - Remove dependency on quadprog (thanks to @peterd-NV)
+
+### Fixed
+
+- CICD: Update unit test for self-collision barrier
 
 ## [3.1.0] - 2024-10-28
 
@@ -203,14 +203,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DampingTask: Simplify implementation
 - Update to Pinocchio 3 with 2.7 backward compatibility
 
+### Removed
+
+- CICD: Disable macOS checks until upstream PyPI package is fixed
+
 ### Fixed
 
 - PostureTask: Match implementation and documentation formula
 - Fix broken documentation links
-
-### Removed
-
-- CICD: Disable macOS checks until upstream PyPI package is fixed
 
 ## [2.1.0] - 2024-04-02
 
