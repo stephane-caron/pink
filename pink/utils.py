@@ -13,7 +13,9 @@ import pinocchio as pin
 from .exceptions import ConfigurationError, PinkError
 
 
-def custom_configuration_vector(robot: pin.Model, **kwargs) -> np.ndarray:
+def custom_configuration_vector(
+    robot: pin.RobotWrapper, **kwargs
+) -> np.ndarray:
     """Generate a configuration vector where named joints have specific values.
 
     Args:
